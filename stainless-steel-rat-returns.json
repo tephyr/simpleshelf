@@ -1,0 +1,12 @@
+{
+"type": "book",
+"title": "The stainless steel rat returns",
+"author": "Harry Harrison",
+"isbn": "978-0-7653-6403-6",
+"publisher": "TOR",
+"status": {"read": "reading", "ownership": "kcls"},
+"tags": ["sci.fi", "stainless.steel.rat"],
+"notes": [
+    {"date": "2011-08-24", "public": "false", "text": "Decently fun book - and the porcuswine are back!"}
+]
+}
