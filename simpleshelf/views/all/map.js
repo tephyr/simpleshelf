@@ -1,6 +1,9 @@
 /**
- * Show all docs
+ * Show all docs, by type
  */
 function(doc) {
-    emit(null, doc);
+    if (doc.title)
+        emit(doc.type, doc.title);
+    else
+        emit(doc.type, null);
 };
