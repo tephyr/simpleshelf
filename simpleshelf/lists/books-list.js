@@ -2,11 +2,15 @@
  * list function: all books, as HTML list
  */
 function(head, req){
-    send("<ul>");
-    while (row = getRow()) {
-        send(renderBook(row));
-    }
-    send("</ul>");
+    provides("html", function(){
+        //send("<html><body>");
+        send("<ul>");
+        while (row = getRow()) {
+            send(renderBook(row));
+        }
+        send("</ul>");
+        //send("</body></html>");
+    });
 }
 
 function renderBook(row){
