@@ -13,6 +13,7 @@ Contents:
 
    no-schema-schema
    views
+   backbone-ui
 
 Indices and tables
 ==================
