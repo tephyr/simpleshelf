@@ -21,5 +21,5 @@ var Library = Backbone.Collection.extend({
         }
         
         return results;
-    } 
+    }
 });
