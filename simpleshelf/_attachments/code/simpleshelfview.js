@@ -1,11 +1,13 @@
 /**
  * Views for simpleshelf
+ * To protect the templates from premature initialization, wrap all views in document.ready
  */
 
+$(document).ready(function(){
 /**
  * Show basic info about entire library; based on Library [collection]
  */
-var LibraryInfoView = Backbone.View.extend({
+window.LibraryInfoView = Backbone.View.extend({
     template: "#info-template",
     tag: "div",
     className: "info-view",
@@ -24,4 +26,6 @@ var LibraryInfoView = Backbone.View.extend({
         $(this.el).html(this.template({bookCount: this.collection.length}));
         return this;
     }
+});
+
 });

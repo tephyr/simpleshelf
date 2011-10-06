@@ -2,11 +2,11 @@
  * Model for simpleshelf
  */
 
-var Book = Backbone.Model.extend({
+window.Book = Backbone.Model.extend({
     initialize: function(){}
 });
 
-var Library = Backbone.Collection.extend({
+window.Library = Backbone.Collection.extend({
     model: Book,
     url: '/simpleshelf/_design/simpleshelf/_view/all',
     parse: function(response) {

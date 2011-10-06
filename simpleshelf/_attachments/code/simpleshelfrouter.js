@@ -1,7 +1,7 @@
 /**
  * router for simpleshelf
  */
-var SimpleShelfLibrary = Backbone.Router.extend({
+window.SimpleShelfLibrary = Backbone.Router.extend({
     routes: {
         '': 'home'
     },
