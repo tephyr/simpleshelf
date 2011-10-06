@@ -11,10 +11,14 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         this.infoView = new LibraryInfoView({
             collection: window.library
         });
+        this.tagCloudView = new TagCloudView({
+            collection: window.tags
+        })
     },
     
     home: function() {
         $('#items').empty();
         $("#items").append(this.infoView.render().el);
+        $('#sidebar').append(this.tagCloudView.render().el);
     }
 });

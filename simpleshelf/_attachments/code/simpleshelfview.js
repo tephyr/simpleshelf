@@ -28,4 +28,23 @@ window.LibraryInfoView = Backbone.View.extend({
     }
 });
 
+/**
+ * Show tag cloud
+ */
+window.TagCloudView = Backbone.View.extend({
+    className: 'tagcloud',
+    tag: 'div',
+    template: _.template($('#tagcloud-template').html()),
+    
+    initialize: function(){
+        _.bindAll(this, 'render');
+        this.collection.bind('reset', this.render);
+    },
+    
+    render: function(){
+        $(this.el).html(this.template(this.collection));
+        return this;
+    }
+});
+
 });

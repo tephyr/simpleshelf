@@ -15,6 +15,14 @@
             <li>book count: <%= bookCount %></li>
         </ul>
     </script>
+    <script type="text/template" id="tagcloud-template">
+        <h2>Tags</h2>
+        <ul>
+            <% _.each(tags, function(tag) { %>
+                <li><%= tag %></li>
+            <% }); %>
+        </ul>
+    </script>
     <script type="text/javascript" src="code/library.js"></script>
   </head>
   <body>

@@ -23,3 +23,20 @@ window.Library = Backbone.Collection.extend({
         return results;
     }
 });
+
+window.Tag = Backbone.Model.extend({});
+
+window.Tags = Backbone.Collection.extend({
+    model: Tag,
+    url: '/simpleshelf/_design/simpleshelf/_view/tags?group=true',
+    parse: function(response){
+        var results = [];
+        if (response.rows){
+            for (var x = 0; x < response.rows.length; x++){
+                results.push({'tag': response.rows[x].key,
+                    'count': response.rows[x].value});
+            }
+        }
+        return results;
+    }
+});

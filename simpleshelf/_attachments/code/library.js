@@ -2,9 +2,12 @@
 (function($) {
     // prep vars
     window.library = new Library();
+    window.tags = new Tags();
     
     // load a set of books
     library.fetch();
+    // load tags
+    tags.fetch();
 
     $(document).ready(function() {
         // reverse colors on the welcome msg

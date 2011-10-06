@@ -10,10 +10,18 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
+   :glob:
 
    no-schema-schema
    views
-   backbone-ui
+
+UI:
+
+.. toctree::
+   :maxdepth: 2
+
+   ui/ui-goals
+   ui/backbone-ui
 
 Indices and tables
 ==================
