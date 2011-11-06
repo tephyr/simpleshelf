@@ -22,3 +22,5 @@ Backbone layout
 Primary page views
 ------------------
 
+- ``LibraryInfoView``: Show basic info about entire library; based on Library [collection]
+- ``TagCloudView``: Show tag cloud; child of ``LibraryInfoView``
