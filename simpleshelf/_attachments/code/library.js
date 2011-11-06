@@ -19,5 +19,7 @@
         Backbone.history.start({pushState: true});
         // go to start point
         window.App.home();
+        
+        showImportMessage();
     });
 })(jQuery);
