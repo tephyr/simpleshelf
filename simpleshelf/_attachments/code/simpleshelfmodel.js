@@ -24,6 +24,27 @@ window.Library = Backbone.Collection.extend({
     }
 });
 
+window.Spine = Backbone.Model.extend({
+    initialize: function(){}
+});
+
+window.SpineList = Backbone.Collection.extend({
+   model: Spine,
+   url: '/simpleshelf/_design/simpleshelf/_view/all', // NOTE: this will change based on the subclass
+   parse: function(response){
+       var results = [];
+       if (response.rows){
+            for (var x = 0; x < response.rows.length; x++){
+                results.push({
+                    'title': response.rows[x].value,
+                    'id': response.rows[x].key
+                });
+            }
+       }
+       return results;
+   } 
+});
+
 window.Tag = Backbone.Model.extend({});
 
 window.TagList = Backbone.Collection.extend({
