@@ -20,7 +20,7 @@
         <h2>Tags</h2>
         <ul>
             <% _.each(tags, function(tag) { %>
-                <li><%= tag %></li>
+                <li><%= tag.tag %>, <%= tag.count %></li>
             <% }); %>
         </ul>
     </script>

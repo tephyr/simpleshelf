@@ -12,7 +12,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             collection: window.library
         });
         this.tagCloudView = new TagCloudView({
-            collection: window.tags
+            collection: window.tagList
         })
     },
     

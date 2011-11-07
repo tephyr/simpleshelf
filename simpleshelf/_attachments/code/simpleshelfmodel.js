@@ -26,7 +26,7 @@ window.Library = Backbone.Collection.extend({
 
 window.Tag = Backbone.Model.extend({});
 
-window.Tags = Backbone.Collection.extend({
+window.TagList = Backbone.Collection.extend({
     model: Tag,
     url: '/simpleshelf/_design/simpleshelf/_view/tags?group=true',
     parse: function(response){

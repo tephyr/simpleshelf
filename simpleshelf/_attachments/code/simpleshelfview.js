@@ -42,7 +42,8 @@ window.TagCloudView = Backbone.View.extend({
     },
     
     render: function(){
-        $(this.el).html(this.template(this.collection));
+        console.log('rendering window.TagCloudView');
+        $(this.el).html(this.template({'tags': this.collection.toJSON()}));
         return this;
     }
 });
