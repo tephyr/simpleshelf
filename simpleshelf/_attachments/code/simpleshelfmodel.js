@@ -45,7 +45,9 @@ window.SpineList = Backbone.Collection.extend({
    } 
 });
 
-window.Tag = Backbone.Model.extend({});
+window.Tag = Backbone.Model.extend({
+    initialize: function(){}
+});
 
 window.TagList = Backbone.Collection.extend({
     model: Tag,

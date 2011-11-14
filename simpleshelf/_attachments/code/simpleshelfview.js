@@ -3,28 +3,52 @@
  * To protect the templates from premature initialization, wrap all views in document.ready
  */
 
-$(document).ready(function(){
+// set underscore to use mustache-style interpolation
+_.templateSettings = {
+    interpolate : /\{\{(.+?)\}\}/g
+};
+
 /**
  * Show basic info about entire library; based on Library [collection]
  */
 window.LibraryInfoView = Backbone.View.extend({
-    template: "#info-template",
+    template: _.template('<ul><li>book count: {{ bookCount }}</li></ul>'),
     tag: "div",
     className: "info-view",
     
     initialize: function(){
         _.bindAll(this, "render");
-        this.initializeTemplate();
         this.collection.bind('reset', this.render);
     },
     
-    initializeTemplate: function() {
-        this.template = _.template($(this.template).html());
-    },
-
     render: function() {
         $(this.el).html(this.template({bookCount: this.collection.length}));
         return this;
+    }
+});
+
+/**
+ * Show individual tag
+ */
+window.TagView = Backbone.View.extend({
+    className: 'tag',
+    tag: 'li',
+    template: _.template('<li>{{ tag }}, {{ count }}</li>'),
+    
+    initialize: function(properties){
+        _.bindAll(this, 'render', 'remove');
+        this.model.bind('change', this.render);
+        this.model.bind('destroy', this.remove);
+    },
+    
+    render: function() {
+        console.log('rendering window.TagView');
+        $(this.el).html(this.template(this.model.toJSON()));
+        return this;
+    },
+    
+    remove: function() {
+        $(this.el).remove();
     }
 });
 
@@ -34,18 +58,28 @@ window.LibraryInfoView = Backbone.View.extend({
 window.TagCloudView = Backbone.View.extend({
     className: 'tagcloud',
     tag: 'div',
-    template: _.template($('#tagcloud-template').html()),
+    template: _.template('<h2>Tags</h2><ul></ul>'),
     
-    initialize: function(){
-        _.bindAll(this, 'render');
-        this.collection.bind('reset', this.render);
+    initialize: function(properties) {
+        _.bindAll(this, 'render', 'addAll', 'addOne');
+        this.collection.bind('add', this.addOne);
     },
-    
-    render: function(){
-        console.log('rendering window.TagCloudView');
-        $(this.el).html(this.template({'tags': this.collection.toJSON()}));
-        return this;
-    }
-});
 
+    render: function() {
+        console.log('rendering window.TagCloudView');
+        $(this.el).html(this.template());
+        this.addAll();
+        return this;
+    },
+
+    addAll: function() {
+        this.collection.each(this.addOne);
+    },
+
+    addOne: function(model) {
+        view = new TagView({model: model});
+        view.render();
+        $('ul', this.el).append(view.el);
+        model.bind('remove', view.remove);
+    }
 });
