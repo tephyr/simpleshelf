@@ -20,6 +20,6 @@
         // go to start point
         window.App.home();
         
-        showImportMessage();
+        // showImportMessage();
     });
 })(jQuery);
