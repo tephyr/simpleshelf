@@ -5,6 +5,8 @@
     window.tagList = new TagList();
     window.spineList = new SpineList();
     
+    window.fetchCount = 0, window.fetchTotal = 2;
+
     // load a set of book spines
     spineList.fetch({ success: spineList_fetch_complete });
     // load tags
@@ -27,8 +29,18 @@
 
 function tagList_fetch_complete(){
   console.log('tagList.fetch succeeded');
+  window.fetchCount += 1;
+  fetches_done();
 };
 
 function spineList_fetch_complete(){
   console.log('spineList.fetch succeeded');
+  window.fetchCount += 1;
+  fetches_done();
+};
+
+function fetches_done(){
+    if (window.fetchCount == window.fetchTotal){
+        $('#welcome-msg').fadeOut(5000);
+    }
 };
