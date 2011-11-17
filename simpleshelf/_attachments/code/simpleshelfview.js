@@ -28,6 +28,64 @@ window.LibraryInfoView = Backbone.View.extend({
 });
 
 /**
+ * Container for simple list of titles
+ */
+window.SpineListView = Backbone.View.extend({
+   template: _.template('<h2>All books</h2><ul></ul>'),
+   tagName: 'div',
+   className: 'spine-list-view',
+   
+   initialize: function(){
+        _.bindAll(this, 'render', 'addAll', 'addOne');
+        this.collection.bind('add', this.addOne);
+        this.collection.bind('reset', this.render);
+   },
+   
+   render: function(){
+        console.log('rendering window.SpineListView');
+        $(this.el).html(this.template());
+        this.addAll();
+        return this;
+   },
+
+   addAll: function() {
+        console.log('SpineListView.addAll: this.collection.length==', this.collection.length)
+        this.collection.each(this.addOne);
+    },
+
+    addOne: function(model) {
+        view = new SpineView({model: model});
+        view.render();
+        $('ul', this.el).append(view.el);
+        model.bind('remove', view.remove);
+    }
+});
+
+/**
+ * Simple representation of book
+ */
+window.SpineView = Backbone.View.extend({
+    className: 'spine-view',
+    tagName: 'li',
+    template: _.template('<a href="{{id}}">{{title}}</a>'),
+    
+    initialize: function(properties){
+        _.bindAll(this, 'render', 'remove');
+        this.model.bind('change', this.render);
+        this.model.bind('destroy', this.remove);
+    },
+    
+    render: function() {
+        $(this.el).html(this.template(this.model.toJSON()));
+        return this;
+    },
+    
+    remove: function() {
+        $(this.el).remove();
+    }
+});
+
+/**
  * Show individual tag
  */
 window.TagView = Backbone.View.extend({
@@ -42,7 +100,6 @@ window.TagView = Backbone.View.extend({
     },
     
     render: function() {
-        console.log('rendering window.TagView');
         $(this.el).html(this.template(this.model.toJSON()));
         return this;
     },
@@ -74,7 +131,7 @@ window.TagCloudView = Backbone.View.extend({
     },
 
     addAll: function() {
-        console.log('addAll: this.collection.length==', this.collection.length)
+        console.log('TagCloudView.addAll: this.collection.length==', this.collection.length)
         this.collection.each(this.addOne);
     },
 

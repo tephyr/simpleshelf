@@ -3,9 +3,10 @@
     // prep vars
     window.library = new Library();
     window.tagList = new TagList();
+    window.spineList = new SpineList();
     
-    // load a set of books
-    library.fetch();
+    // load a set of book spines
+    spineList.fetch({ success: spineList_fetch_complete });
     // load tags
     tagList.fetch({ success: tagList_fetch_complete });
 
@@ -26,4 +27,8 @@
 
 function tagList_fetch_complete(){
   console.log('tagList.fetch succeeded');
+};
+
+function spineList_fetch_complete(){
+  console.log('spineList.fetch succeeded');
 };
