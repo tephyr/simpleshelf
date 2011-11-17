@@ -7,7 +7,7 @@
     // load a set of books
     library.fetch();
     // load tags
-    tagList.fetch();
+    tagList.fetch({ success: tagList_fetch_complete });
 
     $(document).ready(function() {
         // reverse colors on the welcome msg
@@ -23,3 +23,7 @@
         // showImportMessage();
     });
 })(jQuery);
+
+function tagList_fetch_complete(){
+  console.log('tagList.fetch succeeded');
+};
