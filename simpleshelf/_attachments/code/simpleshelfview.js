@@ -67,7 +67,7 @@ window.SpineListView = Backbone.View.extend({
 window.SpineView = Backbone.View.extend({
     className: 'spine-view',
     tagName: 'li',
-    template: _.template('<a href="{{id}}">{{title}}</a>'),
+    template: _.template('<a href="./{{id}}">{{title}}</a>'),
     
     initialize: function(properties){
         _.bindAll(this, 'render', 'remove');

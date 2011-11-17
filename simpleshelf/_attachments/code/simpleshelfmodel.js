@@ -37,7 +37,7 @@ window.SpineList = Backbone.Collection.extend({
             for (var x = 0; x < response.rows.length; x++){
                 results.push({
                     'title': response.rows[x].value,
-                    'id': response.rows[x].key
+                    'id': response.rows[x].id
                 });
             }
        }

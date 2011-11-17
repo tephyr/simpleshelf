@@ -1,7 +1,7 @@
 // encase in jQuery-safe wrapper
 (function($) {
     // prep vars
-    window.library = new Library();
+    // window.library = new Library();
     window.tagList = new TagList();
     window.spineList = new SpineList();
     
