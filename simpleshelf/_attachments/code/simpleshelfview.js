@@ -13,7 +13,7 @@ _.templateSettings = {
  */
 window.LibraryInfoView = Backbone.View.extend({
     template: _.template('<ul><li>book count: {{ bookCount }}</li></ul>'),
-    tag: "div",
+    tagName: "div",
     className: "info-view",
     
     initialize: function(){
@@ -32,8 +32,8 @@ window.LibraryInfoView = Backbone.View.extend({
  */
 window.TagView = Backbone.View.extend({
     className: 'tag',
-    tag: 'li',
-    template: _.template('<li>{{ tag }}, {{ count }}</li>'),
+    tagName: 'li',
+    template: _.template('{{ tag }}, {{ count }}'),
     
     initialize: function(properties){
         _.bindAll(this, 'render', 'remove');
@@ -57,12 +57,13 @@ window.TagView = Backbone.View.extend({
  */
 window.TagCloudView = Backbone.View.extend({
     className: 'tagcloud',
-    tag: 'div',
+    tagName: 'div',
     template: _.template('<h2>Tags</h2><ul></ul>'),
     
     initialize: function(properties) {
         _.bindAll(this, 'render', 'addAll', 'addOne');
         this.collection.bind('add', this.addOne);
+        this.collection.bind('reset', this.render);
     },
 
     render: function() {
@@ -73,6 +74,7 @@ window.TagCloudView = Backbone.View.extend({
     },
 
     addAll: function() {
+        console.log('addAll: this.collection.length==', this.collection.length)
         this.collection.each(this.addOne);
     },
 
