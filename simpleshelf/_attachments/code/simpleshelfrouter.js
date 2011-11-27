@@ -3,7 +3,8 @@
  */
 window.SimpleShelfLibrary = Backbone.Router.extend({
     routes: {
-        '': 'home'
+        '': 'home',
+        'tags/:tagName': 'tags'
     },
     
     initialize: function(){
@@ -26,5 +27,12 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         $('#items').empty();
         $("#items").append(this.spineListView.render().el);
         $('#sidebar').append(this.tagCloudView.render().el);
+    },
+
+    /**
+     * Route for a specific tag
+     */
+    tags: function(tagName){
+        console.log("Routing to tag " + tagName);
     }
 });

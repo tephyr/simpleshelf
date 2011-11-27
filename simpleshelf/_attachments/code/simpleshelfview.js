@@ -93,19 +93,33 @@ window.TagView = Backbone.View.extend({
     tagName: 'li',
     template: _.template('{{ tag }}, {{ count }}'),
     
+    events: {
+        'click': 'tagSelected'
+    },
+
     initialize: function(properties){
-        _.bindAll(this, 'render', 'remove');
+        _.bindAll(this, 'render', 'remove', 'highlightIfMatch');
         this.model.bind('change', this.render);
         this.model.bind('destroy', this.remove);
+        this.model.bind('tag:highlight', this.highlightIfMatch);
     },
-    
+
     render: function() {
         $(this.el).html(this.template(this.model.toJSON()));
         return this;
     },
-    
+
     remove: function() {
         $(this.el).remove();
+    },
+
+    tagSelected: function(){
+        console.log('TagView: selected tag ' + this.model.attributes['tag']);
+        this.model.select();
+    },
+
+    highlightIfMatch: function(tag){
+        $(this.el).toggleClass('selected', (this.model.attributes['tag'] == tag));
     }
 });
 
@@ -118,7 +132,7 @@ window.TagCloudView = Backbone.View.extend({
     template: _.template('<h2>Tags</h2><ul></ul>'),
     
     initialize: function(properties) {
-        _.bindAll(this, 'render', 'addAll', 'addOne');
+        _.bindAll(this, 'render', 'addAll', 'addOne', 'tagSelected');
         this.collection.bind('add', this.addOne);
         this.collection.bind('reset', this.render);
     },
@@ -136,9 +150,15 @@ window.TagCloudView = Backbone.View.extend({
     },
 
     addOne: function(model) {
-        view = new TagView({model: model});
+        var view = new TagView({model: model});
         view.render();
         $('ul', this.el).append(view.el);
         model.bind('remove', view.remove);
+        view.bind('tagSelected', this.tagSelected)
+    },
+
+    tagSelected: function(tag){
+       console.log('TagCloudView.tagSelected event', tag);
+       this.trigger('tagcloud:tagSelected', tag);
     }
 });
