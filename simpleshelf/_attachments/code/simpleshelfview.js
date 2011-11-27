@@ -31,24 +31,24 @@ window.LibraryInfoView = Backbone.View.extend({
  * Container for simple list of titles
  */
 window.SpineListView = Backbone.View.extend({
-   template: _.template('<h2>All books</h2><ul></ul>'),
-   tagName: 'div',
-   className: 'spine-list-view',
+    template: _.template('<h2>All books</h2><ul></ul>'),
+    tagName: 'div',
+    className: 'spine-list-view',
    
-   initialize: function(){
+    initialize: function(){
         _.bindAll(this, 'render', 'addAll', 'addOne');
         this.collection.bind('add', this.addOne);
         this.collection.bind('reset', this.render);
-   },
+    },
    
-   render: function(){
+    render: function(){
         console.log('rendering window.SpineListView');
         $(this.el).html(this.template());
         this.addAll();
         return this;
-   },
+    },
 
-   addAll: function() {
+    addAll: function() {
         console.log('SpineListView.addAll: this.collection.length==', this.collection.length)
         this.collection.each(this.addOne);
     },
