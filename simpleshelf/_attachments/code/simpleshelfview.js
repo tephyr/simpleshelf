@@ -58,6 +58,10 @@ window.SpineListView = Backbone.View.extend({
         view.render();
         $('ul', this.el).append(view.el);
         model.bind('remove', view.remove);
+    },
+    
+    updateTag: function(msgArgs){
+        console.log('SpineListView:updateTag', msgArgs);
     }
 });
 
@@ -114,12 +118,13 @@ window.TagView = Backbone.View.extend({
     },
 
     tagSelected: function(){
-        console.log('TagView: selected tag ' + this.model.attributes['tag']);
+        console.log('TagView: click evt for tag==' + this.model.get('tag'));
         this.model.select();
+        this.trigger('tagview:selected', {'tag': this.model.get('tag')});
     },
 
     highlightIfMatch: function(tag){
-        $(this.el).toggleClass('selected', (this.model.attributes['tag'] == tag));
+        $(this.el).toggleClass('selected', (this.model.get('tag') == tag));
     }
 });
 
@@ -154,11 +159,11 @@ window.TagCloudView = Backbone.View.extend({
         view.render();
         $('ul', this.el).append(view.el);
         model.bind('remove', view.remove);
-        view.bind('tagSelected', this.tagSelected)
+        view.bind('tagview:selected', this.tagSelected)
     },
 
     tagSelected: function(tag){
        console.log('TagCloudView.tagSelected event', tag);
-       this.trigger('tagcloud:tagSelected', tag);
+       this.trigger('tagcloud:tagselected', tag);
     }
 });

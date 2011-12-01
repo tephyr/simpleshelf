@@ -29,11 +29,15 @@ window.Spine = Backbone.Model.extend({
 });
 
 window.SpineList = Backbone.Collection.extend({
-   model: Spine,
-   url: '/simpleshelf/_design/simpleshelf/_view/all', // NOTE: this will change based on the subclass
-   parse: function(response){
-       var results = [];
-       if (response.rows){
+    model: Spine,
+    url: '/simpleshelf/_design/simpleshelf/_view/all', // NOTE: this will change based on the subclass
+    initialize: function(properties) {
+        _.bindAll(this, 'reset', 'filterByTag');
+    },
+    
+    parse: function(response){
+        var results = [];
+        if (response.rows){
             for (var x = 0; x < response.rows.length; x++){
                 results.push({
                     'title': response.rows[x].value,
@@ -42,7 +46,11 @@ window.SpineList = Backbone.Collection.extend({
             }
        }
        return results;
-   } 
+    },
+    
+    filterByTag: function(msgArgs){
+        console.log('SpineList.filterByTag', msgArgs);
+    }
 });
 
 window.Tag = Backbone.Model.extend({
@@ -90,7 +98,7 @@ window.TagList = Backbone.Collection.extend({
     },
 
     selectTag: function(tag){
-        console.log('TagList.selectTag: called with tag', tag);
+        console.log('TagList.selectTag', tag);
         // find & update the selected tag; views should redraw
         this.models.forEach(function(model){
             model.set({'selected': (model.get('tag') === tag)})

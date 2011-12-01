@@ -17,11 +17,16 @@
         $('#sidebar').css({backgroundColor: 'black', color: 'white'});
         
         // instantiate Router
-        window.App = new SimpleShelfLibrary();
+        window.app = new SimpleShelfLibrary();
+
+        // setup events across objects
+        window.app.tagCloudView.bind('tagcloud:tagselected', window.app.spineListView.updateTag)
+
         // start (?) router
         Backbone.history.start({pushState: true});
+
         // go to start point
-        window.App.home();
+        window.app.home();
         
         // showImportMessage();
     });
