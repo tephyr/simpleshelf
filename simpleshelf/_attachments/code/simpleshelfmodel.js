@@ -30,9 +30,24 @@ window.Spine = Backbone.Model.extend({
 
 window.SpineList = Backbone.Collection.extend({
     model: Spine,
-    url: '/simpleshelf/_design/simpleshelf/_view/all', // NOTE: this will change based on the subclass
+    url: function(){
+        var url = '';
+        switch (this._current_filter.type){
+            case 'book':
+                url = '/simpleshelf/_design/simpleshelf/_view/all';
+                break;
+            case 'tag':
+                url = '/simpleshelf/_design/simpleshelf/_view/books_by_tags?key=%22' + this._current_filter.filter + '%22';
+                break;
+        }
+        return url;
+    },
+    
     initialize: function(properties) {
         _.bindAll(this, 'reset', 'filterByTag');
+        this._current_filter = {
+            'type': 'book',
+            'filter': null};
     },
     
     parse: function(response){
@@ -50,7 +65,11 @@ window.SpineList = Backbone.Collection.extend({
     
     filterByTag: function(msgArgs){
         console.log('SpineList.filterByTag', msgArgs);
+        this._current_filter = {'type': 'tag',
+            'filter': msgArgs.tag};
+        this.fetch();
     }
+    
 });
 
 window.Tag = Backbone.Model.extend({

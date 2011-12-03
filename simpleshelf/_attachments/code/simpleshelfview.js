@@ -36,7 +36,7 @@ window.SpineListView = Backbone.View.extend({
     className: 'spine-list-view',
    
     initialize: function(){
-        _.bindAll(this, 'render', 'addAll', 'addOne');
+        _.bindAll(this, 'render', 'addAll', 'addOne', 'updateTag');
         this.collection.bind('add', this.addOne);
         this.collection.bind('reset', this.render);
     },
@@ -62,6 +62,7 @@ window.SpineListView = Backbone.View.extend({
     
     updateTag: function(msgArgs){
         console.log('SpineListView:updateTag', msgArgs);
+        this.collection.filterByTag(msgArgs);
     }
 });
 

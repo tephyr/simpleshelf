@@ -8,9 +8,9 @@
     window.fetchCount = 0, window.fetchTotal = 2;
 
     // load a set of book spines
-    spineList.fetch({ success: spineList_fetch_complete });
+    window.spineList.fetch({ success: spineList_fetch_complete });
     // load tags
-    tagList.fetch({ success: tagList_fetch_complete });
+    window.tagList.fetch({ success: tagList_fetch_complete });
 
     $(document).ready(function() {
         // reverse colors on the welcome msg
