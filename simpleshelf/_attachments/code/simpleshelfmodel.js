@@ -65,8 +65,13 @@ window.SpineList = Backbone.Collection.extend({
     
     filterByTag: function(msgArgs){
         console.log('SpineList.filterByTag', msgArgs);
+        if (msgArgs.tag == null){
+            // reset filter to books
+            this._current_filter = {'type': 'book', 'filter': null};
+        } else {
         this._current_filter = {'type': 'tag',
             'filter': msgArgs.tag};
+        }
         this.fetch();
     }
     

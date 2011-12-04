@@ -73,3 +73,11 @@ div.avatar img {
 #items ul {
   list-style: none;
 }
+
+.tagcloud li.tag, .tagcloud .tagheader {
+    cursor: pointer;
+}
+
+.tagcloud li.tag.selected{
+    font-weight: bold;
+}

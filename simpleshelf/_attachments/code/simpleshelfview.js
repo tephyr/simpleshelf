@@ -135,10 +135,10 @@ window.TagView = Backbone.View.extend({
 window.TagCloudView = Backbone.View.extend({
     className: 'tagcloud',
     tagName: 'div',
-    template: _.template('<h2>Tags</h2><ul></ul>'),
+    template: _.template('<h2 class="tagheader">Tags</h2><ul></ul>'),
     
     initialize: function(properties) {
-        _.bindAll(this, 'render', 'addAll', 'addOne', 'tagSelected');
+        _.bindAll(this, 'render', 'addAll', 'addOne', 'tagSelected', 'resetTags');
         this.collection.bind('add', this.addOne);
         this.collection.bind('reset', this.render);
     },
@@ -147,6 +147,7 @@ window.TagCloudView = Backbone.View.extend({
         console.log('rendering window.TagCloudView');
         $(this.el).html(this.template());
         this.addAll();
+        $('.' + this.className + ' .tagheader').on('click', this.resetTags);
         return this;
     },
 
@@ -163,8 +164,14 @@ window.TagCloudView = Backbone.View.extend({
         view.bind('tagview:selected', this.tagSelected)
     },
 
+    resetTags: function(){
+        console.log('TagCloudView.resetTags');
+        this.collection.selectTag(null);
+        this.trigger('tagcloud:tagselected', {'tag': null}); 
+    },
+    
     tagSelected: function(tag){
-       console.log('TagCloudView.tagSelected event', tag);
-       this.trigger('tagcloud:tagselected', tag);
+        console.log('TagCloudView.tagSelected event', tag);
+        this.trigger('tagcloud:tagselected', tag);
     }
 });
