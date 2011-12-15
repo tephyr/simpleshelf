@@ -1,6 +1,5 @@
 /**
  * Views for simpleshelf
- * To protect the templates from premature initialization, wrap all views in document.ready
  */
 
 // set underscore to use mustache-style interpolation
@@ -36,7 +35,7 @@ window.SpineListView = Backbone.View.extend({
     className: 'spine-list-view',
    
     initialize: function(){
-        _.bindAll(this, 'render', 'addAll', 'addOne', 'updateTag');
+        _.bindAll(this, 'render', 'addAll', 'addOne', 'updateTag', 'bookSelected');
         this.collection.bind('add', this.addOne);
         this.collection.bind('reset', this.render);
     },
@@ -58,11 +57,17 @@ window.SpineListView = Backbone.View.extend({
         view.render();
         $('ul', this.el).append(view.el);
         model.bind('remove', view.remove);
+        view.bind('spineview:selected', this.bookSelected)
     },
     
     updateTag: function(msgArgs){
         console.log('SpineListView:updateTag', msgArgs);
         this.collection.filterByTag(msgArgs);
+    },
+    
+    bookSelected: function(msgArgs){
+        console.log('SpineListView:bookSelected', msgArgs);
+        this.trigger('spinelistview:bookSelected', msgArgs.bookId);
     }
 });
 
@@ -73,9 +78,12 @@ window.SpineView = Backbone.View.extend({
     className: 'spine-view',
     tagName: 'li',
     template: _.template('<a href="./{{id}}">{{title}}</a>'),
+    events: {
+      'click': 'bookSelected'  
+    },
     
     initialize: function(properties){
-        _.bindAll(this, 'render', 'remove');
+        _.bindAll(this, 'render', 'remove', 'bookSelected');
         this.model.bind('change', this.render);
         this.model.bind('destroy', this.remove);
     },
@@ -87,6 +95,14 @@ window.SpineView = Backbone.View.extend({
     
     remove: function() {
         $(this.el).remove();
+    },
+    
+    bookSelected: function(evt){
+        console.log('SpineView: selected book', this.options.model)
+        evt.preventDefault();
+        // signal to switch to full view for this book
+        this.model.select();
+        this.trigger('spineview:selected', {'bookId': this.model.get('id')});
     }
 });
 
@@ -173,5 +189,45 @@ window.TagCloudView = Backbone.View.extend({
     tagSelected: function(tag){
         console.log('TagCloudView.tagSelected event', tag);
         this.trigger('tagcloud:tagselected', tag);
+    }
+});
+
+window.BookView = Backbone.View.extend({
+    className: 'book',
+    tagName: 'div',
+    template: _.template(
+        '<h2>Book</h2>' +
+        '<div class="bookinfo"/>'
+    ),
+    simpleTemplates: {'simpleField': _.template(
+        '<tr><td><span class="title">{{title}}</span></td>' +
+        '<td><span class="value">{{value}}</span></td></tr>'
+    )},
+    
+    initialize: function(options){
+        _bindAll(this, 'render');
+    },
+    
+    render: function(){
+        console.log('BookView: rendering');
+        $(this.el).html(this.template());
+        
+        // build lines programmatically
+        var keys = ['title', 'author', 'isbn', 'openlibrary', 'tags'];
+        var htmlSnippets = {};
+        var bookinfoEl = $('#bookinfo', this.el);
+        var table = $('<table/>');
+        _.each(fields, function(value, key, list){
+            if(_.indexOf(value, htmlSnippets) != -1) {
+                // render specific field
+            } else {
+                table.append(this._addSimpleField(value, this.model[value]))
+            }
+        });
+        bookinfoEl.append(table);
+    },
+    
+    _addSimpleField: function(fieldTitle, fieldValue){
+        return this.simpleTemplates.simpleField({title: fieldTitle, value: fieldValue});
     }
 });

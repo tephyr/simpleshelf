@@ -3,7 +3,12 @@
  */
 
 window.Book = Backbone.Model.extend({
-    initialize: function(){}
+    initialize: function(){},
+
+    select: function(){
+        console.log('Book.select');
+        this.collection.trigger('book:selected', this.get('id'));
+    }
 });
 
 window.Library = Backbone.Collection.extend({
@@ -25,7 +30,12 @@ window.Library = Backbone.Collection.extend({
 });
 
 window.Spine = Backbone.Model.extend({
-    initialize: function(){}
+    initialize: function(){},
+    
+    select: function(){
+        console.log('Spine.select');
+        this.collection.trigger('spine:selected', this.get('id'));
+    }
 });
 
 window.SpineList = Backbone.Collection.extend({

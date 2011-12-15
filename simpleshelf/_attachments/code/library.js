@@ -20,7 +20,8 @@
         window.app = new SimpleShelfLibrary();
 
         // setup events across objects
-        window.app.tagCloudView.bind('tagcloud:tagselected', window.app.spineListView.updateTag)
+        window.app.tagCloudView.bind('tagcloud:tagselected', window.app.spineListView.updateTag);
+        window.app.spineListView.bind('spinelistview:bookSelected', window.app.books);
 
         // start (?) router
         Backbone.history.start({pushState: true});

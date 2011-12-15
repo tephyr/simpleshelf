@@ -4,7 +4,8 @@
 window.SimpleShelfLibrary = Backbone.Router.extend({
     routes: {
         '': 'home',
-        'tags/:tagName': 'tags'
+        'tags/:tagName': 'tags',
+        'books/:bookId': 'books'
     },
     
     initialize: function(){
@@ -33,6 +34,11 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
      * Route for a specific tag
      */
     tags: function(tagName){
-        console.log("Routing to tag " + tagName);
+        console.log("Routing to tag", tagName);
+    },
+    
+    books: function(bookId){
+        console.log('Routing to book', bookId);
+        Backbone.history.navigate('./books/' + bookId);
     }
 });
