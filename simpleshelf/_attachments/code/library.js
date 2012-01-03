@@ -13,9 +13,6 @@
     window.tagList.fetch({ success: tagList_fetch_complete });
 
     $(document).ready(function() {
-        // reverse colors on the welcome msg
-        $('#sidebar').css({backgroundColor: 'black', color: 'white'});
-        
         // instantiate Router
         window.app = new SimpleShelfLibrary();
 
@@ -47,6 +44,6 @@ function spineList_fetch_complete(){
 
 function fetches_done(){
     if (window.fetchCount == window.fetchTotal){
-        $('#welcome-msg').fadeOut(5000);
+        //$('#welcome-msg').fadeOut(5000);
     }
 };
