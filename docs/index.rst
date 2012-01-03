@@ -20,6 +20,7 @@ UI:
 
    ui/ui-goals
    ui/backbone-ui
+   ui/backbone-interaction
 
 Indices and tables
 ==================
