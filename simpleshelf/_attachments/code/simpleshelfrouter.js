@@ -44,5 +44,20 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     books: function(bookId){
         console.log('Routing to book', bookId);
         Backbone.history.navigate('./books/' + bookId);
+        // clear UI container
+        this._items.empty();
+        
+        var me = this;
+        
+        // get requested book
+        window.book = new Book({id: bookId});
+        window.book.fetch({success: function(){
+            // create book view
+            me.bookView = new BookView({
+                model: window.book
+            });
+            // append book view to DOM
+            me._items.append(me.bookView.render().el);
+        }});
     }
 });

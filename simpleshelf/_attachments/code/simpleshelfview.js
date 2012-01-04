@@ -217,14 +217,16 @@ window.BookView = Backbone.View.extend({
         var htmlSnippets = {};
         var bookinfoEl = $('#bookinfo', this.el);
         var table = $('<table/>');
+        var me = this;
         _.each(keys, function(value, key, list){
             if(_.indexOf(value, htmlSnippets) != -1) {
                 // render specific field
             } else {
-                table.append(this._addSimpleField(value, this.model[value]))
+                table.append(me._addSimpleField(value, me.model.get(value)));
             }
         });
         bookinfoEl.append(table);
+        return this;
     },
     
     _addSimpleField: function(fieldTitle, fieldValue){
