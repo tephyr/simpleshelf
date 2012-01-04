@@ -205,7 +205,7 @@ window.BookView = Backbone.View.extend({
     )},
     
     initialize: function(options){
-        _bindAll(this, 'render');
+        _.bindAll(this, 'render');
     },
     
     render: function(){
@@ -217,7 +217,7 @@ window.BookView = Backbone.View.extend({
         var htmlSnippets = {};
         var bookinfoEl = $('#bookinfo', this.el);
         var table = $('<table/>');
-        _.each(fields, function(value, key, list){
+        _.each(keys, function(value, key, list){
             if(_.indexOf(value, htmlSnippets) != -1) {
                 // render specific field
             } else {

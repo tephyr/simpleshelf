@@ -10,6 +10,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     
     initialize: function(){
         console.log("initializing SimpleShelfLibrary (Backbone.Router)");
+        _.bindAll(this, 'home', 'tags', 'books');
 
         /*this.infoView = new LibraryInfoView({
             collection: window.library
@@ -22,12 +23,15 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         this.tagCloudView = new TagCloudView({
             collection: window.tagList
         });
+        
+        // prep UI objects
+        this._items = $('#items');
+        this._sidebar = $('#sidebar');
     },
     
     home: function() {
-        $('#items').empty();
-        $("#items").append(this.spineListView.render().el);
-        $('#sidebar').append(this.tagCloudView.render().el);
+        this._items.empty().append(this.spineListView.render().el);
+        this._sidebar.append(this.tagCloudView.render().el);
     },
 
     /**
