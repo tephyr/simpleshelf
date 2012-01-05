@@ -215,7 +215,7 @@ window.BookView = Backbone.View.extend({
         // build lines programmatically
         var keys = ['title', 'author', 'isbn', 'openlibrary', 'tags'];
         var htmlSnippets = {};
-        var bookinfoEl = $('#bookinfo', this.el);
+        var bookinfoEl = $('.bookinfo', this.el);
         var table = $('<table/>');
         var me = this;
         _.each(keys, function(value, key, list){
