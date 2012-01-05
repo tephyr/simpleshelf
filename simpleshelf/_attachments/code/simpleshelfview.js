@@ -199,6 +199,8 @@ window.BookView = Backbone.View.extend({
         '<h2>Book</h2>' +
         '<div class="bookinfo"/>'
     ),
+    // templates for the different values in a book
+    // TODO: custom templates for status, notes
     simpleTemplates: {
         'simpleField': _.template(
             '<tr class="simple"><td><span class="title">{{title}}</span></td>' +
@@ -219,7 +221,7 @@ window.BookView = Backbone.View.extend({
         $(this.el).html(this.template());
         
         // build lines programmatically
-        var dataKeys = ['title', 'author', 'isbn', 'openlibrary', 'tags'];
+        var dataKeys = ['title', 'author', 'isbn', 'openlibrary', 'publisher', 'tags'];
         var htmlSnippets = {'tags': this.simpleTemplates.tags};
         var bookinfoEl = $('.bookinfo', this.el);
         var table = $('<table/>');
@@ -227,7 +229,6 @@ window.BookView = Backbone.View.extend({
 
         // for each data element (in specified order), render as TR
         _.each(dataKeys, function(element, index, list){
-            //if(_.indexOf(element, htmlSnippets) != -1) {
             if (htmlSnippets.hasOwnProperty(element)){
                 // render specific field
                 table.append(htmlSnippets[element]({title: element, value: me.model.get(element)}));

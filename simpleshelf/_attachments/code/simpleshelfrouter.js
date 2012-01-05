@@ -43,7 +43,8 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     
     books: function(bookId){
         console.log('Routing to book', bookId);
-        Backbone.history.navigate('./books/' + bookId);
+        // TODO: setup couchdb's routes & sync w/next line
+        // Backbone.history.navigate('./books/' + bookId);
         // clear UI container
         this._items.empty();
         
