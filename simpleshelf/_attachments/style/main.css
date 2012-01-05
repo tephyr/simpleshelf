@@ -16,8 +16,21 @@ h1 {
 #profile {
   border:4px solid #edd;
   background:#fee;
-  padding:8px;
   margin-bottom:8px;
+}
+
+#profile .navigation-view {
+    text-align: right;
+}
+#profile .navigation-view ul {
+  margin: 2px 4px;
+  padding: 2px;
+}
+
+#profile .navigation-view li {
+  display: Inline;
+  list-style-type: none;
+  padding-right: 20px;
 }
 
 #items {

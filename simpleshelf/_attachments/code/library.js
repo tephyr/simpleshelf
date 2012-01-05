@@ -19,6 +19,7 @@
         // setup events across objects
         window.app.tagCloudView.bind('tagcloud:tagselected', window.app.spineListView.updateTag);
         window.app.spineListView.bind('spinelistview:bookSelected', window.app.books);
+        window.app.navigationView.bind('navigation:index', window.app.home);
 
         // start (?) router
         Backbone.history.start({pushState: true});
