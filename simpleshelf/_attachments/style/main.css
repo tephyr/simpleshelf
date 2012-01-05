@@ -81,3 +81,7 @@ div.avatar img {
 .tagcloud li.tag.selected{
     font-weight: bold;
 }
+
+.bookinfo .tags .value {
+    background-color: pink;
+}
