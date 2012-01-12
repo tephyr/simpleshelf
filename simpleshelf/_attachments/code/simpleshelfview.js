@@ -63,12 +63,14 @@ window.NavigationView = Backbone.View.extend({
         return this;
     },
 
-    goIndex: function(){
+    goIndex: function(event){
+        event.preventDefault();
         // return home
         this.trigger('navigation:index');
     },
 
-    addBook: function(){
+    addBook: function(event){
+        event.preventDefault();
         // show new book form
         this.trigger('navigation:newbook');
     }
