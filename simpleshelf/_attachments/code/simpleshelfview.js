@@ -309,19 +309,16 @@ window.BookView = Backbone.View.extend({
  */
 window.EditBookView = Backbone.View.extend({
     className: 'editBook',
-    tagName: 'form',
+    tagName: 'div',
     template: _.template(
-        '<div>' +
         '<h2>Book</h2>' +
-        '<div class="bookinfo"/>' +
-        '<input type="submit" value="Submit" class="submit">' +
-        '</div'
+        '<form class="bookinfo"/>'
     ),
 
     simpleTemplates: {
         'simpleField': _.template(
-            '<tr class="simple"><td><span class="title">{{title}}</span></td>' +
-            '<td><input type="text"></td></tr>'
+            '<tr class="simple {{key}}"><td><span class="title">{{title}}</span></td>' +
+            '<td><input type="text" name="{{key}}"></td></tr>'
         )
     },
     
@@ -349,19 +346,28 @@ window.EditBookView = Backbone.View.extend({
         _.each(dataKeys, function(element, index, list){
             if (_.indexOf(normalInputs, element) != -1) {
                 // render element in generic way
-                table.append(me._addSimpleField(element));
+                table.append(me._addSimpleField(element, element));
             }
         });
 
-        bookinfoEl.append(table);
+        bookinfoEl.append(table).append('<input type="submit" value="Submit" class="submit">');
+
         return this;
     },
     
     save: function(){
-        console.log("EditBookView:save");
+        console.log("EditBookView:save", this.model.isNew());
+        var newAttributes = {};
+        if (this.model.isNew()){
+            // save everything
+            newAttributes = $('form', this.el).serializeArray();
+        }
+
+        // TODO: handle validation
+        this.model.save(newAttributes);
     },
 
-    _addSimpleField: function(fieldTitle, fieldValue){
-        return this.simpleTemplates.simpleField({title: fieldTitle, value: fieldValue});
+    _addSimpleField: function(fieldKey, fieldTitle){
+        return this.simpleTemplates.simpleField({title: fieldTitle, key: fieldKey});
     }
 });

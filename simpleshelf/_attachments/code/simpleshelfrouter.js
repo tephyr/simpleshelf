@@ -59,12 +59,16 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         
         var me = this;
         
-        // get requested book
-        window.book = new Book({id: bookId});
-        if (window.book.isNew()){
-            me.editBookView = new EditBookView({});
+        if (bookId == null){
+            // new book
+            window.book = new Book();
+            me.editBookView = new EditBookView({
+                model: window.book
+            });
             me._items.append(me.editBookView.render().el);
         } else {
+            // get requested book
+            window.book = new Book({id: bookId});
             window.book.fetch({success: function(){
                 // create book view
                 me.bookView = new BookView({

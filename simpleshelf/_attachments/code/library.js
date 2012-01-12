@@ -49,3 +49,7 @@ function fetches_done(){
         //$('#welcome-msg').fadeOut(5000);
     }
 };
+
+Backbone.sync = function(method, model) {
+    console.log(method + ": " + JSON.stringify(model));
+};
