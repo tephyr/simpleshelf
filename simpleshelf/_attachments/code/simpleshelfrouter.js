@@ -61,13 +61,18 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         
         // get requested book
         window.book = new Book({id: bookId});
-        window.book.fetch({success: function(){
-            // create book view
-            me.bookView = new BookView({
-                model: window.book
-            });
-            // append book view to DOM
-            me._items.append(me.bookView.render().el);
-        }});
+        if (window.book.isNew()){
+            me.editBookView = new EditBookView({});
+            me._items.append(me.editBookView.render().el);
+        } else {
+            window.book.fetch({success: function(){
+                // create book view
+                me.bookView = new BookView({
+                    model: window.book
+                });
+                // append book view to DOM
+                me._items.append(me.bookView.render().el);
+            }});
+        }
     }
 });

@@ -20,6 +20,7 @@
         window.app.tagCloudView.bind('tagcloud:tagselected', window.app.spineListView.updateTag);
         window.app.spineListView.bind('spinelistview:bookSelected', window.app.books);
         window.app.navigationView.bind('navigation:index', window.app.home);
+        window.app.navigationView.bind('navigation:newbook', window.app.books);
 
         // start (?) router
         Backbone.history.start({pushState: true});

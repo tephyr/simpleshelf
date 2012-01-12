@@ -70,6 +70,7 @@ window.NavigationView = Backbone.View.extend({
 
     addBook: function(){
         // show new book form
+        this.trigger('navigation:newbook');
     }
 });
 
@@ -245,6 +246,9 @@ window.TagCloudView = Backbone.View.extend({
     }
 });
 
+/**
+ * Show all information for single book
+ */
 window.BookView = Backbone.View.extend({
     className: 'book',
     tagName: 'div',
@@ -293,6 +297,68 @@ window.BookView = Backbone.View.extend({
 
         bookinfoEl.append(table);
         return this;
+    },
+
+    _addSimpleField: function(fieldTitle, fieldValue){
+        return this.simpleTemplates.simpleField({title: fieldTitle, value: fieldValue});
+    }
+});
+
+/**
+ * Add/edit book
+ */
+window.EditBookView = Backbone.View.extend({
+    className: 'editBook',
+    tagName: 'form',
+    template: _.template(
+        '<div>' +
+        '<h2>Book</h2>' +
+        '<div class="bookinfo"/>' +
+        '<input type="submit" value="Submit" class="submit">' +
+        '</div'
+    ),
+
+    simpleTemplates: {
+        'simpleField': _.template(
+            '<tr class="simple"><td><span class="title">{{title}}</span></td>' +
+            '<td><input type="text"></td></tr>'
+        )
+    },
+    
+    events: {
+        'click .submit': 'save'
+    },
+
+    initialize: function(options){
+        _.bindAll(this, 'render');
+    },
+
+    render: function(){
+        console.log('EditBookView: rendering');
+        $(this.el).html(this.template());
+
+        // build lines programmatically
+        var dataKeys = ['title', 'author', 'isbn', 'openlibrary', 'publisher', 'tags'];
+        var normalInputs = ['title', 'author', 'isbn', 'openlibrary', 'publisher'];
+        var htmlSnippets = {'tags': this.simpleTemplates.tags};
+        var bookinfoEl = $('.bookinfo', this.el);
+        var table = $('<table/>');
+        var me = this;
+
+        // for each data element (in specified order), render as TR
+        _.each(dataKeys, function(element, index, list){
+            if (_.indexOf(normalInputs, element) != -1) {
+                // render element in generic way
+                table.append(me._addSimpleField(element));
+            }
+        });
+
+        bookinfoEl.append(table);
+        return this;
+    },
+    
+    save: function(){
+        console.log("EditBookView:save");
     },
 
     _addSimpleField: function(fieldTitle, fieldValue){
