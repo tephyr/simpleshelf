@@ -37,6 +37,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     
     home: function() {
         this._items.empty().append(this.spineListView.render().el);
+        this.tagCloudView.resetTags();
         this._sidebar
             .empty()
             .append(this.tagCloudView.render().el);

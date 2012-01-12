@@ -174,6 +174,8 @@ window.TagView = Backbone.View.extend({
 
     render: function() {
         $(this.el).html(this.template(this.model.toJSON()));
+        if (this.model.get('selected'))
+            $(this.el).addClass('selected');
         return this;
     },
 
@@ -198,7 +200,10 @@ window.TagView = Backbone.View.extend({
 window.TagCloudView = Backbone.View.extend({
     className: 'tagcloud',
     tagName: 'div',
-    template: _.template('<h2 class="tagheader">Tags</h2><ul></ul>'),
+    template: _.template('<h2 class="tagheader"><a href="#" id="tagcloudviewheader">Tags</a></h2><ul></ul>'),
+    events: {
+        'click #tagcloudviewheader': 'resetTags'
+    },
 
     initialize: function(properties) {
         _.bindAll(this, 'render', 'addAll', 'addOne', 'tagSelected', 'resetTags');
@@ -209,6 +214,7 @@ window.TagCloudView = Backbone.View.extend({
     render: function() {
         console.log('rendering window.TagCloudView');
         $(this.el).html(this.template());
+        $('.tagheader', this.el).attr('title', 'Click to show all tags');
         this.addAll();
         $('.' + this.className + ' .tagheader').on('click', this.resetTags);
         return this;
