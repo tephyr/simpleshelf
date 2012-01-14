@@ -317,9 +317,14 @@ window.EditBookView = Backbone.View.extend({
         '<form class="bookinfo"/>'
     ),
 
+    dataKeys: ['title', 'author', 'isbn', 'openlibrary', 'publisher', 'tags'],
     simpleTemplates: {
         'simpleField': _.template(
             '<tr class="simple {{key}}"><td><span class="title">{{title}}</span></td>' +
+            '<td><input type="text" name="{{key}}"></td></tr>'
+        ),
+        'tags': _.template(
+            '<tr class="complex {{key}}"><td><span class="title">{{title}}</span></td>' +
             '<td><input type="text" name="{{key}}"></td></tr>'
         )
     },
@@ -337,7 +342,6 @@ window.EditBookView = Backbone.View.extend({
         $(this.el).html(this.template());
 
         // build lines programmatically
-        var dataKeys = ['title', 'author', 'isbn', 'openlibrary', 'publisher', 'tags'];
         var normalInputs = ['title', 'author', 'isbn', 'openlibrary', 'publisher'];
         var htmlSnippets = {'tags': this.simpleTemplates.tags};
         var bookinfoEl = $('.bookinfo', this.el);
@@ -345,10 +349,12 @@ window.EditBookView = Backbone.View.extend({
         var me = this;
 
         // for each data element (in specified order), render as TR
-        _.each(dataKeys, function(element, index, list){
+        _.each(this.dataKeys, function(element, index, list){
             if (_.indexOf(normalInputs, element) != -1) {
                 // render element in generic way
                 table.append(me._addSimpleField(element, element));
+            } else if (htmlSnippets.hasOwnProperty(element)){
+                table.append(me.simpleTemplates[element]({title: element, key: element}));
             }
         });
 
@@ -357,12 +363,19 @@ window.EditBookView = Backbone.View.extend({
         return this;
     },
     
-    save: function(){
+    save: function(event){
         console.log("EditBookView:save", this.model.isNew());
+        event.preventDefault();
         var newAttributes = {};
+        var me = this;
         if (this.model.isNew()){
             // save everything
-            newAttributes = $('form', this.el).serializeArray();
+            // newAttributes = $('form', this.el).serializeArray();
+            _.each($('form', this.el).serializeArray(), function(element, index, list){
+                if (_.indexOf(me.dataKeys, element.name) > -1){
+                    newAttributes[element.name] = element.value;
+                }
+            });
         }
 
         // TODO: handle validation
