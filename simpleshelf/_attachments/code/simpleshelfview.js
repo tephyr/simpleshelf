@@ -334,7 +334,8 @@ window.EditBookView = Backbone.View.extend({
     },
 
     initialize: function(options){
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'dataChanged');
+        this.model.bind('change', this.dataChanged);
     },
 
     render: function(){
@@ -380,6 +381,17 @@ window.EditBookView = Backbone.View.extend({
 
         // TODO: handle validation
         this.model.save(newAttributes);
+    },
+
+    dataChanged: function(event){
+        console.log("model's data has changed");
+        // goto bookview
+        if (this.model.isNew()){
+            this.trigger('editbookview:bookChanged');
+        } else {
+            this.trigger('editbookview:bookChanged', this.model.id);
+            window.app.books(this.model.id);
+        }
     },
 
     _addSimpleField: function(fieldKey, fieldTitle){
