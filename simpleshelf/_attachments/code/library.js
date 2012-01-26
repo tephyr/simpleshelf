@@ -58,6 +58,17 @@ Backbone.sync = _.wrap(Backbone.sync, function(func, method, model, options){
     switch(method){
         case "create":
             console.log(method + ": " + JSON.stringify(model));
+
+            // TODO: generate *good* UUID
+            var modelId = new Date().getTime();
+            model.set({'id': modelId});
+            
+            // couchdb uses PUT for both creates & updates
+            options.type = 'PUT';
+            
+            // save to couchdb
+            func(method, model, options);
+            
             break;
 
         case "update":
