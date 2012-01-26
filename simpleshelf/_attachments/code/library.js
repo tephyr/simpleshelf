@@ -50,6 +50,22 @@ function fetches_done(){
     }
 };
 
-Backbone.sync = function(method, model) {
-    console.log(method + ": " + JSON.stringify(model));
-};
+/**
+ * Override the original Backbone.sync, customize only as necessary
+ */
+Backbone.sync = _.wrap(Backbone.sync, function(func, method, model, options){
+    console.log("calling BB.sync; method=", method);
+    switch(method){
+        case "create":
+            console.log(method + ": " + JSON.stringify(model));
+            break;
+
+        case "update":
+        case "delete":
+            console.log(method, "not enabled");
+            break;
+        default:
+            func(method, model, options);
+            break;
+    }
+});
