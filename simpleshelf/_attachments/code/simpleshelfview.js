@@ -343,8 +343,9 @@ window.EditBookView = Backbone.View.extend({
     },
 
     initialize: function(options){
-        _.bindAll(this, 'render', 'dataChanged');
+        _.bindAll(this, 'render', 'dataChanged', 'dataSynced');
         this.model.bind('change', this.dataChanged);
+        this.model.bind('sync', this.dataSynced);
     },
 
     render: function(){
@@ -376,6 +377,9 @@ window.EditBookView = Backbone.View.extend({
     save: function(event){
         console.log("EditBookView:save", this.model.isNew());
         event.preventDefault();
+        
+        $('input.submit', this.el).attr("disabled", "disabled");
+        
         var newAttributes = {};
         var me = this;
         if (this.model.isNew()){
@@ -394,6 +398,10 @@ window.EditBookView = Backbone.View.extend({
 
     dataChanged: function(event){
         console.log("model's data has changed");
+    },
+    
+    dataSynced: function(event){
+        console.log("EditBookView: dataSynced");
         // goto bookview
         if (this.model.isNew()){
             this.trigger('editbookview:bookChanged');
