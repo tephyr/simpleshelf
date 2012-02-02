@@ -297,7 +297,7 @@ window.BookView = Backbone.View.extend({
 
         // for each data element (in specified order), render as TR
         _.each(dataKeys, function(element, index, list){
-            if (htmlSnippets.hasOwnProperty(element)){
+            if (_.has(htmlSnippets, element)){
                 // render specific field
                 table.append(htmlSnippets[element]({title: element, value: me.model.get(element)}));
             } else {
@@ -364,7 +364,7 @@ window.EditBookView = Backbone.View.extend({
             if (_.indexOf(normalInputs, element) != -1) {
                 // render element in generic way
                 table.append(me._addSimpleField(element, element));
-            } else if (htmlSnippets.hasOwnProperty(element)){
+            } else if (_.has(htmlSnippets, element)){
                 table.append(me.simpleTemplates[element]({title: element, key: element}));
             }
         });
@@ -384,10 +384,14 @@ window.EditBookView = Backbone.View.extend({
         var me = this;
         if (this.model.isNew()){
             // save everything
-            // newAttributes = $('form', this.el).serializeArray();
             _.each($('form', this.el).serializeArray(), function(element, index, list){
-                if (_.indexOf(me.dataKeys, element.name) > -1){
-                    newAttributes[element.name] = element.value;
+                if (element.name == "tags"){
+                    // TODO more robust method of splitting
+                    newAttributes["tags"] = element.value.split(' ');
+                } else {
+                    if (_.indexOf(me.dataKeys, element.name) > -1){
+                        newAttributes[element.name] = element.value;
+                    }
                 }
             });
         }
