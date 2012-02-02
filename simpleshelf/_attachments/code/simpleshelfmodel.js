@@ -33,6 +33,9 @@ window.Library = Backbone.Collection.extend({
 });
 
 window.Spine = Backbone.Model.extend({
+    url: function(){
+        return '/simpleshelf/' + this.get('id');
+    },
     initialize: function(){},
     
     select: function(){
@@ -68,8 +71,9 @@ window.SpineList = Backbone.Collection.extend({
         if (response.rows){
             for (var x = 0; x < response.rows.length; x++){
                 results.push({
-                    'title': response.rows[x].value,
-                    'id': response.rows[x].id
+                    'title': response.rows[x].value.title,
+                    'id': response.rows[x].id,
+                    '_rev': response.rows[x].value._rev
                 });
             }
        }

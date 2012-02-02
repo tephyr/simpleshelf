@@ -71,8 +71,16 @@ Backbone.sync = _.wrap(Backbone.sync, function(func, method, model, options){
             
             break;
 
-        case "update":
         case "delete":
+            console.log(method + ": " + JSON.stringify(model));
+            // include rev, or couchdb won't allow deletion
+            options.url = model.url() + "?rev=" + model.get("_rev");
+            
+            // delete from couchdb
+            func(method, model, options);
+            break;
+
+        case "update":
             console.log(method, "not enabled");
             break;
         default:
