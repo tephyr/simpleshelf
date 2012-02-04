@@ -27,12 +27,13 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         });
         
         // the following views are initially hidden
+        window.book = new window.Book();
         this.editBookView = new EditBookView({
-            model: new window.Book()
+            model: window.book
         })
         
         this.bookView = new BookView({
-            model: new window.Book()
+            model: window.book
         });
 
         // prep UI objects
@@ -70,19 +71,25 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         
         if (bookId == null){
             // new book
-            me.editBookView.initialize({model: new window.Book()});
+            window.book = new window.Book();
+            me.editBookView.initialize({model: window.book});
             me._items.append(me.editBookView.render().el);
         } else {
             // get requested book
-            window.book = new Book({id: bookId});
-            window.book.fetch({success: function(){
+            var loadBookView = function(){
                 // create book view
                 me.bookView.initialize({
                     model: window.book
                 });
                 // append book view to DOM
                 me._items.append(me.bookView.render().el);
-            }});
+            }
+            if (window.book.id != bookId){
+                window.book = new Book({id: bookId});
+                window.book.fetch({success: loadBookView});
+            } else {
+                loadBookView();
+            }
         }
     }
 });

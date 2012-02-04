@@ -406,7 +406,7 @@ window.EditBookView = Backbone.View.extend({
     },
 
     dataChanged: function(event){
-        console.log("model's data has changed");
+        // console.log("model's data has changed");
     },
     
     dataSynced: function(event){

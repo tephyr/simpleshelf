@@ -60,7 +60,7 @@ function bind_test(){
  * Override the original Backbone.sync, customize only as necessary
  */
 Backbone.sync = _.wrap(Backbone.sync, function(func, method, model, options){
-    console.log("calling BB.sync; method=", method);
+    console.log("BB.sync", method);
     switch(method){
         case "create":
             console.log(method + ": " + JSON.stringify(model));

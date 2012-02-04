@@ -9,7 +9,9 @@ window.Book = Backbone.Model.extend({
     url: function(){
         return '/simpleshelf/' + this.get('id');
     },
-    initialize: function(){},
+    initialize: function(){
+        console.log('Book', 'initialize');
+    },
 
     select: function(){
         console.log('Book.select');
