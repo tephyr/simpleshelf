@@ -22,6 +22,7 @@
         window.app.navigationView.bind('navigation:index', window.app.home);
         window.app.navigationView.bind('navigation:newbook', window.app.books);
         window.app.editBookView.bind('editbookview:bookChanged', window.app.tagCloudView.reloadTags);
+        window.spineList.bind('destroy', window.app.tagCloudView.reloadTags);
 
         // start (?) router
         Backbone.history.start({pushState: true});
