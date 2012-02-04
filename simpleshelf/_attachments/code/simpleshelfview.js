@@ -218,7 +218,7 @@ window.TagCloudView = Backbone.View.extend({
     },
 
     initialize: function(properties) {
-        _.bindAll(this, 'render', 'addAll', 'addOne', 'tagSelected', 'resetTags');
+        _.bindAll(this, 'render', 'addAll', 'addOne', 'tagSelected', 'resetTags', 'reloadTags');
         this.collection.bind('add', this.addOne);
         this.collection.bind('reset', this.render);
     },
@@ -243,6 +243,11 @@ window.TagCloudView = Backbone.View.extend({
         $('ul', this.el).append(view.el);
         model.bind('remove', view.remove);
         view.bind('tagview:selected', this.tagSelected)
+    },
+    
+    reloadTags: function(){
+        console.log('TagListView.reload');
+        this.collection.fetch();
     },
 
     resetTags: function(){

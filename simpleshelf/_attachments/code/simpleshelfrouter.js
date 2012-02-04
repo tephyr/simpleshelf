@@ -25,6 +25,15 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         this.tagCloudView = new TagCloudView({
             collection: window.tagList
         });
+        
+        // the following views are initially hidden
+        this.editBookView = new EditBookView({
+            model: new window.Book()
+        })
+        
+        this.bookView = new BookView({
+            model: new window.Book()
+        });
 
         // prep UI objects
         this._profile = $("#profile");
@@ -61,17 +70,14 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         
         if (bookId == null){
             // new book
-            window.book = new Book();
-            me.editBookView = new EditBookView({
-                model: window.book
-            });
+            me.editBookView.initialize({model: new window.Book()});
             me._items.append(me.editBookView.render().el);
         } else {
             // get requested book
             window.book = new Book({id: bookId});
             window.book.fetch({success: function(){
                 // create book view
-                me.bookView = new BookView({
+                me.bookView.initialize({
                     model: window.book
                 });
                 // append book view to DOM
