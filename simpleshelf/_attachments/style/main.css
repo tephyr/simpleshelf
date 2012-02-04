@@ -96,5 +96,9 @@ div.avatar img {
 }
 
 .bookinfo .tags .value {
-    background-color: pink;
+    background-color: silver;
+}
+
+.spine-view span.del {
+    float: right;
 }
