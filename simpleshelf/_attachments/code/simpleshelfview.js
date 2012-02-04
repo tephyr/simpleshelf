@@ -127,10 +127,10 @@ window.SpineListView = Backbone.View.extend({
 window.SpineView = Backbone.View.extend({
     className: 'spine-view',
     tagName: 'li',
-    template: _.template('<a href="./{{id}}">{{title}}</a> <span class="del">delete</span>'),
+    template: _.template('<span class="spine"><a href="./{{id}}">{{title}}</a></span> <span class="del"><a href="#">delete</a></span>'),
     events: {
-      'click a': 'bookSelected',
-      'click .del': 'bookRequestedDelete'
+      'click .spine a': 'bookSelected',
+      'click .del a': 'bookRequestedDelete'
     },
 
     initialize: function(properties){
@@ -150,6 +150,7 @@ window.SpineView = Backbone.View.extend({
 
     bookRequestedDelete: function(evt){
         console.log("SpineView: deleted book", this.options.model);
+        evt.preventDefault();
         // verify!
         if (window.confirm("Ok to delete \"" + this.options.model.get("title") + "\"?")){
             this.model.destroy({'wait': true});
