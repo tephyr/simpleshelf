@@ -403,7 +403,7 @@ window.EditBookView = Backbone.View.extend({
         }
 
         // TODO: handle validation
-        this.model.save(newAttributes);
+        this.model.save(newAttributes, {'wait': true});
     },
 
     dataChanged: function(event){
@@ -412,13 +412,7 @@ window.EditBookView = Backbone.View.extend({
     
     dataSynced: function(event){
         console.log("EditBookView: dataSynced");
-        // goto bookview
-        if (this.model.isNew()){
-            this.trigger('editbookview:bookChanged');
-        } else {
-            this.trigger('editbookview:bookChanged', this.model.id);
-            window.app.books(this.model.id);
-        }
+        this.trigger('editbookview:dataSynced', this.model.id);
     },
 
     _addSimpleField: function(fieldKey, fieldTitle){
