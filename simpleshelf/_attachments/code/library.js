@@ -23,7 +23,7 @@
 
         // setup events across objects
         window.app.tagCloudView.bind('tagcloud:tagselected', window.app.spineListView.updateTag);
-        window.app.spineListView.bind('spinelistview:bookSelected', window.app.books);
+        window.dispatcher.bind('spinelistview:bookSelected', window.app.books);
         window.app.navigationView.bind('navigation:index', window.app.home);
         window.app.navigationView.bind('navigation:newbook', window.app.books);
         window.dispatcher.bind('editbookview:dataSynced', window.app.tagCloudView.reloadTags);
@@ -128,5 +128,11 @@ Backbone.View.prototype.close = function(){
     this.unbind();
     if (this.onClose){
         this.onClose();
+    }
+};
+
+Backbone.View.prototype.log = function(){
+    if (_.has('okToLog', this.options) && this.options.okToLog){
+        console.log(arguments);
     }
 };

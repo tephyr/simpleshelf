@@ -17,13 +17,17 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             collection: window.library
         });*/
 
-        this.navigationView = new NavigationView({});
+        this.navigationView = new NavigationView({
+            dispatcher: window.dispatcher
+        });
 
         this.spineListView = new SpineListView({
+            dispatcher: window.dispatcher,
             collection: window.spineList
         });
 
         this.tagCloudView = new TagCloudView({
+            dispatcher: window.dispatcher,
             collection: window.tagList
         });
 
@@ -37,7 +41,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     },
     
     home: function() {
-        this._items.empty().append(this.spineListView.render().el);
+        this.appView.showView(this.spineListView);
         this.tagCloudView.resetTags();
         this._sidebar
             .empty()

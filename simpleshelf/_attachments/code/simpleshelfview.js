@@ -103,7 +103,9 @@ window.SpineListView = Backbone.View.extend({
     },
 
     addOne: function(model) {
-        view = new SpineView({model: model});
+        view = new SpineView({
+            dispatcher: this.options.dispatcher,
+            model: model});
         view.render();
         $('ul', this.el).append(view.el);
         model.bind('remove', view.remove);
@@ -117,7 +119,7 @@ window.SpineListView = Backbone.View.extend({
 
     bookSelected: function(msgArgs){
         console.log('SpineListView:bookSelected', msgArgs);
-        this.trigger('spinelistview:bookSelected', msgArgs.bookId);
+        this.options.dispatcher.trigger('spinelistview:bookSelected', msgArgs.bookId);
     }
 });
 
@@ -197,7 +199,7 @@ window.TagView = Backbone.View.extend({
     },
 
     tagSelected: function(){
-        console.log('TagView: click evt for tag==' + this.model.get('tag'));
+        this.log('TagView: click evt for tag==' + this.model.get('tag'));
         this.model.select();
         this.trigger('tagview:selected', {'tag': this.model.get('tag')});
     },
@@ -225,7 +227,7 @@ window.TagCloudView = Backbone.View.extend({
     },
 
     render: function() {
-        console.log('rendering window.TagCloudView');
+        this.log('rendering window.TagCloudView');
         $(this.el).html(this.template());
         $('.tagheader', this.el).attr('title', 'Click to show all tags');
         this.addAll();
@@ -234,12 +236,15 @@ window.TagCloudView = Backbone.View.extend({
     },
 
     addAll: function() {
-        console.log('TagCloudView.addAll: this.collection.length==', this.collection.length)
+        this.log('TagCloudView.addAll: this.collection.length==', this.collection.length)
         this.collection.each(this.addOne);
     },
 
     addOne: function(model) {
-        var view = new TagView({model: model});
+        var view = new TagView({
+            model: model,
+            okToLog: this.okToLog
+        });
         view.render();
         $('ul', this.el).append(view.el);
         model.bind('remove', view.remove);
@@ -247,19 +252,19 @@ window.TagCloudView = Backbone.View.extend({
     },
     
     reloadTags: function(){
-        console.log('TagListView.reload');
+        this.log('TagListView.reload');
         this.collection.fetch();
     },
 
     resetTags: function(){
-        console.log('TagCloudView.resetTags');
+        this.log('TagCloudView.resetTags');
         this.collection.selectTag(null);
-        this.trigger('tagcloud:tagselected', {'tag': null});
+        this.options.dispatcher.trigger('tagcloud:tagselected', {'tag': null});
     },
 
     tagSelected: function(tag){
-        console.log('TagCloudView.tagSelected event', tag);
-        this.trigger('tagcloud:tagselected', tag);
+        this.log('TagCloudView.tagSelected event', tag);
+        this.options.dispatcher.trigger('tagcloud:tagselected', tag);
     }
 });
 
