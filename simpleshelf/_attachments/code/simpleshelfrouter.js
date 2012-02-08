@@ -8,9 +8,10 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         'books/:bookId': 'books'
     },
     
-    initialize: function(){
+    initialize: function(options){
         console.log("initializing SimpleShelfLibrary (Backbone.Router)");
         _.bindAll(this, 'home', 'tags', 'books');
+        this.appView = options.appView;
 
         /*this.infoView = new LibraryInfoView({
             collection: window.library
@@ -24,16 +25,6 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
 
         this.tagCloudView = new TagCloudView({
             collection: window.tagList
-        });
-        
-        // the following views are initially hidden
-        window.book = new window.Book();
-        this.editBookView = new EditBookView({
-            model: window.book
-        })
-        
-        this.bookView = new BookView({
-            model: window.book
         });
 
         // prep UI objects
@@ -64,27 +55,26 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         console.log('Routing to book', bookId);
         // TODO: setup couchdb's routes & sync w/next line
         // Backbone.history.navigate('./books/' + bookId);
-        // clear UI container
-        this._items.empty();
         
         var me = this;
         
         if (bookId == null){
             // new book
             window.book = new window.Book();
-            me.editBookView.initialize({model: window.book});
-            me._items.append(me.editBookView.render().el);
+            var editBookView = new EditBookView({
+                dispatcher: window.dispatcher,
+                model: window.book});
+            this.appView.showView(editBookView);
         } else {
             // get requested book
             var loadBookView = function(){
-                // create book view
-                me.bookView.initialize({
-                    model: window.book
-                });
-                // append book view to DOM
-                me._items.append(me.bookView.render().el);
+                // create & show book view
+                var bookView = new BookView({
+                    dispatcher: window.dispatcher,
+                    model: window.book});
+                me.appView.showView(bookView);
             }
-            if (window.book.id != bookId){
+            if (!window.book || (window.book.id != bookId)){
                 window.book = new Book({id: bookId});
                 window.book.fetch({success: loadBookView});
             } else {

@@ -13,18 +13,23 @@
     window.tagList.fetch({ success: tagList_fetch_complete });
 
     $(document).ready(function() {
+        // instantiate global event dispatcher
+        // TODO: keep within app object
+        window.dispatcher = {};
+        _.extend(window.dispatcher, Backbone.Events);
+        
         // instantiate Router
-        window.app = new SimpleShelfLibrary();
+        window.app = new SimpleShelfLibrary({appView: new AppView()});
 
         // setup events across objects
         window.app.tagCloudView.bind('tagcloud:tagselected', window.app.spineListView.updateTag);
         window.app.spineListView.bind('spinelistview:bookSelected', window.app.books);
         window.app.navigationView.bind('navigation:index', window.app.home);
         window.app.navigationView.bind('navigation:newbook', window.app.books);
-        window.app.editBookView.bind('editbookview:dataSynced', window.app.tagCloudView.reloadTags);
-        window.app.editBookView.bind('editbookview:dataSynced', window.app.books);
+        window.dispatcher.bind('editbookview:dataSynced', window.app.tagCloudView.reloadTags);
+        window.dispatcher.bind('editbookview:dataSynced', window.app.books);
         window.spineList.bind('destroy', window.app.tagCloudView.reloadTags);
-
+        
         // start (?) router
         Backbone.history.start({pushState: true});
 
@@ -55,7 +60,7 @@ function fetches_done(){
 
 function bind_test(){
     console.log("THIS BOUND EVENT HAS BEEN FIRED.")
-}
+};
 
 /**
  * Override the original Backbone.sync, customize only as necessary
@@ -95,3 +100,33 @@ Backbone.sync = _.wrap(Backbone.sync, function(func, method, model, options){
             break;
     }
 });
+
+/**
+ * Use AppView to transition between "pages", while enforcing close() calls
+ * Shamelessly copied from http://lostechies.com/derickbailey/2011/09/15/zombies-run-managing-page-transitions-in-backbone-apps/
+ */
+function AppView(){
+
+    this.showView = function(view){
+        if (this.currentView){
+          this.currentView.close();
+        }
+    
+        this.currentView = view;
+        this.currentView.render();
+    
+        $("#items").html(this.currentView.el);
+    }
+};
+
+/**
+ * Add close() method to all views
+ * Shamelessly copied from lostechies.com (see AppView)
+ */
+Backbone.View.prototype.close = function(){
+    this.remove();
+    this.unbind();
+    if (this.onClose){
+        this.onClose();
+    }
+};

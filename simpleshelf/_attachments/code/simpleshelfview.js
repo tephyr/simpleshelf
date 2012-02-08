@@ -412,7 +412,7 @@ window.EditBookView = Backbone.View.extend({
     
     dataSynced: function(event){
         console.log("EditBookView: dataSynced");
-        this.trigger('editbookview:dataSynced', this.model.id);
+        this.options.dispatcher.trigger('editbookview:dataSynced', this.model.id);
     },
 
     _addSimpleField: function(fieldKey, fieldTitle){
