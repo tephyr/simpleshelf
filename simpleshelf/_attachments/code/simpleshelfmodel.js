@@ -128,7 +128,6 @@ window.TagList = Backbone.Collection.extend({
     },
 
     parse: function(response){
-        console.log('TagList: parsing!');
         var results = [];
         if (response.rows){
             for (var x = 0; x < response.rows.length; x++){
