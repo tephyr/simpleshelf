@@ -24,6 +24,7 @@
         // setup events across objects
         var events = {
             'tagcloudview:tagselected': [window.app.spineListView.updateTag],
+            'tagcloudview:tagsreset': [window.app.home],
             'spinelistview:bookSelected': [window.app.books],
             'navigation:index': [window.app.home],
             'navigation:newbook': [window.app.books],

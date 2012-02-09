@@ -18,7 +18,8 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         });*/
 
         this.navigationView = new NavigationView({
-            dispatcher: window.dispatcher
+            dispatcher: window.dispatcher,
+            okToLog: true
         });
 
         this.spineListView = new SpineListView({
@@ -28,7 +29,8 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
 
         this.tagCloudView = new TagCloudView({
             dispatcher: window.dispatcher,
-            collection: window.tagList
+            collection: window.tagList,
+            okToLog: true
         });
 
         // prep UI objects
@@ -37,15 +39,13 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         this._sidebar = $('#sidebar');
 
         // one-time setup
-        this._profile.append(this.navigationView.render().el)
+        this._profile.append(this.navigationView.render().el);
+        this._sidebar.append(this.tagCloudView.render().el);
     },
     
     home: function() {
         this.appView.showView(this.spineListView);
-        this.tagCloudView.resetTags();
-        this._sidebar
-            .empty()
-            .append(this.tagCloudView.render().el);
+        this.tagCloudView.resetTags(false);
     },
 
     /**

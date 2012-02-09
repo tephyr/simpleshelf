@@ -221,11 +221,12 @@ window.TagCloudView = Backbone.View.extend({
     tagName: 'div',
     template: _.template('<h2 class="tagheader"><a href="#" id="tagcloudviewheader">Tags</a></h2><ul></ul>'),
     events: {
-        'click a#tagcloudviewheader': 'resetTags'
+        'click #tagcloudviewheader': 'tagResetRequested'
     },
 
     initialize: function(properties) {
-        _.bindAll(this, 'render', 'addAll', 'addOne', 'tagSelected', 'resetTags', 'reloadTags');
+        _.bindAll(this, 'render', 'addAll', 'addOne', 'tagResetRequested', 'tagSelected',
+            'resetTags', 'reloadTags');
         this.collection.bind('add', this.addOne);
         this.collection.bind('reset', this.render);
     },
@@ -235,7 +236,6 @@ window.TagCloudView = Backbone.View.extend({
         $(this.el).html(this.template());
         $('.tagheader', this.el).attr('title', 'Click to show all tags');
         this.addAll();
-        $('.' + this.className + ' .tagheader').on('click', this.resetTags);
         return this;
     },
 
@@ -261,13 +261,19 @@ window.TagCloudView = Backbone.View.extend({
         this.collection.fetch();
     },
 
-    resetTags: function(evt){
-        if (evt){
-            evt.preventDefault();
-        }
+    resetTags: function(fromEvent){
         this.log('TagCloudView.resetTags');
         this.collection.selectTag(null);
-        this.options.dispatcher.trigger('tagcloudview:tagselected', {'tag': null});
+        if (fromEvent){
+            // fired from UI event; ok to trigger further actions
+            this.options.dispatcher.trigger('tagcloudview:tagsreset', {'tag': null});
+        }
+    },
+
+    tagResetRequested: function(evt){
+        evt.preventDefault();
+        this.log('TagCloudView.tagResetRequested');
+        this.resetTags(true);
     },
 
     tagSelected: function(tag){
