@@ -72,13 +72,23 @@ window.SpineList = Backbone.Collection.extend({
     },
     
     parse: function(response){
-        var results = [];
+        var results = [], row, values;
         if (response.rows){
             for (var x = 0; x < response.rows.length; x++){
+                row = response.rows[x];
+                values = {};
+                // handle different couchdb query results
+                if (_.has(row.value, 'title')){
+                    values['title'] = row.value.title;
+                    values['_rev'] = row.value._rev;
+                } else {
+                    values['title'] = row.value;
+                    values['_rev'] = null;
+                }
                 results.push({
-                    'title': response.rows[x].value.title,
-                    'id': response.rows[x].id,
-                    '_rev': response.rows[x].value._rev
+                    'title': values.title,
+                    'id': row.id,
+                    '_rev': values._rev
                 });
             }
        }
