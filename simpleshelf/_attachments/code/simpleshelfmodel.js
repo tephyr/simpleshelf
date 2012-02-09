@@ -68,7 +68,8 @@ window.SpineList = Backbone.Collection.extend({
         _.bindAll(this, 'reset', 'filterByTag');
         this._current_filter = {
             'type': 'book',
-            'filter': null};
+            'filter': null
+        };
     },
     
     parse: function(response){
@@ -98,15 +99,13 @@ window.SpineList = Backbone.Collection.extend({
     filterByTag: function(msgArgs){
         console.log('SpineList.filterByTag', msgArgs);
         if (msgArgs.tag == null){
-            // reset filter to books
+            // reset filter to show all books
             this._current_filter = {'type': 'book', 'filter': null};
         } else {
-        this._current_filter = {'type': 'tag',
-            'filter': msgArgs.tag};
+            this._current_filter = {'type': 'tag', 'filter': msgArgs.tag};
         }
         this.fetch();
     }
-    
 });
 
 window.Tag = Backbone.Model.extend({
@@ -132,7 +131,7 @@ window.TagList = Backbone.Collection.extend({
     model: Tag,
     url: '/simpleshelf/_design/simpleshelf/_view/tags?group=true',
     initialize: function(properties) {
-        _.bindAll(this, 'reset');
+        _.bindAll(this, 'reset', 'selectTag');
         this.bind('reset', this.reset_debug);
         this.bind('tag:selected', this.selectTag);
     },
@@ -141,8 +140,10 @@ window.TagList = Backbone.Collection.extend({
         var results = [];
         if (response.rows){
             for (var x = 0; x < response.rows.length; x++){
-                results.push({'tag': response.rows[x].key,
-                    'count': response.rows[x].value});
+                results.push({
+                    'tag': response.rows[x].key,
+                    'count': response.rows[x].value
+                });
             }
         }
         return results;

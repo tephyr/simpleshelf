@@ -103,7 +103,7 @@ window.SpineListView = Backbone.View.extend({
     },
 
     addOne: function(model) {
-        view = new SpineView({
+        var view = new SpineView({
             dispatcher: this.options.dispatcher,
             model: model
         });
@@ -221,7 +221,7 @@ window.TagCloudView = Backbone.View.extend({
     tagName: 'div',
     template: _.template('<h2 class="tagheader"><a href="#" id="tagcloudviewheader">Tags</a></h2><ul></ul>'),
     events: {
-        'click #tagcloudviewheader': 'resetTags'
+        'click a#tagcloudviewheader': 'resetTags'
     },
 
     initialize: function(properties) {
@@ -261,15 +261,18 @@ window.TagCloudView = Backbone.View.extend({
         this.collection.fetch();
     },
 
-    resetTags: function(){
+    resetTags: function(evt){
+        if (evt){
+            evt.preventDefault();
+        }
         this.log('TagCloudView.resetTags');
         this.collection.selectTag(null);
-        this.options.dispatcher.trigger('tagcloud:tagselected', {'tag': null});
+        this.options.dispatcher.trigger('tagcloudview:tagselected', {'tag': null});
     },
 
     tagSelected: function(tag){
         this.log('TagCloudView.tagSelected event', tag);
-        this.options.dispatcher.trigger('tagcloud:tagselected', tag);
+        this.options.dispatcher.trigger('tagcloudview:tagselected', tag);
     }
 });
 
