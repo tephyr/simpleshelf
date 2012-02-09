@@ -22,12 +22,24 @@
         window.app = new SimpleShelfLibrary({appView: new AppView()});
 
         // setup events across objects
-        window.app.tagCloudView.bind('tagcloud:tagselected', window.app.spineListView.updateTag);
-        window.dispatcher.bind('spinelistview:bookSelected', window.app.books);
-        window.app.navigationView.bind('navigation:index', window.app.home);
-        window.app.navigationView.bind('navigation:newbook', window.app.books);
-        window.dispatcher.bind('editbookview:dataSynced', window.app.tagCloudView.reloadTags);
-        window.dispatcher.bind('editbookview:dataSynced', window.app.books);
+        var events = {
+            'tagcloud:tagselected': [window.app.spineListView.updateTag],
+            'spinelistview:bookSelected': [window.app.books],
+            'navigation:index': [window.app.home],
+            'navigation:newbook': [window.app.books],
+            'editbookview:dataSynced': [
+                window.app.tagCloudView.reloadTags,
+                window.app.books
+            ]
+        };
+        
+        // bind events
+        _.each(events, function(eventTargets, eventName){
+            _.each(eventTargets, function(eventTarget){
+                window.dispatcher.bind(eventName, eventTarget);
+            });
+        });
+
         window.spineList.bind('destroy', window.app.tagCloudView.reloadTags);
         
         // start (?) router

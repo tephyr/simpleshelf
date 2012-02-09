@@ -66,13 +66,13 @@ window.NavigationView = Backbone.View.extend({
     goIndex: function(event){
         event.preventDefault();
         // return home
-        this.trigger('navigation:index');
+        this.options.dispatcher.trigger('navigation:index');
     },
 
     addBook: function(event){
         event.preventDefault();
         // show new book form
-        this.trigger('navigation:newbook');
+        this.options.dispatcher.trigger('navigation:newbook');
     }
 });
 
@@ -105,10 +105,14 @@ window.SpineListView = Backbone.View.extend({
     addOne: function(model) {
         view = new SpineView({
             dispatcher: this.options.dispatcher,
-            model: model});
+            model: model
+        });
         view.render();
         $('ul', this.el).append(view.el);
         model.bind('remove', view.remove);
+        // even though the subview is given the dispatcher reference,
+        // its events should still bubble up to the parent view, which
+        // will handle dispatching them globally
         view.bind('spineview:selected', this.bookSelected)
     },
 
@@ -242,6 +246,7 @@ window.TagCloudView = Backbone.View.extend({
 
     addOne: function(model) {
         var view = new TagView({
+            dispatcher: this.options.dispatcher,
             model: model,
             okToLog: this.okToLog
         });
