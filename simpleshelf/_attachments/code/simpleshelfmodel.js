@@ -65,7 +65,7 @@ window.SpineList = Backbone.Collection.extend({
     },
     
     initialize: function(properties) {
-        _.bindAll(this, 'reset', 'filterByTag');
+        _.bindAll(this, 'reset', 'filterByTag', 'resetFilter');
         this._current_filter = {
             'type': 'book',
             'filter': null
@@ -96,15 +96,24 @@ window.SpineList = Backbone.Collection.extend({
        return results;
     },
     
+    /**
+     * @param msgArgs {Object} {tag:String}
+     */
     filterByTag: function(msgArgs){
-        console.log('SpineList.filterByTag', msgArgs);
+        console.log('SpineList.filterByTag', JSON.stringify(msgArgs));
         if (msgArgs.tag == null){
             // reset filter to show all books
-            this._current_filter = {'type': 'book', 'filter': null};
+            this.resetFilter();
         } else {
             this._current_filter = {'type': 'tag', 'filter': msgArgs.tag};
         }
-        this.fetch();
+        return this;
+    },
+    
+    resetFilter: function(){
+        // reset filter to show all books
+        this._current_filter = {'type': 'book', 'filter': null};
+        return this;
     }
 });
 

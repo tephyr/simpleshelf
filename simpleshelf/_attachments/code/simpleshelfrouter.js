@@ -22,11 +22,6 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             okToLog: true
         });
 
-        this.spineListView = new SpineListView({
-            dispatcher: window.dispatcher,
-            collection: window.spineList
-        });
-
         this.tagCloudView = new TagCloudView({
             dispatcher: window.dispatcher,
             collection: window.tagList,
@@ -43,9 +38,21 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         this._sidebar.append(this.tagCloudView.render().el);
     },
     
+    /**
+     * Route for the index
+     */
     home: function() {
-        this.appView.showView(this.spineListView);
+        console.log("Routing to home");
         this.tagCloudView.resetTags(false);
+        window.spineList.resetFilter();
+        var me = this;
+        window.spineList.fetch({silent: true, success: function(collection, response){
+            console.log('Route / spineList fetch succeeded; count:', collection.length);
+            me.appView.showView(new SpineListView({
+                dispatcher: window.dispatcher,
+                collection: window.spineList
+            }), {log: true});
+        }});
     },
 
     /**
@@ -53,8 +60,27 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
      */
     tags: function(tagName){
         console.log("Routing to tag", tagName);
+        
+        var me = this;
+        var afterFetch = function(collection, response){
+            me.appView.showView(new SpineListView({
+                dispatcher: window.dispatcher,
+                collection: window.spineList
+            }));
+        };
+
+        if (tagName){
+            window.spineList.filterByTag({'tag': tagName})
+                .fetch({silent: true, success: afterFetch});
+        } else {
+            window.spineList.resetFilter()
+                .fetch({silent: true, success: afterFetch});
+        }
     },
-    
+
+    /**
+     * Route for a specific book
+     */
     books: function(bookId){
         console.log('Routing to book', bookId);
         // TODO: setup couchdb's routes & sync w/next line

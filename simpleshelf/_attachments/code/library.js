@@ -7,8 +7,6 @@
     
     window.fetchCount = 0, window.fetchTotal = 2;
 
-    // load a set of book spines
-    window.spineList.fetch({ success: spineList_fetch_complete });
     // load tags
     window.tagList.fetch({ success: tagList_fetch_complete });
 
@@ -23,7 +21,7 @@
 
         // setup events across objects
         var events = {
-            'tagcloudview:tagselected': [window.app.spineListView.updateTag],
+            'tagcloudview:tagselected': [window.app.tags],
             'tagcloudview:tagsreset': [window.app.home],
             'spinelistview:bookSelected': [window.app.books],
             'navigation:index': [window.app.home],
@@ -120,7 +118,12 @@ Backbone.sync = _.wrap(Backbone.sync, function(func, method, model, options){
  */
 function AppView(){
 
-    this.showView = function(view){
+    this.showView = function(view, options){
+        if (options && _.has('log', options) && options.log){
+            var c = this.currentView ? (this.currentView.viewName || this.currentView.cid) : '[x]';
+            var v = view.viewName || view.cid;
+            console.log('AppView: closing ' + c + ', opening ' + v);
+        }
         if (this.currentView){
           this.currentView.close();
         }

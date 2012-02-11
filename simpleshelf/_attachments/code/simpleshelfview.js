@@ -39,6 +39,7 @@ window.NavigationView = Backbone.View.extend({
       'click .newbook': 'addBook',
       'click .index': 'goIndex'
     },
+    viewName: 'NavigationView',
 
     initialize: function(){
         _.bindAll(this, "render", "addBook", "goIndex");
@@ -83,11 +84,12 @@ window.SpineListView = Backbone.View.extend({
     template: _.template('<h2>All books</h2><ul></ul>'),
     tagName: 'div',
     className: 'spine-list-view',
+    viewName: 'SpineListView',
 
     initialize: function(){
         _.bindAll(this, 'render', 'addAll', 'addOne', 'updateTag', 'bookSelected');
-        this.collection.bind('add', this.addOne);
-        this.collection.bind('reset', this.render);
+        this.collection.on('add', this.addOne);
+        this.collection.on('reset', this.render);
     },
 
     render: function(){
@@ -97,23 +99,29 @@ window.SpineListView = Backbone.View.extend({
         return this;
     },
 
+    onClose: function(){
+        this.collection.off('add', this.addOne);
+        this.collection.off('reset', this.render);
+    },
+
     addAll: function() {
         console.log('SpineListView.addAll: this.collection.length==', this.collection.length)
         this.collection.each(this.addOne);
     },
 
     addOne: function(model) {
+        // TODO: hold in array for onClose clean-up
         var view = new SpineView({
             dispatcher: this.options.dispatcher,
             model: model
         });
         view.render();
         $('ul', this.el).append(view.el);
-        model.bind('remove', view.remove);
+        model.on('remove', view.remove);
         // even though the subview is given the dispatcher reference,
         // its events should still bubble up to the parent view, which
         // will handle dispatching them globally
-        view.bind('spineview:selected', this.bookSelected)
+        view.on('spineview:selected', this.bookSelected)
     },
 
     updateTag: function(msgArgs){
@@ -138,16 +146,22 @@ window.SpineView = Backbone.View.extend({
       'click .spine a': 'bookSelected',
       'click .del a': 'bookRequestedDelete'
     },
+    viewName: 'SpineView',
 
     initialize: function(properties){
         _.bindAll(this, 'render', 'remove', 'bookSelected', 'bookRequestedDelete');
-        this.model.bind('change', this.render);
-        this.model.bind('destroy', this.remove);
+        this.model.on('change', this.render);
+        this.model.on('destroy', this.remove);
     },
 
     render: function() {
         $(this.el).html(this.template(this.model.toJSON()));
         return this;
+    },
+    
+    onClose: function(){
+        this.model.off('change', this.render);
+        this.model.off('destroy', this.remove);
     },
 
     remove: function() {
@@ -183,6 +197,7 @@ window.TagView = Backbone.View.extend({
     events: {
         'click': 'tagSelected'
     },
+    viewName: 'TagView',
 
     initialize: function(properties){
         _.bindAll(this, 'render', 'remove', 'highlightIfMatch');
@@ -205,7 +220,7 @@ window.TagView = Backbone.View.extend({
     tagSelected: function(){
         this.log('TagView: click evt for tag==' + this.model.get('tag'));
         this.model.select();
-        this.trigger('tagview:selected', {'tag': this.model.get('tag')});
+        this.trigger('tagview:selected', this.model.get('tag'));
     },
 
     highlightIfMatch: function(tag){
@@ -223,6 +238,7 @@ window.TagCloudView = Backbone.View.extend({
     events: {
         'click #tagcloudviewheader': 'tagResetRequested'
     },
+    viewName: 'TagCloudView',
 
     initialize: function(properties) {
         _.bindAll(this, 'render', 'addAll', 'addOne', 'tagResetRequested', 'tagSelected',
