@@ -23,12 +23,13 @@
         var events = {
             'tagcloudview:tagselected': [window.app.tags],
             'tagcloudview:tagsreset': [window.app.home],
-            'spinelistview:bookSelected': [window.app.books],
+            'spinelistview:bookSelected': [window.app.bookView],
             'navigation:index': [window.app.home],
-            'navigation:newbook': [window.app.books],
+            'navigation:newbook': [window.app.bookView],
+            'navigation:editbook': [window.app.bookEdit],
             'editbookview:dataSynced': [
                 window.app.tagCloudView.reloadTags,
-                window.app.books
+                window.app.bookView
             ]
         };
         

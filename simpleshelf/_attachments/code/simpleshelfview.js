@@ -306,6 +306,9 @@ window.BookView = Backbone.View.extend({
     tagName: 'div',
     template: _.template(
         '<h2>Book</h2>' +
+        '<div class="menu">' +
+        '<button id="edit">Edit</button>' +
+        '</div>' +
         '<div class="bookinfo"/>'
     ),
     // templates for the different values in a book
@@ -321,8 +324,12 @@ window.BookView = Backbone.View.extend({
         )
     },
 
+    events: {
+        'click #edit': 'editBook'
+    },
+
     initialize: function(options){
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'editBook');
     },
 
     render: function(){
@@ -349,6 +356,12 @@ window.BookView = Backbone.View.extend({
 
         bookinfoEl.append(table);
         return this;
+    },
+
+    editBook: function(evt){
+        evt.preventDefault();
+        // show new book form
+        this.options.dispatcher.trigger('navigation:editbook', this.model.id);
     },
 
     _addSimpleField: function(fieldTitle, fieldValue){

@@ -5,12 +5,13 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     routes: {
         '': 'home',
         'tags/:tagName': 'tags',
-        'books/:bookId': 'books'
+        'books/:bookId': 'bookView',
+        'books/:bookId/edit': 'bookEdit'
     },
     
     initialize: function(options){
         console.log("initializing SimpleShelfLibrary (Backbone.Router)");
-        _.bindAll(this, 'home', 'tags', 'books');
+        _.bindAll(this, 'home', 'tags', 'bookView', 'bookEdit', '_loadBookView', '_loadEditBookView');
         this.appView = options.appView;
 
         /*this.infoView = new LibraryInfoView({
@@ -81,7 +82,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     /**
      * Route for a specific book
      */
-    books: function(bookId){
+    bookView: function(bookId){
         console.log('Routing to book', bookId);
         // TODO: setup couchdb's routes & sync w/next line
         // Backbone.history.navigate('./books/' + bookId);
@@ -91,25 +92,40 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         if (bookId == null){
             // new book
             window.book = new window.Book();
-            var editBookView = new EditBookView({
-                dispatcher: window.dispatcher,
-                model: window.book});
-            this.appView.showView(editBookView);
+            this._loadEditBookView();
         } else {
             // get requested book
-            var loadBookView = function(){
-                // create & show book view
-                var bookView = new BookView({
-                    dispatcher: window.dispatcher,
-                    model: window.book});
-                me.appView.showView(bookView);
-            }
             if (!window.book || (window.book.id != bookId)){
                 window.book = new Book({id: bookId});
-                window.book.fetch({success: loadBookView});
+                window.book.fetch({success: this._loadBookView});
             } else {
-                loadBookView();
+                this._loadBookView();
             }
         }
+    },
+    
+    /**
+     * Route for editing a specific book
+     */
+    bookEdit: function(bookId){
+        console.log('Routing to edit book', bookId);
+        window.book = new Book({id: bookId});
+        window.book.fetch({success: this._loadEditBookView});
+    },
+
+    _loadBookView: function(){
+        // create & show book view
+        var bookView = new BookView({
+            dispatcher: window.dispatcher,
+            model: window.book});
+        this.appView.showView(bookView);
+    },
+    
+    _loadEditBookView: function(){
+        // create & show book view
+        var editBookView = new EditBookView({
+            dispatcher: window.dispatcher,
+            model: window.book});
+        this.appView.showView(editBookView);
     }
 });
