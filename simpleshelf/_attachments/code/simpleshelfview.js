@@ -393,11 +393,13 @@ window.EditBookView = Backbone.View.extend({
     },
     
     events: {
-        'click .submit': 'save'
+        'click .submit': 'save',
+        'click .cancel': 'cancel'
     },
 
     initialize: function(options){
-        _.bindAll(this, 'render', 'dataChanged', 'dataSynced', '_addSimpleField');
+        _.bindAll(this, 'render', 'dataChanged', 'dataSynced', 'save', 'cancel',
+            '_addSimpleField', '_getFormData');
         this.model.bind('change', this.dataChanged);
         this.model.bind('sync', this.dataSynced);
     },
@@ -419,15 +421,26 @@ window.EditBookView = Backbone.View.extend({
                 // render element in generic way
                 table.append(me._addSimpleField(element, element));
             } else if (_.has(htmlSnippets, element)){
+                var properValue;
+                switch(element){
+                    case "tags":
+                        properValue = me.model.get(element).join(" ");
+                        break;
+                    default:
+                        properValue = me.model.get(element);
+                        break;
+                }
                 table.append(me.simpleTemplates[element]({
                     title: element,
                     key: element,
-                    value: me.model.get(element)
+                    value: properValue
                 }));
             }
         });
 
-        bookinfoEl.append(table).append('<input type="submit" value="Submit" class="submit">');
+        var htmlTail = '<input type="submit" value="Submit" class="submit">&nbsp;' +
+            '<button class="cancel">Cancel</button>';
+        bookinfoEl.append(table).append(htmlTail);
 
         return this;
     },
@@ -438,22 +451,47 @@ window.EditBookView = Backbone.View.extend({
         
         $('input.submit', this.el).attr("disabled", "disabled");
         
-        var freshData = {};
-        var me = this;
         // save everything
-        _.each($('form', this.el).serializeArray(), function(element, index, list){
-            if (element.name == "tags"){
-                // TODO more robust method of splitting
-                freshData["tags"] = element.value.split(' ');
-            } else {
-                if (_.indexOf(me.dataKeys, element.name) > -1){
-                    freshData[element.name] = element.value;
-                }
-            }
-        });
+        var freshData = this._getFormData();
 
         // TODO: handle validation
         this.model.save(freshData, {'wait': true});
+    },
+
+    /**
+     * User requested form cancel; prevent lost changes
+     */
+    cancel: function(evt){
+        evt.preventDefault();
+        var formData = this._getFormData();
+        var me = this, difference = false, anyDifferences = false, okToGo = false;
+        // check for changes; ask user to abandon
+        _.each(formData, function(value, key, list){
+            difference = false;
+            // handle special fields separately
+            switch(key){
+                case "tags":
+                    if (!formData[key].smartCompare(me.model.get(key))){
+                        difference = true;
+                    }
+                    break;
+
+                default:
+                    difference = (formData[key] != me.model.get(key));
+                    break;
+            }
+
+            if (difference){
+                console.log('EditBookView.cancel difference', key, value, me.model.get(key));
+                anyDifferences = true;
+            }
+        });
+
+        okToGo = anyDifferences ? window.confirm("There are changes, ok to abandon?") : true;
+
+        if (okToGo){
+            this.options.dispatcher.trigger('editbookview:canceledit', this.model.id);
+        }
     },
 
     dataChanged: function(event){
@@ -471,5 +509,24 @@ window.EditBookView = Backbone.View.extend({
             key: fieldKey,
             value: this.model.get(fieldKey)
         });
+    },
+
+    /**
+     * Serialize form data
+     */
+    _getFormData: function(){
+        var formData = {};
+        var me = this;
+        _.each($('form', this.el).serializeArray(), function(element, index, list){
+            if (element.name == "tags"){
+                // TODO more robust method of splitting
+                formData["tags"] = element.value.split(' ');
+            } else {
+                if (_.indexOf(me.dataKeys, element.name) > -1){
+                    formData[element.name] = element.value;
+                }
+            }
+        });
+        return formData;
     }
 });

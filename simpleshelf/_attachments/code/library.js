@@ -30,7 +30,8 @@
             'editbookview:dataSynced': [
                 window.app.tagCloudView.reloadTags,
                 window.app.bookView
-            ]
+            ],
+            'editbookview:canceledit': [window.app.bookView]
         };
         
         // bind events
@@ -155,4 +156,15 @@ Backbone.View.prototype.log = function(){
     if (_.has('okToLog', this.options) && this.options.okToLog){
         console.log(arguments);
     }
+};
+
+/**
+ * Use underscore.js difference() to quickly compare 2 arrays of strings
+ */
+Array.prototype.smartCompare = function(arr) {
+    if (this.length != arr.length) return false;
+    if (_.difference(this, arr).length > 0){
+        return false;
+    }
+    return true;
 };
