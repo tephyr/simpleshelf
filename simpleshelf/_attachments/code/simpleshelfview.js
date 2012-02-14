@@ -384,11 +384,11 @@ window.EditBookView = Backbone.View.extend({
     simpleTemplates: {
         'simpleField': _.template(
             '<tr class="simple {{key}}"><td><span class="title">{{title}}</span></td>' +
-            '<td><input type="text" name="{{key}}"></td></tr>'
+            '<td><input type="text" name="{{key}}" value="{{value}}"></td></tr>'
         ),
         'tags': _.template(
             '<tr class="complex {{key}}"><td><span class="title">{{title}}</span></td>' +
-            '<td><input type="text" name="{{key}}"></td></tr>'
+            '<td><input type="text" name="{{key}}" value="{{value}}"></td></tr>'
         )
     },
     
@@ -397,7 +397,7 @@ window.EditBookView = Backbone.View.extend({
     },
 
     initialize: function(options){
-        _.bindAll(this, 'render', 'dataChanged', 'dataSynced');
+        _.bindAll(this, 'render', 'dataChanged', 'dataSynced', '_addSimpleField');
         this.model.bind('change', this.dataChanged);
         this.model.bind('sync', this.dataSynced);
     },
@@ -419,7 +419,11 @@ window.EditBookView = Backbone.View.extend({
                 // render element in generic way
                 table.append(me._addSimpleField(element, element));
             } else if (_.has(htmlSnippets, element)){
-                table.append(me.simpleTemplates[element]({title: element, key: element}));
+                table.append(me.simpleTemplates[element]({
+                    title: element,
+                    key: element,
+                    value: me.model.get(element)
+                }));
             }
         });
 
@@ -429,29 +433,27 @@ window.EditBookView = Backbone.View.extend({
     },
     
     save: function(event){
-        console.log("EditBookView:save", this.model.isNew());
         event.preventDefault();
+        console.log("EditBookView:save", this.model.isNew());
         
         $('input.submit', this.el).attr("disabled", "disabled");
         
-        var newAttributes = {};
+        var freshData = {};
         var me = this;
-        if (this.model.isNew()){
-            // save everything
-            _.each($('form', this.el).serializeArray(), function(element, index, list){
-                if (element.name == "tags"){
-                    // TODO more robust method of splitting
-                    newAttributes["tags"] = element.value.split(' ');
-                } else {
-                    if (_.indexOf(me.dataKeys, element.name) > -1){
-                        newAttributes[element.name] = element.value;
-                    }
+        // save everything
+        _.each($('form', this.el).serializeArray(), function(element, index, list){
+            if (element.name == "tags"){
+                // TODO more robust method of splitting
+                freshData["tags"] = element.value.split(' ');
+            } else {
+                if (_.indexOf(me.dataKeys, element.name) > -1){
+                    freshData[element.name] = element.value;
                 }
-            });
-        }
+            }
+        });
 
         // TODO: handle validation
-        this.model.save(newAttributes, {'wait': true});
+        this.model.save(freshData, {'wait': true});
     },
 
     dataChanged: function(event){
@@ -464,6 +466,10 @@ window.EditBookView = Backbone.View.extend({
     },
 
     _addSimpleField: function(fieldKey, fieldTitle){
-        return this.simpleTemplates.simpleField({title: fieldTitle, key: fieldKey});
+        return this.simpleTemplates.simpleField({
+            title: fieldTitle,
+            key: fieldKey,
+            value: this.model.get(fieldKey)
+        });
     }
 });

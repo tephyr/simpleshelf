@@ -105,7 +105,10 @@ Backbone.sync = _.wrap(Backbone.sync, function(func, method, model, options){
             break;
 
         case "update":
-            console.log(method, "not enabled");
+            console.log(method + ": " + JSON.stringify(model));
+            options.type = 'PUT';
+            func(method, model, options);
+
             break;
         default:
             func(method, model, options);
