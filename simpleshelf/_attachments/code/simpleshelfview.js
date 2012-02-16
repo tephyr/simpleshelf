@@ -377,7 +377,7 @@ window.EditBookView = Backbone.View.extend({
     tagName: 'div',
     template: _.template(
         '<h2>Book</h2>' +
-        '<form class="bookinfo"/>'
+        '<form class="bookinfo" id="editbookviewform"/>'
     ),
 
     dataKeys: ['title', 'author', 'isbn', 'openlibrary', 'publisher', 'tags'],
@@ -388,7 +388,7 @@ window.EditBookView = Backbone.View.extend({
         ),
         'tags': _.template(
             '<tr class="complex {{key}}"><td><span class="title">{{title}}</span></td>' +
-            '<td><input type="text" name="{{key}}" value="{{value}}"></td></tr>'
+            '<td><input type="text" name="{{key}}" value="" id="taginput"></td></tr>'
         )
     },
     
@@ -399,7 +399,7 @@ window.EditBookView = Backbone.View.extend({
 
     initialize: function(options){
         _.bindAll(this, 'render', 'dataChanged', 'dataSynced', 'save', 'cancel',
-            '_addSimpleField', '_getFormData');
+            '_addSimpleField', '_getFormData', '_prepPlugins');
         this.model.bind('change', this.dataChanged);
         this.model.bind('sync', this.dataSynced);
     },
@@ -442,7 +442,18 @@ window.EditBookView = Backbone.View.extend({
             '<button class="cancel">Cancel</button>';
         bookinfoEl.append(table).append(htmlTail);
 
+        // call prep plugins after timeout to let DOM render
+        window.setTimeout(function(){
+            me._prepPlugins();            
+        }, 50);
+
         return this;
+    },
+    
+    _prepPlugins: function(){
+       $('#taginput', this.$el).tagsInput({
+           'interactive': true
+       }).importTags(this.model.get('tags').join(','));
     },
     
     save: function(event){
@@ -520,7 +531,7 @@ window.EditBookView = Backbone.View.extend({
         _.each($('form', this.el).serializeArray(), function(element, index, list){
             if (element.name == "tags"){
                 // TODO more robust method of splitting
-                formData["tags"] = element.value.split(' ');
+                formData["tags"] = element.value.split(',');
             } else {
                 if (_.indexOf(me.dataKeys, element.name) > -1){
                     formData[element.name] = element.value;
