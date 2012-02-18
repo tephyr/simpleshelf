@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# SimpleShelfCDB documentation build configuration file, created by
+# simpleshelf documentation build configuration file, created by
 # sphinx-quickstart on Thu Aug 25 19:03:21 2011.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -40,8 +40,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'SimpleShelfCDB'
-copyright = u'2011, Andrew Ittner'
+project = u'simpleshelf'
+copyright = u'2012, Andrew Ittner'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -103,10 +103,10 @@ html_theme = 'pyramid'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = 'Simpleshelf in CouchDB'
+html_title = 'simpleshelf'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title = 'SimpleshelfCDB'
+html_short_title = 'simpleshelf'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
@@ -164,7 +164,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'SimpleShelfCDBdoc'
+htmlhelp_basename = 'simpleshelfdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -178,7 +178,7 @@ htmlhelp_basename = 'SimpleShelfCDBdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'SimpleShelfCDB.tex', u'SimpleShelfCDB Documentation',
+  ('index', 'simpleshelf.tex', u'simpleshelf Documentation',
    u'Andrew Ittner', 'manual'),
 ]
 
@@ -211,6 +211,6 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'simpleshelfcdb', u'SimpleShelfCDB Documentation',
+    ('index', 'simpleshelf', u'simpleshelf Documentation',
      [u'Andrew Ittner'], 1)
 ]
