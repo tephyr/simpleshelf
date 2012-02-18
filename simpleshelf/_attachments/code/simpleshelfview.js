@@ -337,20 +337,24 @@ window.BookView = Backbone.View.extend({
         $(this.el).html(this.template());
 
         // build lines programmatically
-        var dataKeys = ['title', 'author', 'isbn', 'openlibrary', 'publisher', 'tags'];
+        var dataKeys = window.simpleshelf.constants.bookView.schema;
         var htmlSnippets = {'tags': this.simpleTemplates.tags};
         var bookinfoEl = $('.bookinfo', this.el);
-        var table = $('<table/>');
+        var table = $('<table><colgroup><col id="column_title"><col id="column_data"></colgroup><tbody/></table>');
+        var tbody = $('tbody', table);
         var me = this;
 
         // for each data element (in specified order), render as TR
-        _.each(dataKeys, function(element, index, list){
-            if (_.has(htmlSnippets, element)){
+        _.each(dataKeys, function(element){
+            if (_.has(htmlSnippets, element.field)){
                 // render specific field
-                table.append(htmlSnippets[element]({title: element, value: me.model.get(element)}));
+                tbody.append(htmlSnippets[element.field]({
+                    title: element.title,
+                    value: me.model.get(element.field)
+                }));
             } else {
                 // render element in generic way
-                table.append(me._addSimpleField(element, me.model.get(element)));
+                tbody.append(me._addSimpleField(element.title, me.model.get(element.field)));
             }
         });
 
@@ -380,7 +384,6 @@ window.EditBookView = Backbone.View.extend({
         '<form class="bookinfo" id="editbookviewform"/>'
     ),
 
-    dataKeys: ['title', 'author', 'isbn', 'openlibrary', 'publisher', 'tags'],
     simpleTemplates: {
         'simpleField': _.template(
             '<tr class="simple {{key}}"><td><span class="title">{{title}}</span></td>' +
@@ -409,32 +412,33 @@ window.EditBookView = Backbone.View.extend({
         $(this.el).html(this.template());
 
         // build lines programmatically
-        var normalInputs = ['title', 'author', 'isbn', 'openlibrary', 'publisher'];
+        var dataKeys = window.simpleshelf.constants.bookView.schema;
         var htmlSnippets = {'tags': this.simpleTemplates.tags};
         var bookinfoEl = $('.bookinfo', this.el);
-        var table = $('<table/>');
+        var table = $('<table><colgroup><col id="column_title"><col id="column_data"></colgroup><tbody/></table>');
+        var tbody = $('tbody', table);
         var me = this;
 
         // for each data element (in specified order), render as TR
-        _.each(this.dataKeys, function(element, index, list){
-            if (_.indexOf(normalInputs, element) != -1) {
-                // render element in generic way
-                table.append(me._addSimpleField(element, element));
-            } else if (_.has(htmlSnippets, element)){
+        _.each(dataKeys, function(element){
+            if (_.has(htmlSnippets, element.field)){
                 var properValue;
                 switch(element){
                     case "tags":
-                        properValue = me.model.get(element).join(" ");
+                        properValue = me.model.get(element.field).join(" ");
                         break;
                     default:
-                        properValue = me.model.get(element);
+                        properValue = me.model.get(element.field);
                         break;
                 }
-                table.append(me.simpleTemplates[element]({
-                    title: element,
-                    key: element,
+                tbody.append(me.simpleTemplates[element.field]({
+                    title: element.title,
+                    key: element.field,
                     value: properValue
                 }));
+            } else {
+                // render element in generic way
+                tbody.append(me._addSimpleField(element.field, element.title));
             }
         });
 
@@ -533,7 +537,7 @@ window.EditBookView = Backbone.View.extend({
                 // TODO more robust method of splitting
                 formData["tags"] = element.value.split(',');
             } else {
-                if (_.indexOf(me.dataKeys, element.name) > -1){
+                if (_.indexOf(window.simpleshelf.constants.allFields, element.name) > -1){
                     formData[element.name] = element.value;
                 }
             }

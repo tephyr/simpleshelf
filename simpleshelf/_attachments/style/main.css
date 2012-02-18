@@ -95,6 +95,14 @@ div.avatar img {
     font-weight: bold;
 }
 
+.bookinfo table tr td:first-child {
+    text-align: right;
+}
+
+.bookinfo .title {
+    font-weight: bold;
+}
+
 .bookinfo .tags .value {
     background-color: silver;
 }
