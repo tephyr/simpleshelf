@@ -32,11 +32,10 @@ Validation for type===book
 
   - any key/value pairs, like ``{"openlibrary": "/works/OL76984W", "powells": "http://powells.com/path/to/book}``
 
-- ``notes``:    Array of objects
+- ``notesPublic``:  string
+- ``notesPrivate``: string
 
-  element definition::
-
-    {date: yyyy-mm-dd, public: Bool (default false), text: string}
+  Both ``notes*`` are strings of arbitrary length; notesPrivate will never be published.
 
 - ``activity``: Array of objects
 
@@ -65,7 +64,7 @@ book/activity/action
 
 book/status/read
 ----------------
-- to.read
+- to.read (*adds book.read.queued to actions*)
 - reading (*adds book.read.started to actions*)
 - finished (*adds book.read.finished to actions*)
 - abandoned (*adds book.read.stopped to actions*)
