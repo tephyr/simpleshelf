@@ -9,6 +9,11 @@ h1 {
   margin-top:0;
 }
 
+h1.title {
+    display: inline;
+    margin-bottom: 0;
+}
+
 #account {
   float:right;
 }
@@ -20,6 +25,8 @@ h1 {
 }
 
 #profile .navigation-view {
+    display: inline;
+    float: right;
     text-align: right;
 }
 #profile .navigation-view ul {
@@ -28,7 +35,7 @@ h1 {
 }
 
 #profile .navigation-view li {
-  display: Inline;
+  display: inline;
   list-style-type: none;
   padding-right: 20px;
 }
