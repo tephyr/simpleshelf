@@ -21,7 +21,7 @@ window.Book = Backbone.Model.extend({
 
 window.Library = Backbone.Collection.extend({
     model: Book,
-    url: '/simpleshelf/_design/simpleshelf/_view/all',
+    url: '/simpleshelf/_design/simpleshelf/_view/books?key="book"',
     parse: function(response) {
         var results = [];
         if (response.rows){
@@ -55,7 +55,7 @@ window.SpineList = Backbone.Collection.extend({
         var url = '';
         switch (this._current_filter.type){
             case 'book':
-                url = '/simpleshelf/_design/simpleshelf/_view/all';
+                url = '/simpleshelf/_design/simpleshelf/_view/all?key="book"';
                 break;
             case 'tag':
                 url = '/simpleshelf/_design/simpleshelf/_view/books_by_tags?key=%22' + this._current_filter.filter + '%22';
