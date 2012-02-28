@@ -107,6 +107,10 @@ div.avatar img {
     background-color: silver;
 }
 
+.bookinfo .complex.notesPublic textarea, .bookinfo .complex.notesPrivate textarea {
+    width: 100%;
+}
+
 .spine-view span.del {
     float: right;
 }

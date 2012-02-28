@@ -11,7 +11,9 @@ window.simpleshelf.constants = {
             {'field': 'isbn', 'title': 'ISBN'},
             {'field': 'openlibrary', 'title': 'OpenLibrary'},
             {'field': 'publisher', 'title': 'Publisher'},
-            {'field': 'tags', 'title': 'Tags'}
+            {'field': 'tags', 'title': 'Tags'},
+            {'field': 'notesPublic', 'title': 'Public notes'},
+            {'field': 'notesPrivate', 'title': 'Private notes'}
         ]
     }
 };

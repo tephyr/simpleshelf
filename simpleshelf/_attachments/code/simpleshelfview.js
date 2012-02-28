@@ -321,6 +321,10 @@ window.BookView = Backbone.View.extend({
         'tags': _.template(
             '<tr class="tags"><td><span class="title">{{title}}</span></td>' +
             '<td><span class="value">{{value}}</span></td></tr>'
+        ),
+        'notes': _.template(
+            '<tr class="notes"><td><span class="title">{{title}}</span></td>' +
+            '<td><span class="value">{{value}}</span></td></tr>'
         )
     },
 
@@ -338,7 +342,11 @@ window.BookView = Backbone.View.extend({
 
         // build lines programmatically
         var dataKeys = window.simpleshelf.constants.bookView.schema;
-        var htmlSnippets = {'tags': this.simpleTemplates.tags};
+        var htmlSnippets = {
+            'tags': this.simpleTemplates.tags,
+            'notesPublic': this.simpleTemplates.notes,
+            'notesPrivate': this.simpleTemplates.notes
+        };
         var bookinfoEl = $('.bookinfo', this.el);
         var table = $('<table><colgroup><col id="column_title"><col id="column_data"></colgroup><tbody/></table>');
         var tbody = $('tbody', table);
@@ -392,6 +400,10 @@ window.EditBookView = Backbone.View.extend({
         'tags': _.template(
             '<tr class="complex {{key}}"><td><span class="title">{{title}}</span></td>' +
             '<td><input type="text" name="{{key}}" value="" id="taginput"></td></tr>'
+        ),
+        'notes': _.template(
+            '<tr class="complex {{key}}"><td><span class="title">{{title}}</span></td>' +
+            '<td><textarea name="{{key}}" rows="5">{{value}}</textarea></td></tr>'
         )
     },
     
@@ -413,7 +425,11 @@ window.EditBookView = Backbone.View.extend({
 
         // build lines programmatically
         var dataKeys = window.simpleshelf.constants.bookView.schema;
-        var htmlSnippets = {'tags': this.simpleTemplates.tags};
+        var htmlSnippets = {
+            'tags': this.simpleTemplates.tags,
+            'notesPublic': this.simpleTemplates.notes,
+            'notesPrivate': this.simpleTemplates.notes
+        };
         var bookinfoEl = $('.bookinfo', this.el);
         var table = $('<table><colgroup><col id="column_title"><col id="column_data"></colgroup><tbody/></table>');
         var tbody = $('tbody', table);
@@ -431,7 +447,7 @@ window.EditBookView = Backbone.View.extend({
                         properValue = me.model.get(element.field);
                         break;
                 }
-                tbody.append(me.simpleTemplates[element.field]({
+                tbody.append(htmlSnippets[element.field]({
                     title: element.title,
                     key: element.field,
                     value: properValue
