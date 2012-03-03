@@ -341,7 +341,7 @@ window.BookView = Backbone.View.extend({
         $(this.el).html(this.template());
 
         // build lines programmatically
-        var dataKeys = window.simpleshelf.constants.bookView.schema;
+        var dataKeys = window.simpleshelf.constantsUI.bookView.schema;
         var htmlSnippets = {
             'tags': this.simpleTemplates.tags,
             'notesPublic': this.simpleTemplates.notes,
@@ -424,7 +424,7 @@ window.EditBookView = Backbone.View.extend({
         $(this.el).html(this.template());
 
         // build lines programmatically
-        var dataKeys = window.simpleshelf.constants.bookView.schema;
+        var dataKeys = window.simpleshelf.constantsUI.bookView.schema;
         var htmlSnippets = {
             'tags': this.simpleTemplates.tags,
             'notesPublic': this.simpleTemplates.notes,
@@ -553,7 +553,7 @@ window.EditBookView = Backbone.View.extend({
                 // TODO more robust method of splitting
                 formData["tags"] = element.value.split(',');
             } else {
-                if (_.indexOf(window.simpleshelf.constants.allFields, element.name) > -1){
+                if (_.indexOf(window.simpleshelf.constantsUI.allFields, element.name) > -1){
                     formData[element.name] = element.value;
                 }
             }

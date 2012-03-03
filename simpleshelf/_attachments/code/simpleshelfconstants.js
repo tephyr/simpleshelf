@@ -3,7 +3,7 @@
  */
 
 window.simpleshelf = window.simpleshelf || {};
-window.simpleshelf.constants = {
+window.simpleshelf.constantsUI = {
     bookView: {
         schema: [
             {'field': 'title', 'title': 'Title'},
@@ -18,8 +18,9 @@ window.simpleshelf.constants = {
     }
 };
 
-window.simpleshelf.constants.allFields = _.map(window.simpleshelf.constants.bookView.schema,
+window.simpleshelf.constantsUI.allFields = _.map(window.simpleshelf.constantsUI.bookView.schema,
     function(schema){
         return schema.field;
     }
 );
+
