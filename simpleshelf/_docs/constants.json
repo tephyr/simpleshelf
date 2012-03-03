@@ -1,0 +1,6 @@
+{
+"_id": "simpleshelf.constants",
+"type": "constants",
+"read": ["to.read", "reading", "finished", "abandoned", "reference"],
+"ownership": ["personal", "library", "on.loan", "loaned.out", "on.order"]
+}
