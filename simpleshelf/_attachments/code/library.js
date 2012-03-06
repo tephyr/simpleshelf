@@ -9,6 +9,8 @@
 
     // load tags
     window.tagList.fetch({ success: tagList_fetch_complete });
+    
+    fetchConstants();
 
     $(document).ready(function() {
         // instantiate global event dispatcher
@@ -53,6 +55,19 @@
     });
 })(jQuery);
 
+function fetchConstants(){
+    $.getJSON( '/simpleshelf/simpleshelf.constants', null, constantsFetched );
+};
+
+function constantsFetched(data, textStatus, jqXHR) {
+    console.log('constantsFetched completed');
+    window.app = window.app || {};
+    window.app.constants = {
+        'ownership': data.ownership,
+        'read': data.read
+    };
+};
+
 function tagList_fetch_complete(){
   console.log('tagList.fetch succeeded');
   window.fetchCount += 1;
@@ -68,11 +83,11 @@ function spineList_fetch_complete(){
 function fetches_done(){
     if (window.fetchCount == window.fetchTotal){
         //$('#welcome-msg').fadeOut(5000);
-    }
+    };
 };
 
 function bind_test(){
-    console.log("THIS BOUND EVENT HAS BEEN FIRED.")
+    console.log("THIS BOUND EVENT HAS BEEN FIRED.");
 };
 
 /**
@@ -137,7 +152,7 @@ function AppView(){
         this.currentView.render();
     
         $("#items").html(this.currentView.el);
-    }
+    };
 };
 
 /**

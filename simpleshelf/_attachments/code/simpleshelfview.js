@@ -53,7 +53,7 @@ window.NavigationView = Backbone.View.extend({
         var links = {
             "newbook": "New book",
             "index": "Index"
-            }
+        };
 
         var linkTemplate = _.template('<li><a href="#{{key}}" class="{{key}}">{{name}}</a></li>');
         _.each(links, function(value, key, list){
@@ -105,7 +105,7 @@ window.SpineListView = Backbone.View.extend({
     },
 
     addAll: function() {
-        console.log('SpineListView.addAll: this.collection.length==', this.collection.length)
+        console.log('SpineListView.addAll: this.collection.length==', this.collection.length);
         this.collection.each(this.addOne);
     },
 
@@ -121,7 +121,7 @@ window.SpineListView = Backbone.View.extend({
         // even though the subview is given the dispatcher reference,
         // its events should still bubble up to the parent view, which
         // will handle dispatching them globally
-        view.on('spineview:selected', this.bookSelected)
+        view.on('spineview:selected', this.bookSelected);
     },
 
     updateTag: function(msgArgs){
@@ -178,7 +178,7 @@ window.SpineView = Backbone.View.extend({
     },
 
     bookSelected: function(evt){
-        console.log('SpineView: selected book', this.options.model)
+        console.log('SpineView: selected book', this.options.model);
         evt.preventDefault();
         // signal to switch to full view for this book
         this.model.select();
@@ -256,7 +256,7 @@ window.TagCloudView = Backbone.View.extend({
     },
 
     addAll: function() {
-        this.log('TagCloudView.addAll: this.collection.length==', this.collection.length)
+        this.log('TagCloudView.addAll: this.collection.length==', this.collection.length);
         this.collection.each(this.addOne);
     },
 
@@ -269,7 +269,7 @@ window.TagCloudView = Backbone.View.extend({
         view.render();
         $('ul', this.el).append(view.el);
         model.bind('remove', view.remove);
-        view.bind('tagview:selected', this.tagSelected)
+        view.bind('tagview:selected', this.tagSelected);
     },
     
     reloadTags: function(){
@@ -325,6 +325,10 @@ window.BookView = Backbone.View.extend({
         'notes': _.template(
             '<tr class="notes"><td><span class="title">{{title}}</span></td>' +
             '<td><span class="value">{{value}}</span></td></tr>'
+        ),
+        'status': _.template(
+            '<tr class="status"><td><span class="title">{{title}}</span></td>' +
+            '<td><span class="value">{{value}}</span></td></tr>'
         )
     },
 
@@ -345,7 +349,8 @@ window.BookView = Backbone.View.extend({
         var htmlSnippets = {
             'tags': this.simpleTemplates.tags,
             'notesPublic': this.simpleTemplates.notes,
-            'notesPrivate': this.simpleTemplates.notes
+            'notesPrivate': this.simpleTemplates.notes,
+            'status': this.simpleTemplates.status
         };
         var bookinfoEl = $('.bookinfo', this.el);
         var table = $('<table><colgroup><col id="column_title"><col id="column_data"></colgroup><tbody/></table>');
@@ -354,7 +359,18 @@ window.BookView = Backbone.View.extend({
 
         // for each data element (in specified order), render as TR
         _.each(dataKeys, function(element){
-            if (_.has(htmlSnippets, element.field)){
+            if (element.special){
+                var formElement;
+                var statusOwnership = me.model.get('status') || {'ownership': null};
+                switch (element.field){
+                    case 'status.ownership':
+                        tbody.append(htmlSnippets['status']({
+                            title: 'Ownership',
+                            value: statusOwnership['ownership'] || '---'
+                        }));
+                        break;
+                } 
+            } else if (_.has(htmlSnippets, element.field)){
                 // render specific field
                 tbody.append(htmlSnippets[element.field]({
                     title: element.title,
@@ -404,6 +420,10 @@ window.EditBookView = Backbone.View.extend({
         'notes': _.template(
             '<tr class="complex {{key}}"><td><span class="title">{{title}}</span></td>' +
             '<td><textarea name="{{key}}" rows="5">{{value}}</textarea></td></tr>'
+        ),
+        'status': _.template(
+            '<tr class="status"><td><span class="title">{{title}}</span></td>' +
+            '<td><span class="value"><div id="formElement"/></span></td></tr>'
         )
     },
     
@@ -428,7 +448,8 @@ window.EditBookView = Backbone.View.extend({
         var htmlSnippets = {
             'tags': this.simpleTemplates.tags,
             'notesPublic': this.simpleTemplates.notes,
-            'notesPrivate': this.simpleTemplates.notes
+            'notesPrivate': this.simpleTemplates.notes,
+            'status': this.simpleTemplates.status
         };
         var bookinfoEl = $('.bookinfo', this.el);
         var table = $('<table><colgroup><col id="column_title"><col id="column_data"></colgroup><tbody/></table>');
@@ -437,7 +458,22 @@ window.EditBookView = Backbone.View.extend({
 
         // for each data element (in specified order), render as TR
         _.each(dataKeys, function(element){
-            if (_.has(htmlSnippets, element.field)){
+            if (element.special){
+                var $formElement;
+                switch (element.field){
+                    case 'status.ownership':
+                        $formElement = window.simpleshelf.util.buildSelect(
+                            element.field,
+                            window.app.constants.ownership
+                        );
+                        
+                        tbody.append(htmlSnippets['status']({
+                            title: 'Ownership',
+                        }));
+                        $('#formElement', tbody).replaceWith($formElement);
+                        break;
+                }
+            } else if (_.has(htmlSnippets, element.field)){
                 var properValue;
                 switch(element){
                     case "tags":
@@ -546,16 +582,30 @@ window.EditBookView = Backbone.View.extend({
      * Serialize form data
      */
     _getFormData: function(){
-        var formData = {};
+        var formData = {
+            'status': {}
+        };
         var me = this;
         _.each($('form', this.el).serializeArray(), function(element, index, list){
-            if (element.name == "tags"){
-                // TODO more robust method of splitting
-                formData["tags"] = element.value.split(',');
-            } else {
-                if (_.indexOf(window.simpleshelf.constantsUI.allFields, element.name) > -1){
-                    formData[element.name] = element.value;
-                }
+            switch (element.name){
+                case "tags":
+                    // TODO more robust method of splitting
+                    formData["tags"] = element.value.split(',');
+                    break;
+
+                case "status.ownership":
+                    formData['status']['ownership'] = element.value;
+                    break;
+
+                case "status.read":
+                    formData['status']['read'] = element.value;
+                    break;
+
+                default:
+                    if (_.indexOf(window.simpleshelf.constantsUI.allFields, element.name) > -1){
+                        formData[element.name] = element.value;
+                    }
+                    break;
             }
         });
         return formData;

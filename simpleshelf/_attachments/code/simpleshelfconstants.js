@@ -13,7 +13,9 @@ window.simpleshelf.constantsUI = {
             {'field': 'publisher', 'title': 'Publisher'},
             {'field': 'tags', 'title': 'Tags'},
             {'field': 'notesPublic', 'title': 'Public notes'},
-            {'field': 'notesPrivate', 'title': 'Private notes'}
+            {'field': 'notesPrivate', 'title': 'Private notes'},
+            {'field': 'status.read', 'special': true, 'title': 'Read'},
+            {'field': 'status.ownership', 'special': true, 'title': 'Ownership'},
         ]
     }
 };
