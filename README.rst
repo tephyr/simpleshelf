@@ -1,6 +1,6 @@
-====================================
-simpleshelf: track your books simply
-====================================
+=============================
+simpleshelf: track your books
+=============================
 
 simpleshelf stores your personal library of books to read, have read, want to read, and lets you track your progress.
 
