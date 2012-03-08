@@ -23,5 +23,21 @@ window.simpleshelf.util = {
                 .appendTo($formElement);
         });
         return $formElement;
+    },
+
+    buildStatusFormRead: function(elementSelect){
+        var displayText = {
+            'intro': "Select the new <strong>read</strong> status, and optionally a date to which it applies."
+        };
+
+        var $dpInput = $('<input id="dateRead" type="text"/>');
+
+        var $datePicker = $dpInput.datepicker();
+
+        var $formElement = $('<div id="dialogStatusRead" title="Change Read status"/>')
+            .append($("<p>" + displayText.intro + "</p>"))
+            .append(elementSelect)
+            .append($dpInput);
+        return $formElement;
     }
 };

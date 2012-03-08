@@ -125,3 +125,7 @@ div.avatar img {
 .book .menu {
     float: right;
 }
+
+div#dialogStatusRead {
+    display: none;
+}

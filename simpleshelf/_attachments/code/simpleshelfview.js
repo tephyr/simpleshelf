@@ -421,19 +421,24 @@ window.EditBookView = Backbone.View.extend({
             '<tr class="complex {{key}}"><td><span class="title">{{title}}</span></td>' +
             '<td><textarea name="{{key}}" rows="5">{{value}}</textarea></td></tr>'
         ),
-        'status': _.template(
+        'statusOwn': _.template(
             '<tr class="status"><td><span class="title">{{title}}</span></td>' +
-            '<td><span class="value"><div id="formElement"/></span></td></tr>'
+            '<td><span class="value"><div id="formElementOwn"/></span></td></tr>'
+        ),
+        'statusRead': _.template(
+            '<tr class="status"><td><span class="title">{{title}}</span></td>' +
+            '<td><span class="value"><button id="openReadDialog">Change Read status</button><div id="formElementRead"/></span></td></tr>'
         )
     },
     
     events: {
         'click .submit': 'save',
-        'click .cancel': 'cancel'
+        'click .cancel': 'cancel',
+        'click #openReadDialog': 'openReadDialog'
     },
 
     initialize: function(options){
-        _.bindAll(this, 'render', 'dataChanged', 'dataSynced', 'save', 'cancel',
+        _.bindAll(this, 'render', 'dataChanged', 'dataSynced', 'openReadDialog', 'save', 'cancel',
             '_addSimpleField', '_getFormData', '_prepPlugins');
         this.model.bind('change', this.dataChanged);
         this.model.bind('sync', this.dataSynced);
@@ -449,7 +454,8 @@ window.EditBookView = Backbone.View.extend({
             'tags': this.simpleTemplates.tags,
             'notesPublic': this.simpleTemplates.notes,
             'notesPrivate': this.simpleTemplates.notes,
-            'status': this.simpleTemplates.status
+            'statusOwn': this.simpleTemplates.statusOwn,
+            'statusRead': this.simpleTemplates.statusRead
         };
         var bookinfoEl = $('.bookinfo', this.el);
         var table = $('<table><colgroup><col id="column_title"><col id="column_data"></colgroup><tbody/></table>');
@@ -466,12 +472,29 @@ window.EditBookView = Backbone.View.extend({
                             element.field,
                             window.app.constants.ownership
                         );
-                        
-                        tbody.append(htmlSnippets['status']({
+
+                        tbody.append(htmlSnippets['statusOwn']({
                             title: 'Ownership',
                         }));
-                        $('#formElement', tbody).replaceWith($formElement);
+                        $('#formElementOwn', tbody).replaceWith($formElement);
                         break;
+
+                    case 'status.read':
+                        var $select = window.simpleshelf.util.buildSelect(
+                            element.field,
+                            window.app.constants.read
+                        );
+
+                        var $dialogElement = window.simpleshelf.util.buildStatusFormRead(
+                            $select
+                        );
+
+                        tbody.append(htmlSnippets['statusRead']({
+                            title: 'Read',
+                        }));
+                        $('#formElementRead', tbody).replaceWith($dialogElement);
+                        break;
+
                 }
             } else if (_.has(htmlSnippets, element.field)){
                 var properValue;
@@ -568,6 +591,14 @@ window.EditBookView = Backbone.View.extend({
     dataSynced: function(event){
         console.log("EditBookView: dataSynced");
         this.options.dispatcher.trigger('editbookview:dataSynced', this.model.id);
+    },
+    
+    openReadDialog: function(event){
+        event.preventDefault();
+        $('#dialogStatusRead').dialog({
+            modal: true,
+            resizable: false
+        });
     },
 
     _addSimpleField: function(fieldKey, fieldTitle){
