@@ -9,13 +9,20 @@ window.Book = Backbone.Model.extend({
     url: function(){
         return '/simpleshelf/' + this.get('id');
     },
-    initialize: function(){
+    initialize: function(attributes){
         console.log('Book', 'initialize');
+        _.bindAll(this, "select", "setStatus");
     },
 
     select: function(){
         console.log('Book.select');
         this.collection.trigger('book:selected', this.get('id'));
+    },
+
+    setStatus: function(statusName, statusValue){
+        var updatedStatus = {};
+        updatedStatus[statusName] = statusValue;
+        this.set(_.extend(this.get('status'), updatedStatus));
     }
 });
 

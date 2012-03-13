@@ -32,7 +32,9 @@ window.simpleshelf.util = {
 
         var $dpInput = $('<input id="dateRead" type="text"/>');
 
-        var $datePicker = $dpInput.datepicker();
+        var $datePicker = $dpInput.datepicker({
+            dateFormat: "yy-mm-dd"
+        });
 
         var $formElement = $('<div id="dialogStatusRead" title="Change Read status"/>')
             .append($("<p>" + displayText.intro + "</p>"))

@@ -361,14 +361,20 @@ window.BookView = Backbone.View.extend({
         _.each(dataKeys, function(element){
             if (element.special){
                 var formElement;
-                var statusOwnership = me.model.get('status') || {'ownership': null};
+                var status = me.model.get('status') || {'ownership': null, 'read': null};
+
                 switch (element.field){
                     case 'status.ownership':
                         tbody.append(htmlSnippets['status']({
                             title: 'Ownership',
-                            value: statusOwnership['ownership'] || '---'
+                            value: status['ownership'] || '---'
                         }));
                         break;
+                    case 'status.read':
+                        tbody.append(htmlSnippets['status']({
+                            title: 'Read',
+                            value: status['read'] || '---'
+                        }));
                 } 
             } else if (_.has(htmlSnippets, element.field)){
                 // render specific field
@@ -595,9 +601,31 @@ window.EditBookView = Backbone.View.extend({
     
     openReadDialog: function(event){
         event.preventDefault();
+        var me = this;
+        var updateData = function(status, date){
+            if (status.length > 0){
+                me.model.setStatus('read', status);
+            }
+            if (date.length > 0){
+                // TODO: add to log
+            }
+            me.model.set('status', status);
+        };
+
         $('#dialogStatusRead').dialog({
             modal: true,
-            resizable: false
+            resizable: false,
+            buttons: {
+                "Save": function(){
+                    var newStatus = $('select', this).val();
+                    var newDate = $("#dateRead", this).val();
+                    updateData(newStatus, newDate);
+                    $( this ).dialog( "close" );
+                },
+                Cancel: function() {
+                    $( this ).dialog( "close" );
+                }
+            }
         });
     },
 
