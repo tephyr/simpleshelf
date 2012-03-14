@@ -428,12 +428,12 @@ window.EditBookView = Backbone.View.extend({
             '<td><textarea name="{{key}}" rows="5">{{value}}</textarea></td></tr>'
         ),
         'statusOwn': _.template(
-            '<tr class="status"><td><span class="title">{{title}}</span></td>' +
+            '<tr class="status own"><td><span class="title">{{title}}</span></td>' +
             '<td><span class="value"><div id="formElementOwn"/></span></td></tr>'
         ),
         'statusRead': _.template(
-            '<tr class="status"><td><span class="title">{{title}}</span></td>' +
-            '<td><span class="value"><button id="openReadDialog">Change Read status</button><div id="formElementRead"/></span></td></tr>'
+            '<tr class="status read"><td><span class="title">{{title}}</span></td>' +
+            '<td><span class="value">{{value}}</span>&nbsp;<button id="openReadDialog">Change Read status</button><div id="formElementRead"/></td></tr>'
         )
     },
     
@@ -476,7 +476,8 @@ window.EditBookView = Backbone.View.extend({
                     case 'status.ownership':
                         $formElement = window.simpleshelf.util.buildSelect(
                             element.field,
-                            window.app.constants.ownership
+                            window.app.constants.ownership,
+                            me.model.getStatus('ownership')
                         );
 
                         tbody.append(htmlSnippets['statusOwn']({
@@ -488,7 +489,8 @@ window.EditBookView = Backbone.View.extend({
                     case 'status.read':
                         var $select = window.simpleshelf.util.buildSelect(
                             element.field,
-                            window.app.constants.read
+                            window.app.constants.read,
+                            me.model.getStatus('read')
                         );
 
                         var $dialogElement = window.simpleshelf.util.buildStatusFormRead(
@@ -497,6 +499,7 @@ window.EditBookView = Backbone.View.extend({
 
                         tbody.append(htmlSnippets['statusRead']({
                             title: 'Read',
+                            value: me.model.getStatus('read') || '---'
                         }));
                         $('#formElementRead', tbody).replaceWith($dialogElement);
                         break;
@@ -591,7 +594,7 @@ window.EditBookView = Backbone.View.extend({
     },
 
     dataChanged: function(event){
-        // console.log("model's data has changed");
+        console.log("model's data has changed");
     },
     
     dataSynced: function(event){
@@ -609,7 +612,8 @@ window.EditBookView = Backbone.View.extend({
             if (date.length > 0){
                 // TODO: add to log
             }
-            me.model.set('status', status);
+            // update value on main edit form
+            $(".status.read .value", this.el).text(status);
         };
 
         $('#dialogStatusRead').dialog({

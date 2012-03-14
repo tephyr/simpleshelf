@@ -11,7 +11,16 @@ window.Book = Backbone.Model.extend({
     },
     initialize: function(attributes){
         console.log('Book', 'initialize');
-        _.bindAll(this, "select", "setStatus");
+        _.bindAll(this, "getStatus", "select", "setStatus");
+    },
+
+    getStatus: function(status){
+        var statusHash = this.get('status') || {};
+        if (_.has(statusHash, status)){
+            return statusHash[status];
+        } else {
+            return null;
+        }
     },
 
     select: function(){
