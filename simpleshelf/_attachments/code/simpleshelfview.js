@@ -433,7 +433,7 @@ window.EditBookView = Backbone.View.extend({
         ),
         'statusRead': _.template(
             '<tr class="status read"><td><span class="title">{{title}}</span></td>' +
-            '<td><span class="value">{{value}}</span>&nbsp;<button id="openReadDialog">Change Read status</button><div id="formElementRead"/></td></tr>'
+            '<td><input type="text" readonly="readonly" name="{{key}}" value="{{value}}">&nbsp;<button id="openReadDialog">Change Read status</button><div id="formElementRead"/></td></tr>'
         )
     },
     
@@ -499,7 +499,8 @@ window.EditBookView = Backbone.View.extend({
 
                         tbody.append(htmlSnippets['statusRead']({
                             title: 'Read',
-                            value: me.model.getStatus('read') || '---'
+                            value: me.model.getStatus('read') || '---',
+                            key: element.field
                         }));
                         $('#formElementRead', tbody).replaceWith($dialogElement);
                         break;
@@ -575,6 +576,12 @@ window.EditBookView = Backbone.View.extend({
                     }
                     break;
 
+                case "status":
+                    if (!_.isEqual(me.model.get(key), formData[key])){
+                        difference = true;
+                    }
+                    break;
+
                 default:
                     difference = (formData[key] != me.model.get(key));
                     break;
@@ -606,14 +613,15 @@ window.EditBookView = Backbone.View.extend({
         event.preventDefault();
         var me = this;
         var updateData = function(status, date){
+            var updatedValue = null;
             if (status.length > 0){
-                me.model.setStatus('read', status);
+                updatedValue = status;
             }
+            $('input[name="status.read"]', this.el).val(updatedValue || "---");
+
             if (date.length > 0){
                 // TODO: add to log
             }
-            // update value on main edit form
-            $(".status.read .value", this.el).text(status);
         };
 
         $('#dialogStatusRead').dialog({

@@ -4,7 +4,8 @@
 
 window.Book = Backbone.Model.extend({
     defaults: {
-        'type': 'book'
+        'type': 'book',
+        'status': {'ownership': null, 'read': null}
     },
     url: function(){
         return '/simpleshelf/' + this.get('id');
