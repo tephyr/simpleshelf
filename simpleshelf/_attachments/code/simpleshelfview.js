@@ -682,3 +682,39 @@ window.EditBookView = Backbone.View.extend({
         return formData;
     }
 });
+
+/**
+ * ActivityListView: subview on BookView for all Activities
+ */
+window.ActivityListView = Backbone.View.extend({
+    className: 'activityListView',
+    tagName: 'div',
+    template: _.template(
+        '<h3>Activity</h3>'
+    ),
+
+    events: {},
+    initialize: function(){},
+    render: function(){},
+
+    addAll: function() {
+        console.log('ActivityListView.addAll: this.collection.length==', this.collection.length);
+        this.collection.each(this.addOne);
+    },
+
+    addOne: function(model) {
+        // TODO: hold in array for onClose clean-up
+        /*var view = new SpineView({
+            dispatcher: this.options.dispatcher,
+            model: model
+        });
+        view.render();
+        $('ul', this.el).append(view.el);
+        model.on('remove', view.remove);
+        // even though the subview is given the dispatcher reference,
+        // its events should still bubble up to the parent view, which
+        // will handle dispatching them globally
+        view.on('spineview:selected', this.bookSelected);*/
+    },
+
+});
