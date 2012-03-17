@@ -435,7 +435,7 @@ window.EditBookView = Backbone.View.extend({
         ),
         'statusRead': _.template(
             '<tr class="status read"><td><span class="title">{{title}}</span></td>' +
-            '<td><input type="text" readonly="readonly" name="{{key}}" value="{{value}}">&nbsp;<button id="openReadDialog">Change Read status</button><div id="formElementRead"/></td></tr>'
+            '<td><span class="value" id="status_read_display">{{value}}</span><input type="hidden" value="{{value}}" name="{{key}}">&nbsp;<button id="openReadDialog">Change Read status</button><div id="formElementRead"/></td></tr>'
         )
     },
     
@@ -494,7 +494,7 @@ window.EditBookView = Backbone.View.extend({
 
                     case 'status.read':
                         var $select = window.simpleshelf.util.buildSelect(
-                            element.field,
+                            'status_read_form',
                             window.app.constants.read,
                             me.model.getStatus('read')
                         );
@@ -546,9 +546,10 @@ window.EditBookView = Backbone.View.extend({
     },
     
     _prepPlugins: function(){
-       $('#taginput', this.$el).tagsInput({
-           'interactive': true
-       }).importTags(this.model.get('tags').join(','));
+        var tags = this.model.get('tags') || [];
+        $('#taginput', this.$el).tagsInput({
+            'interactive': true
+        }).importTags(tags.join(','));
     },
     
     save: function(event){
@@ -577,7 +578,7 @@ window.EditBookView = Backbone.View.extend({
             // handle special fields separately
             switch(key){
                 case "tags":
-                    if (!formData[key].smartCompare(me.model.get(key))){
+                    if (!formData[key].smartCompare(me.model.get(key) || [])){
                         difference = true;
                     }
                     break;
@@ -589,7 +590,7 @@ window.EditBookView = Backbone.View.extend({
                     break;
 
                 default:
-                    difference = (formData[key] != me.model.get(key));
+                    difference = (formData[key] != (me.model.get(key) || ""));
                     break;
             }
 
@@ -624,6 +625,7 @@ window.EditBookView = Backbone.View.extend({
                 updatedValue = status;
             }
             $('input[name="status.read"]', this.el).val(updatedValue || "---");
+            $('#status_read_display', this.el).text(updatedValue || '---');
 
             if (date.length > 0){
                 // TODO: add to log
@@ -667,20 +669,27 @@ window.EditBookView = Backbone.View.extend({
             switch (element.name){
                 case "tags":
                     // TODO more robust method of splitting
-                    formData["tags"] = element.value.split(',');
+                    var fieldValue = $.trim(element.value);
+                    if (fieldValue.length > 0){
+                        formData["tags"] = element.value.split(',');
+                    } else {
+                        formData["tags"] = [];
+                    }
                     break;
 
                 case "status.ownership":
-                    formData['status']['ownership'] = element.value;
-                    break;
-
                 case "status.read":
-                    formData['status']['read'] = element.value;
+                    var fieldValue = $.trim(element.value);
+                    var fieldSubName = element.name.split(".")[1];
+                    if (fieldValue.length == 0 || fieldValue == "---"){
+                        fieldValue = null;
+                    }
+                    formData['status'][fieldSubName] = fieldValue;
                     break;
 
                 default:
                     if (_.indexOf(window.simpleshelf.constantsUI.allFields, element.name) > -1){
-                        formData[element.name] = element.value;
+                        formData[element.name] = $.trim(element.value);
                     }
                     break;
             }
