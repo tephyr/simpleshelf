@@ -344,6 +344,8 @@ window.BookView = Backbone.View.extend({
         console.log('BookView: rendering');
         $(this.el).html(this.template());
 
+        $('h2', this.el).attr('title', 'id: ' + this.model.id);
+
         // build lines programmatically
         var dataKeys = window.simpleshelf.constantsUI.bookView.schema;
         var htmlSnippets = {
@@ -453,6 +455,10 @@ window.EditBookView = Backbone.View.extend({
     render: function(){
         console.log('EditBookView: rendering');
         $(this.el).html(this.template());
+
+        if (!this.model.isNew()){
+            $('h2', this.el).attr('title', 'id: ' + this.model.id);
+        }
 
         // build lines programmatically
         var dataKeys = window.simpleshelf.constantsUI.bookView.schema;
