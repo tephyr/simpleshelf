@@ -36,10 +36,14 @@ window.simpleshelf.util = {
             dateFormat: "yy-mm-dd"
         });
 
+        var layout = "<table><tr><td>Read status</td><td><span id='statusinput'/></td></tr>" + 
+            "<tr><td>Eff. date</td><td><span id='dpinput'/></td></tr></table>";
+
         var $formElement = $('<div id="dialogStatusRead" title="Change Read status"/>')
             .append($("<p>" + displayText.intro + "</p>"))
-            .append(elementSelect)
-            .append($dpInput);
+            .append($(layout));
+        $('#statusinput', $formElement).replaceWith(elementSelect);
+        $('#dpinput', $formElement).replaceWith($dpInput);
         return $formElement;
     }
 };

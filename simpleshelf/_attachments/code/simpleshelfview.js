@@ -452,6 +452,11 @@ window.EditBookView = Backbone.View.extend({
         this.model.bind('sync', this.dataSynced);
     },
 
+    onClose: function(){
+        // remove read status dialog, since on first open, jQuery pushes it outside the container
+        $('#dialogStatusRead').remove();
+    },
+
     render: function(){
         console.log('EditBookView: rendering');
         $(this.el).html(this.template());
