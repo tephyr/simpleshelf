@@ -603,7 +603,11 @@ window.EditBookView = Backbone.View.extend({
         okToGo = anyDifferences ? window.confirm("There are changes, ok to abandon?") : true;
 
         if (okToGo){
-            this.options.dispatcher.trigger('editbookview:canceledit', this.model.id);
+            if (this.model.isNew()){
+                this.options.dispatcher.trigger('editbookview:cancelnewbook');
+            } else {
+                this.options.dispatcher.trigger('editbookview:canceledit', this.model.id);
+            }
         }
     },
 

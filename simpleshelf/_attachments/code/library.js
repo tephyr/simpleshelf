@@ -33,7 +33,8 @@
                 window.app.tagCloudView.reloadTags,
                 window.app.bookView
             ],
-            'editbookview:canceledit': [window.app.bookView]
+            'editbookview:canceledit': [window.app.bookView],
+            'editbookview:cancelnewbook': [window.app.home]
         };
         
         // bind events
