@@ -37,7 +37,7 @@ Validation for type===book
 
   Both ``notes*`` are strings of arbitrary length; notesPrivate will never be published.
 
-- ``activity``: Array of objects
+- ``activities``: Array of ``activity`` objects
 
   element definition::
 
@@ -53,7 +53,7 @@ Constants
 +++++++++
 Constants in CouchDB are tricky: CouchDB does not allow access to other documents when saving one, to preserve atomicity.  Any list of acceptable values must be available to the validation routine and the creation code.  The following lists are allowable sets of values for particular fields in the schema.
 
-book/activity/action
+book/activities/action
 --------------------
 - book.added
 - book.read.started
