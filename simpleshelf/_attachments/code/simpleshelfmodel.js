@@ -5,8 +5,7 @@
 window.Book = Backbone.Model.extend({
     defaults: {
         'type': 'book',
-        'status': {'ownership': null, 'read': null},
-        'activity': []
+        'status': {'ownership': null, 'read': null}
     },
     url: function(){
         return '/simpleshelf/' + this.get('id');
@@ -14,6 +13,20 @@ window.Book = Backbone.Model.extend({
     initialize: function(attributes){
         console.log('Book', 'initialize');
         _.bindAll(this, "getStatus", "select", "setStatus");
+    },
+
+    /**
+     * Parse book info, removing activities list, to be parsed by child collection
+     * Inspired by http://stackoverflow.com/questions/8501170/backbone-js-view-of-model-containing-collection
+     */
+    parse: function(resp){
+        if (this.attributes.activities){
+            this.attributes.activities.set(resp.activities);
+            delete resp.activities;
+        } else {
+            resp.activities = new ActivityList(resp.activities);
+        }
+        return resp;
     },
 
     getStatus: function(status){
@@ -187,5 +200,35 @@ window.TagList = Backbone.Collection.extend({
             model.set({'selected': (model.get('tag') === tag)})
                 .trigger('tag:highlight', tag);
         });
+    }
+});
+
+/**
+ * Individual Activity record
+ */
+window.Activity = Backbone.Model.extend({
+    defaults: {
+        date: null,
+        action: null
+    }
+});
+
+/**
+ * Collection of Activity records
+ */
+window.ActivityList = Backbone.Collection.extend({
+    model: Activity,
+    parse: function(response) {
+        var results = [];
+        if (response.rows){
+            _.each(response.rows, function(element){
+                results.push({
+                    "date": element.date || null,
+                    "action": element.action || null
+                });
+            });
+        }
+
+        return results;
     }
 });

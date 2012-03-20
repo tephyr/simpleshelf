@@ -308,6 +308,7 @@ window.BookView = Backbone.View.extend({
         '<h2>Book</h2>' +
         '<div class="menu">' +
         '<button id="edit">Edit</button>' +
+        '<button id="showActivities">Show activities</button>' +
         '</div>' +
         '<div class="bookinfo"/>'
     ),
@@ -333,11 +334,16 @@ window.BookView = Backbone.View.extend({
     },
 
     events: {
-        'click #edit': 'editBook'
+        'click #edit': 'editBook',
+        'click #showActivities': 'showActivities'
     },
 
     initialize: function(options){
-        _.bindAll(this, 'render', 'editBook');
+        _.bindAll(this, 'render', 'editBook', 'showActivities');
+        this.options.activitiesView = new window.ActivityListView({
+            dispatcher: window.dispatcher,
+            collection: this.options.model.get("activities")
+        });
     },
 
     render: function(){
@@ -398,6 +404,19 @@ window.BookView = Backbone.View.extend({
         evt.preventDefault();
         // show new book form
         this.options.dispatcher.trigger('navigation:editbook', this.model.id);
+    },
+
+    showActivities: function(evt){
+        evt.preventDefault();
+        // show dialog w/activities
+        $('<div id="dialogActivities" title="Activities"/>')
+            .css("display", "none")
+            .append(this.options.activitiesView.render().el)
+            .appendTo(this.el);
+        $('#dialogActivities').dialog({
+            modal: true,
+            resizable: false
+        });
     },
 
     _addSimpleField: function(fieldTitle, fieldValue){
@@ -707,19 +726,54 @@ window.EditBookView = Backbone.View.extend({
     }
 });
 
+window.ActivityView = Backbone.View.extend({
+    className: 'activity-view',
+    tagName: "tr",
+    template: _.template(
+        "<td>{{date}}</td><td>{{action}}</td>"
+    ),
+    viewName: 'ActivityView',
+
+    initialize: function(properties){
+        _.bindAll(this, 'render', 'remove');
+        this.model.on('change', this.render);
+        this.model.on('destroy', this.remove);
+    },
+
+    render: function(){
+        $(this.el).html(this.template(this.model.toJSON()));
+        return this;
+    }
+});
+
 /**
  * ActivityListView: subview on BookView for all Activities
  */
 window.ActivityListView = Backbone.View.extend({
-    className: 'activityListView',
-    tagName: 'div',
+    className: 'activity-list-view',
+    tagName: 'table',
     template: _.template(
-        '<h3>Activity</h3>'
+        '<tbody/>'
     ),
+    viewName: "ActivityListView",
 
     events: {},
-    initialize: function(){},
-    render: function(){},
+    initialize: function(){
+        _.bindAll(this, 'render', 'addAll', 'addOne');
+        this.collection.on('add', this.addOne);
+        this.collection.on('reset', this.render);
+    },
+    render: function() {
+        this.log('rendering window.ActivityListView');
+        $(this.el).html(this.template());
+        this.addAll();
+        return this;
+    },
+
+    onClose: function(){
+        this.collection.off('add', this.addOne);
+        this.collection.off('reset', this.render);
+    },
 
     addAll: function() {
         console.log('ActivityListView.addAll: this.collection.length==', this.collection.length);
@@ -728,17 +782,17 @@ window.ActivityListView = Backbone.View.extend({
 
     addOne: function(model) {
         // TODO: hold in array for onClose clean-up
-        /*var view = new SpineView({
+        var view = new ActivityView({
             dispatcher: this.options.dispatcher,
             model: model
         });
         view.render();
-        $('ul', this.el).append(view.el);
+        $('tbody', this.el).append(view.el);
         model.on('remove', view.remove);
         // even though the subview is given the dispatcher reference,
         // its events should still bubble up to the parent view, which
         // will handle dispatching them globally
-        view.on('spineview:selected', this.bookSelected);*/
-    },
+        view.on('activityview:selected', function(){window.alert("activity view selected");});
+    }
 
 });
