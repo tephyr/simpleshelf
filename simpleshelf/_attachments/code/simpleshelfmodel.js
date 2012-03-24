@@ -20,6 +20,10 @@ window.Book = Backbone.Model.extend({
      * Inspired by http://stackoverflow.com/questions/8501170/backbone-js-view-of-model-containing-collection
      */
     parse: function(resp){
+        if (_.has(resp, 'ok') && resp.ok == true){
+            // no need to parse
+            return;
+        }
         if (this.attributes.activities){
             this.attributes.activities.set(resp.activities);
             delete resp.activities;
