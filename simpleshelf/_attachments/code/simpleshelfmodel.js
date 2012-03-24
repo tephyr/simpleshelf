@@ -12,7 +12,7 @@ window.Book = Backbone.Model.extend({
     },
     initialize: function(attributes){
         console.log('Book', 'initialize');
-        _.bindAll(this, "getStatus", "select", "setStatus");
+        _.bindAll(this, "addActivity", "getStatus", "select", "setStatus");
     },
 
     /**
@@ -25,12 +25,20 @@ window.Book = Backbone.Model.extend({
             return;
         }
         if (this.attributes.activities){
-            this.attributes.activities.set(resp.activities);
+            this.attributes.activities.reset(resp.activities);
             delete resp.activities;
         } else {
             resp.activities = new ActivityList(resp.activities);
         }
         return resp;
+    },
+
+    /**
+     * Add an activity in one call
+     * @param opts {Object} {date: date string, action: String}, IOW a valid Activity object's attributes
+     **/
+    addActivity: function(opts){
+        this.get('activities').add(opts);
     },
 
     getStatus: function(status){

@@ -26,3 +26,12 @@ window.simpleshelf.constantsUI.allFields = _.map(window.simpleshelf.constantsUI.
     }
 );
 
+window.simpleshelf.constants = {
+    actionsRead: {
+        'to.read': 'book.read.queued',
+        'reading': 'book.read.started',
+        'finished': 'book.read.finished',
+        'abandoned': 'book.read.stopped',
+        'reference': null
+    }
+};

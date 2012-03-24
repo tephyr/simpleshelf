@@ -584,9 +584,28 @@ window.EditBookView = Backbone.View.extend({
         
         // save everything
         var freshData = this._getFormData();
+        var me = this;
+        _.each(window.simpleshelf.constantsUI.bookView.schema, function(element, index){
+            if (element.special){
+                switch(element.field){
+                    case "status.ownership":
+                        me.model.setStatus('ownership', freshData[element.field]);
+                        break;
+
+                    case "status.read":
+                        me.model.setStatus('read', freshData[element.field]);
+                        break;
+
+                    default:
+                        break;
+                }
+            } else {
+                me.model.set(element.field, freshData[element.field], {silent: true});
+            }
+        });
 
         // TODO: handle validation
-        this.model.save(freshData, {'wait': true});
+        this.model.save(null, {'wait': true});
     },
 
     /**
@@ -619,7 +638,7 @@ window.EditBookView = Backbone.View.extend({
             }
 
             if (difference){
-                console.log('EditBookView.cancel difference', key, value, me.model.get(key));
+                console.log('EditBookView.cancel difference', key, "Old", me.model.get(key), "New", value);
                 anyDifferences = true;
             }
         });
@@ -630,6 +649,8 @@ window.EditBookView = Backbone.View.extend({
             if (this.model.isNew()){
                 this.options.dispatcher.trigger('editbookview:cancelnewbook');
             } else {
+                // reset from server in case any attributes changed (like activities)
+                this.model.fetch();
                 this.options.dispatcher.trigger('editbookview:canceledit', this.model.id);
             }
         }
@@ -656,7 +677,11 @@ window.EditBookView = Backbone.View.extend({
             $('#status_read_display', this.el).text(updatedValue || '---');
 
             if (date.length > 0){
-                // TODO: add to log
+                // add to log
+                var mappedStatus = window.simpleshelf.constants.actionsRead[status] || null;
+                if (mappedStatus){
+                    me.model.addActivity({'date': date, 'action': mappedStatus});
+                }
             }
         };
 
@@ -708,11 +733,10 @@ window.EditBookView = Backbone.View.extend({
                 case "status.ownership":
                 case "status.read":
                     var fieldValue = $.trim(element.value);
-                    var fieldSubName = element.name.split(".")[1];
                     if (fieldValue.length == 0 || fieldValue == "---"){
                         fieldValue = null;
                     }
-                    formData['status'][fieldSubName] = fieldValue;
+                    formData[element.name] = fieldValue;
                     break;
 
                 default:
