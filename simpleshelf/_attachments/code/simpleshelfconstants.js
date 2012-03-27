@@ -9,13 +9,14 @@ window.simpleshelf.constantsUI = {
             {'field': 'title', 'title': 'Title'},
             {'field': 'author', 'title': 'Author'},
             {'field': 'isbn', 'title': 'ISBN'},
-            {'field': 'openlibrary', 'title': 'OpenLibrary'},
+            {'field': 'public', 'title': 'Public', 'special': true},
             {'field': 'publisher', 'title': 'Publisher'},
             {'field': 'tags', 'title': 'Tags'},
             {'field': 'notesPublic', 'title': 'Public notes'},
             {'field': 'notesPrivate', 'title': 'Private notes'},
             {'field': 'status.read', 'special': true, 'title': 'Read'},
             {'field': 'status.ownership', 'special': true, 'title': 'Ownership'},
+            // urls
         ]
     }
 };

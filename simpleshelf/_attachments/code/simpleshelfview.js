@@ -356,6 +356,7 @@ window.BookView = Backbone.View.extend({
         var dataKeys = window.simpleshelf.constantsUI.bookView.schema;
         var htmlSnippets = {
             'tags': this.simpleTemplates.tags,
+            'public': this.simpleTemplates.simpleField,
             'notesPublic': this.simpleTemplates.notes,
             'notesPrivate': this.simpleTemplates.notes,
             'status': this.simpleTemplates.status
@@ -374,21 +375,39 @@ window.BookView = Backbone.View.extend({
                 switch (element.field){
                     case 'status.ownership':
                         tbody.append(htmlSnippets['status']({
-                            title: 'Ownership',
+                            title: element.title,
                             value: status['ownership'] || '---'
                         }));
                         break;
                     case 'status.read':
                         tbody.append(htmlSnippets['status']({
-                            title: 'Read',
+                            title: element.title,
                             value: status['read'] || '---'
                         }));
+                        break;
+
+                    case 'public':
+                        tbody.append(htmlSnippets['public']({
+                            title: element.title,
+                            value: me.model.get(element.field) ? "yes" : "no"
+                        }));
+                        break;
+
+                    default:
+                        break;
+
                 } 
             } else if (_.has(htmlSnippets, element.field)){
                 // render specific field
+                var properValue;
+                switch(element.field){
+                    default:
+                        properValue = me.model.get(element.field);
+                        break;
+                }
                 tbody.append(htmlSnippets[element.field]({
                     title: element.title,
-                    value: me.model.get(element.field)
+                    value: properValue
                 }));
             } else {
                 // render element in generic way
@@ -444,6 +463,10 @@ window.EditBookView = Backbone.View.extend({
             '<tr class="complex {{key}}"><td><span class="title">{{title}}</span></td>' +
             '<td><input type="text" name="{{key}}" value="" id="taginput"></td></tr>'
         ),
+        'public': _.template(
+            '<tr class="complex {{key}}"><td><span class="title">{{title}}</span></td>' +
+            '<td><input type="checkbox" name="{{key}}" checked="{{value}}" value="true"></td></tr>'
+        ),
         'notes': _.template(
             '<tr class="complex {{key}}"><td><span class="title">{{title}}</span></td>' +
             '<td><textarea name="{{key}}" rows="5">{{value}}</textarea></td></tr>'
@@ -488,6 +511,7 @@ window.EditBookView = Backbone.View.extend({
         var dataKeys = window.simpleshelf.constantsUI.bookView.schema;
         var htmlSnippets = {
             'tags': this.simpleTemplates.tags,
+            'public': this.simpleTemplates.public,
             'notesPublic': this.simpleTemplates.notes,
             'notesPrivate': this.simpleTemplates.notes,
             'statusOwn': this.simpleTemplates.statusOwn,
@@ -535,6 +559,15 @@ window.EditBookView = Backbone.View.extend({
                         $('#formElementRead', tbody).replaceWith($dialogElement);
                         break;
 
+                    case "public":
+                        // convert "true" to "checked" for input type==checkbox
+                        tbody.append(htmlSnippets[element.field]({
+                            title: element.title,
+                            key: element.field,
+                            value: (me.model.get(element.field) == "true") ? "checked" : ""
+                        }));
+                        break;
+
                 }
             } else if (_.has(htmlSnippets, element.field)){
                 var properValue;
@@ -542,6 +575,7 @@ window.EditBookView = Backbone.View.extend({
                     case "tags":
                         properValue = me.model.get(element.field).join(" ");
                         break;
+
                     default:
                         properValue = me.model.get(element.field);
                         break;
@@ -594,6 +628,10 @@ window.EditBookView = Backbone.View.extend({
 
                     case "status.read":
                         me.model.setStatus('read', freshData[element.field]);
+                        break;
+
+                    case "public":
+                        me.model.set('public', freshData[element.field]);
                         break;
 
                     default:
@@ -720,6 +758,10 @@ window.EditBookView = Backbone.View.extend({
         var me = this;
         _.each($('form', this.el).serializeArray(), function(element, index, list){
             switch (element.name){
+                case "public":
+                    formData["public"] = (element.value == "true");
+                    break;
+
                 case "tags":
                     // TODO more robust method of splitting
                     var fieldValue = $.trim(element.value);
