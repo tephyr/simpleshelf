@@ -21,6 +21,7 @@ Validation for type===book
 - ``title``:    string|null
 - ``author``:   string|null
 - ``isbn``:     string|null
+- ``public``:   Boolean, defaults to ``true``
 - ``status``:   Object
 
   - ``read``:       ``null`` | any value from `book/status/read`_
