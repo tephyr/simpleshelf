@@ -1,0 +1,20 @@
+{
+"_id": "sample-the-simple-dollar",
+"type": "book",
+"title": "The simple dollar",
+"author": "Trent Hamm",
+"isbn": "978-0-13-705425-1",
+"public": true,
+"publisher": "FT Press",
+"status": {"read": "to.read", "ownership": "personal"},
+"tags": ["finance", "non.fiction"],
+"urls": {
+	"source": "http://www.thesimpledollar.com/",
+	"openlibrary": "http://openlibrary.org/works/OL15536144W/The_simple_dollar"
+},
+"notesPublic": "Started reading it from library, good enough to buy",
+"notesPrivate": "Left it at ch14, p179",
+"activities": [
+	{"date": "2012-03-26", "action": "book.added"}
+]
+}
