@@ -45,5 +45,19 @@ window.simpleshelf.util = {
         $('#statusinput', $formElement).replaceWith(elementSelect);
         $('#dpinput', $formElement).replaceWith($dpInput);
         return $formElement;
+    },
+
+    /**
+     * Build a login form, attach to body as div#loginform
+     **/
+    buildLoginForm: function(){
+        var dialogTemplate = _.template(
+            '<div id="loginform" title="Login to simpleshelf">' + 
+            '<div class="row"><label for="userid">User id</label><input type="text" id="userid"/></div>' +
+            '<div class="row"><label for="userpw">Password</label><input type="password" id="userpw"/></div>' +
+            '</div>'
+        );
+
+        return $(dialogTemplate()).css('display', 'none').appendTo('body');
     }
 };

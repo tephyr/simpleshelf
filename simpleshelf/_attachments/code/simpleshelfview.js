@@ -37,12 +37,13 @@ window.NavigationView = Backbone.View.extend({
     className: "navigation-view",
     events: {
       'click .newbook': 'addBook',
-      'click .index': 'goIndex'
+      'click .index': 'goIndex',
+      'click .login': 'logIn'
     },
     viewName: 'NavigationView',
 
     initialize: function(){
-        _.bindAll(this, "render", "addBook", "goIndex");
+        _.bindAll(this, "render", "addBook", "goIndex", "logIn");
     },
 
     render: function(){
@@ -52,7 +53,8 @@ window.NavigationView = Backbone.View.extend({
         // add links
         var links = {
             "newbook": "New book",
-            "index": "Index"
+            "index": "Index",
+            "login": "Login"
         };
 
         var linkTemplate = _.template('<li><a href="#{{key}}" class="{{key}}">{{name}}</a></li>');
@@ -74,6 +76,96 @@ window.NavigationView = Backbone.View.extend({
         event.preventDefault();
         // show new book form
         this.options.dispatcher.trigger('navigation:newbook');
+    },
+
+    logIn: function(event){
+        event.preventDefault();
+        window.simpleshelf.util.authGetSession(function(authResults){
+            console.log("authResults before login", authResults);
+        });
+        // show login form
+        var $loginForm = $('#loginform');
+        if ($loginForm.length == 0){
+            $loginForm = window.simpleshelf.util.buildLoginForm();
+        }
+        $loginForm.dialog({
+            modal: true,
+            resizable: false,
+            buttons: {
+                'Login': function(){
+                    console.log("login!");
+                    var loginOptions = {
+                        name: $('#userid', this).val(),
+                        password: $('#userpw', this).val(),
+                        success : function(r) {
+                            console.log("login succeeded");
+                            window.simpleshelf.util.authGetSession(function(authResults){
+                                console.log("authResults after login", authResults);
+                            });
+                            window.alert('logged in!');
+                        }
+                    };
+                    window.simpleshelf.util.authLogin(loginOptions);
+                    $(this).dialog("close");
+                },
+                'Cancel': function(){
+                    $(this).dialog("close");
+                }
+            }
+        });
+    }
+});
+
+/**
+ * Container for login/signup forms
+ */
+window.AuthenticationView = Backbone.View.extend({
+    template: _.template(
+        '<form>' +
+        '<label for="name">Name</label> <input type="text" name="name" value="" autocapitalize="off" autocorrect="off">' +
+        '<label for="password">Password</label> <input type="password" name="password" value="">' +
+        '<input type="submit" name="submit" value="{{submitValue}}">' +
+        '</form>'
+    ),
+    tagName: 'div',
+    className: 'authentication-view',
+    viewName: 'AuthenticationView',
+    events: {
+        'submit form': 'onSubmit'
+    },
+
+    initialize: function(){
+        _.bindAll(this, 'render', 'onSubmit');
+    },
+
+    render: function(){
+        var templateOptions = {submitValue: ''};
+        switch(this.model.get('action')){
+            case "getcredentials":
+                templateOptions.submitValue = 'Login';
+                break;
+
+            case "signup":
+                templateOptions.submitValue = 'Signup';
+                break;
+        }
+        $(this.el).html(this.template(templateOptions));
+        return this;
+    },
+
+    onSubmit: function(event){
+        event.preventDefault();
+        var $formElement = $('form', this.el);
+        var userName = $('input:text[name=name]', $formElement).val();
+        var userPw = $('input:password', $formElement).val();
+        console.log('submitted', 'action', $(':submit', $formElement).val());
+        if (this.model.get('action') == "getcredentials"){
+            this.options.dispatcher.trigger('authenticationview.login', {
+                action: 'login',
+                name: userName,
+                password: userPw
+            });
+        }
     }
 });
 
