@@ -59,5 +59,35 @@ window.simpleshelf.util = {
         );
 
         return $(dialogTemplate()).css('display', 'none').appendTo('body');
+    },
+
+    /**
+     * Retrieve the current session
+     */
+    authGetSession: function(onSessionRetrieved){
+        $.couch.session({
+            success : function(r) {
+                var result = {authInfo: null, status: "unknown"};
+                var userCtx = r.userCtx;
+                if (userCtx.name) {
+                    result.status = "loggedIn";
+                } else if (userCtx.roles.indexOf("_admin") != -1) {
+                    result.status = "adminParty";
+                } else {
+                    result.status = "loggedOut";
+                };
+                result.authInfo = r;
+                if (_.isFunction(onSessionRetrieved)){
+                    onSessionRetrieved(result);
+                }
+          }});
+    },
+
+    /**
+     * Login with the given name/password combo
+     * @param {Object} options {name, password, success, error}
+     */
+    authLogin: function(options){
+        $.couch.login(options);
     }
 };

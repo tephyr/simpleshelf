@@ -63,6 +63,45 @@ window.Book = Backbone.Model.extend({
     }
 });
 
+/**
+ * Hold authentication info for the current instance
+ * actions: signup/getcredentials invoke the UI, login/logout interact with the server
+ */
+window.AuthInfo = Backbone.Model.extend({
+    default: {
+        'status': null, // loggedIn, loggedOut, adminParty; should match CouchDB
+        'action': null // signup, getcredentials, login, logout
+    },
+    initialize: function(options){
+        _.bindAll(this, 'handleResults');
+    },
+    url: function(){}, // enforce noop
+
+    handleResults: function(results){
+        // parse info, update status & action, fire event
+        if (results.authInfo.ok && results.authInfo.ok == true){
+            this.set('status', results.status);
+            this.set('userCtx', results.authInfo.userCtx || {});
+        } else {
+            this.set('status', null);
+            this.set('userCtx', {});
+        }
+
+        switch(this.get('status')){
+            case 'loggedOut':
+                this.set('action', 'getcredentials');
+                break;
+
+            case 'loggedIn':
+            default:
+                this.set('action', null);
+                break;
+        }
+
+        this.trigger('authenticate:handleresults', results);
+    }
+});
+
 window.Library = Backbone.Collection.extend({
     model: Book,
     url: '/simpleshelf/_design/simpleshelf/_view/books?key="book"',
