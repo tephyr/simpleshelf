@@ -4,6 +4,7 @@
 window.SimpleShelfLibrary = Backbone.Router.extend({
     routes: {
         '': 'home',
+        'auth': 'authenticate',
         'tags/:tagName': 'tags',
         'books/:bookId': 'bookView',
         'books/:bookId/edit': 'bookEdit'
@@ -11,7 +12,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     
     initialize: function(options){
         console.log("initializing SimpleShelfLibrary (Backbone.Router)");
-        _.bindAll(this, 'home', 'tags', 'bookView', 'bookEdit', '_loadBookView', '_loadEditBookView');
+        _.bindAll(this, 'home', 'authenticate', 'tags', 'bookView', 'bookEdit', '_loadBookView', '_loadEditBookView');
         this.appView = options.appView;
 
         /*this.infoView = new LibraryInfoView({
@@ -44,16 +45,67 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
      */
     home: function() {
         console.log("Routing to home");
-        this.tagCloudView.resetTags(false);
-        window.spineList.resetFilter();
-        var me = this;
-        window.spineList.fetch({silent: true, success: function(collection, response){
-            console.log('Route / spineList fetch succeeded; count:', collection.length);
-            me.appView.showView(new SpineListView({
+        // verify logged-in
+        var authStatus = window.authInfo.get('status');
+        if (authStatus == null || authStatus == 'loggedout'){
+            // TODO: if authStatus null, retrieve session before deciding what to do
+            // get authenticated
+            window.authInfo.set('action', 'login');
+            //this.navigate('auth/');
+            this.authenticate();
+        } else {
+            this.tagCloudView.resetTags(false);
+            window.spineList.resetFilter();
+            var me = this;
+            window.spineList.fetch({silent: true, success: function(collection, response){
+                console.log('Route / spineList fetch succeeded; count:', collection.length);
+                me.appView.showView(new SpineListView({
+                    dispatcher: window.dispatcher,
+                    collection: window.spineList
+                }), {log: true});
+            }});
+        }
+    },
+
+    /**
+     * Route for authentication
+     */
+    authenticate: function(options){
+        // if we have no auth status, get it
+        if (window.authInfo.get('status') == null){
+            window.simpleshelf.util.authGetSession(function(results){
+                window.authInfo.handleResults(results);
+            });
+            return;
+        }
+
+        var action = _.has(options, 'action') ? options.action : window.authInfo.get('action');
+
+        if (action == null && window.authInfo.get('status') == 'loggedIn'){
+            window.app.home();
+        }
+
+        if (action == 'getcredentials'){
+            // show login view
+            this.appView.showView(new AuthenticationView({
                 dispatcher: window.dispatcher,
-                collection: window.spineList
-            }), {log: true});
-        }});
+                model: window.authInfo
+            }));
+        } else if (action == 'login'){
+            // login to couch
+            var loginOptions = _.extend({
+                'name': null,
+                'password': null,
+                'success': function(response){
+                    window.authInfo.handleResults(response)
+                },
+                'error': function(status, error, reason){
+                    window.alert('The login failed with this error: ' + error + '\nand this reason: ' + reason);
+                }
+            }, options);
+            window.simpleshelf.util.authLogin(loginOptions);
+        }
+        // TODO: signup, logout
     },
 
     /**

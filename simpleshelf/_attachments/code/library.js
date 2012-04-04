@@ -2,6 +2,7 @@
 (function($) {
     // prep vars
     // window.library = new Library();
+    window.authInfo = new AuthInfo();
     window.tagList = new TagList();
     window.spineList = new SpineList();
     
@@ -34,7 +35,8 @@
                 window.app.bookView
             ],
             'editbookview:canceledit': [window.app.bookView],
-            'editbookview:cancelnewbook': [window.app.home]
+            'editbookview:cancelnewbook': [window.app.home],
+            'authenticationview.login': [window.app.authenticate]
         };
         
         // bind events
@@ -45,6 +47,7 @@
         });
 
         window.spineList.bind('destroy', window.app.tagCloudView.reloadTags);
+        window.authInfo.bind('authenticate:handleresults', window.app.authenticate);
         
         // start (?) router
         Backbone.history.start({pushState: true});
