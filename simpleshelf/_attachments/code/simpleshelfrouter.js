@@ -12,7 +12,8 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     
     initialize: function(options){
         console.log("initializing SimpleShelfLibrary (Backbone.Router)");
-        _.bindAll(this, 'home', 'authenticate', 'tags', 'bookView', 'bookEdit', '_loadBookView', '_loadEditBookView');
+        _.bindAll(this, 'home', 'authenticate', 'tags', 'bookView', 'bookEdit',
+            '_loadBookView', '_loadData', '_loadEditBookView');
         this.appView = options.appView;
 
         /*this.infoView = new LibraryInfoView({
@@ -74,14 +75,34 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         // if we have no auth status, get it
         if (window.authInfo.get('status') == null){
             window.simpleshelf.util.authGetSession(function(results){
-                window.authInfo.handleResults(results);
+                window.dispatcher.trigger('authenticate:processsession', results);
             });
             return;
         }
 
-        var action = _.has(options, 'action') ? options.action : window.authInfo.get('action');
+        if (options){
+            // event fired & routed here, follow given actions
+            if (options.action == 'login'){
+                // login to couch
+                var loginOptions = _.extend({
+                    'name': null,
+                    'password': null,
+                    'success': function(response){
+                        window.dispatcher.trigger('authenticate:processlogin', response);
+                    },
+                    'error': function(status, error, reason){
+                        window.alert('The login failed with this error: ' + error + '\nand this reason: ' + reason);
+                        // leave current view in place, so user can retry
+                    }
+                }, options);
+                window.simpleshelf.util.authLogin(loginOptions);
+                return;
+            }
+        }
 
+        var action = window.authInfo.get('action');
         if (action == null && window.authInfo.get('status') == 'loggedIn'){
+            this._loadData();
             window.app.home();
         }
 
@@ -91,19 +112,6 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
                 dispatcher: window.dispatcher,
                 model: window.authInfo
             }));
-        } else if (action == 'login'){
-            // login to couch
-            var loginOptions = _.extend({
-                'name': null,
-                'password': null,
-                'success': function(response){
-                    window.authInfo.handleResults(response)
-                },
-                'error': function(status, error, reason){
-                    window.alert('The login failed with this error: ' + error + '\nand this reason: ' + reason);
-                }
-            }, options);
-            window.simpleshelf.util.authLogin(loginOptions);
         }
         // TODO: signup, logout
     },
@@ -179,5 +187,11 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             dispatcher: window.dispatcher,
             model: window.book});
         this.appView.showView(editBookView);
+    },
+
+    _loadData: function(){
+        // load tags
+        window.tagList.fetch();
+        fetchConstants();
     }
 });

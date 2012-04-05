@@ -73,13 +73,27 @@ window.AuthInfo = Backbone.Model.extend({
         'action': null // signup, getcredentials, login, logout
     },
     initialize: function(options){
-        _.bindAll(this, 'handleResults');
+        _.bindAll(this, 'handleLogin', 'handleSession');
     },
     url: function(){}, // enforce noop
 
-    handleResults: function(results){
+    /**
+     * Process a login call
+     */
+    handleLogin: function(results){
+        if (_.has(results, 'ok') && results.ok == true){
+            this.set({'action': null, 'status': 'loggedIn'});
+            this.set('userCtx', {'name': results.name, 'roles': results.roles});
+            this.trigger('authenticate:authenticationupdated');
+        }
+    },
+
+    /**
+     * Process a session call
+     */
+    handleSession: function(results){
         // parse info, update status & action, fire event
-        if (results.authInfo.ok && results.authInfo.ok == true){
+        if (_.has(results, 'authInfo') && results.authInfo.ok == true){
             this.set('status', results.status);
             this.set('userCtx', results.authInfo.userCtx || {});
         } else {
@@ -98,7 +112,7 @@ window.AuthInfo = Backbone.Model.extend({
                 break;
         }
 
-        this.trigger('authenticate:handleresults', results);
+        this.trigger('authenticate:authenticationupdated');
     }
 });
 

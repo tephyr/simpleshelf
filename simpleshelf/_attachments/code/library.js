@@ -1,24 +1,17 @@
 // encase in jQuery-safe wrapper
 (function($) {
-    // prep vars
-    // window.library = new Library();
-    window.authInfo = new AuthInfo();
-    window.tagList = new TagList();
-    window.spineList = new SpineList();
-    
-    window.fetchCount = 0, window.fetchTotal = 2;
-
-    // load tags
-    window.tagList.fetch({ success: tagList_fetch_complete });
-    
-    fetchConstants();
-
     $(document).ready(function() {
         // instantiate global event dispatcher
         // TODO: keep within app object
         window.dispatcher = {};
         _.extend(window.dispatcher, Backbone.Events);
         
+        // prep models
+        // window.library = new Library();
+        window.authInfo = new AuthInfo();
+        window.tagList = new TagList();
+        window.spineList = new SpineList();
+
         // instantiate Router
         window.app = new SimpleShelfLibrary({appView: new AppView()});
 
@@ -36,21 +29,26 @@
             ],
             'editbookview:canceledit': [window.app.bookView],
             'editbookview:cancelnewbook': [window.app.home],
-            'authenticationview.login': [window.app.authenticate]
+            'authenticationview.login': [window.app.authenticate],
+            'authenticate:processsession': [window.authInfo.handleSession],
+            'authenticate:processlogin': [window.authInfo.handleLogin]
         };
         
-        // bind events
+        // bind events to global dispatcher
         _.each(events, function(eventTargets, eventName){
             _.each(eventTargets, function(eventTarget){
                 window.dispatcher.bind(eventName, eventTarget);
             });
         });
 
+        // bind events from specific models
         window.spineList.bind('destroy', window.app.tagCloudView.reloadTags);
-        window.authInfo.bind('authenticate:handleresults', window.app.authenticate);
+        window.authInfo.bind('authenticate:authenticationupdated', window.app.authenticate);
         
         // start (?) router
         Backbone.history.start({pushState: true});
+
+        window.fetchCount = 0, window.fetchTotal = 2;
 
         // go to start point
         window.app.home();

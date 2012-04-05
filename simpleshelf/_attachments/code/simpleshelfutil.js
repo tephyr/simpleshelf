@@ -63,6 +63,7 @@ window.simpleshelf.util = {
 
     /**
      * Retrieve the current session
+     * @param {Function} onSessionRetrieved
      */
     authGetSession: function(onSessionRetrieved){
         $.couch.session({
