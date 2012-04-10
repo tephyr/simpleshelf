@@ -30,8 +30,11 @@
             'editbookview:canceledit': [window.app.bookView],
             'editbookview:cancelnewbook': [window.app.home],
             'authenticationview.login': [window.app.authenticate],
-            'authenticate:processsession': [window.authInfo.handleSession],
-            'authenticate:processlogin': [window.authInfo.handleLogin]
+            'authenticate:processlogin': [window.authInfo.handleLogin],
+            'authenticate:processlogout': [window.authInfo.handleLogout],
+            'authenticate:askedforcredentials': [window.app.navigationView.askedForCredentials],
+            'authenticate:loggedin': [window.app.navigationView.loggedIn],
+            'navigation:logout': [window.app.authenticate]
         };
         
         // bind events to global dispatcher
@@ -43,7 +46,9 @@
 
         // bind events from specific models
         window.spineList.bind('destroy', window.app.tagCloudView.reloadTags);
-        window.authInfo.bind('authenticate:authenticationupdated', window.app.authenticate);
+        window.authInfo.bind('authinfo:authenticationupdated', window.app.authenticate);
+        window.authInfo.bind('authinfo:loggedout', window.app.navigationView.loggedOut);
+        window.authInfo.bind('authinfo:loggedout', window.app.home);
         
         // start (?) router
         Backbone.history.start({pushState: true});

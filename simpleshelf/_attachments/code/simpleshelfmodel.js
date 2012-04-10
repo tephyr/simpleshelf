@@ -70,21 +70,70 @@ window.Book = Backbone.Model.extend({
 window.AuthInfo = Backbone.Model.extend({
     default: {
         'status': null, // loggedIn, loggedOut, adminParty; should match CouchDB
-        'action': null // signup, getcredentials, login, logout
+        //'action': null, // signup, getcredentials, login, logout
+        'userCtx': {}
     },
     initialize: function(options){
-        _.bindAll(this, 'handleLogin', 'handleSession');
+        _.bindAll(this, 'doLogin', 'doLogout', 'getSession',
+            'handleLogin', 'handleLogout', 'handleSession'
+        );
     },
     url: function(){}, // enforce noop
+
+    /**
+     * Login to couch
+     * @param options {Object} {error: Function(status, error, reason)}
+     */
+     doLogin: function(options){
+        var me = this;
+        var loginOptions = _.extend({
+            'name': null,
+            'password': null,
+            'success': function(response){
+                me.handleLogin(response);
+            }
+        }, options);
+        window.simpleshelf.util.authLogin(loginOptions);
+    },
+
+    /**
+     * Logout of couch
+     */
+    doLogout: function(){
+        var me = this;
+        $.couch.logout({
+            success: function(response){
+                me.handleLogout(response);
+            }
+        });
+    },
+
+    /**
+     * Get current session info
+     */
+    getSession: function(){
+        var me = this;
+        window.simpleshelf.util.authGetSession(function(results){
+            // hand off to local function
+            me.handleSession(results);
+        });
+    },
 
     /**
      * Process a login call
      */
     handleLogin: function(results){
         if (_.has(results, 'ok') && results.ok == true){
-            this.set({'action': null, 'status': 'loggedIn'});
+            this.set({'status': 'loggedIn'});
             this.set('userCtx', {'name': results.name, 'roles': results.roles});
-            this.trigger('authenticate:authenticationupdated');
+            this.trigger('authinfo:authenticationupdated');
+        }
+    },
+
+    handleLogout: function(results){
+        if (_.has(results, 'ok') && results.ok == true){
+            this.set({'status': 'loggedOut', 'userCtx': {}});
+            this.trigger('authinfo:loggedout');
         }
     },
 
@@ -101,18 +150,19 @@ window.AuthInfo = Backbone.Model.extend({
             this.set('userCtx', {});
         }
 
+        var options = {};
         switch(this.get('status')){
             case 'loggedOut':
-                this.set('action', 'getcredentials');
+                options['action'] = 'getcredentials';
                 break;
 
             case 'loggedIn':
             default:
-                this.set('action', null);
+                options['action'] = null;
                 break;
         }
 
-        this.trigger('authenticate:authenticationupdated');
+        this.trigger('authinfo:authenticationupdated', options);
     }
 });
 

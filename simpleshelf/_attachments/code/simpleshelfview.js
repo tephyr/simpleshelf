@@ -43,7 +43,8 @@ window.NavigationView = Backbone.View.extend({
     viewName: 'NavigationView',
 
     initialize: function(){
-        _.bindAll(this, "render", "addBook", "goIndex", "logIn");
+        _.bindAll(this, "render", "addBook", "goIndex", "logIn", "loggedIn", "loggedOut",
+            "askedForCredentials");
     },
 
     render: function(){
@@ -80,39 +81,27 @@ window.NavigationView = Backbone.View.extend({
 
     logIn: function(event){
         event.preventDefault();
-        window.simpleshelf.util.authGetSession(function(authResults){
-            console.log("authResults before login", authResults);
-        });
-        // show login form
-        var $loginForm = $('#loginform');
-        if ($loginForm.length == 0){
-            $loginForm = window.simpleshelf.util.buildLoginForm();
+        if (window.authInfo.get('status') != 'loggedIn'){
+            // navigate to authentication page
+            window.app.authenticate();
+        } else {
+            // log out
+            this.options.dispatcher.trigger('navigation:logout', {'action': 'logout'});
         }
-        $loginForm.dialog({
-            modal: true,
-            resizable: false,
-            buttons: {
-                'Login': function(){
-                    console.log("login!");
-                    var loginOptions = {
-                        name: $('#userid', this).val(),
-                        password: $('#userpw', this).val(),
-                        success : function(r) {
-                            console.log("login succeeded");
-                            window.simpleshelf.util.authGetSession(function(authResults){
-                                console.log("authResults after login", authResults);
-                            });
-                            window.alert('logged in!');
-                        }
-                    };
-                    window.simpleshelf.util.authLogin(loginOptions);
-                    $(this).dialog("close");
-                },
-                'Cancel': function(){
-                    $(this).dialog("close");
-                }
-            }
-        });
+    },
+
+    askedForCredentials: function(){
+        // update login link to show that credentials are being asked for
+        $('a.login', this.el).css('background-color', 'yellow').text("Login");
+    },
+
+    loggedIn: function(){
+        // update link to logout
+        $('a.login', this.el).css('background-color', '').text("Logout");
+    },
+
+    loggedOut: function(){
+        $('a.login', this.el).text("Login");
     }
 });
 
@@ -134,13 +123,14 @@ window.AuthenticationView = Backbone.View.extend({
         'submit form': 'onSubmit'
     },
 
-    initialize: function(){
+    initialize: function(options){
         _.bindAll(this, 'render', 'onSubmit');
+        this.action = options.action || null;
     },
 
     render: function(){
         var templateOptions = {submitValue: ''};
-        switch(this.model.get('action')){
+        switch(this.action){
             case "getcredentials":
                 templateOptions.submitValue = 'Login';
                 break;
@@ -159,7 +149,7 @@ window.AuthenticationView = Backbone.View.extend({
         var userName = $('input:text[name=name]', $formElement).val();
         var userPw = $('input:password', $formElement).val();
         console.log('submitted', 'action', $(':submit', $formElement).val());
-        if (this.model.get('action') == "getcredentials"){
+        if (this.action == "getcredentials"){
             this.options.dispatcher.trigger('authenticationview.login', {
                 action: 'login',
                 name: userName,

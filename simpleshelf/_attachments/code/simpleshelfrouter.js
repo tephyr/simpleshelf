@@ -48,12 +48,14 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         console.log("Routing to home");
         // verify logged-in
         var authStatus = window.authInfo.get('status');
-        if (authStatus == null || authStatus == 'loggedout'){
+        if (authStatus == null || authStatus == 'loggedOut'){
             // TODO: if authStatus null, retrieve session before deciding what to do
-            // get authenticated
-            window.authInfo.set('action', 'login');
+            // empty all collections
+            window.spineList.reset();
+            window.tagList.reset();
+
             //this.navigate('auth/');
-            this.authenticate();
+            this.authenticate({'action': 'getcredentials'});
         } else {
             this.tagCloudView.resetTags(false);
             window.spineList.resetFilter();
@@ -72,46 +74,49 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
      * Route for authentication
      */
     authenticate: function(options){
-        // if we have no auth status, get it
-        if (window.authInfo.get('status') == null){
-            window.simpleshelf.util.authGetSession(function(results){
-                window.dispatcher.trigger('authenticate:processsession', results);
-            });
+        // if we have no auth status, retrieve it first
+        if (_.isEmpty(window.authInfo.get('status'))){
+            window.authInfo.getSession();
             return;
         }
 
-        if (options){
-            // event fired & routed here, follow given actions
-            if (options.action == 'login'){
-                // login to couch
-                var loginOptions = _.extend({
-                    'name': null,
-                    'password': null,
-                    'success': function(response){
-                        window.dispatcher.trigger('authenticate:processlogin', response);
-                    },
-                    'error': function(status, error, reason){
-                        window.alert('The login failed with this error: ' + error + '\nand this reason: ' + reason);
-                        // leave current view in place, so user can retry
-                    }
-                }, options);
-                window.simpleshelf.util.authLogin(loginOptions);
-                return;
-            }
-        }
-
-        var action = window.authInfo.get('action');
+        options = _.extend({}, options);
+        var action = options.action || null;
+        // event fired & routed here, follow given actions
         if (action == null && window.authInfo.get('status') == 'loggedIn'){
+            // logged in; get data & head home
             this._loadData();
+            window.dispatcher.trigger('authenticate:loggedin');
             window.app.home();
+            return;
         }
 
-        if (action == 'getcredentials'){
-            // show login view
-            this.appView.showView(new AuthenticationView({
-                dispatcher: window.dispatcher,
-                model: window.authInfo
-            }));
+        switch(action){
+            case 'login':
+                // login to couch
+                var loginOptions = _.extend(options, {
+                    error: function(status, error, reason){
+                        window.alert('The login failed with this error: ' + error + 
+                            '\nand this reason: ' + reason);
+                        // leave current view in place, so user can retry
+                }});
+                window.authInfo.doLogin(loginOptions);
+                break;
+
+            case 'logout':
+                window.authInfo.doLogout();
+                break;
+
+            case 'getcredentials':
+            default:
+                // show login view
+                this.appView.showView(new AuthenticationView({
+                    dispatcher: window.dispatcher,
+                    model: window.authInfo,
+                    action: action
+                }));
+                window.dispatcher.trigger('authenticate:askedforcredentials');
+                break;
         }
         // TODO: signup, logout
     },
