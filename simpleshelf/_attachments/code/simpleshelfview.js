@@ -860,6 +860,7 @@ window.EditBookView = Backbone.View.extend({
             'status': {}
         };
         var me = this;
+        var fieldValue, fieldSubName;
         _.each($('form', this.el).serializeArray(), function(element, index, list){
             switch (element.name){
                 case "public":
@@ -878,11 +879,14 @@ window.EditBookView = Backbone.View.extend({
 
                 case "status.ownership":
                 case "status.read":
-                    var fieldValue = $.trim(element.value);
+                    fieldValue = $.trim(element.value);
+                    fieldSubName = element.name.split(".")[1];
                     if (fieldValue.length == 0 || fieldValue == "---"){
                         fieldValue = null;
                     }
-                    formData[element.name] = fieldValue;
+                    // ensure the object exists
+                    formData["status"] = formData["status"] || {}
+                    formData["status"][fieldSubName] = fieldValue;
                     break;
 
                 default:
