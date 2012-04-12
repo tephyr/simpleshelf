@@ -17,24 +17,24 @@
 
         // setup events across objects
         var events = {
-            'tagcloudview:tagselected': [window.app.tags],
-            'tagcloudview:tagsreset': [window.app.home],
-            'spinelistview:bookSelected': [window.app.bookView],
-            'navigation:index': [window.app.home],
-            'navigation:newbook': [window.app.bookView],
-            'navigation:editbook': [window.app.bookEdit],
-            'editbookview:dataSynced': [
-                window.app.tagCloudView.reloadTags,
-                window.app.bookView
-            ],
-            'editbookview:canceledit': [window.app.bookView],
-            'editbookview:cancelnewbook': [window.app.home],
-            'authenticationview.login': [window.app.authenticate],
-            'authenticate:processlogin': [window.authInfo.handleLogin],
-            'authenticate:processlogout': [window.authInfo.handleLogout],
             'authenticate:askedforcredentials': [window.app.navigationView.askedForCredentials],
             'authenticate:loggedin': [window.app.navigationView.loggedIn],
-            'navigation:logout': [window.app.authenticate]
+            'authenticate:processlogin': [window.authInfo.handleLogin],
+            'authenticate:processlogout': [window.authInfo.handleLogout],
+            'authenticationview.login': [window.app.authenticate],
+            'editbookview:canceledit': [window.app.bookView],
+            'editbookview:cancelnewbook': [window.app.home],
+            'editbookview:dataSynced': [
+                window.app.bookView,
+                window.app.tagCloudView.reloadTags
+            ],
+            'navigation:editbook': [window.app.bookEdit],
+            'navigation:index': [window.app.home],
+            'navigation:logout': [window.app.authenticate],
+            'navigation:newbook': [window.app.bookView],
+            'spinelistview:bookSelected': [window.app.bookView],
+            'tagcloudview:tagselected': [window.app.tags],
+            'tagcloudview:tagsreset': [window.app.home]
         };
         
         // bind events to global dispatcher
@@ -45,10 +45,10 @@
         });
 
         // bind events from specific models
-        window.spineList.bind('destroy', window.app.tagCloudView.reloadTags);
         window.authInfo.bind('authinfo:authenticationupdated', window.app.authenticate);
-        window.authInfo.bind('authinfo:loggedout', window.app.navigationView.loggedOut);
         window.authInfo.bind('authinfo:loggedout', window.app.home);
+        window.authInfo.bind('authinfo:loggedout', window.app.navigationView.loggedOut);
+        window.spineList.bind('destroy', window.app.tagCloudView.reloadTags);
         
         // start (?) router
         Backbone.history.start({pushState: true});
