@@ -21,6 +21,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         });*/
 
         this.navigationView = new NavigationView({
+            model: window.authInfo,
             dispatcher: window.dispatcher,
             okToLog: true
         });

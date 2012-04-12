@@ -42,9 +42,10 @@ window.NavigationView = Backbone.View.extend({
     },
     viewName: 'NavigationView',
 
-    initialize: function(){
+    initialize: function(options){
         _.bindAll(this, "render", "addBook", "goIndex", "logIn", "loggedIn", "loggedOut",
-            "askedForCredentials");
+            "askedForCredentials", "_updateLinks");
+        this.model.bind('change:status', this._updateLinks);
     },
 
     render: function(){
@@ -90,18 +91,35 @@ window.NavigationView = Backbone.View.extend({
         }
     },
 
+    /**
+     * Hide/show links
+     */
+    _updateLinks: function(){
+        var authStatus = this.model.get("status");
+        var linkVisibility = {
+            ".newbook": authStatus == "loggedIn",
+            ".index": authStatus == "loggedIn",
+            ".login": true // always visible; text may change
+        };
+
+        _.each(linkVisibility, function(value, key){
+            $(key, this).toggle(value);
+        }, this.$el);
+    },
+
+    /* event handlers*/
     askedForCredentials: function(){
         // update login link to show that credentials are being asked for
-        $('a.login', this.el).css('background-color', 'yellow').text("Login");
+        $('a.login', this.$el).css('background-color', 'yellow').text("Login");
     },
 
     loggedIn: function(){
         // update link to logout
-        $('a.login', this.el).css('background-color', '').text("Logout");
+        $('a.login', this.$el).css('background-color', '').text("Logout");
     },
 
     loggedOut: function(){
-        $('a.login', this.el).text("Login");
+        $('a.login', this.$el).text("Login");
     }
 });
 
