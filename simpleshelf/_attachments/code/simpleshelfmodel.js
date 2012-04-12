@@ -1,12 +1,46 @@
 /**
- * Model for simpleshelf
+ * Models for simpleshelf
  */
 
+/**
+ * Individual Activity record
+ */
+window.Activity = Backbone.Model.extend({
+    defaults: {
+        date: null,
+        action: null
+    }
+});
+
+/**
+ * Collection of Activity records
+ */
+window.ActivityList = Backbone.Collection.extend({
+    model: Activity,
+    parse: function(response) {
+        var results = [];
+        if (response.rows){
+            _.each(response.rows, function(element){
+                results.push({
+                    "date": element.date || null,
+                    "action": element.action || null
+                });
+            });
+        }
+
+        return results;
+    }
+});
+
+/**
+ * Model for book
+ */
 window.Book = Backbone.Model.extend({
     defaults: {
         'type': 'book',
         'status': {'ownership': null, 'read': null},
-        'public': true
+        'public': true,
+        'activities': new ActivityList([])
     },
     url: function(){
         return '/simpleshelf/' + this.get('id');
@@ -316,35 +350,5 @@ window.TagList = Backbone.Collection.extend({
             model.set({'selected': (model.get('tag') === tag)})
                 .trigger('tag:highlight', tag);
         });
-    }
-});
-
-/**
- * Individual Activity record
- */
-window.Activity = Backbone.Model.extend({
-    defaults: {
-        date: null,
-        action: null
-    }
-});
-
-/**
- * Collection of Activity records
- */
-window.ActivityList = Backbone.Collection.extend({
-    model: Activity,
-    parse: function(response) {
-        var results = [];
-        if (response.rows){
-            _.each(response.rows, function(element){
-                results.push({
-                    "date": element.date || null,
-                    "action": element.action || null
-                });
-            });
-        }
-
-        return results;
     }
 });
