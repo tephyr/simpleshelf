@@ -113,7 +113,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
                 this.appView.showView(new AuthenticationView({
                     dispatcher: window.dispatcher,
                     model: window.authInfo,
-                    action: action
+                    action: 'getcredentials'
                 }));
                 window.dispatcher.trigger('authenticate:askedforcredentials');
                 break;
