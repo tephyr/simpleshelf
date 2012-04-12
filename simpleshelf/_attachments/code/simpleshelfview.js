@@ -349,9 +349,13 @@ window.TagCloudView = Backbone.View.extend({
 
     render: function() {
         this.log('rendering window.TagCloudView');
-        $(this.el).html(this.template());
-        $('.tagheader', this.el).attr('title', 'Click to show all tags');
-        this.addAll();
+        if (this.collection.length){
+            this.$el.html(this.template());
+            $('.tagheader', this.$el).attr('title', 'Click to show all tags');
+            this.addAll();
+        } else {
+            this.$el.empty();
+        }
         return this;
     },
 
@@ -367,7 +371,7 @@ window.TagCloudView = Backbone.View.extend({
             okToLog: this.okToLog
         });
         view.render();
-        $('ul', this.el).append(view.el);
+        $('ul', this.$el).append(view.el);
         model.bind('remove', view.remove);
         view.bind('tagview:selected', this.tagSelected);
     },
