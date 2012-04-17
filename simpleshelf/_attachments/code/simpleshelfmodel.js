@@ -47,7 +47,7 @@ window.Book = Backbone.Model.extend({
     },
     initialize: function(attributes){
         console.log('Book', 'initialize');
-        _.bindAll(this, "addActivity", "getStatus", "select", "setStatus");
+        _.bindAll(this, "addActivity", "getDefault", "getStatus", "select", "setStatus");
     },
 
     /**
@@ -65,6 +65,10 @@ window.Book = Backbone.Model.extend({
         } else {
             resp.activities = new ActivityList(resp.activities);
         }
+
+        // enforce deeper attributes
+        resp.status = _.extend(this.getDefault({attr: 'status'}), resp.status);
+
         return resp;
     },
 
@@ -74,6 +78,28 @@ window.Book = Backbone.Model.extend({
      **/
     addActivity: function(opts){
         this.get('activities').add(opts);
+    },
+
+    /**
+     * Provide a default (empty) value for a given attribute
+     * @param opts {Object} {attr:[status]}
+     */
+    getDefault: function(opts){
+        if (!opts || !_.has(opts, 'attr')){
+            return null;
+        }
+
+        var result = null;
+        switch(opts.attr){
+            case "status":
+                result = {'read': null, 'ownership': null};
+                break;
+
+            default:
+                break;
+        }
+
+        return result;
     },
 
     getStatus: function(status){
