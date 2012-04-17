@@ -729,11 +729,9 @@ window.EditBookView = Backbone.View.extend({
             if (element.special){
                 switch(element.field){
                     case "status.ownership":
-                        me.model.setStatus('ownership', freshData[element.field]);
-                        break;
-
                     case "status.read":
-                        me.model.setStatus('read', freshData[element.field]);
+                        var fieldSubName = element.field.split(".")[1];
+                        me.model.setStatus(fieldSubName, freshData['status'][fieldSubName]);
                         break;
 
                     case "public":
