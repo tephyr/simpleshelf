@@ -450,6 +450,11 @@ window.BookView = Backbone.View.extend({
         });
     },
 
+    onClose: function(){
+        // dispose of sub views
+        this.options.activitiesView.close();
+    },
+
     render: function(){
         console.log('BookView: rendering');
         $(this.el).html(this.template());

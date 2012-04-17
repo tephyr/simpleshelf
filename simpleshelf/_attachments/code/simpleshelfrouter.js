@@ -157,16 +157,11 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         
         if (bookId == null){
             // new book
-            window.book = new window.Book();
             this._loadEditBookView();
         } else {
             // get requested book
-            if (!window.book || (window.book.id != bookId)){
-                window.book = new Book({id: bookId});
-                window.book.fetch({success: this._loadBookView});
-            } else {
-                this._loadBookView();
-            }
+            var book = new Book({id: bookId});
+            book.fetch({success: this._loadBookView});
         }
     },
     
@@ -175,23 +170,28 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
      */
     bookEdit: function(bookId){
         console.log('Routing to edit book', bookId);
-        window.book = new Book({id: bookId});
-        window.book.fetch({success: this._loadEditBookView});
+        var me = this;
+        var book = new Book({id: bookId});
+        book.fetch({success: function(model, response){
+            me._loadEditBookView({'book': model});
+        }
+        });
     },
 
-    _loadBookView: function(){
+    _loadBookView: function(model, response){
         // create & show book view
         var bookView = new BookView({
             dispatcher: window.dispatcher,
-            model: window.book});
+            model: model});
         this.appView.showView(bookView);
     },
     
-    _loadEditBookView: function(){
+    _loadEditBookView: function(options){
         // create & show book view
+        options = options || {};
         var editBookView = new EditBookView({
             dispatcher: window.dispatcher,
-            model: window.book});
+            model: options.book || new window.Book()});
         this.appView.showView(editBookView);
     },
 

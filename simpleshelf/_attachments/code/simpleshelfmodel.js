@@ -39,8 +39,7 @@ window.Book = Backbone.Model.extend({
     defaults: {
         'type': 'book',
         'status': {'ownership': null, 'read': null},
-        'public': true,
-        'activities': new ActivityList([])
+        'public': true
     },
     url: function(){
         return '/simpleshelf/' + this.get('id');
@@ -48,6 +47,11 @@ window.Book = Backbone.Model.extend({
     initialize: function(attributes){
         console.log('Book', 'initialize');
         _.bindAll(this, "addActivity", "getDefault", "getStatus", "select", "setStatus");
+        // last piece to fire before this model finishes loading;
+        // if activities is missing, add a new instance: if set in this.defaults, it violates encapsulation
+        if (!this.get('activities')){
+            this.set('activities', new ActivityList([]));
+        }
     },
 
     /**
