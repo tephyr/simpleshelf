@@ -33,7 +33,8 @@ window.simpleshelf.util = {
         var $dpInput = $('<input id="dateRead" type="text"/>');
 
         var $datePicker = $dpInput.datepicker({
-            dateFormat: "yy-mm-dd"
+            dateFormat: "yy-mm-dd",
+            showButtonPanel: true
         });
 
         var layout = "<table><tr><td>Read status</td><td><span id='statusinput'/></td></tr>" + 
