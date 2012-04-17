@@ -701,7 +701,9 @@ window.EditBookView = Backbone.View.extend({
 
         // call prep plugins after timeout to let DOM render
         window.setTimeout(function(){
-            me._prepPlugins();            
+            me._prepPlugins();
+            // put focus in first text field
+            $('input[type="text"]', me.$el).first().focus();
         }, 50);
 
         return this;
