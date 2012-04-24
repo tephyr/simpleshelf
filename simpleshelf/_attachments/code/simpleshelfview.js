@@ -409,11 +409,11 @@ window.BookView = Backbone.View.extend({
     className: 'book',
     tagName: 'div',
     template: _.template(
+        '<div class="header">' +
         '<h2>Book</h2>' +
         '<div class="menu">' +
         '<button id="edit">Edit</button>' +
-        '<button id="showActivities">Show activities</button>' +
-        '</div>' +
+        '</div></div>' +
         '<div class="bookinfo"/>'
     ),
     // templates for the different values in a book
@@ -438,12 +438,11 @@ window.BookView = Backbone.View.extend({
     },
 
     events: {
-        'click #edit': 'editBook',
-        'click #showActivities': 'showActivities'
+        'click #edit': 'editBook'
     },
 
     initialize: function(options){
-        _.bindAll(this, 'render', 'editBook', 'showActivities');
+        _.bindAll(this, 'render', 'editBook');
         this.options.activitiesView = new window.ActivityListView({
             dispatcher: window.dispatcher,
             collection: this.options.model.get("activities")
@@ -525,6 +524,9 @@ window.BookView = Backbone.View.extend({
         });
 
         bookinfoEl.append(table);
+        bookinfoEl.append(
+            $('<div/>').addClass('activities').append(this.options.activitiesView.render().el)
+        );
         return this;
     },
 
@@ -532,19 +534,6 @@ window.BookView = Backbone.View.extend({
         evt.preventDefault();
         // show new book form
         this.options.dispatcher.trigger('navigation:editbook', this.model.id);
-    },
-
-    showActivities: function(evt){
-        evt.preventDefault();
-        // show dialog w/activities
-        $('<div id="dialogActivities" title="Activities"/>')
-            .css("display", "none")
-            .append(this.options.activitiesView.render().el)
-            .appendTo(this.el);
-        $('#dialogActivities').dialog({
-            modal: true,
-            resizable: false
-        });
     },
 
     _addSimpleField: function(fieldTitle, fieldValue){
@@ -700,8 +689,8 @@ window.EditBookView = Backbone.View.extend({
             }
         });
 
-        var htmlTail = '<input type="submit" value="Submit" class="submit">&nbsp;' +
-            '<button class="cancel">Cancel</button>';
+        var htmlTail = '<div class="menu"><input type="submit" value="Submit" class="submit">&nbsp;' +
+            '<button class="cancel">Cancel</button></div>';
         bookinfoEl.append(table).append(htmlTail);
 
         // call prep plugins after timeout to let DOM render

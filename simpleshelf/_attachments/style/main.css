@@ -14,6 +14,10 @@ h1.title {
     margin-bottom: 0;
 }
 
+h2 {
+  margin: 0;
+}
+
 #account {
   float:right;
 }
@@ -102,6 +106,27 @@ div.avatar img {
     font-weight: bold;
 }
 
+.spine-view span.del {
+    float: right;
+}
+
+/* book view */
+.book .header h2 {
+    float: left;
+}
+
+.book .menu {
+    text-align: right;
+}
+
+.bookinfo {
+    clear: both;
+}
+
+.bookinfo > table {
+    float: left;
+}
+
 .bookinfo table tr td:first-child {
     text-align: right;
 }
@@ -118,18 +143,22 @@ div.avatar img {
     width: 100%;
 }
 
-.spine-view span.del {
+.bookinfo .activities {
     float: right;
+    position: relative;
+    top: 0px;
 }
 
-.book .menu {
-    float: right;
+.bookinfo .activities table tr:nth-child(2n) {
+    background-color: silver;
+}
+/* end book view */
+
+/* edit book view */
+.editBook .menu {
+    clear: both;
 }
 
 div#dialogStatusRead {
     display: none;
-}
-
-#dialogActivities .activity-list-view {
-    width: 100%;
 }
