@@ -38,13 +38,19 @@ window.NavigationView = Backbone.View.extend({
     events: {
       'click .newbook': 'addBook',
       'click .index': 'goIndex',
-      'click .login': 'logIn'
+      'click .login': 'logIn',
+      'click .next': 'gotoNext',
+      'click .prev': 'gotoPrev'
     },
     viewName: 'NavigationView',
 
     initialize: function(options){
-        _.bindAll(this, "render", "addBook", "goIndex", "logIn", "loggedIn", "loggedOut",
-            "askedForCredentials", "_updateLinks");
+        _.bindAll(this, "render",
+            "addBook", "askedForCredentials",
+            "goIndex", "gotoPrev", "gotoNext",
+            "hideGoto", "logIn", "loggedIn",
+            "loggedOut", "showGoto",
+            "_updateLinks");
         this.model.bind('change:status', this._updateLinks);
     },
 
@@ -54,14 +60,28 @@ window.NavigationView = Backbone.View.extend({
 
         // add links
         var links = {
-            "newbook": "New book",
+            "prev": {"text": "Previous", "show": false},
+            "next": {"text": "Next", "show": false},
+            "newbook": {"text": "New book"},
             "index": "Index",
             "login": "Login"
         };
 
-        var linkTemplate = _.template('<li><a href="#{{key}}" class="{{key}}">{{name}}</a></li>');
+        var linkTemplate = _.template('<li class="{{key}}"><a href="#{{key}}" class="{{key}}">{{name}}</a></li>');
+        var text, show, $li;
         _.each(links, function(value, key, list){
-            $parent.append(linkTemplate({'key': key, 'name': value}));
+            if (_.isString(value)){
+                text = value;
+                show = true;
+            } else {
+                text = value.text;
+                show = value.show || true;
+            }
+            $li = $(linkTemplate({'key': key, 'name': text}));
+            $parent.append($li);
+            if (!show){
+                $li.filter('li').hide();
+            }
         });
 
         $(this.el).html($parent);
@@ -97,6 +117,8 @@ window.NavigationView = Backbone.View.extend({
     _updateLinks: function(){
         var authStatus = this.model.get("status");
         var linkVisibility = {
+            ".next": authStatus == "loggedIn",
+            ".prev": authStatus == "loggedIn",
             ".newbook": authStatus == "loggedIn",
             ".index": authStatus == "loggedIn",
             ".login": true // always visible; text may change
@@ -113,6 +135,16 @@ window.NavigationView = Backbone.View.extend({
         $('a.login', this.$el).css('background-color', 'yellow').text("Login");
     },
 
+    gotoPrev: function(event){
+        event.preventDefault();
+        this.options.dispatcher.trigger("navigation:prev");
+    },
+
+    gotoNext: function(event){
+        event.preventDefault();
+        this.options.dispatcher.trigger("navigation:next");
+    },
+
     loggedIn: function(){
         // update link to logout
         $('a.login', this.$el).css('background-color', '').text("Logout");
@@ -120,6 +152,23 @@ window.NavigationView = Backbone.View.extend({
 
     loggedOut: function(){
         $('a.login', this.$el).text("Login");
+    },
+
+    /**
+     * show prev/next buttons
+     */
+    showGoto: function(){
+        // quirky because they were hidden before being added to DOM
+        // $('li.next', this.$el).add('li.prev', this.$el).show();
+        $('li.next', this.$el).children().andSelf().css('display', '');
+        $('li.prev', this.$el).children().andSelf().css('display', '');
+    },
+
+    /**
+     * hide prev/next buttons
+     */
+    hideGoto: function(){
+        $('li.next', this.$el).add('li.prev', this.$el).hide();
     }
 });
 
@@ -187,7 +236,9 @@ window.SpineListView = Backbone.View.extend({
     viewName: 'SpineListView',
 
     initialize: function(){
-        _.bindAll(this, 'render', 'addAll', 'addOne', 'updateTag', 'bookSelected');
+        _.bindAll(this, 'render',
+            'addAll', 'addOne', 'bookSelected',
+            'updateTag');
         this.collection.on('add', this.addOne);
         this.collection.on('reset', this.render);
     },
@@ -231,6 +282,7 @@ window.SpineListView = Backbone.View.extend({
 
     bookSelected: function(msgArgs){
         console.log('SpineListView:bookSelected', msgArgs);
+        this.collection.setCurrentSpine({'id': msgArgs.bookId});
         this.options.dispatcher.trigger('spinelistview:bookSelected', msgArgs.bookId);
     }
 });

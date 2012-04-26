@@ -69,6 +69,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
                 }), {log: true});
             }});
         }
+        window.dispatcher.trigger('router:home');
     },
 
     /**
@@ -184,6 +185,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             dispatcher: window.dispatcher,
             model: model});
         this.appView.showView(bookView);
+        window.dispatcher.trigger('router:loadbook');
     },
     
     _loadEditBookView: function(options){

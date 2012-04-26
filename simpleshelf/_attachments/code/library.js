@@ -32,6 +32,10 @@
             'navigation:index': [window.app.home],
             'navigation:logout': [window.app.authenticate],
             'navigation:newbook': [window.app.bookView],
+            'navigation:next': [window.spineList.gotoNext],
+            'navigation:prev': [window.spineList.gotoPrev],
+            'router:home': [window.app.navigationView.hideGoto],
+            'router:loadbook': [window.app.navigationView.showGoto],
             'spinelistview:bookSelected': [window.app.bookView],
             'tagcloudview:tagselected': [window.app.tags],
             'tagcloudview:tagsreset': [window.app.home]
@@ -49,6 +53,7 @@
         window.authInfo.bind('authinfo:loggedout', window.app.home);
         window.authInfo.bind('authinfo:loggedout', window.app.navigationView.loggedOut);
         window.spineList.bind('destroy', window.app.tagCloudView.reloadTags);
+        window.spineList.bind('spinelist:move', window.app.bookView);
         
         // start (?) router
         Backbone.history.start({pushState: true});

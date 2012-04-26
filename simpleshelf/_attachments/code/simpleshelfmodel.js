@@ -264,23 +264,28 @@ window.SpineList = Backbone.Collection.extend({
     model: Spine,
     url: function(){
         var url = '';
-        switch (this._current_filter.type){
+        switch (this._currentFilter.type){
             case 'book':
                 url = '/simpleshelf/_design/simpleshelf/_view/all?key="book"';
                 break;
             case 'tag':
-                url = '/simpleshelf/_design/simpleshelf/_view/books_by_tags?key=%22' + this._current_filter.filter + '%22';
+                url = '/simpleshelf/_design/simpleshelf/_view/books_by_tags?key=%22' + this._currentFilter.filter + '%22';
                 break;
         }
         return url;
     },
     
     initialize: function(properties) {
-        _.bindAll(this, 'reset', 'filterByTag', 'resetFilter');
-        this._current_filter = {
+        _.bindAll(this, 'reset', 'filterByTag',
+            'gotoNext', 'gotoPrev',
+            'resetFilter', 'setCurrentSpine',
+            '_goto'
+        );
+        this._currentFilter = {
             'type': 'book',
             'filter': null
         };
+        this._currentSpine = null;
     },
     
     parse: function(response){
@@ -316,15 +321,58 @@ window.SpineList = Backbone.Collection.extend({
             // reset filter to show all books
             this.resetFilter();
         } else {
-            this._current_filter = {'type': 'tag', 'filter': msgArgs.tag};
+            this._currentFilter = {'type': 'tag', 'filter': msgArgs.tag};
         }
         return this;
     },
     
+    gotoNext: function(msgArgs){
+        this._goto(1);
+    },
+
+    gotoPrev: function(msgArgs){
+        this._goto(-1);
+    },
+
     resetFilter: function(){
         // reset filter to show all books
-        this._current_filter = {'type': 'book', 'filter': null};
+        this._currentFilter = {'type': 'book', 'filter': null};
         return this;
+    },
+
+    setCurrentSpine: function(msgArgs){
+        this._currentSpine = msgArgs.id;
+    },
+
+    _goto: function(offset){
+        var currentSpineIdx = null;
+        var spineId = null;
+        var me = this;
+        this.each(function(spine, index){
+            if (me._currentSpine == spine.id){
+                currentSpineIdx = index;
+                return;
+            }
+        });
+
+        var gotoIndex = currentSpineIdx + offset;
+        if (currentSpineIdx !== null){
+            if (gotoIndex == -1){
+                // previous wrap-around
+                spineId = this.at(this.length - 1).id;
+            }
+            else if (this.length == gotoIndex){
+                // next wrap-around
+                spineId = this.at(0).id;
+            } else {
+                spineId = this.at(gotoIndex).id;
+            }
+        } else {
+            return null;
+        }
+
+        this._currentSpine = spineId;
+        this.trigger('spinelist:move', spineId);
     }
 });
 
