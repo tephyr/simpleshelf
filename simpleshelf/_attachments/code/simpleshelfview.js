@@ -36,11 +36,11 @@ window.NavigationView = Backbone.View.extend({
     tagName: "div",
     className: "navigation-view",
     events: {
-      'click .newbook': 'addBook',
-      'click .index': 'goIndex',
-      'click .login': 'logIn',
-      'click .next': 'gotoNext',
-      'click .prev': 'gotoPrev'
+      'click a.newbook': 'addBook',
+      'click a.index': 'goIndex',
+      'click a.login': 'logIn',
+      'click a.next': 'gotoNext',
+      'click a.prev': 'gotoPrev'
     },
     viewName: 'NavigationView',
 
