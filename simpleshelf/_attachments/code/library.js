@@ -151,7 +151,7 @@ Backbone.sync = _.wrap(Backbone.sync, function(func, method, model, options){
 function AppView(){
 
     this.showView = function(view, options){
-        if (options && _.has('log', options) && options.log){
+        if (options && _.has(options, 'log') && options.log){
             var c = this.currentView ? (this.currentView.viewName || this.currentView.cid) : '[x]';
             var v = view.viewName || view.cid;
             console.log('AppView: closing ' + c + ', opening ' + v);
@@ -180,8 +180,8 @@ Backbone.View.prototype.close = function(){
 };
 
 Backbone.View.prototype.log = function(){
-    if (_.has('okToLog', this.options) && this.options.okToLog){
-        console.log(arguments);
+    if (_.has(this.options, 'okToLog') && this.options.okToLog){
+        console.log.apply(this, arguments);
     }
 };
 
