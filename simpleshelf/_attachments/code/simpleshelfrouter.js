@@ -184,7 +184,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         var bookView = new BookView({
             dispatcher: window.dispatcher,
             model: model});
-        this.appView.showView(bookView);
+        this.appView.showView(bookView, {log: true});
         window.dispatcher.trigger('router:loadbook');
     },
     

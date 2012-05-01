@@ -52,6 +52,7 @@ window.NavigationView = Backbone.View.extend({
             "loggedOut", "showGoto",
             "_updateLinks");
         this.model.bind('change:status', this._updateLinks);
+        this.options.okToLog = true;
     },
 
     render: function(){
@@ -137,11 +138,13 @@ window.NavigationView = Backbone.View.extend({
 
     gotoPrev: function(event){
         event.preventDefault();
+        // this.log("gotoPrev: firing navigation.prev");
         this.options.dispatcher.trigger("navigation:prev");
     },
 
     gotoNext: function(event){
         event.preventDefault();
+        // this.log("gotoPrev: firing navigation.next");
         this.options.dispatcher.trigger("navigation:next");
     },
 
@@ -215,7 +218,7 @@ window.AuthenticationView = Backbone.View.extend({
         var $formElement = $('form', this.el);
         var userName = $('input:text[name=name]', $formElement).val();
         var userPw = $('input:password', $formElement).val();
-        console.log('submitted', 'action', $(':submit', $formElement).val());
+        this.log('submitted', 'action', $(':submit', $formElement).val());
         if (this.action == "getcredentials"){
             this.options.dispatcher.trigger('authenticationview.login', {
                 action: 'login',
@@ -235,16 +238,17 @@ window.SpineListView = Backbone.View.extend({
     className: 'spine-list-view',
     viewName: 'SpineListView',
 
-    initialize: function(){
+    initialize: function(options){
         _.bindAll(this, 'render',
             'addAll', 'addOne', 'bookSelected',
             'updateTag');
         this.collection.on('add', this.addOne);
         this.collection.on('reset', this.render);
+        this.options.okToLog = true;
     },
 
     render: function(){
-        console.log('rendering window.SpineListView');
+        this.log('rendering window.SpineListView');
         $(this.el).html(this.template());
         this.addAll();
         return this;
@@ -256,7 +260,7 @@ window.SpineListView = Backbone.View.extend({
     },
 
     addAll: function() {
-        console.log('SpineListView.addAll: this.collection.length==', this.collection.length);
+        this.log('SpineListView.addAll: this.collection.length==', this.collection.length);
         this.collection.each(this.addOne);
     },
 
@@ -276,12 +280,12 @@ window.SpineListView = Backbone.View.extend({
     },
 
     updateTag: function(msgArgs){
-        console.log('SpineListView:updateTag', msgArgs);
+        this.log('SpineListView:updateTag', msgArgs);
         this.collection.filterByTag(msgArgs);
     },
 
     bookSelected: function(msgArgs){
-        console.log('SpineListView:bookSelected', msgArgs);
+        this.log('SpineListView:bookSelected', msgArgs);
         this.collection.setCurrentSpine({'id': msgArgs.bookId});
         this.options.dispatcher.trigger('spinelistview:bookSelected', msgArgs.bookId);
     }
@@ -304,6 +308,7 @@ window.SpineView = Backbone.View.extend({
         _.bindAll(this, 'render', 'remove', 'bookSelected', 'bookRequestedDelete');
         this.model.on('change', this.render);
         this.model.on('destroy', this.remove);
+        this.options.okToLog = true;
     },
 
     render: function() {
@@ -321,7 +326,7 @@ window.SpineView = Backbone.View.extend({
     },
 
     bookRequestedDelete: function(evt){
-        console.log("SpineView: deleted book", this.options.model);
+        this.log("SpineView: deleted book", this.options.model);
         evt.preventDefault();
         // verify!
         if (window.confirm("Ok to delete \"" + this.options.model.get("title") + "\"?")){
@@ -330,7 +335,7 @@ window.SpineView = Backbone.View.extend({
     },
 
     bookSelected: function(evt){
-        console.log('SpineView: selected book', this.options.model);
+        this.log('SpineView: selected book', this.options.model);
         evt.preventDefault();
         // signal to switch to full view for this book
         this.model.select();
@@ -499,6 +504,7 @@ window.BookView = Backbone.View.extend({
             dispatcher: window.dispatcher,
             collection: this.options.model.get("activities")
         });
+        this.options.okToLog = true;
     },
 
     onClose: function(){
@@ -507,7 +513,7 @@ window.BookView = Backbone.View.extend({
     },
 
     render: function(){
-        console.log('BookView: rendering');
+        this.log('BookView: rendering');
         $(this.el).html(this.template());
 
         $('h2', this.el).attr('title', 'id: ' + this.model.id);
@@ -650,7 +656,7 @@ window.EditBookView = Backbone.View.extend({
     },
 
     render: function(){
-        console.log('EditBookView: rendering');
+        this.log('EditBookView: rendering');
         $(this.el).html(this.template());
 
         if (!this.model.isNew()){
@@ -764,7 +770,7 @@ window.EditBookView = Backbone.View.extend({
     
     save: function(event){
         event.preventDefault();
-        console.log("EditBookView:save", this.model.isNew());
+        this.log("EditBookView:save", this.model.isNew());
         
         $('input.submit', this.el).attr("disabled", "disabled");
         
@@ -826,7 +832,7 @@ window.EditBookView = Backbone.View.extend({
             }
 
             if (difference){
-                console.log('EditBookView.cancel difference', key, "Old", me.model.get(key), "New", value);
+                this.log('EditBookView.cancel difference', key, "Old", me.model.get(key), "New", value);
                 anyDifferences = true;
             }
         });
@@ -845,11 +851,11 @@ window.EditBookView = Backbone.View.extend({
     },
 
     dataChanged: function(event){
-        console.log("model's data has changed");
+        this.log("model's data has changed");
     },
     
     dataSynced: function(event){
-        console.log("EditBookView: dataSynced");
+        this.log("EditBookView: dataSynced");
         this.options.dispatcher.trigger('editbookview:dataSynced', this.model.id);
     },
     
@@ -996,7 +1002,7 @@ window.ActivityListView = Backbone.View.extend({
     },
 
     addAll: function() {
-        console.log('ActivityListView.addAll: this.collection.length==', this.collection.length);
+        this.log('ActivityListView.addAll: this.collection.length==', this.collection.length);
         this.collection.each(this.addOne);
     },
 
