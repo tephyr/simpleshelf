@@ -1,1 +1,1 @@
-../../libs/moment/moment.js
+../../views/lib/moment/moment.js
