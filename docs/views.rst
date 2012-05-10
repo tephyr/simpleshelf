@@ -18,6 +18,7 @@ Useful queries
 * `What books am I currently reading? <http://localhost:5984/simpleshelf/_design/simpleshelf/_view/by_status?key=[%22read%22,%20%22reading%22]>`__ (``doc.status.read==reading``)
 * `What books mentioned Singapore? <http://localhost:5984/simpleshelf/_design/simpleshelf/_view/by_tags?key=%22mentioned.singapore%22>`__ (``"mentioned.singapore" in doc.tags``)
 * `All tags, with count <http://localhost:5984/simpleshelf/_design/simpleshelf/_view/tags?group=true>`__
+* `Books finished, sorted by year <http://localhost:5984/simpleshelf/_design/simpleshelf/_view/by_year>`__, as spine list
 
 .. _all: http://localhost:5984/simpleshelf/_design/simpleshelf/_view/all
 .. _authors: http://localhost:5984/simpleshelf/_design/simpleshelf/_view/authors
