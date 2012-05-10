@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="style/main.css" type="text/css">
     <link rel="stylesheet" href="style/jquery.tagsinput.css" type="text/css">
     <link rel="stylesheet" href="style/jquery-ui/pepper-grinder/jquery-ui-1.8.18.custom.css" type="text/css">
+    <script type="text/javascript" src="code/yepnope.min.js"></script>
     <script type="text/javascript" src="vendor/backbone/underscore.js"></script>
     <script type="text/javascript" src="vendor/backbone/jquery.js"></script>
     <script type="text/javascript" src="vendor/jquery/jquery-ui-1.8.18.custom.min.js"></script>
@@ -12,14 +13,32 @@
     <script type="text/javascript" src="vendor/backbone/backbone.js"></script>
     <script type="text/javascript" src="/_utils/script/sha1.js"></script>
     <script type="text/javascript" src="/_utils/script/jquery.couch.js?0.11.0"></script>
-    <script type="text/javascript" src="code/moment.js"></script>
-    <script type="text/javascript" src="code/simpleshelfutil.js"></script>
-    <script type="text/javascript" src="code/simpleshelfconstants.js"></script>
-    <script type="text/javascript" src="code/simpleshelfmodel.js"></script>
-    <script type="text/javascript" src="code/simpleshelfview.js"></script>
-    <script type="text/javascript" src="code/simpleshelfrouter.js"></script>
     <script type="text/javascript" src="vendor/backbone/import-container.js"></script>
-    <script type="text/javascript" src="code/library.js"></script>
+    <script type="text/javascript">
+        yepnope({
+            load: [
+                'code/moment.js',
+                'code/simpleshelfconstants.js',
+                'code/simpleshelfutil.js',
+                'code/simpleshelfmodel.js',
+
+                'code/views/setup.js',
+                'code/views/navigationview.js',
+                'code/views/authenticationview.js',
+                'code/views/activityview.js',
+                'code/views/activitylistview.js',
+                'code/views/bookview.js',
+                'code/views/editbookview.js',
+                'code/views/spineview.js',
+                'code/views/spinelistview.js',
+                'code/views/tagview.js',
+                'code/views/tagcloudview.js',
+
+                'code/simpleshelfrouter.js',
+                'code/library.js'
+            ]
+        });
+    </script>
   </head>
   <body>
     <div id="account"></div>
