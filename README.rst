@@ -23,7 +23,7 @@ How to install
 .. warning::
    Work in progress
 
-1. Install CouchDB_
+1. Install CouchDB_ v1.2.0 or greater
 #. Install Python_ (prerequisite for couchapp_)
 #. Install couchapp_
 
