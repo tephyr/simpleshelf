@@ -268,15 +268,21 @@ window.SpineList = Backbone.Collection.extend({
             case 'book':
                 url = '/simpleshelf/_design/simpleshelf/_view/all?key="book"';
                 break;
+
             case 'tag':
                 url = '/simpleshelf/_design/simpleshelf/_view/books_by_tags?key=%22' + this._currentFilter.filter + '%22';
+                break;
+
+            case 'report':
+                // TODO: filter by specific year
+                url = '/simpleshelf/_design/simpleshelf/_view/' + this._currentFilter.dbView;
                 break;
         }
         return url;
     },
     
     initialize: function(properties) {
-        _.bindAll(this, 'reset', 'filterByTag',
+        _.bindAll(this, 'reset', 'filterByTag', 'filterByReport',
             'gotoNext', 'gotoPrev',
             'resetFilter', 'setCurrentSpine',
             '_goto'
@@ -323,6 +329,27 @@ window.SpineList = Backbone.Collection.extend({
         } else {
             this._currentFilter = {'type': 'tag', 'filter': msgArgs.tag};
         }
+        return this;
+    },
+
+    /**
+     * @param msgArgs {Object} {reportId:String}
+     */
+    filterByReport: function(msgArgs){
+        console.log('SpineList.filterByReport', JSON.stringify(msgArgs));
+
+        // find report by id
+        var selectedReport = window.reportList.find(function(model){
+            return msgArgs.reportId == model.id;
+        });
+
+        if (selectedReport){
+            this._currentFilter = {
+                'type': 'report',
+                'dbView': selectedReport.get('dbView')
+            };
+        }
+
         return this;
     },
     
@@ -424,9 +451,46 @@ window.TagList = Backbone.Collection.extend({
     selectTag: function(tag){
         console.log('TagList.selectTag', tag);
         // find & update the selected tag; views should redraw
-        this.models.forEach(function(model){
+        this.each(function(model){
             model.set({'selected': (model.get('tag') === tag)})
                 .trigger('tag:highlight', tag);
+        });
+    }
+});
+
+/**
+ * Report: a model that returns SpineList-compatible results, with optional filter
+ * NOTE: Multiple reports can share the same name (but must have different filters),
+ * so id distinguishes between them.
+ */
+window.Report = Backbone.Model.extend({
+    defaults: {
+        'dbView': '',     // name of couchdb view
+        'title': '',      // human-readable
+        'selected': false // is this view currently selected?
+    },
+
+    select: function(){
+        console.log('Report.select: called for report ' + this.get('title'));
+        this.collection.trigger('report:selected', this.id);
+    }
+});
+
+window.ReportList = Backbone.Collection.extend({
+    model: Report,
+    url: null,
+    initialize: function(options){
+        _.bindAll(this, 'selectReport');
+        this.bind('report:selected', this.selectReport);
+    },
+
+    selectReport: function(reportId){
+        console.log('ReportList: selectReport()');
+        // find & update selected report
+        this.each(function(model){
+            model
+                .set('selected', (model.get('id') == reportId))
+                .trigger('report:highlight', reportId);
         });
     }
 });

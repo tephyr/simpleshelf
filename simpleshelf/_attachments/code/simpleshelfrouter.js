@@ -5,15 +5,19 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     routes: {
         '': 'home',
         'auth': 'authenticate',
-        'tags/:tagName': 'tags',
         'books/:bookId': 'bookView',
-        'books/:bookId/edit': 'bookEdit'
+        'books/:bookId/edit': 'bookEdit',
+        'reports/:reportId': 'reports',
+        'tags/:tagName': 'tags'
     },
     
     initialize: function(options){
         console.log("initializing SimpleShelfLibrary (Backbone.Router)");
-        _.bindAll(this, 'home', 'authenticate', 'tags', 'bookView', 'bookEdit',
-            '_loadBookView', '_loadData', '_loadEditBookView');
+        _.bindAll(this, 'home',
+            'authenticate', 'bookView', 'bookEdit',
+            'reports', 'tags',
+            '_loadBookView', '_loadData', '_loadEditBookView',
+            '_loadSpineList');
         this.appView = options.appView;
 
         /*this.infoView = new LibraryInfoView({
@@ -32,6 +36,12 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             okToLog: true
         });
 
+        this.reportListView = new ReportListView({
+            dispatcher: window.dispatcher,
+            collection: window.reportList,
+            okToLog: true
+        })
+
         // prep UI objects
         this._profile = $("#profile");
         this._items = $('#items');
@@ -40,6 +50,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         // one-time setup
         this._profile.append(this.navigationView.render().el);
         this._sidebar.append(this.tagCloudView.render().el);
+        this._sidebar.append(this.reportListView.render().el);
     },
     
     /**
@@ -60,6 +71,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         } else {
             this.tagCloudView.resetTags(false);
             window.spineList.resetFilter();
+            window.reportList.selectReport(null);
             var me = this;
             window.spineList.fetch({silent: true, success: function(collection, response){
                 console.log('Route / spineList fetch succeeded; count:', collection.length);
@@ -129,21 +141,23 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     tags: function(tagName){
         console.log("Routing to tag", tagName);
         
-        var me = this;
-        var afterFetch = function(collection, response){
-            me.appView.showView(new SpineListView({
-                dispatcher: window.dispatcher,
-                collection: window.spineList
-            }));
-        };
-
         if (tagName){
-            window.spineList.filterByTag({'tag': tagName})
-                .fetch({silent: true, success: afterFetch});
+            window.spineList
+                .filterByTag({'tag': tagName})
+                .fetch({silent: true, success: this._loadSpineList});
         } else {
-            window.spineList.resetFilter()
-                .fetch({silent: true, success: afterFetch});
+            window.spineList
+                .resetFilter()
+                .fetch({silent: true, success: this._loadSpineList});
         }
+    },
+
+    reports: function(reportId){
+        console.log("Routing to report", reportId);
+        this.tagCloudView.resetTags(false);
+        window.spineList
+            .filterByReport({'reportId': reportId})
+            .fetch({silent: true, success: this._loadSpineList});
     },
 
     /**
@@ -195,6 +209,13 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             dispatcher: window.dispatcher,
             model: options.book || new window.Book()});
         this.appView.showView(editBookView);
+    },
+
+    _loadSpineList: function(collection, response){
+        this.appView.showView(new SpineListView({
+            dispatcher: window.dispatcher,
+            collection: window.spineList
+        }));
     },
 
     _loadData: function(){

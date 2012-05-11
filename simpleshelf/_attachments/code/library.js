@@ -11,6 +11,9 @@
         window.authInfo = new AuthInfo();
         window.tagList = new TagList();
         window.spineList = new SpineList();
+        window.reportList = new ReportList();
+
+        prepReportList();
 
         // instantiate Router
         window.app = new SimpleShelfLibrary({appView: new AppView()});
@@ -34,6 +37,7 @@
             'navigation:newbook': [window.app.bookView],
             'navigation:next': [window.spineList.gotoNext],
             'navigation:prev': [window.spineList.gotoPrev],
+            'reportlistiew:reportselected': [window.app.reports],
             'router:home': [window.app.navigationView.hideGoto],
             'router:loadbook': [window.app.navigationView.showGoto],
             'spinelistview:bookSelected': [window.app.bookView],
@@ -100,6 +104,13 @@ function fetches_done(){
 
 function bind_test(){
     console.log("THIS BOUND EVENT HAS BEEN FIRED.");
+};
+
+/**
+ * Add default reports
+ */
+function prepReportList(){
+    window.reportList.add({id: 'by-year', dbView: 'by_year', title: 'By year'});
 };
 
 /**

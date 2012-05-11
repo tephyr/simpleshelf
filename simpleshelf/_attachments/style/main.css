@@ -98,11 +98,15 @@ div.avatar img {
   list-style: none;
 }
 
-.tagcloud li.tag, .tagcloud .tagheader {
+.tagcloud li.tag,
+.tagcloud .tagheader,
+.reportlist li.report,
+.reportlist .reportheader {
     cursor: pointer;
 }
 
-.tagcloud li.tag.selected{
+.tagcloud li.tag.selected,
+.reportlist li.report.selected {
     font-weight: bold;
 }
 
