@@ -21,6 +21,7 @@ UI:
    ui/ui-goals
    ui/backbone-ui
    ui/backbone-interaction
+   ui/reports
 
 Indices and tables
 ==================
