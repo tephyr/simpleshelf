@@ -60,10 +60,14 @@ h2 {
 }
 
 #items li {
-  border:4px solid #f5f5ff;
   background:#fff;
-  padding:8px;
   margin:4px 0;
+}
+
+#items li:hover {
+  background-color: cyan;
+  color: white;
+  cursor: pointer;
 }
 
 form {
