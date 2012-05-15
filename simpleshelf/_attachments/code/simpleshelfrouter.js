@@ -20,10 +20,6 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             '_loadSpineList');
         this.appView = options.appView;
 
-        /*this.infoView = new LibraryInfoView({
-            collection: window.library
-        });*/
-
         this.navigationView = new NavigationView({
             model: window.authInfo,
             dispatcher: window.dispatcher,

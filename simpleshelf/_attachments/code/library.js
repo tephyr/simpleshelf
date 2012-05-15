@@ -7,7 +7,6 @@
         _.extend(window.dispatcher, Backbone.Events);
         
         // prep models
-        // window.library = new Library();
         window.authInfo = new AuthInfo();
         window.tagList = new TagList();
         window.spineList = new SpineList();
