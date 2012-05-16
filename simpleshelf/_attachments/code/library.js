@@ -11,6 +11,7 @@
         window.tagList = new TagList();
         window.spineList = new SpineList();
         window.availableReportList = new AvailableReportList();
+        window.byYearSpineList = new ByYearSpineList();
 
         prepAvailableReportList();
 
@@ -24,7 +25,7 @@
             'authenticate:processlogin': [window.authInfo.handleLogin],
             'authenticate:processlogout': [window.authInfo.handleLogout],
             'authenticationview.login': [window.app.authenticate],
-            'availablereportlistiew:reportselected': [window.app.reports],
+            'availablereportlistview:reportselected': [window.app.reports],
             'editbookview:canceledit': [window.app.bookView],
             'editbookview:cancelnewbook': [window.app.home],
             'editbookview:dataSynced': [

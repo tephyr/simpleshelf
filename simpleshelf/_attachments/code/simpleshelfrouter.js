@@ -16,7 +16,10 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         _.bindAll(this, 'home',
             'authenticate', 'bookView', 'bookEdit',
             'reports', 'tags',
-            '_loadBookView', '_loadData', '_loadEditBookView',
+            '_loadBookView',
+            '_loadByYearSpineList',
+            '_loadData',
+            '_loadEditBookView',
             '_loadSpineList');
         this.appView = options.appView;
 
@@ -151,9 +154,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     reports: function(reportId){
         console.log("Routing to report", reportId);
         this.tagCloudView.resetTags(false);
-        window.spineList
-            .filterByReport({'reportId': reportId})
-            .fetch({silent: true, success: this._loadSpineList});
+        window.byYearSpineList.fetch({silent: true, success: this._loadByYearSpineList});
     },
 
     /**
@@ -211,6 +212,13 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         this.appView.showView(new SpineListView({
             dispatcher: window.dispatcher,
             collection: window.spineList
+        }));
+    },
+
+    _loadByYearSpineList: function(collection, response){
+        this.appView.showView(new SpineListView({
+            dispatcher: window.dispatcher,
+            collection: window.byYearSpineList
         }));
     },
 
