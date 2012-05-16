@@ -7,6 +7,8 @@
     initialize: function(models, options) {
     	// Backbone.Model.prototype.set.call(this, attributes, options);
     	window.SpineList.prototype.initialize.call(this, models, options);
+        // additional bindings
+        _.bindAll(this, 'getAvailableYears');
     },
 
     url: function(){
@@ -29,6 +31,18 @@
             }
        }
        return results;
+    },
+
+    /**
+     * Return sorted list of years with data
+     */
+    getAvailableYears: function(){
+        var allYears = this.map(function(model){
+            return model.get('year');
+        });
+        // sort, make uniq
+        allYears.sort();
+        return _.uniq(allYears, true);
     }
 
 });
