@@ -104,13 +104,13 @@ div.avatar img {
 
 .tagcloud li.tag,
 .tagcloud .tagheader,
-.reportlist li.report,
-.reportlist .reportheader {
+.availablereportlist li.availablereport,
+.availablereportlist .availablereportheader {
     cursor: pointer;
 }
 
 .tagcloud li.tag.selected,
-.reportlist li.report.selected {
+.availablereportlist li.availablereport.selected {
     font-weight: bold;
 }
 

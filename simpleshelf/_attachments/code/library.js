@@ -10,9 +10,9 @@
         window.authInfo = new AuthInfo();
         window.tagList = new TagList();
         window.spineList = new SpineList();
-        window.reportList = new ReportList();
+        window.availableReportList = new AvailableReportList();
 
-        prepReportList();
+        prepAvailableReportList();
 
         // instantiate Router
         window.app = new SimpleShelfLibrary({appView: new AppView()});
@@ -24,6 +24,7 @@
             'authenticate:processlogin': [window.authInfo.handleLogin],
             'authenticate:processlogout': [window.authInfo.handleLogout],
             'authenticationview.login': [window.app.authenticate],
+            'availablereportlistiew:reportselected': [window.app.reports],
             'editbookview:canceledit': [window.app.bookView],
             'editbookview:cancelnewbook': [window.app.home],
             'editbookview:dataSynced': [
@@ -36,7 +37,6 @@
             'navigation:newbook': [window.app.bookView],
             'navigation:next': [window.spineList.gotoNext],
             'navigation:prev': [window.spineList.gotoPrev],
-            'reportlistiew:reportselected': [window.app.reports],
             'router:home': [window.app.navigationView.hideGoto],
             'router:loadbook': [window.app.navigationView.showGoto],
             'spinelistview:bookSelected': [window.app.bookView],
@@ -108,8 +108,8 @@ function bind_test(){
 /**
  * Add default reports
  */
-function prepReportList(){
-    window.reportList.add({id: 'by-year', dbView: 'by_year', title: 'By year'});
+function prepAvailableReportList(){
+    window.availableReportList.add({id: 'by-year', dbView: 'by_year', title: 'By year'});
 };
 
 /**

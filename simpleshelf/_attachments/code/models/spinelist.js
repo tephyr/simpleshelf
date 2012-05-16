@@ -77,7 +77,7 @@ window.SpineList = Backbone.Collection.extend({
         console.log('SpineList.filterByReport', JSON.stringify(msgArgs));
 
         // find report by id
-        var selectedReport = window.reportList.find(function(model){
+        var selectedReport = window.availableReportList.find(function(model){
             return msgArgs.reportId == model.id;
         });
 

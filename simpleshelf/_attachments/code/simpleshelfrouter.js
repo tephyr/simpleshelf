@@ -32,9 +32,9 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             okToLog: true
         });
 
-        this.reportListView = new ReportListView({
+        this.availableReportListView = new AvailableReportListView({
             dispatcher: window.dispatcher,
-            collection: window.reportList,
+            collection: window.availableReportList,
             okToLog: true
         })
 
@@ -46,7 +46,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         // one-time setup
         this._profile.append(this.navigationView.render().el);
         this._sidebar.append(this.tagCloudView.render().el);
-        this._sidebar.append(this.reportListView.render().el);
+        this._sidebar.append(this.availableReportListView.render().el);
     },
     
     /**
@@ -67,7 +67,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         } else {
             this.tagCloudView.resetTags(false);
             window.spineList.resetFilter();
-            window.reportList.selectReport(null);
+            window.availableReportList.selectReport(null);
             var me = this;
             window.spineList.fetch({silent: true, success: function(collection, response){
                 console.log('Route / spineList fetch succeeded; count:', collection.length);

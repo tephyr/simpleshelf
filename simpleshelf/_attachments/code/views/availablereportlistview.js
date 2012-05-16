@@ -1,13 +1,13 @@
 /**
  * Show report list
  */
-window.ReportListView = Backbone.View.extend({
-    className: 'reportlist',
+window.AvailableReportListView = Backbone.View.extend({
+    className: 'availablereportlist',
     tagName: 'div',
-    template: _.template('<h2 class="reports"><a href="#" id="reportlistheader">Reports</a></h2><ul></ul>'),
+    template: _.template('<h2 class="availablereports"><a href="#" id="availablereportlistheader">Reports</a></h2><ul></ul>'),
     events: {
     },
-    viewName: 'ReportListView',
+    viewName: 'AvailableReportListView',
 
     initialize: function(properties) {
         _.bindAll(this, 'render', 'addAll', 'addOne', 'reportSelected');
@@ -32,7 +32,7 @@ window.ReportListView = Backbone.View.extend({
     },
 
     addOne: function(model) {
-        var view = new ReportView({
+        var view = new AvailableReportView({
             dispatcher: this.options.dispatcher,
             model: model,
             okToLog: this.okToLog
@@ -40,11 +40,11 @@ window.ReportListView = Backbone.View.extend({
         view.render();
         $('ul', this.$el).append(view.el);
         model.bind('remove', view.remove);
-        view.bind('reportview:selected', this.reportSelected);
+        view.bind('availablereportview:selected', this.reportSelected);
     },
 
     reportSelected: function(reportId){
         this.log(this.viewName + '.reportSelected event', reportId);
-        this.options.dispatcher.trigger('reportlistiew:reportselected', reportId);
+        this.options.dispatcher.trigger('availablereportlistview:reportselected', reportId);
     }
 });
