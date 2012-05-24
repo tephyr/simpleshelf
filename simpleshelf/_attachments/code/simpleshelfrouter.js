@@ -216,7 +216,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     },
 
     _loadByYearSpineList: function(collection, response){
-        this.appView.showView(new ByYearSpineListView({
+        this.appView.showView(new ByYearReportPresenterView({
             dispatcher: window.dispatcher,
             collection: window.byYearSpineList
         }));
