@@ -59,6 +59,10 @@ h2 {
   width:30%;
 }
 
+#items ul {
+  padding: 0;
+}
+
 #items li {
   background:#fff;
   margin:4px 0;
