@@ -17,7 +17,7 @@ window.SpineListView = Backbone.View.extend({
     },
 
     render: function(){
-        this.log('rendering window.SpineListView');
+        this.log('rendering ' + this.viewName);
         $(this.el).html(this.template());
         this.addAll();
         return this;
@@ -29,7 +29,7 @@ window.SpineListView = Backbone.View.extend({
     },
 
     addAll: function() {
-        this.log('SpineListView.addAll: this.collection.length==', this.collection.length);
+        this.log(this.viewName + '.addAll: this.collection.length==', this.collection.length);
         this.collection.each(this.addOne);
     },
 
@@ -49,12 +49,12 @@ window.SpineListView = Backbone.View.extend({
     },
 
     updateTag: function(msgArgs){
-        this.log('SpineListView:updateTag', msgArgs);
+        this.log(this.viewName + ':updateTag', msgArgs);
         this.collection.filterByTag(msgArgs);
     },
 
     bookSelected: function(msgArgs){
-        this.log('SpineListView:bookSelected', msgArgs);
+        this.log(this.viewName + ':bookSelected', msgArgs);
         this.collection.setCurrentSpine({'id': msgArgs.bookId});
         this.options.dispatcher.trigger('spinelistview:bookSelected', msgArgs.bookId);
     }
