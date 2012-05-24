@@ -17,9 +17,8 @@ View layout
 ::
 
   - ByYearReportPresenterView
-    - SingleYearReportView
-      - SpineListView
-        - SpineView
+    - SingleYearReportView (SpineListView)
+      - SpineView
 
 
 ByYearReportPresenterView
@@ -30,4 +29,4 @@ Loops through data's unique years values to build ``SingleYearReportView``.
 
 SingleYearReportView
 ~~~~~~~~~~~~~~~~~~~~
-Represents single year of this report.  Writes ``SpineListView`` with records for given year.
+Represents single year of this report.  Subclass of ``SpineListView``; outputs SpineViews.
