@@ -154,7 +154,18 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
     reports: function(reportId){
         console.log("Routing to report", reportId);
         this.tagCloudView.resetTags(false);
-        window.byYearSpineList.fetch({silent: true, success: this._loadByYearSpineList});
+        switch(reportId){
+            case "by-year":
+                window.byYearSpineList.fetch({silent: true, success: this._loadByYearSpineList});
+                break;
+
+            case "by-status-read-finished":
+            case "by-status-read-reading":
+                window.spineList
+                    .filterByReport({reportId: reportId})
+                    .fetch({silent: true, success: this._loadSpineList});
+                break;
+        }
     },
 
     /**

@@ -2,7 +2,7 @@
  * Container for simple list of titles
  */
 window.SpineListView = Backbone.View.extend({
-    template: _.template('<h2>All books</h2><ul></ul>'),
+    template: _.template('<h2>{{ title }}</h2><ul></ul>'),
     tagName: 'div',
     className: 'spine-list-view',
     viewName: 'SpineListView',
@@ -18,7 +18,13 @@ window.SpineListView = Backbone.View.extend({
 
     render: function(){
         this.log('rendering ' + this.viewName);
-        $(this.el).html(this.template());
+        // change header if using a report
+        var templateData = {'title': 'All books'};
+        var currentReport = window.availableReportList.getCurrentReport();
+        if (currentReport){
+            templateData.title = currentReport.get('title');
+        }
+        $(this.el).html(this.template(templateData));
         this.addAll();
         return this;
     },

@@ -2,8 +2,19 @@ window.AvailableReportList = Backbone.Collection.extend({
     model: AvailableReport,
     url: null,
     initialize: function(options){
-        _.bindAll(this, 'selectReport');
+        _.bindAll(this, 'getCurrentReport', 'selectReport');
         this.bind('availablereport:selected', this.selectReport);
+    },
+
+    /**
+     * Get currently selected report, or null
+     */
+    getCurrentReport: function(){
+        var currentReport = null;
+        currentReport = this.find(function(model){
+            return model.get('selected');
+        });
+        return currentReport;
     },
 
     selectReport: function(reportId){

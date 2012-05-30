@@ -110,7 +110,21 @@ function bind_test(){
  * Add default reports
  */
 function prepAvailableReportList(){
-    window.availableReportList.add({id: 'by-year', dbView: 'by_year', title: 'By year'});
+    window.availableReportList.add({
+        id: 'by-year',
+        dbView: 'by_year',
+        title: 'By year'
+    });
+    window.availableReportList.add({
+        id: 'by-status-read-finished',
+        dbView: 'by_status?key=[%22read%22,%22finished%22]',
+        title: 'Finished'
+    });
+    window.availableReportList.add({
+        id: 'by-status-read-reading',
+        dbView: 'by_status?key=[%22read%22,%22reading%22]',
+        title: 'Currently reading'
+    });
 };
 
 /**
