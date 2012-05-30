@@ -20,7 +20,9 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             '_loadByYearSpineList',
             '_loadData',
             '_loadEditBookView',
-            '_loadSpineList');
+            '_loadSpineList',
+            '_swapNavigationEvents'
+        );
         this.appView = options.appView;
 
         this.navigationView = new NavigationView({
@@ -69,6 +71,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             this.authenticate({'action': 'getcredentials'});
         } else {
             this.tagCloudView.resetTags(false);
+            this._swapNavigationEvents([window.byYearSpineList], [window.spineList]);
             window.spineList.resetFilter();
             window.availableReportList.selectReport(null);
             var me = this;
@@ -156,11 +159,14 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         this.tagCloudView.resetTags(false);
         switch(reportId){
             case "by-year":
+                // switch event subscription to report's subclass
+                this._swapNavigationEvents([window.spineList], [window.byYearSpineList]);
                 window.byYearSpineList.fetch({silent: true, success: this._loadByYearSpineList});
                 break;
 
             case "by-status-read-finished":
             case "by-status-read-reading":
+                this._swapNavigationEvents([window.byYearSpineList], [window.spineList]);
                 window.spineList
                     .filterByReport({reportId: reportId})
                     .fetch({silent: true, success: this._loadSpineList});
@@ -237,5 +243,17 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         // load tags
         window.tagList.fetch();
         fetchConstants();
+    },
+
+    _swapNavigationEvents: function(removeThese, addThese){
+        _.each(removeThese, function(handler){
+            window.dispatcher.off('navigation:next', handler.gotoNext);
+            window.dispatcher.off('navigation:prev', handler.gotoPrev);
+        });
+
+        _.each(addThese, function(handler){
+            window.dispatcher.on('navigation:next', handler.gotoNext);
+            window.dispatcher.on('navigation:prev', handler.gotoPrev);
+        });
     }
 });
