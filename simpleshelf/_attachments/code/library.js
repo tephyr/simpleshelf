@@ -48,16 +48,16 @@
         // bind events to global dispatcher
         _.each(events, function(eventTargets, eventName){
             _.each(eventTargets, function(eventTarget){
-                window.dispatcher.bind(eventName, eventTarget);
+                window.dispatcher.on(eventName, eventTarget);
             });
         });
 
         // bind events from specific models
-        window.authInfo.bind('authinfo:authenticationupdated', window.app.authenticate);
-        window.authInfo.bind('authinfo:loggedout', window.app.home);
-        window.authInfo.bind('authinfo:loggedout', window.app.navigationView.loggedOut);
-        window.spineList.bind('destroy', window.app.tagCloudView.reloadTags);
-        window.spineList.bind('spinelist:move', window.app.bookView);
+        window.authInfo.on('authinfo:authenticationupdated', window.app.authenticate);
+        window.authInfo.on('authinfo:loggedout', window.app.home);
+        window.authInfo.on('authinfo:loggedout', window.app.navigationView.loggedOut);
+        window.spineList.on('destroy', window.app.tagCloudView.reloadTags);
+        window.spineList.on('spinelist:move', window.app.bookView);
         
         // start (?) router
         Backbone.history.start({pushState: true});
