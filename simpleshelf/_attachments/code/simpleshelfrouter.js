@@ -21,6 +21,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             '_loadData',
             '_loadEditBookView',
             '_loadSpineList',
+            '_manageSpineListEvents',
             '_swapNavigationEvents'
         );
         this.appView = options.appView;
@@ -72,6 +73,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         } else {
             this.tagCloudView.resetTags(false);
             this._swapNavigationEvents([window.byYearSpineList], [window.spineList]);
+            this._manageSpineListEvents(window.spineList);
             window.spineList.resetFilter();
             window.availableReportList.selectReport(null);
             var me = this;
@@ -161,12 +163,14 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             case "by-year":
                 // switch event subscription to report's subclass
                 this._swapNavigationEvents([window.spineList], [window.byYearSpineList]);
+                this._manageSpineListEvents(window.byYearSpineList);
                 window.byYearSpineList.fetch({silent: true, success: this._loadByYearSpineList});
                 break;
 
             case "by-status-read-finished":
             case "by-status-read-reading":
                 this._swapNavigationEvents([window.byYearSpineList], [window.spineList]);
+                this._manageSpineListEvents(window.spineList);
                 window.spineList
                     .filterByReport({reportId: reportId})
                     .fetch({silent: true, success: this._loadSpineList});
@@ -245,8 +249,26 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         fetchConstants();
     },
 
+    /**
+     * Switch events to trigger for a single SpineList
+     */
+    _manageSpineListEvents: function(currentSpineList) {
+        _.each([window.spineList, window.byYearSpineList], function(sl){
+            sl.off('spinelist:move');
+            if (sl == currentSpineList){
+                sl.on('spinelist:move', window.app.bookView);
+            }
+        });
+    },
+
+    /**
+     * Swap next/prev navigation events to prevent multiple from firing
+     */
     _swapNavigationEvents: function(removeThese, addThese){
-        _.each(removeThese, function(handler){
+        // remove these events from ALL handlers
+        // BB allows multiple identical events to be bound,
+        // which causes multiple firings for the same trigger
+        _.each(_.union(removeThese, addThese), function(handler){
             window.dispatcher.off('navigation:next', handler.gotoNext);
             window.dispatcher.off('navigation:prev', handler.gotoPrev);
         });

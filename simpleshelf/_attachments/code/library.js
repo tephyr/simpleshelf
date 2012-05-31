@@ -36,8 +36,6 @@
             'navigation:index': [window.app.home],
             'navigation:logout': [window.app.authenticate],
             'navigation:newbook': [window.app.bookView],
-            'navigation:next': [window.spineList.gotoNext],
-            'navigation:prev': [window.spineList.gotoPrev],
             'router:home': [window.app.navigationView.hideGoto],
             'router:loadbook': [window.app.navigationView.showGoto],
             'spinelistview:bookSelected': [window.app.bookView],
@@ -57,8 +55,9 @@
         window.authInfo.on('authinfo:loggedout', window.app.home);
         window.authInfo.on('authinfo:loggedout', window.app.navigationView.loggedOut);
         window.spineList.on('destroy', window.app.tagCloudView.reloadTags);
-        window.spineList.on('spinelist:move', window.app.bookView);
-        
+        // See also simpleshelfrouter._manageSpineListEvents,
+        // for events that apply to all SpineList collections.
+
         // start (?) router
         Backbone.history.start({pushState: true});
 
