@@ -66,7 +66,6 @@
 
     _goto: function(offset){
         var currentSpineIdx = null;
-        var spineId = null;
         var me = this;
         this.each(function(spine, index){
             if (me._currentSpine == spine.id){
@@ -79,19 +78,19 @@
         if (currentSpineIdx !== null){
             if (gotoIndex == -1){
                 // previous wrap-around
-                spineId = this.at(this.length - 1).id;
+                gotoIndex = this.length - 1;
             }
             else if (this.length == gotoIndex){
                 // next wrap-around
-                spineId = this.at(0).id;
-            } else {
-                spineId = this.at(gotoIndex).id;
+                gotoIndex = 0;
             }
         } else {
             return null;
         }
 
+        var spineId = this.at(gotoIndex).id;
         this._currentSpine = spineId;
+        console.log('Moving to index', gotoIndex, 'spineId', spineId, 'title', this.at(gotoIndex).get('title'));
         this.trigger('spinelist:move', spineId);
     }
 });
