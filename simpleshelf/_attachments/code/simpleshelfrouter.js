@@ -154,6 +154,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
                 .resetFilter()
                 .fetch({silent: true, success: this._loadSpineList});
         }
+        window.dispatcher.trigger('router:tags');
     },
 
     reports: function(reportId){
@@ -176,6 +177,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
                     .fetch({silent: true, success: this._loadSpineList});
                 break;
         }
+        window.dispatcher.trigger('router:reports');
     },
 
     /**
@@ -227,6 +229,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
             dispatcher: window.dispatcher,
             model: options.book || new window.Book()});
         this.appView.showView(editBookView);
+        window.dispatcher.trigger('router:bookedit');
     },
 
     _loadSpineList: function(collection, response){

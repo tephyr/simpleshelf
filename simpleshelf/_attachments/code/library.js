@@ -36,8 +36,11 @@
             'navigation:index': [window.app.home],
             'navigation:logout': [window.app.authenticate],
             'navigation:newbook': [window.app.bookView],
+            'router:bookedit': [window.app.navigationView.hideGoto],
             'router:home': [window.app.navigationView.hideGoto],
             'router:loadbook': [window.app.navigationView.showGoto],
+            'router:reports': [window.app.navigationView.hideGoto],
+            'router:tags': [window.app.navigationView.hideGoto],
             'spinelistview:bookSelected': [window.app.bookView],
             'tagcloudview:tagselected': [window.app.tags],
             'tagcloudview:tagsreset': [window.app.home]
