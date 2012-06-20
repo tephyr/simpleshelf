@@ -19,7 +19,8 @@ These fields are required for any document.
 Validation for type===book
 ++++++++++++++++++++++++++
 - ``title``:    string|null
-- ``author``:   string|null
+- ``author``:   string|null **should this be an array?**
+- ``publisher``: string|null
 - ``isbn``:     string|null
 - ``public``:   Boolean, defaults to ``true``
 - ``status``:   Object
