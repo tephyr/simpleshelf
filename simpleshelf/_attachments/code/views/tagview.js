@@ -4,7 +4,7 @@
 window.TagView = Backbone.View.extend({
     className: 'tag',
     tagName: 'li',
-    template: _.template('{{ tag }}, {{ count }}'),
+    template: _.template('{{ tag }} [{{ count }}]'),
 
     events: {
         'click': 'tagSelected'
