@@ -17,6 +17,39 @@ class XmlImporter(object):
     """given a valid XML file from an older version of simpleshelf,
     pull all data into the new objects"""
 
+    # class-level values
+    status_conversion_read = {
+        "1": "to.read",
+        "2": "reading",
+        "3": "finished",
+        "6": "reference",
+        "7": "abandoned",
+        # "special": no direct translation
+        "4": "to.read",
+        "5": "do.not.read"
+    }
+
+    #- to.read (*adds book.read.queued to actions*)
+    #- reading (*adds book.read.started to actions*)
+    #- finished (*adds book.read.finished to actions*)
+    #- abandoned (*adds book.read.stopped to actions*)
+    #- reference
+
+    status_conversion_ownership = {
+        "1": "personal",
+        "3": "on.loan",
+        "2": "loaned.out",
+        "5": "on.order",
+        "4": "library",
+        "6": "personal.gone"
+    }
+    #- personal
+    #- library
+    #- on.loan
+    #- loaned.out
+    #- on.order
+
+
     def __init__(self, xml_path, couchdb_uri, couchdb_name,
                  debug=False, verbosity=0):
         self.path_to_xml = Path(xml_path).expand()
@@ -49,19 +82,18 @@ class XmlImporter(object):
             for status_item_xml in status_xml.getiterator('item'):
                 statuses_from_xml[status_group][status_item_xml.attrib['id']] = status_item_xml.text
 
-        ## TODO: prep status objects
-        #status_objects = {'Search': {'1': 'do not search',
-                                     #'10': 'to search',
-                                     #'20': 'searched, has results',
-                                     #'30': 'searched, no results'}
-                          #}
+        # prep status objects
+        status_objects = {'Search': {'1': 'do not search',
+                                     '10': 'to search',
+                                     '20': 'searched, has results',
+                                     '30': 'searched, no results'}
+                          }
 
-        #for k, v in statuses_from_xml.items():
-            #status_group = k
-            #status_objects[status_group] = {}
-            #for kx, vx in v.items():
-                #status_object = Status(group=status_group, name=vx, title=vx)
-                #status_objects[status_group][kx] = status_object
+        for k, v in statuses_from_xml.items():
+            status_group = k
+            status_objects[status_group] = {}
+            for kx, vx in v.items():
+                status_objects[status_group][kx] = vx
 
         missing_status_groups = []
         # for each book in library/books
@@ -92,17 +124,17 @@ class XmlImporter(object):
                     if author_xml.attrib['primary'] == '1':
                         break
 
-                ## add statuses
-                #for status_on_book in book_xml.getiterator('status'):
-                    #status_group = status_on_book.attrib['name']
-                    #if status_group in status_objects.keys():
-                        #specific_status = status_objects[status_group][status_on_book.attrib['value']]
-                        ##book.statuses[status_group] = specific_status
-                        #book.status[status_group] = specific_status
-                    #else:
-                        ## log it
-                        #if status_group not in missing_status_groups:
-                            #missing_status_groups.append(status_group)
+                # add statuses
+                for status_on_book in book_xml.getiterator('status'):
+                    status_group = status_on_book.attrib['name']
+                    if status_group in status_objects.keys():
+                        converted_status = status_mapper(status_group, status_on_book.attrib['value'])
+                        if converted_status:
+                            book.status.update(converted_status)
+                    else:
+                        # log it
+                        if status_group not in missing_status_groups:
+                            missing_status_groups.append(status_group)
 
                 print(book.title)
 
@@ -137,6 +169,18 @@ def uuid_fixer(uuidvalue):
         return uuidvalue[0:20] + uuidvalue[28:]
     else:
         return uuidvalue
+
+def status_mapper(status_group="", status_key=""):
+    """
+    Map a v1 XML status value to new couchdb format.
+    """
+    if status_group.lower() == 'read':
+        return {'read': XmlImporter.status_conversion_read[status_key]}
+    elif status_group.lower() == 'ownership':
+        return {'ownership': XmlImporter.status_conversion_ownership[status_key]}
+    else:
+        return None
+
 
 def run():
     """run helper; sets up class & runs it"""
