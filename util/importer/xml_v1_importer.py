@@ -118,11 +118,16 @@ class XmlImporter(object):
                     book.publisher = publisher_xml.text
 
                 # add the authors
+                authors = []
                 for author_xml in book_xml.getiterator('author'):
                     # set authors until all done, or one is primary
-                    book.author = author_xml.text
                     if author_xml.attrib['primary'] == '1':
-                        break
+                        authors.insert(0, author_xml.text)
+                    else:
+                        authors.append(author_xml.text)
+
+                # remove any duplicates
+                book.authors = list(set(authors))
 
                 # add statuses
                 for status_on_book in book_xml.getiterator('status'):
@@ -135,6 +140,16 @@ class XmlImporter(object):
                         # log it
                         if status_group not in missing_status_groups:
                             missing_status_groups.append(status_group)
+
+                # store date finished
+                date_finished = book_xml.attrib['datefinished']
+                if len(date_finished) > 0:
+                    book.activities.append(
+                        dict(date=date_finished, action="book.read.finished")
+                    )
+
+                # add tag to identify imported books
+                book.tags.append("import.v1")
 
                 print(book.title)
 

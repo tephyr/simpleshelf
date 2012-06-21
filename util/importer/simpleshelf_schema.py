@@ -11,7 +11,7 @@ from couchdbkit import *
 class Book(Document):
     type         = StringProperty()
     title        = StringProperty()
-    author       = StringProperty()
+    authors      = ListProperty()
     isbn         = StringProperty()
     publisher    = StringProperty()
     public       = BooleanProperty()
