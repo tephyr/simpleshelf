@@ -19,7 +19,7 @@ These fields are required for any document.
 Validation for type===book
 ++++++++++++++++++++++++++
 - ``title``:    string|null
-- ``author``:   string|null **should this be an array?**
+- ``authors``:   Array of strings|empty Array (Primary author listed first)
 - ``publisher``: string|null
 - ``isbn``:     string|null
 - ``public``:   Boolean, defaults to ``true``
@@ -48,8 +48,8 @@ Validation for type===book
   examples::
 
     {date: '2012-01-01T08:00:00', action: 'book.added'}
-    {date: '2012-01-01', action: 'book.started'}
-    {date: '2012-01-08', action: 'book.finished'}
+    {date: '2012-01-01',          action: 'book.read.started'}
+    {date: '2012-01-08',          action: 'book.read.finished'}
 
 Constants
 +++++++++
