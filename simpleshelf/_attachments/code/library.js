@@ -82,8 +82,6 @@
 
         // go to start point
         window.app.home();
-        
-        // showImportMessage();
     }
 })(jQuery);
 
