@@ -8,7 +8,7 @@ window.Book = Backbone.Model.extend({
         'public': true
     },
     url: function(){
-        return '/simpleshelf/' + this.get('id');
+        return '/' + window.simpleshelf.constants.dbName + '/' + this.get('id');
     },
     initialize: function(attributes){
         console.log('Book', 'initialize');

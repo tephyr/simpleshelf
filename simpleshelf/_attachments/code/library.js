@@ -1,22 +1,36 @@
 // encase in jQuery-safe wrapper
 (function($) {
     $(document).ready(function() {
+        $.couch.app(function(app) { 
+            launchSimpleShelf(app);
+        });
+    });
+
+    function launchSimpleShelf(app){
         // instantiate global event dispatcher
         // TODO: keep within app object
         window.dispatcher = {};
         _.extend(window.dispatcher, Backbone.Events);
-        
+
+        // ugly hack for not having the db name when creating Book/Spine models
+        window.simpleshelf.constants = {
+            dbName: app.db.name
+        };
+
         // prep models
-        window.authInfo = new AuthInfo();
-        window.tagList = new TagList();
-        window.spineList = new SpineList();
-        window.availableReportList = new AvailableReportList();
-        window.byYearSpineList = new ByYearSpineList();
+        window.authInfo = new AuthInfo({dbName: app.db.name});
+        window.tagList = new TagList([], {dbName: app.db.name});
+        window.spineList = new SpineList([], {dbName: app.db.name});
+        window.availableReportList = new AvailableReportList([], {dbName: app.db.name});
+        window.byYearSpineList = new ByYearSpineList([], {dbName: app.db.name});
 
         prepAvailableReportList();
 
         // instantiate Router
-        window.app = new SimpleShelfLibrary({appView: new AppView()});
+        window.app = new SimpleShelfLibrary({
+            appView: new AppView(),
+            dbName: app.db.name
+        });
 
         // setup events across objects
         var events = {
@@ -70,7 +84,7 @@
         window.app.home();
         
         // showImportMessage();
-    });
+    }
 })(jQuery);
 
 function fetchConstants(){

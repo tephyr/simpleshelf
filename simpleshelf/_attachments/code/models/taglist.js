@@ -1,10 +1,10 @@
 window.TagList = Backbone.Collection.extend({
     model: Tag,
-    url: '/simpleshelf/_design/simpleshelf/_view/tags?group=true',
-    initialize: function(properties) {
+    initialize: function(models, options) {
         _.bindAll(this, 'reset', 'selectTag');
         this.bind('reset', this.reset_debug);
         this.bind('tag:selected', this.selectTag);
+        this.options = options;
     },
 
     parse: function(response){
@@ -31,5 +31,9 @@ window.TagList = Backbone.Collection.extend({
             model.set({'selected': (model.get('tag') === tag)})
                 .trigger('tag:highlight', tag);
         });
+    },
+
+    url: function(){
+        return '/' + this.options.dbName + '/_design/simpleshelf/_view/tags?group=true';
     }
 });

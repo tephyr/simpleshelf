@@ -9,10 +9,11 @@
     	window.SpineList.prototype.initialize.call(this, models, options);
         // additional bindings
         _.bindAll(this, 'getAvailableYears', 'getSpinesByYear');
+        this.options = options;
     },
 
     url: function(){
-	    return '/simpleshelf/_design/simpleshelf/_view/by_year'
+	    return '/' + this.options.dbName + '/_design/simpleshelf/_view/by_year'
 	},
 
     comparator: function(model) {

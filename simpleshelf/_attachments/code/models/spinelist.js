@@ -4,22 +4,22 @@ window.SpineList = Backbone.Collection.extend({
         var url = '';
         switch (this._currentFilter.type){
             case 'book':
-                url = '/simpleshelf/_design/simpleshelf/_view/all?key="book"';
+                url = '/' + this.options.dbName + '/_design/simpleshelf/_view/all?key="book"';
                 break;
 
             case 'tag':
-                url = '/simpleshelf/_design/simpleshelf/_view/books_by_tags?key=%22' + this._currentFilter.filter + '%22';
+                url = '/' + this.options.dbName + '/_design/simpleshelf/_view/books_by_tags?key=%22' + this._currentFilter.filter + '%22';
                 break;
 
             case 'report':
                 // TODO: filter by specific year
-                url = '/simpleshelf/_design/simpleshelf/_view/' + this._currentFilter.dbView;
+                url = '/' + this.options.dbName + '/_design/simpleshelf/_view/' + this._currentFilter.dbView;
                 break;
         }
         return url;
     },
     
-    initialize: function(properties) {
+    initialize: function(models, options) {
         _.bindAll(this, 'reset', 'filterByTag', 'filterByReport',
             'gotoNext', 'gotoPrev',
             'resetFilter', 'setCurrentSpine',
@@ -30,6 +30,7 @@ window.SpineList = Backbone.Collection.extend({
             'filter': null
         };
         this._currentSpine = null;
+        this.options = options;
     },
     
     parse: function(response){
