@@ -1,7 +1,7 @@
 {
 "type": "book",
 "title": "The stainless steel rat returns",
-"author": "Harry Harrison",
+"authors": ["Harry Harrison"],
 "isbn": "978-0-7653-6403-6",
 "publisher": "TOR",
 "status": {"read": "reading", "ownership": "kcls"},

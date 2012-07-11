@@ -1,7 +1,7 @@
 {
 "type": "book",
 "title": "Do the work!",
-"author": "Steven Pressfield",
+"authors": ["Steven Pressfield"],
 "isbn": "978-1-936719-01-3",
 "publisher": "Do You Zoom, Inc.",
 "status": {"read": null, "ownership": ""},
