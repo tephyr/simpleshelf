@@ -216,3 +216,16 @@ Array.prototype.smartCompare = function(arr) {
     }
     return true;
 };
+
+/**
+ * Compare list of strings by order & value of each element
+ */
+Array.prototype.stringElementCompare = function(arr){
+    if (this.length != arr.length) return false;
+    for (var x = 0; x < this.length; x++){
+        if (this[x] != arr[x]){
+            return false;
+        }
+    }
+    return true;
+};
