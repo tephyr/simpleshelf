@@ -7,7 +7,7 @@ window.simpleshelf.constantsUI = {
     bookView: {
         schema: [
             {'field': 'title', 'title': 'Title'},
-            {'field': 'author', 'title': 'Author'},
+            {'field': 'authors', 'title': 'Author', 'special': true},
             {'field': 'isbn', 'title': 'ISBN'},
             {'field': 'public', 'title': 'Public', 'special': true},
             {'field': 'publisher', 'title': 'Publisher'},

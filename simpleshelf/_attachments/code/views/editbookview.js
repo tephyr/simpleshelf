@@ -14,6 +14,10 @@ window.EditBookView = Backbone.View.extend({
             '<tr class="simple {{key}}"><td><span class="title">{{title}}</span></td>' +
             '<td><input type="text" name="{{key}}" value="{{value}}"></td></tr>'
         ),
+        'authors': _.template(
+            '<tr class="complex {{key}}"><td><span class="title">{{title}}</span></td>' +
+            '<td><textarea name="{{key}}" id="authorsinput" cols="60" rows="2" title="Use shift+enter to add a new line">{{value}}</textarea></tr>'
+        ),
         'tags': _.template(
             '<tr class="complex {{key}}"><td><span class="title">{{title}}</span></td>' +
             '<td><input type="text" name="{{key}}" value="" id="taginput"></td></tr>'
@@ -70,7 +74,8 @@ window.EditBookView = Backbone.View.extend({
             'notesPublic': this.simpleTemplates.notes,
             'notesPrivate': this.simpleTemplates.notes,
             'statusOwn': this.simpleTemplates.statusOwn,
-            'statusRead': this.simpleTemplates.statusRead
+            'statusRead': this.simpleTemplates.statusRead,
+            'authors': this.simpleTemplates.authors
         };
         var bookinfoEl = $('.bookinfo', this.el);
         var table = $('<table><colgroup><col id="column_title"><col id="column_data"></colgroup><tbody/></table>');
@@ -120,6 +125,17 @@ window.EditBookView = Backbone.View.extend({
                             title: element.title,
                             key: element.field,
                             value: (me.model.get(element.field) == "true") ? "checked" : ""
+                        }));
+                        break;
+
+                    case "authors":
+                        // put in multi-line textbox
+                        var authors = "";
+                        if (me.model.get(element.field))
+                        tbody.append(htmlSnippets[element.field]({
+                            title: element.title,
+                            key: element.field,
+                            value: me.model.getAuthorsAsString({delimiter: "\n"})
                         }));
                         break;
 
@@ -179,14 +195,15 @@ window.EditBookView = Backbone.View.extend({
         _.each(window.simpleshelf.constantsUI.bookView.schema, function(element, index){
             if (element.special){
                 switch(element.field){
+                    case "authors":
+                    case "public":
+                        me.model.set(element.field, freshData[element.field]);
+                        break;
+
                     case "status.ownership":
                     case "status.read":
                         var fieldSubName = element.field.split(".")[1];
                         me.model.setStatus(fieldSubName, freshData['status'][fieldSubName]);
-                        break;
-
-                    case "public":
-                        me.model.set('public', freshData[element.field]);
                         break;
 
                     default:
@@ -213,6 +230,10 @@ window.EditBookView = Backbone.View.extend({
             difference = false;
             // handle special fields separately
             switch(key){
+                case "authors":
+                    difference = !formData[key].stringElementCompare(me.model.get(key));
+                    break;
+
                 case "tags":
                     if (!formData[key].smartCompare(me.model.get(key) || [])){
                         difference = true;
@@ -231,7 +252,7 @@ window.EditBookView = Backbone.View.extend({
             }
 
             if (difference){
-                this.log('EditBookView.cancel difference', key, "Old", me.model.get(key), "New", value);
+                me.log('EditBookView.cancel difference', key, "Old", me.model.get(key), "New", value);
                 anyDifferences = true;
             }
         });
@@ -314,18 +335,13 @@ window.EditBookView = Backbone.View.extend({
         var fieldValue, fieldSubName;
         _.each($('form', this.el).serializeArray(), function(element, index, list){
             switch (element.name){
-                case "public":
-                    formData["public"] = (element.value == "true");
+                case "authors":
+                    // use regexp to split, to handle \r\n
+                    formData["authors"] = $.trim(element.value).split(/\r\n|\r|\n/);
                     break;
 
-                case "tags":
-                    // TODO more robust method of splitting
-                    var fieldValue = $.trim(element.value);
-                    if (fieldValue.length > 0){
-                        formData["tags"] = element.value.split(',');
-                    } else {
-                        formData["tags"] = [];
-                    }
+                case "public":
+                    formData["public"] = (element.value == "true");
                     break;
 
                 case "status.ownership":
@@ -338,6 +354,16 @@ window.EditBookView = Backbone.View.extend({
                     // ensure the object exists
                     formData["status"] = formData["status"] || {}
                     formData["status"][fieldSubName] = fieldValue;
+                    break;
+
+                case "tags":
+                    // TODO more robust method of splitting
+                    var fieldValue = $.trim(element.value);
+                    if (fieldValue.length > 0){
+                        formData["tags"] = element.value.split(',');
+                    } else {
+                        formData["tags"] = [];
+                    }
                     break;
 
                 default:

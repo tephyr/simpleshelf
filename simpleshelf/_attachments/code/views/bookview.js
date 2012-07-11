@@ -98,6 +98,13 @@ window.BookView = Backbone.View.extend({
                         }));
                         break;
 
+                    case 'authors':
+                        tbody.append(me._addSimpleField(
+                            element.title,
+                            me.model.getAuthorsAsString({delimiter: ', '})
+                        ));
+                        break;
+
                     default:
                         break;
 

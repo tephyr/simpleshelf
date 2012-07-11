@@ -51,6 +51,23 @@ window.Book = Backbone.Model.extend({
     },
 
     /**
+     * Return the authors as a string, optionally delimited ()
+     * @param opts {Object} {delimiter: String}
+     * @return String
+     */
+    getAuthorsAsString: function(opts){
+        if (!this.get('authors')){
+            return "";
+        }
+
+        if (opts && opts.delimiter){
+            return this.get('authors').join(opts.delimiter);
+        } else {
+            return this.get('authors').join(" ");
+        }
+    },
+
+    /**
      * Provide a default (empty) value for a given attribute
      * @param opts {Object} {attr:[status]}
      */
