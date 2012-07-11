@@ -151,7 +151,9 @@ div.avatar img {
     background-color: silver;
 }
 
-.bookinfo .complex.notesPublic textarea, .bookinfo .complex.notesPrivate textarea {
+.bookinfo .complex.notesPublic textarea,
+.bookinfo .complex.notesPrivate textarea,
+.bookinfo .title input {
     width: 100%;
 }
 
