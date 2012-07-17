@@ -13,7 +13,8 @@
         _.extend(window.dispatcher, Backbone.Events);
 
         // ugly hack for not having the db name when creating Book/Spine models
-        window.simpleshelf.constants = {
+        window.simpleshelf.info = window.simpleshelf.info || {};
+        window.simpleshelf.info = {
             dbName: app.db.name
         };
 

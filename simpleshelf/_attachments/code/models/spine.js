@@ -7,6 +7,6 @@ window.Spine = Backbone.Model.extend({
     },
 
     url: function(){
-        return '/' + window.simpleshelf.constants.dbName + '/' + this.get('id');
+        return '/' + window.simpleshelf.info.dbName + '/' + this.get('id');
     },
 });
