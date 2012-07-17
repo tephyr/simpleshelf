@@ -312,6 +312,10 @@ window.EditBookView = Backbone.View.extend({
                 Cancel: function() {
                     $( this ).dialog( "close" );
                 }
+            },
+            close: function(event, ui) {
+                // put focus back on launcher button
+                $('#openReadDialog').focus();
             }
         });
     },
