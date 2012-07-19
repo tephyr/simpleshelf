@@ -36,7 +36,7 @@ window.EditBookView = Backbone.View.extend({
         ),
         'statusRead': _.template(
             '<tr class="status read"><td><span class="title">{{title}}</span></td>' +
-            '<td><span class="value" id="status_read_display">{{value}}</span><input type="hidden" value="{{value}}" name="{{key}}">&nbsp;<button id="openReadDialog">Change Read status</button><div id="formElementRead"/></td></tr>'
+            '<td><span class="value" id="status_read_display">{{value}}</span><input type="hidden" value="{{value}}" name="{{key}}">&nbsp;<a href="#" id="openReadDialog">Change Read status</a><div id="formElementRead"/></td></tr>'
         )
     },
     
@@ -47,7 +47,9 @@ window.EditBookView = Backbone.View.extend({
     },
 
     initialize: function(options){
-        _.bindAll(this, 'render', 'dataChanged', 'dataSynced', 'openReadDialog', 'save', 'cancel',
+        _.bindAll(this,
+            'render', 'dataChanged', 'dataSynced',
+            'openReadDialog', 'save', 'cancel',
             '_addSimpleField', '_getFormData', '_prepPlugins');
         this.model.bind('change', this.dataChanged);
         this.model.bind('sync', this.dataSynced);
@@ -160,7 +162,7 @@ window.EditBookView = Backbone.View.extend({
             }
         });
 
-        var htmlTail = '<div class="menu"><input type="submit" value="Submit" class="submit">&nbsp;' +
+        var htmlTail = '<div class="menu"><button type="submit" class="submit"><strong>Submit</strong></button>&nbsp;' +
             '<button class="cancel">Cancel</button></div>';
         bookinfoEl.append(table).append(htmlTail);
 

@@ -44,11 +44,13 @@ window.BookView = Backbone.View.extend({
             collection: this.options.model.get("activities")
         });
         this.options.okToLog = true;
+        Mousetrap.bind('e', this.editBook);
     },
 
     onClose: function(){
         // dispose of sub views
         this.options.activitiesView.close();
+        Mousetrap.reset();
     },
 
     render: function(){
