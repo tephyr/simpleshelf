@@ -2,8 +2,9 @@
  * Show all docs, by type
  */
 function(doc) {
-    if (doc.title)
+    if (doc.title){
         emit(doc.type, {"title": doc.title, "_rev": doc._rev});
-    else
-        emit(doc.type, null);
+    } else {
+        emit(doc.type, {"title": "NO TITLE", "_rev": doc._rev});
+    }
 };
