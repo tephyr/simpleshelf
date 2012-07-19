@@ -130,8 +130,6 @@ window.EditBookView = Backbone.View.extend({
 
                     case "authors":
                         // put in multi-line textbox
-                        var authors = "";
-                        if (me.model.get(element.field))
                         tbody.append(htmlSnippets[element.field]({
                             title: element.title,
                             key: element.field,
