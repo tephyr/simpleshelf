@@ -91,5 +91,27 @@ window.simpleshelf.util = {
      */
     authLogin: function(options){
         $.couch.login(options);
+    },
+
+    /**
+     * Clean an array of Strings, removing any empty elements
+     */
+    cleanStringArray: function(arr){
+        var cleanedArray = _.map(arr, function(value){
+            if (_.isString(value)) {
+                value = $.trim(value);
+                if (value.length > 0) {
+                    return value;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        });
+
+        return _.filter(cleanedArray, function(value) {
+            return !_.isNull(value);
+        });
     }
 };
