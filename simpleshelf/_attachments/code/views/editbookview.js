@@ -231,12 +231,20 @@ window.EditBookView = Backbone.View.extend({
             // handle special fields separately
             switch(key){
                 case "authors":
-                    difference = !formData[key].stringElementCompare(me.model.get(key));
+                    if (_.isArray(me.model.get(key))){
+                        difference = !formData[key].stringElementCompare(me.model.get(key));
+                    } else {
+                        difference = (formData[key].length > 0);
+                    }
                     break;
 
                 case "tags":
-                    if (!formData[key].smartCompare(me.model.get(key) || [])){
-                        difference = true;
+                    if (_.isArray(me.model.get(key))){
+                        if (!formData[key].smartCompare(me.model.get(key) || [])){
+                            difference = true;
+                        }
+                    } else {
+                        difference = (formData[key].length > 0);
                     }
                     break;
 
@@ -341,7 +349,7 @@ window.EditBookView = Backbone.View.extend({
             switch (element.name){
                 case "authors":
                     // use regexp to split, to handle \r\n
-                    formData["authors"] = $.trim(element.value).split(/\r\n|\r|\n/);
+                    formData["authors"] = window.simpleshelf.util.cleanStringArray($.trim(element.value).split(/\r\n|\r|\n/));
                     break;
 
                 case "public":
@@ -368,6 +376,7 @@ window.EditBookView = Backbone.View.extend({
                     } else {
                         formData["tags"] = [];
                     }
+                    formData["tags"] = window.simpleshelf.util.cleanStringArray(formData["tags"]);
                     break;
 
                 default:
