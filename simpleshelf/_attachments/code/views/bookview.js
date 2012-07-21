@@ -44,16 +44,19 @@ window.BookView = Backbone.View.extend({
             collection: this.options.model.get("activities")
         });
         this.options.okToLog = true;
-        Mousetrap.bind('e', this.editBook);
     },
 
     onClose: function(){
         // dispose of sub views
         this.options.activitiesView.close();
+        Mousetrap.unbind("e");
     },
 
     render: function(){
         this.log('BookView: rendering');
+        // bind keys here, since this is run after any previous view's onClose
+        Mousetrap.bind('e', this.editBook);
+
         $(this.el).html(this.template());
 
         $('h2', this.el).attr('title', 'id: ' + this.model.id);

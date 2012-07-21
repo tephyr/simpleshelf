@@ -25,6 +25,10 @@ window.NavigationView = Backbone.View.extend({
             "_updateLinks");
         this.model.bind('change:status', this._updateLinks);
         this.options.okToLog = true;
+        Mousetrap.bind("n", this.gotoNext);
+        Mousetrap.bind("p", this.gotoPrev);
+        Mousetrap.bind("i", this.goIndex);
+        Mousetrap.bind("b", this.addBook);
     },
 
     render: function(){
