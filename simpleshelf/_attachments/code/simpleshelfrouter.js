@@ -213,8 +213,10 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         });
     },
 
+    /**
+     * Create & show book view
+     */
     _loadBookView: function(model, response){
-        // create & show book view
         var bookView = new BookView({
             dispatcher: window.dispatcher,
             model: model});
@@ -222,12 +224,15 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         window.dispatcher.trigger('router:loadbook');
     },
     
+    /**
+     * Create & show book view for new or existing book
+     */
     _loadEditBookView: function(options){
-        // create & show book view
         options = options || {};
         var editBookView = new EditBookView({
             dispatcher: window.dispatcher,
-            model: options.book || new window.Book()});
+            model: options.book || new window.Book()
+        });
         this.appView.showView(editBookView);
         window.dispatcher.trigger('router:bookedit');
     },

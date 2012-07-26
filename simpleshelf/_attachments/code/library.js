@@ -151,8 +151,9 @@ Backbone.sync = _.wrap(Backbone.sync, function(func, method, model, options){
         case "create":
             console.log(method + ": " + JSON.stringify(model));
 
-            // TODO: generate *good* UUID
-            var modelId = new Date().getTime();
+            // get new UUID synchronously
+            // generate 4 new uuids, if cache is empty
+            var modelId = $.couch.newUUID(4);
             model.set({'id': modelId});
             
             // couchdb uses PUT for both creates & updates
