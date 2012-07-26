@@ -2,6 +2,51 @@ window.simpleshelf = window.simpleshelf || {};
 
 window.simpleshelf.util = {
     /**
+     * Retrieve the current session
+     * @param {Function} onSessionRetrieved
+     */
+    authGetSession: function(onSessionRetrieved){
+        $.couch.session({
+            success : function(r) {
+                var result = {authInfo: null, status: "unknown"};
+                var userCtx = r.userCtx;
+                if (userCtx.name) {
+                    result.status = "loggedIn";
+                } else if (userCtx.roles.indexOf("_admin") != -1) {
+                    result.status = "adminParty";
+                } else {
+                    result.status = "loggedOut";
+                };
+                result.authInfo = r;
+                if (_.isFunction(onSessionRetrieved)){
+                    onSessionRetrieved(result);
+                }
+          }});
+    },
+
+    /**
+     * Login with the given name/password combo
+     * @param {Object} options {name, password, success, error}
+     */
+    authLogin: function(options){
+        $.couch.login(options);
+    },
+
+    /**
+     * Build a login form, attach to body as div#loginform
+     **/
+    buildLoginForm: function(){
+        var dialogTemplate = _.template(
+            '<div id="loginform" title="Login to simpleshelf">' + 
+            '<div class="row"><label for="userid">User id</label><input type="text" id="userid"/></div>' +
+            '<div class="row"><label for="userpw">Password</label><input type="password" id="userpw"/></div>' +
+            '</div>'
+        );
+
+        return $(dialogTemplate()).css('display', 'none').appendTo('body');
+    },
+
+    /**
      * Build a select form element, with initial empty value
      */
     buildSelect: function(selectName, options, selectedOption){
@@ -46,51 +91,6 @@ window.simpleshelf.util = {
         $('#statusinput', $formElement).replaceWith(elementSelect);
         $('#dpinput', $formElement).replaceWith($dpInput);
         return $formElement;
-    },
-
-    /**
-     * Build a login form, attach to body as div#loginform
-     **/
-    buildLoginForm: function(){
-        var dialogTemplate = _.template(
-            '<div id="loginform" title="Login to simpleshelf">' + 
-            '<div class="row"><label for="userid">User id</label><input type="text" id="userid"/></div>' +
-            '<div class="row"><label for="userpw">Password</label><input type="password" id="userpw"/></div>' +
-            '</div>'
-        );
-
-        return $(dialogTemplate()).css('display', 'none').appendTo('body');
-    },
-
-    /**
-     * Retrieve the current session
-     * @param {Function} onSessionRetrieved
-     */
-    authGetSession: function(onSessionRetrieved){
-        $.couch.session({
-            success : function(r) {
-                var result = {authInfo: null, status: "unknown"};
-                var userCtx = r.userCtx;
-                if (userCtx.name) {
-                    result.status = "loggedIn";
-                } else if (userCtx.roles.indexOf("_admin") != -1) {
-                    result.status = "adminParty";
-                } else {
-                    result.status = "loggedOut";
-                };
-                result.authInfo = r;
-                if (_.isFunction(onSessionRetrieved)){
-                    onSessionRetrieved(result);
-                }
-          }});
-    },
-
-    /**
-     * Login with the given name/password combo
-     * @param {Object} options {name, password, success, error}
-     */
-    authLogin: function(options){
-        $.couch.login(options);
     },
 
     /**

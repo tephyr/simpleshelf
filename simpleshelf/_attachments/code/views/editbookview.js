@@ -55,9 +55,119 @@ window.EditBookView = Backbone.View.extend({
         this.model.bind('sync', this.dataSynced);
     },
 
+    /**
+     * User requested form cancel; prevent lost changes
+     */
+    cancel: function(evt){
+        evt.preventDefault();
+        var formData = this._getFormData();
+        var me = this, difference = false, anyDifferences = false, okToGo = false;
+        // check for changes; ask user to abandon
+        _.each(formData, function(value, key, list){
+            difference = false;
+            // handle special fields separately
+            switch(key){
+                case "authors":
+                    if (_.isArray(me.model.get(key))){
+                        difference = !formData[key].stringElementCompare(me.model.get(key));
+                    } else {
+                        difference = (formData[key].length > 0);
+                    }
+                    break;
+
+                case "tags":
+                    if (_.isArray(me.model.get(key))){
+                        if (!formData[key].smartCompare(me.model.get(key) || [])){
+                            difference = true;
+                        }
+                    } else {
+                        difference = (formData[key].length > 0);
+                    }
+                    break;
+
+                case "status":
+                    if (!_.isEqual(me.model.get(key), formData[key])){
+                        difference = true;
+                    }
+                    break;
+
+                default:
+                    difference = (formData[key] != (me.model.get(key) || ""));
+                    break;
+            }
+
+            if (difference){
+                me.log('EditBookView.cancel difference', key, "Old", me.model.get(key), "New", value);
+                anyDifferences = true;
+            }
+        });
+
+        okToGo = anyDifferences ? window.confirm("There are changes, ok to abandon?") : true;
+
+        if (okToGo){
+            if (this.model.isNew()){
+                this.options.dispatcher.trigger('editbookview:cancelnewbook');
+            } else {
+                // reset from server in case any attributes changed (like activities)
+                this.model.fetch();
+                this.options.dispatcher.trigger('editbookview:canceledit', this.model.id);
+            }
+        }
+    },
+
+    dataChanged: function(event){
+        this.log("model's data has changed");
+    },
+
+    dataSynced: function(event){
+        this.log("EditBookView: dataSynced");
+        this.options.dispatcher.trigger('editbookview:dataSynced', this.model.id);
+    },
+
     onClose: function(){
         // remove read status dialog, since on first open, jQuery pushes it outside the container
         $('#dialogStatusRead').remove();
+    },
+
+    openReadDialog: function(event){
+        event.preventDefault();
+        var me = this;
+        var updateData = function(status, date){
+            var updatedValue = null;
+            if (status.length > 0){
+                updatedValue = status;
+            }
+            $('input[name="status.read"]', this.el).val(updatedValue || "---");
+            $('#status_read_display', this.el).text(updatedValue || '---');
+
+            if (date.length > 0){
+                // add to log
+                var mappedStatus = window.simpleshelf.constants.actionsRead[status] || null;
+                if (mappedStatus){
+                    me.model.addActivity({'date': date, 'action': mappedStatus});
+                }
+            }
+        };
+
+        $('#dialogStatusRead').dialog({
+            modal: true,
+            resizable: false,
+            buttons: {
+                "Save": function(){
+                    var newStatus = $('select', this).val();
+                    var newDate = $("#dateRead", this).val();
+                    updateData(newStatus, newDate);
+                    $( this ).dialog( "close" );
+                },
+                Cancel: function() {
+                    $( this ).dialog( "close" );
+                }
+            },
+            close: function(event, ui) {
+                // put focus back on launcher button
+                $('#openReadDialog').focus();
+            }
+        });
     },
 
     render: function(){
@@ -176,13 +286,6 @@ window.EditBookView = Backbone.View.extend({
         return this;
     },
     
-    _prepPlugins: function(){
-        var tags = this.model.get('tags') || [];
-        $('#taginput', this.$el).tagsInput({
-            'interactive': true
-        }).importTags(tags.join(','));
-    },
-    
     save: function(event){
         event.preventDefault();
         this.log("EditBookView:save", this.model.isNew());
@@ -216,116 +319,6 @@ window.EditBookView = Backbone.View.extend({
 
         // TODO: handle validation
         this.model.save(null, {'wait': true});
-    },
-
-    /**
-     * User requested form cancel; prevent lost changes
-     */
-    cancel: function(evt){
-        evt.preventDefault();
-        var formData = this._getFormData();
-        var me = this, difference = false, anyDifferences = false, okToGo = false;
-        // check for changes; ask user to abandon
-        _.each(formData, function(value, key, list){
-            difference = false;
-            // handle special fields separately
-            switch(key){
-                case "authors":
-                    if (_.isArray(me.model.get(key))){
-                        difference = !formData[key].stringElementCompare(me.model.get(key));
-                    } else {
-                        difference = (formData[key].length > 0);
-                    }
-                    break;
-
-                case "tags":
-                    if (_.isArray(me.model.get(key))){
-                        if (!formData[key].smartCompare(me.model.get(key) || [])){
-                            difference = true;
-                        }
-                    } else {
-                        difference = (formData[key].length > 0);
-                    }
-                    break;
-
-                case "status":
-                    if (!_.isEqual(me.model.get(key), formData[key])){
-                        difference = true;
-                    }
-                    break;
-
-                default:
-                    difference = (formData[key] != (me.model.get(key) || ""));
-                    break;
-            }
-
-            if (difference){
-                me.log('EditBookView.cancel difference', key, "Old", me.model.get(key), "New", value);
-                anyDifferences = true;
-            }
-        });
-
-        okToGo = anyDifferences ? window.confirm("There are changes, ok to abandon?") : true;
-
-        if (okToGo){
-            if (this.model.isNew()){
-                this.options.dispatcher.trigger('editbookview:cancelnewbook');
-            } else {
-                // reset from server in case any attributes changed (like activities)
-                this.model.fetch();
-                this.options.dispatcher.trigger('editbookview:canceledit', this.model.id);
-            }
-        }
-    },
-
-    dataChanged: function(event){
-        this.log("model's data has changed");
-    },
-    
-    dataSynced: function(event){
-        this.log("EditBookView: dataSynced");
-        this.options.dispatcher.trigger('editbookview:dataSynced', this.model.id);
-    },
-    
-    openReadDialog: function(event){
-        event.preventDefault();
-        var me = this;
-        var updateData = function(status, date){
-            var updatedValue = null;
-            if (status.length > 0){
-                updatedValue = status;
-            }
-            $('input[name="status.read"]', this.el).val(updatedValue || "---");
-            $('#status_read_display', this.el).text(updatedValue || '---');
-
-            if (date.length > 0){
-                // add to log
-                var mappedStatus = window.simpleshelf.constants.actionsRead[status] || null;
-                if (mappedStatus){
-                    me.model.addActivity({'date': date, 'action': mappedStatus});
-                }
-            }
-        };
-
-        $('#dialogStatusRead').dialog({
-            modal: true,
-            resizable: false,
-            buttons: {
-                "Save": function(){
-                    var newStatus = $('select', this).val();
-                    var newDate = $("#dateRead", this).val();
-                    updateData(newStatus, newDate);
-                    $( this ).dialog( "close" );
-                },
-                Cancel: function() {
-                    $( this ).dialog( "close" );
-                }
-            },
-            close: function(event, ui) {
-                // put focus back on launcher button
-                $('#openReadDialog').focus();
-            }
-        });
     },
 
     _addSimpleField: function(fieldKey, fieldTitle){
@@ -387,5 +380,13 @@ window.EditBookView = Backbone.View.extend({
             }
         });
         return formData;
+    },
+
+    _prepPlugins: function(){
+        var tags = this.model.get('tags') || [];
+        $('#taginput', this.$el).tagsInput({
+            'interactive': true
+        }).importTags(tags.join(','));
     }
+
 });
