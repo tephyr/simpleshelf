@@ -22,28 +22,6 @@ window.Book = Backbone.Model.extend({
     },
 
     /**
-     * Parse book info, removing activities list, to be parsed by child collection
-     * Inspired by http://stackoverflow.com/questions/8501170/backbone-js-view-of-model-containing-collection
-     */
-    parse: function(resp){
-        if (_.has(resp, 'ok') && resp.ok == true){
-            // no need to parse
-            return;
-        }
-        if (this.attributes.activities){
-            this.attributes.activities.reset(resp.activities);
-            delete resp.activities;
-        } else {
-            resp.activities = new ActivityList(resp.activities);
-        }
-
-        // enforce deeper attributes
-        resp.status = _.extend(this.getDefault({attr: 'status'}), resp.status);
-
-        return resp;
-    },
-
-    /**
      * Add an activity in one call
      * @param opts {Object} {date: date string, action: String}, IOW a valid Activity object's attributes
      **/
@@ -97,6 +75,28 @@ window.Book = Backbone.Model.extend({
         } else {
             return null;
         }
+    },
+
+    /**
+     * Parse book info, removing activities list, to be parsed by child collection
+     * Inspired by http://stackoverflow.com/questions/8501170/backbone-js-view-of-model-containing-collection
+     */
+    parse: function(resp){
+        if (_.has(resp, 'ok') && resp.ok == true){
+            // no need to parse
+            return;
+        }
+        if (this.attributes.activities){
+            this.attributes.activities.reset(resp.activities);
+            delete resp.activities;
+        } else {
+            resp.activities = new ActivityList(resp.activities);
+        }
+
+        // enforce deeper attributes
+        resp.status = _.extend(this.getDefault({attr: 'status'}), resp.status);
+
+        return resp;
     },
 
     select: function(){
