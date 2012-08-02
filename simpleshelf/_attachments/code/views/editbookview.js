@@ -86,7 +86,7 @@ window.EditBookView = Backbone.View.extend({
                     break;
 
                 case "status":
-                    if (!_.isEqual(me.model.get(key), formData[key])){
+                    if (!_.isEqual(me.model.getStatusComplete(), formData[key])){
                         difference = true;
                     }
                     break;

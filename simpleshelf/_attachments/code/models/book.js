@@ -11,7 +11,14 @@ window.Book = Backbone.Model.extend({
     },
     initialize: function(attributes){
         console.log('Book', 'initialize');
-        _.bindAll(this, "addActivity", "getDefault", "getStatus", "select", "setStatus");
+        _.bindAll(this,
+            "addActivity",
+            "getDefault",
+            "getStatus",
+            "getStatusComplete",
+            "select",
+            "setStatus"
+        );
         // last pieces to fire before this model finishes loading
         // verify status has minimum defaults
         this.set('status', _.extend({}, {'ownership': null, 'read': null}, this.get('status')));
@@ -75,6 +82,17 @@ window.Book = Backbone.Model.extend({
         } else {
             return null;
         }
+    },
+
+    /**
+     * Get the complete status object, using the default as a base
+     */
+    getStatusComplete: function(){
+        var result = _.extend({},
+            this.getDefault({'attr': 'status'}),
+            this.get('status')
+        );
+        return result;
     },
 
     /**
