@@ -196,7 +196,12 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
         } else {
             // get requested book
             var book = new Book({id: bookId});
-            book.fetch({success: this._loadBookView});
+            book.fetch({
+                success: this._loadBookView,
+                error: function(model, response){
+                    alert("Book failed to load.");
+                }
+            });
         }
     },
     

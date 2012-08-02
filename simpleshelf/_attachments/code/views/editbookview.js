@@ -317,8 +317,16 @@ window.EditBookView = Backbone.View.extend({
             }
         });
 
-        // TODO: handle validation
-        this.model.save(null, {'wait': true});
+        this.model.save(null,
+            {'wait': true,
+            'error': function(model, error){
+                if (error == 5) {
+                    alert("The book must have either a title or an ISBN.");
+                } else {
+                    alert("Validation failed; data not saved.\n" + error);
+                }
+            }
+        });
     },
 
     _addSimpleField: function(fieldKey, fieldTitle){

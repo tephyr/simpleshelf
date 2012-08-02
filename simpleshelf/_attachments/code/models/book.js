@@ -107,6 +107,25 @@ window.Book = Backbone.Model.extend({
     setStatus: function(statusName, statusValue){
         var updatedStatus = {};
         updatedStatus[statusName] = statusValue;
-        this.set(_.extend(this.get('status'), updatedStatus));
+        this.set(_.extend({}, this.get('status'), updatedStatus));
+    },
+
+    validate: function(attrs){
+        // MUST HAVE EITHER title OR isbn: 5
+        var hasValidTitle = false;
+        var hasValidIsbn = false;
+        if (_.has(attrs, 'title') && 
+            _.isString(attrs.title) && 
+            $.trim(attrs.title).length > 0){
+            hasValidTitle = true;
+        }
+        if (_.has(attrs, 'isbn') && 
+            _.isString(attrs.isbn) && 
+            $.trim(attrs.isbn).length > 0){
+            hasValidIsbn = true;
+        }
+        if (!hasValidTitle && !hasValidIsbn){
+            return 5; //"must have either title or isbn"
+        }
     }
 });
