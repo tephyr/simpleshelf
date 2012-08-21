@@ -4,7 +4,7 @@
 window.TagView = Backbone.View.extend({
     className: 'tag',
     tagName: 'li',
-    template: _.template('{{ tag }} [{{ count }}]'),
+    template: _.template('<a href="#">{{ tag }}</a>'),
 
     events: {
         'click': 'tagSelected'
@@ -20,6 +20,9 @@ window.TagView = Backbone.View.extend({
 
     render: function() {
         $(this.el).html(this.template(this.model.toJSON()));
+        // generate tagN value, 1-5
+        var rankingClass = 'tag' + Math.min(5, this.model.get('count'));
+        this.$el.addClass(rankingClass);
         if (this.model.get('selected'))
             $(this.el).addClass('selected');
         return this;
