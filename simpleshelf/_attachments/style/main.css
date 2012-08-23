@@ -1,12 +1,31 @@
 /* add styles here */
+html {
+  height:100%;
+  margin:0;
+  padding:0;
+}
 
 body {
-  font:1em Helvetica, sans-serif;
-  padding:4px;
+  background-image: linear-gradient(bottom, rgb(198,215,196) 8%, rgb(23,97,97) 54%);
+  background-image: -o-linear-gradient(bottom, rgb(198,215,196) 8%, rgb(23,97,97) 54%);
+  background-image: -moz-linear-gradient(bottom, rgb(198,215,196) 8%, rgb(23,97,97) 54%);
+  background-image: -webkit-linear-gradient(bottom, rgb(198,215,196) 8%, rgb(23,97,97) 54%);
+  background-image: -ms-linear-gradient(bottom, rgb(198,215,196) 8%, rgb(23,97,97) 54%);
+
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0.08, rgb(198,215,196)),
+    color-stop(0.54, rgb(23,97,97))
+  );
+  font: 1em Helvetica,sans-serif;
+  padding: 4px;
 }
 
 h1 {
   margin-top:0;
+  padding: 4px;
 }
 
 h1.title {
@@ -23,8 +42,8 @@ h2 {
 }
 
 #profile {
-  border:4px solid #edd;
-  background:#fee;
+  border:4px solid #BDEFEF;
+  background:#239595;
   margin-bottom:8px;
 }
 
@@ -45,15 +64,15 @@ h2 {
 }
 
 #items {
-  border:4px solid #dde;
-  background:#eef;
+  border:4px solid #BDEFEF;
   padding:8px;
   width:60%;
   float:left;
 }
 
 #sidebar {
-  border:4px solid #dfd;
+  background-color: #239595;
+  border:4px solid #BDEFEF;
   padding:8px;
   float:right;
   width:30%;
@@ -64,7 +83,6 @@ h2 {
 }
 
 #items li {
-  background:#fff;
   margin:4px 0;
 }
 
