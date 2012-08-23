@@ -6,19 +6,34 @@ window.TagCloudView = Backbone.View.extend({
     tagName: 'div',
     template: _.template('<h2 class="tagheader"><a href="#" id="tagcloudviewheader">Tags</a></h2>' + 
         '<ul></ul>' + 
-        '<p><a href="#" id="changeAppearance">Change appearance</a></p>'),
+        '<p><span class="tagcloudchanger"><a href="#" id="changeAppearance">Change appearance</a></span>' +
+        '&nbsp;<span class="tagcloudchanger"><a href="#" id="sortAlpha">Sort alpha</a></span>' +
+        '&nbsp;<span class="tagcloudchanger"><a href="#" id="sortStrength">Sort strength</a></span>' +
+        '</p>'),
     events: {
         'click #changeAppearance': 'changeAppearance',
+        'click #sortAlpha': 'sortAlpha',
+        'click #sortStrength': 'sortStrength',
         'click #tagcloudviewheader': 'tagResetRequested'
     },
     viewName: 'TagCloudView',
+    // track internal state
+    _internals: {'appearance': '', 'sortAlpha': 'asc', 'sortStrength': ''},
 
-    initialize: function(properties) {
-        _.bindAll(this, 'render',
-            'addAll', 'addOne',
+    initialize: function(options) {
+        _.bindAll(this,
+            'addAll',
+            'addOne',
             'changeAppearance',
-            'tagResetRequested', 'tagSelected',
-            'resetTags', 'reloadTags');
+            'reloadTags',
+            'render',
+            'resetTags',
+            'sortAlpha',
+            'sortStrength',
+            'tagResetRequested',
+            'tagSelected',
+            '_getSortTarget'
+        );
         this.collection.bind('add', this.addOne);
         this.collection.bind('reset', this.render);
     },
@@ -55,13 +70,12 @@ window.TagCloudView = Backbone.View.extend({
 
     changeAppearance: function(evt){
         evt.preventDefault();
-        var $anchor = $('#changeAppearance', this.$el);
-        if (!$anchor.hasClass('toggled')) {
+        if (this._internals.appearance == '') {
             $("ul", this.$el).hide().addClass("alt").fadeIn("fast");
-            $anchor.addClass('toggled');
+            this._internals.appearance = 'toggled';
         } else {
             $("ul", this.$el).hide().removeClass("alt").fadeIn("fast");
-            $anchor.removeClass('toggled');
+            this._internals.appearance = '';
         }
     },
     
@@ -79,6 +93,26 @@ window.TagCloudView = Backbone.View.extend({
         }
     },
 
+    sortAlpha: function(evt){
+        evt.preventDefault();
+        // defaults to ascending alpha sort on page load
+        var sorting = (this._internals.sortAlpha == 'asc') ? 'desc' : 'asc';
+        this._getSortTarget().tsort({order:sorting});
+        this._internals.sortAlpha = sorting;
+    },
+
+    sortStrength: function(evt){
+        evt.preventDefault();
+        var sorting;
+        if (this._internals.sortStrength == '' || this._internals.sortStrength == 'asc'){
+            sorting = 'desc';
+        } else {
+            sorting = 'asc';
+        }
+        this._getSortTarget().tsort({order:sorting, attr:"class"});
+        this._internals.sortStrength = sorting;
+    },
+
     tagResetRequested: function(evt){
         evt.preventDefault();
         this.log('TagCloudView.tagResetRequested');
@@ -88,5 +122,9 @@ window.TagCloudView = Backbone.View.extend({
     tagSelected: function(tag){
         this.log('TagCloudView.tagSelected event', tag);
         this.options.dispatcher.trigger('tagcloudview:tagselected', tag);
+    },
+
+    _getSortTarget: function(){
+        return $("ul li", this.$el);
     }
 });
