@@ -140,6 +140,11 @@ function prepAvailableReportList(){
         dbView: 'by_status?key=[%22read%22,%22reading%22]',
         title: 'Currently reading'
     });
+    window.availableReportList.add({
+        id: 'read-not-set',
+        dbView: 'read_not_set',
+        title: 'Read status not set'
+    });
 };
 
 /**

@@ -170,6 +170,7 @@ window.SimpleShelfLibrary = Backbone.Router.extend({
 
             case "by-status-read-finished":
             case "by-status-read-reading":
+            default:
                 this._swapNavigationEvents([window.byYearSpineList], [window.spineList]);
                 this._manageSpineListEvents(window.spineList);
                 window.spineList
