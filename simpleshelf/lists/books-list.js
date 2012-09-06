@@ -15,6 +15,11 @@ function(head, req){
 
 function renderBook(row){
     var title = row.value.title || "[No title]";
-    var author = row.value.author || "[No author]";
-    return '<li><a href="#"' + row.id + '>' + title + '</a> by ' + author + '</li>';
+    var authorPart = "";
+    if (row.value.authors && row.value.authors.length > 0) {
+        if (row.value.authors[0].length > 0) {
+            authorPart = " by " + row.value.authors[0];
+        }
+    }
+    return '<li><a href="#"' + row.id + '>' + title + '</a>' + authorPart + '</li>';
 }
