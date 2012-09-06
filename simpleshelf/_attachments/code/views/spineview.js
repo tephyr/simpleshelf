@@ -4,7 +4,7 @@
 window.SpineView = Backbone.View.extend({
     className: 'spine-view',
     tagName: 'li',
-    template: _.template('<span class="spine"><a href="./{{id}}">{{title}}</a></span> <span class="del"><a href="#">delete</a></span>'),
+    template: _.template('<span class="spine"><a href="./{{id}}">{{titleOrId}}</a></span> <span class="del"><a href="#">delete</a></span>'),
     events: {
       'click .spine a': 'bookSelected',
       'click .del a': 'bookRequestedDelete'
