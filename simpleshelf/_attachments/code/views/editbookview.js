@@ -48,9 +48,15 @@ window.EditBookView = Backbone.View.extend({
 
     initialize: function(options){
         _.bindAll(this,
-            'render', 'dataChanged', 'dataSynced',
-            'openReadDialog', 'save', 'cancel',
-            '_addSimpleField', '_getFormData', '_prepPlugins');
+            'cancel',
+            'dataChanged',
+            'dataSynced',
+            'openReadDialog',
+            'render',
+            'save',
+            '_addSimpleField',
+            '_getFormData',
+            '_prepPlugins');
         this.model.bind('change', this.dataChanged);
         this.model.bind('sync', this.dataSynced);
     },
