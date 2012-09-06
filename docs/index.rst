@@ -12,6 +12,7 @@ Contents:
 
    no-schema-schema
    views
+   lists
 
 UI:
 
