@@ -122,10 +122,14 @@ window.Book = Backbone.Model.extend({
         this.collection.trigger('book:selected', this.get('id'));
     },
 
+    /**
+     * Carefully set the status, to ensure "default" values are preserved
+     */
     setStatus: function(statusName, statusValue){
         var updatedStatus = {};
         updatedStatus[statusName] = statusValue;
-        this.set(_.extend({}, this.get('status'), updatedStatus));
+        var finalValue = {'status': _.extend({}, this.get('status'), updatedStatus)};
+        this.set(finalValue);
     },
 
     validate: function(attrs){
