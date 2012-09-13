@@ -1,0 +1,7 @@
+{
+  "_id"          : "org.couchdb.user:demouser",
+  "type"         : "user",
+  "name"         : "demouser",
+  "roles"        : ["demo"],
+  "password"     : "demopassword"
+}
