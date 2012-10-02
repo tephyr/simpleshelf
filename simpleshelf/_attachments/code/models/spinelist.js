@@ -4,16 +4,16 @@ window.SpineList = Backbone.Collection.extend({
         var url = '';
         switch (this._currentFilter.type){
             case 'book':
-                url = '/' + this.options.dbName + '/_design/simpleshelf/_view/all?key="book"';
+                url = '_view/all?key="book"';
                 break;
 
             case 'tag':
-                url = '/' + this.options.dbName + '/_design/simpleshelf/_view/books_by_tags?key=%22' + this._currentFilter.filter + '%22';
+                url = '_view/books_by_tags?key=%22' + this._currentFilter.filter + '%22';
                 break;
 
             case 'report':
                 // TODO: filter by specific year
-                url = '/' + this.options.dbName + '/_design/simpleshelf/_view/' + this._currentFilter.dbView;
+                url = '_view/' + this._currentFilter.dbView;
                 break;
         }
         return url;

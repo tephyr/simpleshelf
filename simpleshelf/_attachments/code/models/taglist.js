@@ -34,6 +34,6 @@ window.TagList = Backbone.Collection.extend({
     },
 
     url: function(){
-        return '/' + this.options.dbName + '/_design/simpleshelf/_view/tags?group=true';
+        return '_view/tags?group=true';
     }
 });

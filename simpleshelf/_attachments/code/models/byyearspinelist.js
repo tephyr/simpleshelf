@@ -13,7 +13,7 @@
     },
 
     url: function(){
-	    return '/' + this.options.dbName + '/_design/simpleshelf/_view/by_year'
+        return '_view/by_year'
 	},
 
     comparator: function(model) {

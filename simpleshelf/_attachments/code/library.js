@@ -87,7 +87,7 @@
 })(jQuery);
 
 function fetchConstants(){
-    $.getJSON( '/simpleshelf/simpleshelf.constants', null, constantsFetched );
+    $.getJSON( 'data/simpleshelf.constants', null, constantsFetched );
 };
 
 function constantsFetched(data, textStatus, jqXHR) {
