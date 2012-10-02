@@ -1,28 +1,73 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>simpleshelf</title>
+    <title>simpleshelf library</title>
     <link rel="stylesheet" href="style/main.css" type="text/css">
+    <link rel="stylesheet" href="style/jquery.tagsinput.css" type="text/css">
+    <link rel="stylesheet" href="style/jquery-ui/pepper-grinder/jquery-ui-1.8.18.custom.css" type="text/css">
+    <link rel="stylesheet" href="style/tagcloud.css" type="text/css">
+
+    <script type="text/javascript" src="code/yepnope.min.js"></script>
+    <script type="text/javascript" src="vendor/backbone/underscore.js"></script>
+    <script type="text/javascript" src="vendor/backbone/jquery.js"></script>
+    <script type="text/javascript" src="/_utils/script/jquery.couch.js?0.11.0"></script>
+    <script type="text/javascript" src="vendor/jquery/jquery-ui-1.8.18.custom.min.js"></script>
+    <script type="text/javascript" src="vendor/jquery/jquery.tagsinput.js"></script>
+    <script type="text/javascript" src="vendor/couchapp/jquery.couch.app.js"></script>
+    <script type="text/javascript" src="vendor/backbone/backbone.js"></script>
+    <script type="text/javascript" src="/_utils/script/sha1.js"></script>
+    <script type="text/javascript" src="vendor/backbone/import-container.js"></script>
+    <script type="text/javascript">
+        yepnope({
+            load: [
+                'code/moment.js',
+                'code/mousetrap.min.js',
+                'code/jquery.tinysort.min.js',
+                'code/simpleshelfconstants.js',
+                'code/simpleshelfutil.js',
+
+                'code/models/activity.js',
+                'code/models/activitylist.js',
+                'code/models/book.js',
+                'code/models/authinfo.js',
+                'code/models/tag.js',
+                'code/models/taglist.js',
+                'code/models/spine.js',
+                'code/models/spinelist.js',
+                'code/models/byyearspinelist.js',
+                'code/models/availablereport.js',
+                'code/models/availablereportlist.js',
+
+                'code/views/setup.js',
+                'code/views/navigationview.js',
+                'code/views/authenticationview.js',
+                'code/views/activityview.js',
+                'code/views/activitylistview.js',
+                'code/views/bookview.js',
+                'code/views/editbookview.js',
+                'code/views/spineview.js',
+                'code/views/spinelistview.js',
+                'code/views/singleyearreportview.js',
+                'code/views/byyearreportpresenterview.js',
+                'code/views/availablereportview.js',
+                'code/views/availablereportlistview.js',
+                'code/views/tagview.js',
+                'code/views/tagcloudview.js',
+
+                'code/simpleshelfrouter.js',
+                'code/library.js'
+            ]
+        });
+    </script>
   </head>
   <body>
     <div id="account"></div>
 
-    <h1>simpleshelf: track your books simply</h1>
-
-    <div id="profile"></div>
+    <div id="profile"><h1 class="title">simpleshelf: track your books</h1></div>
     <div id="items"></div>
 
     <div id="sidebar">
-      <p>Welcome to simpleshelf. Your books await.</p>
+      <!--p id="welcome-msg">Welcome to simpleshelf. Your books await.</p-->
     </div>
   </body>
-  <script src="vendor/couchapp/loader.js"></script>
-  <script type="text/javascript" charset="utf-8">
-    $.couch.app(function(app) {
-      $("#account").evently("account", app);
-      $("#profile").evently("profile", app);
-      $.evently.connect("#account","#profile", ["loggedIn","loggedOut"]);
-      $("#items").evently("items", app);
-    });
-  </script>
 </html>
