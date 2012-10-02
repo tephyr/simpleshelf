@@ -3,3 +3,4 @@ docs/_build/
 next.txt
 README.html
 *.pyc
+.doit.db
