@@ -1,12 +1,10 @@
 // encase in jQuery-safe wrapper
 (function($) {
     $(document).ready(function() {
-        $.couch.app(function(app) { 
-            launchSimpleShelf(app);
-        });
+        launchSimpleShelf();
     });
 
-    function launchSimpleShelf(app){
+    function launchSimpleShelf(){
         // instantiate global event dispatcher
         // TODO: keep within app object
         window.dispatcher = {};
@@ -14,23 +12,20 @@
 
         // ugly hack for not having the db name when creating Book/Spine models
         window.simpleshelf.info = window.simpleshelf.info || {};
-        window.simpleshelf.info = {
-            dbName: app.db.name
-        };
+        window.simpleshelf.info = {};
 
         // prep models
-        window.authInfo = new AuthInfo({dbName: app.db.name});
-        window.tagList = new TagList([], {dbName: app.db.name});
-        window.spineList = new SpineList([], {dbName: app.db.name});
-        window.availableReportList = new AvailableReportList([], {dbName: app.db.name});
-        window.byYearSpineList = new ByYearSpineList([], {dbName: app.db.name});
+        window.authInfo = new AuthInfo({});
+        window.tagList = new TagList([], {});
+        window.spineList = new SpineList([], {});
+        window.availableReportList = new AvailableReportList([], {});
+        window.byYearSpineList = new ByYearSpineList([], {});
 
         prepAvailableReportList();
 
         // instantiate Router
         window.app = new SimpleShelfLibrary({
-            appView: new AppView(),
-            dbName: app.db.name
+            appView: new AppView()
         });
 
         // setup events across objects
