@@ -1,0 +1,14 @@
+[
+    {
+        "from": "/library/data/*",
+        "to": "../../*",
+        "method": "*",
+        "query": {}
+    },
+    {
+        "from": "/library/*",
+        "to": "/*",
+        "method": "*",
+        "query": {}
+    }
+]
