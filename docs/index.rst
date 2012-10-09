@@ -13,7 +13,8 @@ Contents:
    no-schema-schema
    views
    lists
-
+   security
+   
 UI:
 
 .. toctree::
