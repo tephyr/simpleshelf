@@ -2,6 +2,7 @@
 #coding:utf-8
 
 import doit
+from   doit.tools import check_timestamp_unchanged
 import sh
 
 
@@ -20,7 +21,12 @@ def task_docs():
         output = sh.make('html')
         sh.cd('..')
 
-    return {'actions': [(cmd_build, )]}
+    return {
+        'actions': [(cmd_build, )],
+        'file_dep': ["docs/index.rst"],
+        'targets': ["docs/_build"],
+        'uptodate': [check_timestamp_unchanged('docs')]
+    }
 
 def task_couchapp_push():
     """
