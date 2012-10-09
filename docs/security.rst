@@ -29,7 +29,7 @@ Server security
   
   .. note:: The password is only in clear-text when uploaded to the server; once CouchDB receives it, it will be hashed automatically.
   
-4. In the server settings, set ``require_valid_user`` in section ``couch_httpd_auth`` to ``true``.
+4. In the server settings, set ``couch_httpd_auth.require_valid_user`` to ``true``.
 
   In Futon:
   
@@ -37,6 +37,8 @@ Server security
   - find the ``couch_httpd_auth`` section
   - find the ``require_valid_user`` option
   - if not already set to "true", double-click the value & set it to ``true``
+
+5. To force basic authentication (currently the only way to allow a login without having an external page), set ``httpd.WWW-Authenticate`` to ``Basic realm="CouchDB"`` (the realm name does not matter, as long as it exists).
 
 Database security
 +++++++++++++++++
@@ -50,10 +52,12 @@ These instructions must be followed for each simpleshelf database on a CouchDB s
 3. For a database-level admin, add the username to the ``Admins:Names`` list, **OR** add their roles to the ``Admins:Roles`` list.
 4. For each user, either add their usernames to the ``Members:Names`` list, **OR** add their roles to the ``Members:Roles`` list.
 
-  .. note:: The default role for the demo user is "demo".
-  
+  .. note:: The default role for the demo user is "demo".  The demo user can view but not add or edit books.
+
 5. Once the database-level security is set (meaning that at least 1 non-admin is specified by username or role), **no unauthenticated users** can see the database.
 6. Logout, log back in as one of the users, and verify the security.
+
+.. warning:: Known issue: logging out as one user, and logging back in as another, will maintain CouchDB's authentication as the previous user.  To simulate a "normal" login, restart the browser.
 
 Reference
 +++++++++
