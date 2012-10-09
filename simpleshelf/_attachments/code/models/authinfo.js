@@ -36,11 +36,19 @@ window.AuthInfo = Backbone.Model.extend({
      */
     doLogout: function(){
         var me = this;
-        $.couch.logout({
+
+        var options = {
             success: function(response){
                 me.handleLogout(response);
+            },
+            error: function(status, error, reason){
+                var msg = "Logout failed\nstatus: " + status;
+                msg = msg + "\nerror: " + error;
+                msg = msg + "\nreason: " + reason;
+                window.alert(msg);
             }
-        });
+        };
+        window.simpleshelf.util.authLogout(options);
     },
 
     /**

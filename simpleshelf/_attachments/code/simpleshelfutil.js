@@ -6,22 +6,28 @@ window.simpleshelf.util = {
      * @param {Function} onSessionRetrieved
      */
     authGetSession: function(onSessionRetrieved){
-        $.couch.session({
-            success : function(r) {
-                var result = {authInfo: null, status: "unknown"};
-                var userCtx = r.userCtx;
-                if (userCtx.name) {
-                    result.status = "loggedIn";
-                } else if (userCtx.roles.indexOf("_admin") != -1) {
-                    result.status = "adminParty";
-                } else {
-                    result.status = "loggedOut";
-                };
-                result.authInfo = r;
-                if (_.isFunction(onSessionRetrieved)){
-                    onSessionRetrieved(result);
-                }
-          }});
+        var jqxhr = $.ajax({
+            type: "GET",
+            url: "/_session", // ?basic=true
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Accept', 'application/json');
+            }
+        })
+        .done(function(r) {
+            var result = {authInfo: null, status: "unknown"};
+            var userCtx = r.userCtx;
+            if (userCtx.name) {
+                result.status = "loggedIn";
+            } else if (userCtx.roles.indexOf("_admin") != -1) {
+                result.status = "adminParty";
+            } else {
+                result.status = "loggedOut";
+            };
+            result.authInfo = r;
+            if (_.isFunction(onSessionRetrieved)){
+                onSessionRetrieved(result);
+            }
+        });
     },
 
     /**
@@ -29,7 +35,59 @@ window.simpleshelf.util = {
      * @param {Object} options {name, password, success, error}
      */
     authLogin: function(options){
-        $.couch.login(options);
+        options = options || {};
+
+        var jqxhr = $.ajax({
+                type: "POST",
+                url: "/_session", // ?basic=true
+                dataType: "json",
+                data: {
+                    name: options.name,
+                    password: options.password
+                },
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader('Accept', 'application/json');
+                }
+            })
+            .done(function(jqXHR) { 
+                console.log("authLogin: success");
+                if (options.success){
+                    options.success(jqXHR);
+                }
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                console.log("authLogin: error");
+                if (options.error){
+                    options.error(jqXHR.status, errorThrown);
+                }
+            })
+            .always(function() {
+                console.log("authLogin: complete");
+            });
+    },
+
+    authLogout: function(options){
+        var jqxhr = $.ajax({
+            type: "DELETE",
+            url: "/_session", // ?basic=true
+            dataType: "json",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Accept', 'application/json');
+            }
+        })
+        .done(function(jqXHR) { 
+            console.log("authLogout: success");
+            if (options.success){
+                options.success(jqXHR);
+            }
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            alert("authLogout: error");
+            options.error();
+        })
+        .always(function() {
+            console.log("authLogout: complete");
+        });
     },
 
     /**
