@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>simpleshelf library</title>
     <link rel="stylesheet" href="style/bootstrap.min.css" type="text/css">
@@ -64,13 +64,17 @@
     </script>
   </head>
   <body>
-    <div id="account"></div>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div id="profile" class="span12">
+            <h1 class="title">simpleshelf: track your books</h1>
+        </div>
+      </div>
 
-    <div id="profile"><h1 class="title">simpleshelf: track your books</h1></div>
-    <div id="items"></div>
-
-    <div id="sidebar">
-      <!--p id="welcome-msg">Welcome to simpleshelf. Your books await.</p-->
+      <div class="row-fluid">
+        <div id="items" class="span8"></div>
+        <div id="sidebar" class="span3 offset1"></div>
+      </div>
     </div>
   </body>
 </html>
