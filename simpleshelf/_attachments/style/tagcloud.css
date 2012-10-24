@@ -3,7 +3,7 @@
     margin:1em 0;
     padding:.5em 10px;
     text-align:center;
-    /*background:#71b5e9 url(bg_tagcloud.gif) repeat-x;*/
+    background:#71b5e9 url(bg_tagcloud.gif) repeat-x;
     border: 2px solid #BDEFEF;
 }
 #tags li{

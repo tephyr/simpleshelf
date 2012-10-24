@@ -69,6 +69,11 @@ form {
     font-weight: bold;
 }
 
+.tagcloudchangercontrols {
+  font-size: smaller;
+  text-align: center;
+}
+
 .spine-view span.del {
     float: right;
 }

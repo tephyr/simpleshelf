@@ -6,7 +6,7 @@ window.TagCloudView = Backbone.View.extend({
     tagName: 'div',
     template: _.template('<h2 class="tagheader"><a href="#" id="tagcloudviewheader">Tags</a></h2>' + 
         '<ul></ul>' + 
-        '<p><span class="tagcloudchanger"><a href="#" id="changeAppearance">Change appearance</a></span>' +
+        '<p class="tagcloudchangercontrols"><span class="tagcloudchanger"><a href="#" id="changeAppearance">Change appearance</a></span>' +
         '&nbsp;<span class="tagcloudchanger"><a href="#" id="sortAlpha">Sort alpha</a></span>' +
         '&nbsp;<span class="tagcloudchanger"><a href="#" id="sortStrength">Sort strength</a></span>' +
         '</p>'),
