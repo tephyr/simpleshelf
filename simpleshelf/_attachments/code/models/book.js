@@ -136,6 +136,12 @@ window.Book = Backbone.Model.extend({
         // MUST HAVE EITHER title OR isbn: 5
         var hasValidTitle = false;
         var hasValidIsbn = false;
+
+        // do not validate new models
+        if (this.isNew()) {
+            return;
+        }
+
         if (_.has(attrs, 'title') && 
             _.isString(attrs.title) && 
             $.trim(attrs.title).length > 0){
