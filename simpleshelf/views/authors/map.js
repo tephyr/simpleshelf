@@ -2,8 +2,17 @@
  * Show all authors
  */
 function(doc){
-    if (doc.author)
-        emit(doc.author, doc);
-    else
-        emit(null, doc);
+    // load libraries
+    var _ = require('views/lib/underscore/underscore-min');
+    var ctrAuthors = 0;
+
+    if (doc.authors) {
+        if (_.isArray(doc.authors)) {
+            ctrAuthors = 0;
+            _.each(doc.authors, function(author){
+                emit(author, {authorPos: ctrAuthors, title: doc.title});
+                ctrAuthors++;
+            });
+        }
+    }
 }
