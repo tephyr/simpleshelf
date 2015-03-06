@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'simpleshelf'
-copyright = u'2012, Andrew Ittner'
+copyright = u'2012-2015, Andrew Ittner'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
