@@ -10,6 +10,7 @@ Contents:
    :maxdepth: 2
    :glob:
 
+   setup/*
    no-schema-schema
    views
    lists
