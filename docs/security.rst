@@ -59,6 +59,14 @@ These instructions must be followed for each simpleshelf database on a CouchDB s
 
 .. warning:: Known issue: logging out as one user, and logging back in as another, will maintain CouchDB's authentication as the previous user.  To simulate a "normal" login, restart the browser.
 
+Replication & security
+++++++++++++++++++++++
+Quick and easy way to replicate a secured database
+--------------------------------------------------
+Add the username & password to the source URL, like so::
+
+  http://user:password@example.com:5984/source-database/
+
 Reference
 +++++++++
 - `Security Features Overview <http://wiki.apache.org/couchdb/Security_Features_Overview>`__
