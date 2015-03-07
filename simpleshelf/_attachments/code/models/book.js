@@ -7,7 +7,7 @@ window.Book = Backbone.Model.extend({
         'public': true
     },
     url: function(){
-        return 'data/' + this.get('id');
+        return '_rewrite/data/' + this.get('id');
     },
     initialize: function(attributes){
         console.log('Book', 'initialize');

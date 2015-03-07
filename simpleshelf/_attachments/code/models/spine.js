@@ -13,6 +13,6 @@ window.Spine = Backbone.Model.extend({
     },
 
     url: function(){
-        return 'data/' + this.get('id');
+        return '_rewrite/data/' + this.get('id');
     }
 });

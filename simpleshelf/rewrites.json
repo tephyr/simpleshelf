@@ -6,6 +6,12 @@
         "query": {}
     },
     {
+        "from": "/data/*",
+        "to": "../../*",
+        "method": "*",
+        "query": {}
+    },
+    {
         "from": "/library/*",
         "to": "/*",
         "method": "*",
