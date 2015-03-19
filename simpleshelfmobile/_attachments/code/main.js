@@ -10,7 +10,8 @@ require.config( {
         "jquery": "lib/jquery",
         "jquerymobile": "lib/jquery.mobile-1.4.5",
         "underscore": "lib/underscore",
-        "backbone": "lib/backbone"
+        "backbone": "lib/backbone",
+        "handlebars": "lib/handlebars"
     },
 
     // Sets the configuration for third party scripts that are not AMD compatible
