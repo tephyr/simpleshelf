@@ -20,12 +20,38 @@ define([
          */
         index: function() {
             this._log("/ route.");
-            this._changeScreen(app.views.frontPageView);
+            // this._changeScreen(app.views.frontPageView);
         },
 
         login: function() {
             this._log("/login");
+            this._changeScreen(app.views.loginPageView);
+        },
+
+        main: function() {
+            this._log("/main");
             // TODO
+        },
+
+        /**
+         * Change the current screen.
+         * Instantiates the view if not already in DOM.
+         */
+        _changeScreen: function(view, options) {
+            if (!view.isInDOM) {
+                console.info("[router]", "Rendering " + view.getName());
+                // Render view & get handle to object.
+                view.render();
+                // Call post-render actions.
+                if (view.postRender) {
+                    view.postRender();
+                }
+                // Initialize the jqm page widget for this new element.
+                view.$el.page({});
+                view.$el.trigger('create');
+            }
+            // Change to this view.
+            $.mobile.pageContainer.pagecontainer("change", view.$el, options);
         },
 
         _log: function() {
