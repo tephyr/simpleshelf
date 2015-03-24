@@ -6,8 +6,10 @@ define([
     "backbone",
     "settings",
     "couchutils",
-    "router"
-], function($, _, Backbone, appSettings, couchUtils, Router) {
+    "views/LoginPageView",
+    "appevents"
+], function($, _, Backbone, appSettings, couchUtils, 
+    LoginPageView) {
 
     console.info("app.js loaded.");
     var app = {
@@ -19,10 +21,8 @@ define([
 
     // Setup up views hash to hold view objects & persist them for the application lifetime.
     app.views = {
-        // TBD
+        loginPageView: new LoginPageView()
     };
-
-    app.router = new Router();
 
     // Initial settings.
     appSettings.set({"urlPrefix": window.location.protocol + "//" + window.location.host});
@@ -38,6 +38,7 @@ define([
             })
             .fail(function() {
                 console.warn("Need to log in.");
+                app.router.navigate("login", {trigger: true});
             })
             .always(function() {
                 console.info("Done checking login status.");
@@ -45,6 +46,7 @@ define([
     };
 
     // Anything else that should be immediately available when the application launches, add here.
+    // require("appevents").setupAppEvents(app);
 
     return app;
 });

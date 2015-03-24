@@ -11,7 +11,8 @@ require.config( {
         "jquerymobile": "lib/jquery.mobile-1.4.5",
         "underscore": "lib/underscore",
         "backbone": "lib/backbone",
-        "handlebars": "lib/handlebars"
+        "handlebars": "lib/handlebars",
+        "text": "lib/text"
     },
 
     // Sets the configuration for third party scripts that are not AMD compatible
@@ -30,8 +31,10 @@ require.config( {
 require([
     "jquery",
     "backbone",
-    "app"
-], function ( $, Backbone, App ) {
+    "app",
+    "router",
+    "appevents"
+], function ( $, Backbone, App, Router ) {
 
     $( document ).on( "mobileinit",
 
@@ -50,6 +53,19 @@ require([
 
         console.info(window.pageLoadedAt);
         this.app = App; // singleton
+
+        // Setup top-level app objects.
+        app.router = new Router();
+        require("appevents").setupAppEvents(app);
+        require("appevents").hookupAppEvents(app);
+
+        // Tidy initial view.
+        $("body").removeClass("splash");
+
+        // Start Backbone routing.
+        Backbone.history.start();
+
+        // Start app.
         this.app.run();
 
     });
