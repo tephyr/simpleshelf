@@ -26,7 +26,9 @@ define([
                     // This call is a little different than the native Backbone navigate,
                     // to keep it similar to all other calls: {url: String, options: Object}.
                     console.info("[app]", "navigate", data);
-                    app.router.navigate(data.url, _.extend({}, data.options));
+                    // By default, trigger the route method; to disable, set ``trigger==false``.
+                    // This is opposite of Backbone's default.
+                    app.router.navigate(data.url, _.extend({trigger: true}, data.options));
                 }
 
             });
@@ -37,9 +39,16 @@ define([
          * Each view must be connected to the event router **here**.
          **/
         hookupAppEvents: function (app) {
-            app.views.loginPageView.on("all", _.bind(function(eventName, data) {
-                app.trigger(eventName, data);
-            }, this));
+            // Hook up specific views' events.
+            _.each([app.views.loginPageView, app.views.mainPageView],
+                function(view) {
+                    view.on("all", _.bind(function(eventName, data) {
+                        app.trigger(eventName, data);
+                    }, this));
+                }, this);
+            // app.views.loginPageView.on("all", _.bind(function(eventName, data) {
+            //     app.trigger(eventName, data);
+            // }, this));
         }
     };
 
