@@ -12,7 +12,8 @@ define([
     var Router = Backbone.Router.extend({
         routes: {
             "": "index",
-            "login": "login"
+            "login": "login",
+            "main" : "main"
         },
 
         /**
@@ -30,7 +31,7 @@ define([
 
         main: function() {
             this._log("/main");
-            // TODO
+            this._changeScreen(app.views.mainPageView);
         },
 
         /**

@@ -7,9 +7,10 @@ define([
     "settings",
     "couchutils",
     "views/LoginPageView",
+    "views/MainPageView",
     "appevents"
 ], function($, _, Backbone, appSettings, couchUtils, 
-    LoginPageView) {
+    LoginPageView, MainPageView) {
 
     console.info("app.js loaded.");
     var app = {
@@ -21,7 +22,8 @@ define([
 
     // Setup up views hash to hold view objects & persist them for the application lifetime.
     app.views = {
-        loginPageView: new LoginPageView()
+        loginPageView: new LoginPageView(),
+        mainPageView: new MainPageView()
     };
 
     // Initial settings.
@@ -29,12 +31,13 @@ define([
 
     app.run = function() {
         console.info("App running as of ", new Date());
-        // On initial load, check if user already logged in.
+        // On initial load, check if user is already logged in.
         // If so, proceed to main page.
         // If not, show login.
         couchUtils.isLoggedIn()
             .done(function() {
                 console.log("Proceed to main page.");
+                app.trigger("app:navigate", {url: "main"});
             })
             .fail(function() {
                 console.warn("Need to log in.");
@@ -46,7 +49,6 @@ define([
     };
 
     // Anything else that should be immediately available when the application launches, add here.
-    // require("appevents").setupAppEvents(app);
 
     return app;
 });
