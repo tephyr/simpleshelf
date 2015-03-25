@@ -31,7 +31,10 @@ define([
 
         main: function() {
             this._log("/main");
-            this._changeScreen(app.views.mainPageView);
+            app.views.mainPageView.model.fetch()
+                .always(_.bind(function() {
+                    this._changeScreen(app.views.mainPageView);
+                }, this));
         },
 
         /**

@@ -8,9 +8,10 @@ define([
     "couchutils",
     "views/LoginPageView",
     "views/MainPageView",
+    "models/GlobalCount",
     "appevents"
 ], function($, _, Backbone, appSettings, couchUtils, 
-    LoginPageView, MainPageView) {
+    LoginPageView, MainPageView, GlobalCountModel) {
 
     console.info("app.js loaded.");
     var app = {
@@ -23,7 +24,7 @@ define([
     // Setup up views hash to hold view objects & persist them for the application lifetime.
     app.views = {
         loginPageView: new LoginPageView(),
-        mainPageView: new MainPageView()
+        mainPageView: new MainPageView({model: new GlobalCountModel()})
     };
 
     // Initial settings.

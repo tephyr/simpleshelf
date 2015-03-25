@@ -16,6 +16,7 @@ function(PageView, Handlebars, template) {
 
         initialize: function() {
             this.template = Handlebars.compile(template);
+            this.listenTo(this.model, "changes", this.render);
             return this;
         },
 
@@ -25,7 +26,6 @@ function(PageView, Handlebars, template) {
          */
         onAddBook: function(event) {
             event.preventDefault();
-            // Trigger login event.
             this.trigger("app:navigate", {
                 url: "addbook"
             });
