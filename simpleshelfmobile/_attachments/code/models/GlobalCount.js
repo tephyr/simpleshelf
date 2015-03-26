@@ -4,9 +4,10 @@
  **/
 define([
     "underscore",
+    "underscore.string",
     "backbone",
     "app"
-], function(_, Backbone, app) {
+], function(_, _s, Backbone, app) {
 
     var GlobalCountModel = Backbone.Model.extend({
         url: function() {
@@ -27,6 +28,15 @@ define([
 
             return results;
         },
+
+        toJSON: function() {
+            var result = this.attributes;
+            // Customize the strings.
+            _.each(_.pairs(this.attributes), function(pair) {
+                result[pair[0] + "_fmt"] = _s.numberFormat(pair[1], 0);
+            });
+            return result;
+        }
 
     });
 
