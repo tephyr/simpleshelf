@@ -24,7 +24,7 @@ function(Backbone) {
                 console.warn(this.getName() + " already in DOM.");
             } else {
                 if (this.model) {
-                    this.$el.html(this.template(this.model.attributes));
+                    this.$el.html(this.template(this.model.toJSON()));
                 } else {
                     this.$el.html(this.template());
                 }
