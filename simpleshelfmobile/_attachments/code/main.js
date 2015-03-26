@@ -10,6 +10,7 @@ require.config( {
         "jquery": "lib/jquery",
         "jquerymobile": "lib/jquery.mobile-1.4.5",
         "underscore": "lib/underscore",
+        "underscore.string": "lib/underscore.string",
         "backbone": "lib/backbone",
         "handlebars": "lib/handlebars",
         "text": "lib/text"
