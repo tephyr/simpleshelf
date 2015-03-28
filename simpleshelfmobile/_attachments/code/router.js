@@ -31,10 +31,12 @@ define([
 
         main: function() {
             this._log("/main");
-            app.views.mainPageView.model.fetch()
-                .always(_.bind(function() {
-                    this._changeScreen(app.views.mainPageView);
-                }, this));
+            $.when(
+                app.views.mainPageView.model.fetch(),
+                app.views.mainPageView.books.fetch()
+            ).always(_.bind(function() {
+                this._changeScreen(app.views.mainPageView);
+            }, this));
         },
 
         /**

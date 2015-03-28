@@ -9,9 +9,10 @@ define([
     "views/LoginPageView",
     "views/MainPageView",
     "models/GlobalCount",
+    "models/BookCollection",
     "appevents"
 ], function($, _, Backbone, appSettings, couchUtils, 
-    LoginPageView, MainPageView, GlobalCountModel) {
+    LoginPageView, MainPageView, GlobalCountModel, BookCollection) {
 
     console.info("app.js loaded.");
     var app = {
@@ -24,8 +25,12 @@ define([
     // Setup up views hash to hold view objects & persist them for the application lifetime.
     app.views = {
         loginPageView: new LoginPageView(),
-        mainPageView: new MainPageView({model: new GlobalCountModel()})
+        mainPageView: new MainPageView({
+            model: new GlobalCountModel(),
+        })
     };
+    // Add BookCollection to mainPageView.  Don't know why it won't work on initialization.
+    app.views.mainPageView.books = new BookCollection();
 
     // Initial settings.
     appSettings.set({"urlPrefix": window.location.protocol + "//" + window.location.host});
