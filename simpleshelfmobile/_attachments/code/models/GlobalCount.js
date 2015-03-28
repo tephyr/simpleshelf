@@ -5,9 +5,8 @@
 define([
     "underscore",
     "underscore.string",
-    "backbone",
-    "app"
-], function(_, _s, Backbone, app) {
+    "backbone"
+], function(_, _s, Backbone) {
 
     var GlobalCountModel = Backbone.Model.extend({
         url: function() {
