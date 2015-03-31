@@ -35,6 +35,7 @@ define([
                 app.views.mainPageView.model.fetch(),
                 app.views.mainPageView.books.fetch()
             ).always(_.bind(function() {
+                app.views.mainPageView.render();
                 this._changeScreen(app.views.mainPageView);
             }, this));
         },
@@ -44,20 +45,8 @@ define([
          * Instantiates the view if not already in DOM.
          */
         _changeScreen: function(view, options) {
-            if (!view.isInDOM) {
-                console.info("[router]", "Rendering " + view.getName());
-                // Render view & get handle to object.
-                view.render();
-                // Call post-render actions.
-                if (view.postRender) {
-                    view.postRender();
-                }
-                // Initialize the jqm page widget for this new element.
-                view.$el.page({});
-                view.$el.trigger('create');
-            }
             // Change to this view.
-            $.mobile.pageContainer.pagecontainer("change", view.$el, options);
+            $("body").pagecontainer("change", view.$el);
         },
 
         _log: function() {

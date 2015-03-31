@@ -24,8 +24,9 @@ define([
 
     // Setup up views hash to hold view objects & persist them for the application lifetime.
     app.views = {
-        loginPageView: new LoginPageView(),
+        loginPageView: new LoginPageView({el: "#login"}),
         mainPageView: new MainPageView({
+            el: "#main",
             model: new GlobalCountModel(),
         })
     };
