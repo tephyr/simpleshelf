@@ -20,6 +20,7 @@ function(_, Backbone, Handlebars, template) {
             // Show books in "reading" state.
             console.info("Reading count", this.books.size());
 
+            this.$("#main-reading-count").text(this.books.size());
             this.$("#main-book-instances-fmt").text(this.model.formatSimply("_book_instances"));
             this.$("#main-author-instances-fmt").text(this.model.formatSimply("_author_instances"));
             this.$("#main-tag-instances-fmt").text(this.model.formatSimply("_tag_instances"));
