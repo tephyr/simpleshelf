@@ -2,21 +2,13 @@
  * Login page
  */
 define([
-    "views/PageView",
-    "lib/handlebars",
-    "text!views/templates/loginpage.html"
+    "backbone"
 ],
-function(PageView, Handlebars, template) {
-    var loginPage = PageView.extend({
-        id: "pageLogin",
-        _name: "LoginPage",
+function(Backbone) {
+    var loginPage = Backbone.View.extend({
+        id: "login",
         events: {
-            "vclick #login-action": "onLogin",
-        },
-
-        initialize: function() {
-            this.template = Handlebars.compile(template);
-            return this;
+            "vclick #login-action": "onLogin"
         },
 
         /** EVENTS **/
