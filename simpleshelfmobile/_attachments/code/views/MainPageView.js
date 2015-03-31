@@ -3,39 +3,30 @@
  */
 define([
     "underscore",
-    "views/PageView",
-    "lib/handlebars",
-    "text!views/templates/mainpage.html"
+    "backbone"
 ],
-function(_, PageView, Handlebars, template) {
-    var loginPage = PageView.extend({
-        id: "pageMain",
-        _name: "MainPage",
+function(_, Backbone, Handlebars, template) {
+    var mainPage = Backbone.View.extend({
         events: {
             "vclick #main-add-book": "onAddBook",
         },
 
         initialize: function() {
             this.books = null;
-            this.template = Handlebars.compile(template);
-            // this.listenTo(this.model, "changes", this.render);
             return this;
         },
 
-        postRender: function() {
-            // Call superclass first.
-            PageView.prototype.postRender.apply(this, arguments);
+        render: function() {
+            // Show books in "reading" state.
+            console.info("Reading count", this.books.size());
 
-            if (this.isInDOM) {
-                // Show books in "reading" state.
-                console.info("Reading count", this.books.size());
+            this.$("#main-book-instances-fmt").text(this.model.formatSimply("_book_instances"));
+            this.$("#main-author-instances-fmt").text(this.model.formatSimply("_author_instances"));
+            this.$("#main-tag-instances-fmt").text(this.model.formatSimply("_tag_instances"));
 
-                this.$("#main-reading").append(this.books.each(function(book) {
-                    return "<li>" + book.get("title") + "</li>";
-                }))
-
-                this.$("#main-reading").listview("refresh");
-            }
+            this.$("#main-reading").append(this.books.map(function(book) {
+                return "<li>" + book.get("title") + "</li>";
+            }));
 
             return this;
         },
@@ -52,5 +43,5 @@ function(_, PageView, Handlebars, template) {
         }
     });
 
-    return loginPage;
+    return mainPage;
 });
