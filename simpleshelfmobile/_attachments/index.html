@@ -33,5 +33,40 @@
     <div id="pageSplash">
         <h1>simpleshelf: track your books</h1>
     </div>
+    <div id="login" data-role="page">
+        <div data-role="header">
+            <h1>simpleshelf</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <h2>Log in</h2>
+            <form class="login-form">
+                <input type="text" data-clear-btn="true" name="login-username" id="login-username" value="" placeholder="User name">
+
+                <input type="password" data-clear-btn="true" name="login-password" id="login-password" value="" autocomplete="off" placeholder="Password">
+
+                <input type="button" value="Log in" name="login-action" id="login-action">
+            </form>
+        </div>
+    </div>
+
+    <div id="main" data-role="page">
+        <div data-role="header">
+            <h1>simpleshelf</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <h3 class="ui-bar ui-bar-a ui-corner-all">Reading</h3>
+            <div class="ui-body">
+                <ul data-role="listview" data-count-theme="b" data-inset="true" id="main-reading">
+                </ul>
+            </div>
+            <ul data-role="listview" data-count-theme="b" data-inset="true">
+                <li><a href="#">Books <span class="ui-li-count" id="main-book-instances-fmt"></span></a></li>
+                <li><a href="#">Authors <span class="ui-li-count" id="main-author-instances-fmt"></span></a></li>
+                <li><a href="#">Tags <span class="ui-li-count" id="main-tag-instances-fmt"></span></a></li>
+            </ul>
+            <a href="#" id="main-add-book" class="ui-btn ui-icon-plus ui-btn-icon-left">Add book</a>
+        </div>
+    </div>
+
 </body>
 </html>
