@@ -35,6 +35,14 @@ define([
                 result[pair[0] + "_fmt"] = _s.numberFormat(pair[1], 0);
             });
             return result;
+        },
+
+        /* Custom functions. */
+        /**
+         * Format a field simply (commas after thousands).
+         */
+        formatSimply: function(fieldName) {
+            return _s.numberFormat(this.get(fieldName), 0);
         }
 
     });
