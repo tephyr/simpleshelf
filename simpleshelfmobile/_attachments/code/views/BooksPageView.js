@@ -12,6 +12,7 @@ function(_, Backbone, SpinesByLetterView) {
 
         initialize: function() {
             this.$collapsibleParent = this.$("[role='main']");
+            this.spineCollection = null;
             return this;
         },
 
@@ -21,7 +22,8 @@ function(_, Backbone, SpinesByLetterView) {
 
         addOne: function(model) {
             var view = new SpinesByLetterView({
-                model: model
+                model: model,
+                spineCollection: this.spineCollection
             });
             view.render();
             this.$collapsibleParent.append(view.$el);

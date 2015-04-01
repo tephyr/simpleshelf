@@ -13,7 +13,7 @@
             var url = "_view/spines";
             if (!_.isNull(this.filterKey)) {
                 // Get a subset of the spines, by the given key.
-                url = url + "?key=\"" + this.filterKey + \"";
+                url = url + '?key="' + this.filterKey + '"';
             }
 
             return url;
@@ -28,8 +28,8 @@
                 _.each(response.rows, function(row) {
                     parsed.push({
                         id: row.id,
-                        firstLetter: row.values.firstLetter,
-                        title: row.values.title
+                        firstLetter: row.value.firstLetter,
+                        title: row.value.title
                     });
                 });
             }

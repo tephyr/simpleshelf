@@ -28,6 +28,8 @@ function(_, Backbone, Handlebars, template) {
         // EVENTS //
         onCollapsibleExpand: function(event, ui) {
             console.info("[SpinesByLetterView]", "onCollapsibleExpand", this.model.id);
+            // Trigger load/refresh (if necessary) of SpineCollection *for given letter*.
+            // Fill this collapsible's <ul> with spines.
         }
     });
 
