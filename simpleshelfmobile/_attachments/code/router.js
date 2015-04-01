@@ -44,7 +44,8 @@ define([
         books: function() {
             this._log("/books");
             $.when(
-                app.views.booksPageView.collection.fetch()
+                app.views.booksPageView.collection.fetch(),
+                app.catalog.spineCollection.fetch()
             ).always(_.bind(function() {
                 app.views.booksPageView.render();
                 this._changeScreen(app.views.booksPageView);

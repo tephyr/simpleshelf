@@ -20,7 +20,9 @@ define([
 
     console.info("app.js loaded.");
     var app = {
-
+        catalog: {
+            spineCollection: new SpineCollection()
+        }
     };
 
     // Allow this object to receive & emit events.
@@ -36,7 +38,7 @@ define([
         booksPageView: new BooksPageView({
             el: "#books",
             collection: new BooksByLetterCollection(),
-            spineCollection: new SpineCollection()
+            spineCollection: app.catalog.spineCollection
         })
     };
     // Add BookCollection to mainPageView.  Don't know why it won't work on initialization.

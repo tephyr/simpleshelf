@@ -10,14 +10,15 @@ function(_, Backbone, SpinesByLetterView) {
     var BooksPage = Backbone.View.extend({
         events: {},
 
-        initialize: function() {
+        initialize: function(options) {
             this.$collapsibleParent = this.$("[role='main']");
-            this.spineCollection = null;
+            this.spineCollection = _.has(options, "spineCollection") ? options.spineCollection : null;
             return this;
         },
 
         render: function() {
             this.collection.each(this.addOne, this);
+            return this;
         },
 
         addOne: function(model) {
