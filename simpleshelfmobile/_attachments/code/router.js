@@ -13,7 +13,8 @@ define([
         routes: {
             "": "index",
             "login": "login",
-            "main" : "main"
+            "main" : "main",
+            "books": "books"
         },
 
         /**
@@ -37,6 +38,16 @@ define([
             ).always(_.bind(function() {
                 app.views.mainPageView.render();
                 this._changeScreen(app.views.mainPageView);
+            }, this));
+        },
+
+        books: function() {
+            this._log("/books");
+            $.when(
+                app.views.booksPageView.collection.fetch()
+            ).always(_.bind(function() {
+                app.views.booksPageView.render();
+                this._changeScreen(app.views.booksPageView);
             }, this));
         },
 
