@@ -4,27 +4,29 @@
 define([
     "underscore",
     "backbone",
-    "handlebars",
-    "text!views/templates/titlecollapsible.html"
+    "views/SpinesByLetterView"
 ],
-function(_, Backbone, Handlebars, template) {
+function(_, Backbone, SpinesByLetterView) {
     var BooksPage = Backbone.View.extend({
         events: {},
 
         initialize: function() {
-            this.template = Handlebars.compile(template);
+            this.$collapsibleParent = this.$("[role='main']");
             return this;
         },
 
         render: function() {
-            var $collapsibleParent = this.$("[role='main']"),
-                $letter;
-            // REFACTOR: turn into sub-views.
-            this.collection.each(function(model) {
-                $letter = $(this.template(model.toJSON()));
-                $collapsibleParent.append($letter);
-                $letter.collapsible();
-            }, this);
+            this.collection.each(this.addOne, this);
+        },
+
+        addOne: function(model) {
+            var view = new SpinesByLetterView({
+                model: model
+            });
+            view.render();
+            this.$collapsibleParent.append(view.$el);
+            view.postRender();
+            model.on("remove", view.remove);
         }
     });
 
