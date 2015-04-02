@@ -5,14 +5,16 @@ define([
     "underscore",
     "backbone",
     "handlebars",
-    "text!views/templates/spinesbylettercollapsible.html"
+    "text!views/templates/spinesbylettercollapsible.html",
+    "text!views/templates/spinelistitem.html"
 ],
-function(_, Backbone, Handlebars, template) {
+function(_, Backbone, Handlebars, template, spineTemplate) {
     var SpinesByLetterView = Backbone.View.extend({
         events: {},
 
         initialize: function(options) {
             this.template = Handlebars.compile(template);
+            this.spineTemplate = Handlebars.compile(spineTemplate);
             this.spineCollection = _.has(options, "spineCollection") ? options.spineCollection : null;
             return this;
         },
@@ -42,7 +44,7 @@ function(_, Backbone, Handlebars, template) {
             // REFACTOR: create sub-view for spine.
             $ul.empty();
             _.each(spines, function(spine) {
-                $ul.append("<li title='" + spine.id + "'>" + spine.get("title") + "</li>");
+                $ul.append(this.spineTemplate(spine.toJSON()));
             }, this);
             // Refresh this listview widget.
             $ul.listview( "refresh" );
