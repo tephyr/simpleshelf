@@ -17,6 +17,11 @@ define([
             "books": "books"
         },
 
+        initialize: function(options) {
+            this._lastPageId = null;
+            this._currentPageId = null;
+        },
+
         /**
          * Index route (default)
          */
@@ -53,12 +58,22 @@ define([
         },
 
         /**
-         * Change the current screen.
-         * Instantiates the view if not already in DOM.
+         * Change to another view.
          */
         _changeScreen: function(view, options) {
-            // Change to this view.
-            $("body").pagecontainer("change", view.$el);
+            // console.info("Changing from", this._currentPageId, "to", view.$el.attr("id"),
+            //     "last==" + this._lastPageId);
+            // Check if moving to the previous page.
+            var changeOptions = {};
+            if (this._lastPageId === view.$el.attr("id")) {
+                changeOptions.reverse = true;
+                this._lastPageId = null;
+            } else {
+                this._lastPageId = this._currentPageId;
+            }
+            this._currentPageId = view.$el.attr("id");
+
+            $("body").pagecontainer("change", view.$el, changeOptions);
         },
 
         _log: function() {
