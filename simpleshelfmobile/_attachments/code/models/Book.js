@@ -7,6 +7,7 @@
     "backbone"
 ], function(_, Backbone) {
     var Book = Backbone.Model.extend({
+        idAttribute: "_id",
         defaults: {
             'type': 'book',
             'public': true
