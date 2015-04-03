@@ -22,8 +22,53 @@ define([
 
     console.info("app.js loaded.");
     var app = {
+        // Catalog: all metadata regarding the library.
+        // Typically, these data will change only when a books is added/edited/deleted.
         catalog: {
-            spineCollection: new SpineCollection()
+            spinesInitialized: false,
+            booksByLetterInitialized: false,
+            spineCollection: new SpineCollection(),
+            booksByLetterCollection: new BooksByLetterCollection(),
+            /**
+             * Load the spines collection, fetching only when necessary.
+             **/
+            loadSpines: function(forceLoad) {
+                var deferred = $.Deferred();
+                if (!this.spinesInitialized || forceLoad) {
+                    this.spineCollection.fetch()
+                        .done(function() {
+                            deferred.resolve();
+                        })
+                        .fail(function() {
+                            deferred.reject();
+                        })
+                        .always(_.bind(function() {
+                            this.spinesInitialized = true;
+                        }, this));
+                } else {
+                    deferred.resolve();
+                }
+
+                return deferred;
+            },
+            /**
+             * Load the books-by-letter collection, fetching only when necessary.
+             **/
+            loadBooksByLetter: function(forceLoad) {
+                var deferred = $.Deferred();
+                if (!this.booksByLetterInitialized || forceLoad) {
+                    this.booksByLetterCollection.fetch()
+                        .done(deferred.resolve)
+                        .fail(deferred.reject)
+                        .always(_.bind(function() {
+                            this.booksByLetterInitialized = true;
+                        }, this));
+                } else {
+                    deferred.resolve();
+                }
+
+                return deferred;
+            }
         }
     };
 
@@ -39,7 +84,7 @@ define([
         }),
         booksPageView: new BooksPageView({
             el: "#books",
-            collection: new BooksByLetterCollection(),
+            collection: app.catalog.booksByLetterCollection,
             spineCollection: app.catalog.spineCollection
         }),
         bookPageView: new BookPageView({
