@@ -1,0 +1,3 @@
+/* Left column 1/3rd of right column on book page. */
+#book .ui-grid-a .ui-block-a { width: 35%; }
+#book .ui-grid-a .ui-block-b { width: 65%; }
