@@ -14,7 +14,8 @@ define([
             "": "index",
             "login": "login",
             "main" : "main",
-            "books": "books"
+            "books": "books",
+            "books/:id": "book"
         },
 
         initialize: function(options) {
@@ -54,6 +55,18 @@ define([
             ).always(_.bind(function() {
                 app.views.booksPageView.render();
                 this._changeScreen(app.views.booksPageView);
+            }, this));
+        },
+
+        book: function(bookId) {
+            this._log("/book/" + bookId);
+            app.views.bookPageView.model.clear({"silent": true});
+            app.views.bookPageView.model.set("id", bookId);
+            $.when(
+                app.views.bookPageView.model.fetch()
+            ).always(_.bind(function() {
+                app.views.bookPageView.render();
+                this._changeScreen(app.views.bookPageView);
             }, this));
         },
 
