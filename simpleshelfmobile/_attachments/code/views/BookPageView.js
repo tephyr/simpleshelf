@@ -7,11 +7,13 @@ define([
 ],
 function(_, Backbone) {
     var BookPage = Backbone.View.extend({
-        events: {},
-
         render: function() {
             // Fill out existing structure.
-            this.$("#book-title").text(this.model.get("title"));
+            var fieldsStandardText = ["title", "isbn", "publisher", "notesPublic", "notesPrivate"];
+            _.each(fieldsStandardText, function(field) {
+                this.$("#book-" + field).html(this.model.get(field));
+            }, this);
+
             return this;
         }
     });
