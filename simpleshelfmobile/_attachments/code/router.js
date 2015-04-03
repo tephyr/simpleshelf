@@ -49,11 +49,13 @@ define([
 
         books: function() {
             this._log("/books");
+            
+            // Only load the spine collection *once*.
+            // Since the view renders itself when the collection syncs, no need to call it here.
             $.when(
-                app.views.booksPageView.collection.fetch(),
-                app.catalog.spineCollection.fetch()
+                app.catalog.loadBooksByLetter(),
+                app.catalog.loadSpines()
             ).always(_.bind(function() {
-                app.views.booksPageView.render();
                 this._changeScreen(app.views.booksPageView);
             }, this));
         },
