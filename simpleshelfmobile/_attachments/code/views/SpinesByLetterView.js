@@ -10,12 +10,14 @@ define([
 ],
 function(_, Backbone, Handlebars, template, spineTemplate) {
     var SpinesByLetterView = Backbone.View.extend({
-        events: {},
 
         initialize: function(options) {
             this.template = Handlebars.compile(template);
             this.spineTemplate = Handlebars.compile(spineTemplate);
             this.spineCollection = _.has(options, "spineCollection") ? options.spineCollection : null;
+            if (!_.isNull(this.spineCollection)) {
+                this.listenTo(this.spineCollection, "sync", "onSpineSync");
+            }
             return this;
         },
 
@@ -27,27 +29,28 @@ function(_, Backbone, Handlebars, template, spineTemplate) {
         postRender: function() {
             // Turn it into a collapsible widget.
             this.$el.collapsible();
-            this.$el.on("collapsibleexpand", _.bind(this.onCollapsibleExpand, this));
+            // Add the spines to the list.
+            this._renderList();
             // Turn the content into a listview.
             this.$("ul").listview();
             return this;
         },
 
-        // EVENTS //
-        onCollapsibleExpand: function(event, ui) {
-            console.info("[SpinesByLetterView]", "onCollapsibleExpand", this.model.id);
-            // Trigger load/refresh (if necessary) of SpineCollection *for given letter*.
-            // Fill this collapsible's <ul> with spines.
-            var spines = this.spineCollection.where({firstLetter: this.model.id});
-            var $ul = this.$("ul");
+        _renderList: function() {
+            var spines = this.spineCollection.where({firstLetter: this.model.id}),
+                $ul = this.$("ul");
 
             // REFACTOR: create sub-view for spine.
-            $ul.empty();
             _.each(spines, function(spine) {
                 $ul.append(this.spineTemplate(spine.toJSON()));
             }, this);
             // Refresh this listview widget.
-            $ul.listview( "refresh" );
+            // $ul.listview( "refresh" );
+        },
+
+        // EVENTS //
+        onSpineSync: function() {
+            console.info("[SpinesByLetterView]", "spineCollection synced", this.spineCollection.size());
         }
     });
 
