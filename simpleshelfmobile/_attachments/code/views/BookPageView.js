@@ -10,10 +10,16 @@ function(_, Backbone) {
         render: function() {
             // Fill out existing structure.
             var fieldsStandardText = ["title", "isbn", "publisher", "notesPublic", "notesPrivate"],
-                authors;
+                authors, fieldValue;
 
             _.each(fieldsStandardText, function(field) {
-                this.$("#book-" + field).html(this.model.get(field));
+                // Use non-breaking space when field is null.
+                if (this.model.has(field)) {
+                    fieldValue = this.model.get(field);
+                } else {
+                    fieldValue = "&nbsp;";
+                }
+                this.$("#book-" + field).html(fieldValue);
             }, this);
 
             // Show either author or authors rows.
