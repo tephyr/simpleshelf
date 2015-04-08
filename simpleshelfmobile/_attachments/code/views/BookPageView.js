@@ -3,14 +3,16 @@
  */
 define([
     "underscore",
-    "backbone"
+    "backbone",
+    "handlebars",
+    "text!views/templates/bookactivities.html"
 ],
-function(_, Backbone) {
+function(_, Backbone, Handlebars, ActivitiesTemplate) {
     var BookPage = Backbone.View.extend({
         render: function() {
             // Fill out existing structure.
             var fieldsStandardText = ["title", "isbn", "publisher", "notesPublic", "notesPrivate"],
-                authors, fieldValue;
+                authors, fieldValue, activities, $ulActivities, template;
 
             _.each(fieldsStandardText, function(field) {
                 // Use non-breaking space when field is null.
@@ -44,6 +46,19 @@ function(_, Backbone) {
             this.$("#book-public").html(
                 this.model.get("public") ? "Yes" : "No"
             );
+
+            // List of activities.
+            activities = this.model.get("activities");
+            if (activities.length === 0) {
+                 this.$("#book-activities").empty().html("&nbsp;");
+            } else {
+                this.$("#book-activities").empty().append("<ul>");
+                $ulActivities = this.$("#book-activities ul");
+                template = Handlebars.compile(ActivitiesTemplate);
+                _.each(activities, function(activity) {
+                    $ulActivities.append(template(activity));
+                }, this);
+            }
 
             return this;
         }
