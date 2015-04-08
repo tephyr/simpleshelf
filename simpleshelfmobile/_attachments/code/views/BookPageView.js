@@ -12,7 +12,7 @@ function(_, Backbone, Handlebars, ActivitiesTemplate) {
         render: function() {
             // Fill out existing structure.
             var fieldsStandardText = ["title", "isbn", "publisher", "notesPublic", "notesPrivate"],
-                authors, fieldValue, activities, $ulActivities, template;
+                authors, fieldValue, activities, $ul, template, statuses;
 
             _.each(fieldsStandardText, function(field) {
                 // Use non-breaking space when field is null.
@@ -53,10 +53,22 @@ function(_, Backbone, Handlebars, ActivitiesTemplate) {
                  this.$("#book-activities").empty().html("&nbsp;");
             } else {
                 this.$("#book-activities").empty().append("<ul>");
-                $ulActivities = this.$("#book-activities ul");
+                $ul = this.$("#book-activities ul");
                 template = Handlebars.compile(ActivitiesTemplate);
                 _.each(activities, function(activity) {
-                    $ulActivities.append(template(activity));
+                    $ul.append(template(activity));
+                }, this);
+            }
+
+            // List of statuses.
+            statuses = this.model.get("status");
+            if (!_.isObject(statuses)) {
+                this.$("#book-status").empty().html("&nbsp;");
+            } else {
+                this.$("#book-status").empty().append("<ul>");
+                $ul = this.$("#book-status ul");
+                _.each(_.keys(statuses), function(key) {
+                    $ul.append("<li>" + key + ": " + statuses[key] + "</li>");
                 }, this);
             }
 
