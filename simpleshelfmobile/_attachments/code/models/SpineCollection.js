@@ -9,6 +9,13 @@
 
     var SpineCollection = Backbone.Collection.extend({
         filterKey: null,
+        /**
+         * sortBy comparator: return the title, by which BB will sort the collection.
+         **/
+        comparator: function(spine) {
+            return spine.get("title");
+        },
+
         url: function() {
             var url = "_view/spines";
             if (!_.isNull(this.filterKey)) {
