@@ -13,7 +13,7 @@
          * sortBy comparator: return the title, by which BB will sort the collection.
          **/
         comparator: function(spine) {
-            return spine.get("title");
+            return spine.get("title").toLowerCase();
         },
 
         url: function() {
