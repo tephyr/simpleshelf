@@ -34,6 +34,11 @@ function(_, Backbone) {
                 }
             }
 
+            // Private?
+            this.$("#book-public").html(
+                this.model.get("public") ? "Yes" : "No"
+            );
+
             return this;
         }
     });
