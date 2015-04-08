@@ -14,7 +14,7 @@ function(_, Backbone) {
 
             _.each(fieldsStandardText, function(field) {
                 // Use non-breaking space when field is null.
-                if (this.model.has(field)) {
+                if (this.model.has(field) && this.model.get(field).length > 0) {
                     fieldValue = this.model.get(field);
                 } else {
                     fieldValue = "&nbsp;";
