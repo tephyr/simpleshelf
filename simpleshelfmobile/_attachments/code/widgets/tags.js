@@ -11,7 +11,7 @@ function($) {
      
         options: {
             tagItems: [],
-            tagTemplate: "<div class='tag'>{{tag}}</div>"
+            tagTemplate: "<div class='tag ui-corner-all ui-shadow'>{{tag}}</div>"
         },
 
         _create: function() {
