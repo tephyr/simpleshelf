@@ -74,9 +74,11 @@ function(_, $, Backbone, Handlebars, ActivitiesTemplate) {
             }
 
             // Tags widget.
-            this.$("#book-tags").tags({
-                tagItems: this.model.get("tags")
-            });
+            // Since this page is called without getting removed, always call the widget.
+            var $el = this.$("#book-tags");
+            $el.tags();
+            // console.info("[BookPageView]", "previous tags", $el.tags("option", "tagItems"));
+            $el.tags("option", "tagItems", this.model.get("tags"));
 
             return this;
         }
