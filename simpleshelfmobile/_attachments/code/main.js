@@ -55,6 +55,10 @@ require([
     require( [ "jquerymobile" ], function () {
 
         console.info(window.pageLoadedAt);
+
+        // Load plugins and widgets on the global $.
+        require(["widgets/tags"]);
+
         this.app = App; // singleton
 
         // Setup top-level app objects.

@@ -3,11 +3,12 @@
  */
 define([
     "underscore",
+    "jquery",
     "backbone",
     "handlebars",
     "text!views/templates/bookactivities.html"
 ],
-function(_, Backbone, Handlebars, ActivitiesTemplate) {
+function(_, $, Backbone, Handlebars, ActivitiesTemplate) {
     var BookPage = Backbone.View.extend({
         render: function() {
             // Fill out existing structure.
@@ -71,6 +72,11 @@ function(_, Backbone, Handlebars, ActivitiesTemplate) {
                     $ul.append("<li>" + key + ": " + statuses[key] + "</li>");
                 }, this);
             }
+
+            // Tags widget.
+            this.$("#book-tags").tags({
+                tagItems: this.model.get("tags")
+            });
 
             return this;
         }
