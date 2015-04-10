@@ -23,22 +23,9 @@ function($) {
             }
         },
 
-        /**
-         * Load tags to show.
-         **/
-        tags: function( value ) {
-     
-            // No value passed, act as a getter.
-            if ( value === undefined ) {
-                return this.options.tags;
-            // Value passed, act as a setter.
-            } else {
-                // Store updated list of tags.
-                this.options.tags = tags;
-                // Clear element & add tags.
-                this._addTags();
-     
-            }
+        _setOption: function(key, value) {
+            this.options[key] = value;
+            this._addTags();
         },
 
         /**
