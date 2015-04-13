@@ -22,6 +22,8 @@ Backbone.View.prototype.close = function(){
 
 Backbone.View.prototype.log = function(){
     if (_.has(this.options, 'okToLog') && this.options.okToLog){
-        console.log.apply(this, arguments);
+        // Use ``console`` for context, not ``this``.
+        // Per http://stackoverflow.com/a/7942342/562978 .
+        console.log.apply(console, arguments);
     }
 };
