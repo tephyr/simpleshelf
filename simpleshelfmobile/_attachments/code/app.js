@@ -10,6 +10,7 @@ define([
     "views/MainPageView",
     "views/BooksPageView",
     "views/BookPageView",
+    "views/EditBookPageView",
     "models/GlobalCount",
     "models/BookCollection",
     "models/BooksByLetterCollection",
@@ -17,7 +18,7 @@ define([
     "models/Book",
     "appevents"
 ], function($, _, Backbone, appSettings, couchUtils, 
-    LoginPageView, MainPageView, BooksPageView, BookPageView,
+    LoginPageView, MainPageView, BooksPageView, BookPageView, EditBookPageView,
     GlobalCountModel, BookCollection, BooksByLetterCollection, SpineCollection, BookModel) {
 
     console.info("app.js loaded.");
@@ -90,6 +91,9 @@ define([
         bookPageView: new BookPageView({
             el: "#book",
             model: new BookModel()
+        }),
+        editBookPageView: new EditBookPageView({
+            el: "#editbook"
         })
     };
     // Add BookCollection to mainPageView.  Don't know why it won't work on initialization.

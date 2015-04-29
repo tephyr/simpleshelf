@@ -15,7 +15,8 @@ define([
             "login": "login",
             "main" : "main",
             "books": "books",
-            "books/:id": "book"
+            "books/:id": "book",
+            "addbook": "addbook"
         },
 
         initialize: function(options) {
@@ -70,6 +71,15 @@ define([
                 app.views.bookPageView.render();
                 this._changeScreen(app.views.bookPageView);
             }, this));
+        },
+
+        /**
+         * Show the edit book view with no data.
+         **/
+        addbook: function() {
+            this._log("/addbook");
+            app.views.editBookPageView.render();
+            this._changeScreen(app.views.editBookPageView);
         },
 
         /**
