@@ -128,6 +128,14 @@
                     <input type="text" name="editbook-isbn" id="editbook-isbn" placeholder="ISBN" value="">
                     <label for="editbook-publisher">Publisher</label>
                     <input type="text" name="editbook-publisher" id="editbook-publisher" placeholder="Publisher" value="">
+                    <div class="ui-field-contain">
+                        <label for="editbook-public">Public?</label>
+                        <select name="editbook-public" id="editbook-public" data-role="slider">
+                            <option value="off">no</option>
+                            <option value="on">yes</option>
+                        </select>
+                    </div>
+
                     <fieldset data-role="controlgroup" data-type="horizontal">
                         <button class="ui-shadow ui-btn ui-corner-all ui-icon-check ui-btn-icon-right" type="submit" name="editbook-submit" id="editbook-submit">Submit</button>
                         <button class="ui-shadow ui-btn ui-corner-all ui-icon-delete ui-btn-icon-right" name="editbook-cancel" id="editbook-cancel">Cancel</button>
