@@ -9,7 +9,8 @@ define([
 function(_, $, Backbone) {
     var EditBookPage = Backbone.View.extend({
         events: {
-            "click #editbook-submit": "onSubmit"
+            "click #editbook-submit": "onSubmit",
+            "click #editbook-cancel": "onCancel"
         },
         render: function() {
             // Clear out any previous data.
@@ -17,6 +18,11 @@ function(_, $, Backbone) {
         },
 
         /** EVENTS **/
+        onCancel: function(event) {
+            event.preventDefault();
+            console.info("Cancelling a book!");
+        },
+
         onSubmit: function(event) {
             event.preventDefault();
             console.info("Submitting a book!");
