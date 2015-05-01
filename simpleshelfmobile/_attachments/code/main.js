@@ -32,10 +32,12 @@ require.config( {
 require([
     "jquery",
     "backbone",
+    "underscore",
     "app",
     "router",
-    "appevents"
-], function ( $, Backbone, App, Router ) {
+    "appevents",
+    "appsetup"
+], function ( $, Backbone, _, App, Router ) {
 
     $( document ).on( "mobileinit",
 
@@ -58,6 +60,9 @@ require([
 
         // Load plugins and widgets on the global $.
         require(["widgets/tags"]);
+
+        // Override BB sync.
+        require("appsetup").overrideBackboneSync(Backbone, _);
 
         this.app = App; // singleton
 
