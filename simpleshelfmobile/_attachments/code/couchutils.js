@@ -6,6 +6,24 @@ define([
     "settings"
 ], function($, appSettings) {
     var couchUtils = {
+        /**
+         * Get UUIDs directly from CouchDB.
+         **/
+        getUUIDs: function() {
+            // Returns list of UUIDs (defaults to 1 item).
+            var dfrd = $.Deferred();
+            $.ajax({
+                url: "/_uuids",
+                dataType: "json"
+            }).done(function(data) {
+                var uuids = data.uuids;
+                dfrd.resolve(uuids);
+            }).fail(function() {
+                dfrd.reject();
+            });
+
+            return dfrd;
+        },
 
         /**
          * Determine if current session is active.
