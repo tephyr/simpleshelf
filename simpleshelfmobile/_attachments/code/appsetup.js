@@ -16,11 +16,6 @@ define(function() {
                     case "create":
                         console.log(method + ": " + JSON.stringify(model));
 
-                        // get new UUID synchronously
-                        // generate 4 new uuids, if cache is empty
-                        var modelId = $.couch.newUUID(4);
-                        model.set({'id': modelId});
-                        
                         // couchdb uses PUT for both creates & updates
                         options.type = 'PUT';
                         
