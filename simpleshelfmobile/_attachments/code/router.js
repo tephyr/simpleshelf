@@ -5,8 +5,10 @@
 define([
     "underscore",
     "backbone",
-    "app"
-], function(_, Backbone, app) {
+    "app",
+    "models/Book",
+    "couchutils"
+], function(_, Backbone, app, Book, couchUtils) {
 
     // Define the application router.
     var Router = Backbone.Router.extend({
@@ -78,8 +80,15 @@ define([
          **/
         addbook: function() {
             this._log("/addbook");
-            app.views.editBookPageView.render();
-            this._changeScreen(app.views.editBookPageView);
+            $.when(
+                couchUtils.getUUIDs()
+            ).then(
+                _.bind(function(uuids) {
+                    app.views.editBookPageView.model = new Book({id: uuids[0]});
+                    app.views.editBookPageView.render();
+                    this._changeScreen(app.views.editBookPageView);
+                }, this)
+            );
         },
 
         /**
