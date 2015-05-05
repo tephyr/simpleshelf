@@ -22,7 +22,7 @@ function(_, $, Backbone, Book) {
         /**
          * Create book, add all data to it.
          **/
-        _createModel: function() {
+        _fillModel: function() {
             this.model.set({
                 title: this.$("#editbook-title").val(),
                 authors: this.$("#editbook-authors").val().split("\n"),
@@ -52,7 +52,7 @@ function(_, $, Backbone, Book) {
         onSubmit: function(event) {
             event.preventDefault();
             console.info("Submitting a book!");
-            this._createModel();
+            this._fillModel();
             if (this.model.isValid()) {
                 // Save to db, fire event.
                 console.info(this.model.toJSON());
