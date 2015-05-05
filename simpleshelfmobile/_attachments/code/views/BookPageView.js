@@ -49,7 +49,7 @@ function(_, $, Backbone, Handlebars, ActivitiesTemplate) {
             );
 
             // List of activities.
-            activities = this.model.get("activities");
+            activities = this.model.get("activities") || [];
             if (activities.length === 0) {
                  this.$("#book-activities").empty().html("&nbsp;");
             } else {
