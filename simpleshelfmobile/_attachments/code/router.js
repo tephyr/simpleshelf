@@ -66,7 +66,7 @@ define([
         book: function(bookId) {
             this._log("/book/" + bookId);
             app.views.bookPageView.model.clear({"silent": true});
-            app.views.bookPageView.model.set("id", bookId);
+            app.views.bookPageView.model.set("_id", bookId);
             $.when(
                 app.views.bookPageView.model.fetch()
             ).always(_.bind(function() {
@@ -84,7 +84,7 @@ define([
                 couchUtils.getUUIDs()
             ).then(
                 _.bind(function(uuids) {
-                    app.views.editBookPageView.model = new Book({id: uuids[0]});
+                    app.views.editBookPageView.model = new Book({_id: uuids[0]});
                     app.views.editBookPageView.render();
                     this._changeScreen(app.views.editBookPageView);
                 }, this)
