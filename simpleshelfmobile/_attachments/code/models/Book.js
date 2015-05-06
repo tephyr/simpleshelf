@@ -13,7 +13,14 @@
             'public': true
         },
         url: function(){
-            return '_rewrite/data/' + this.get('id');
+            var urlPrefix = '_rewrite/data/';
+            if (this.isNew()) {
+                // Do not include non-existent server ID.
+                return urlPrefix;
+            } else {
+                return urlPrefix + this.get(this.idAttribute);
+            }
+        },
 
         /**
          * Because CouchDB returns id & rev for some calls, and _id and _rev for others, 
