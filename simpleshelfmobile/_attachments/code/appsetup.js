@@ -35,6 +35,36 @@ define(function() {
 
                 return promise;
             });
+        },
+
+        updateHeaders: function(Handlebars, templates, views) {
+            // Compile templates.
+            var compiledTemplates = _.mapObject(templates, function(template) {
+                return Handlebars.compile(template);
+            });
+
+            // Add templates to each view.
+            _.each(views, function(view) {
+                var data = {id: view.$el.attr("id")};
+                var panelSelector = "#" + data.id + "-menu-panel";
+
+                // Add home icon & menu link.
+                switch(data.id) {
+                    case "main":
+                        // Main only gets menu.
+                        view.$("[data-role='header']").append(compiledTemplates.headerIcons(data));
+                        break;
+
+                    default:
+                        view.$("[data-role='header']")
+                            .append('<a href="#main" data-icon="home" data-iconpos="notext">Home</a>')
+                            .append(compiledTemplates.headerIcons(data));
+                        break;
+                }
+
+                // Append menu list to panel.
+                view.$(panelSelector).append(compiledTemplates.headerMenu());
+            });
         }
     };
 

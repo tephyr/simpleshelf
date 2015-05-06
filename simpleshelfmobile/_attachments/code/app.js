@@ -4,6 +4,7 @@ define([
     "jquery",
     "underscore",
     "backbone",
+    "handlebars",
     "settings",
     "couchutils",
     "views/LoginPageView",
@@ -16,10 +17,14 @@ define([
     "models/BooksByLetterCollection",
     "models/SpineCollection",
     "models/Book",
-    "appevents"
-], function($, _, Backbone, appSettings, couchUtils, 
+    "text!views/templates/headericons.html",
+    "text!views/templates/headermenu.html",
+    "appevents",
+    "appsetup"
+], function($, _, Backbone, Handlebars, appSettings, couchUtils, 
     LoginPageView, MainPageView, BooksPageView, BookPageView, EditBookPageView,
-    GlobalCountModel, BookCollection, BooksByLetterCollection, SpineCollection, BookModel) {
+    GlobalCountModel, BookCollection, BooksByLetterCollection, SpineCollection, BookModel,
+    HeaderIconsTemplate, HeaderMenuTemplate) {
 
     console.info("app.js loaded.");
     var app = {
@@ -98,6 +103,21 @@ define([
     };
     // Add BookCollection to mainPageView.  Don't know why it won't work on initialization.
     app.views.mainPageView.books = new BookCollection();
+
+    // Update headers for most views.
+    require("appsetup").updateHeaders(
+        Handlebars,
+        {
+            headerIcons: HeaderIconsTemplate,
+            headerMenu: HeaderMenuTemplate
+        },
+        [
+            app.views.mainPageView,
+            app.views.booksPageView,
+            app.views.bookPageView,
+            app.views.editBookPageView
+        ]
+    );
 
     // Initial settings.
     appSettings.set({"urlPrefix": window.location.protocol + "//" + window.location.host});
