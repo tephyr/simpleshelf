@@ -52,7 +52,7 @@ require([
 
             $.mobile.defaultPageTransition = "slide";
         }
-    )
+    );
 
     require( [ "jquerymobile" ], function () {
 
