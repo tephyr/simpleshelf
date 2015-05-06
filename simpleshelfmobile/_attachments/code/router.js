@@ -80,15 +80,9 @@ define([
          **/
         addbook: function() {
             this._log("/addbook");
-            $.when(
-                couchUtils.getUUIDs()
-            ).then(
-                _.bind(function(uuids) {
-                    app.views.editBookPageView.model = new Book({_id: uuids[0]});
-                    app.views.editBookPageView.render();
-                    this._changeScreen(app.views.editBookPageView);
-                }, this)
-            );
+            app.views.editBookPageView.model = new Book();
+            app.views.editBookPageView.render();
+            this._changeScreen(app.views.editBookPageView);
         },
 
         /**
