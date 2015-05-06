@@ -23,12 +23,27 @@ define([
                         });
                 },
                 "app:navigate": function(data) {
+                    var url;
                     // This call is a little different than the native Backbone navigate,
                     // to keep it similar to all other calls: {url: String, options: Object}.
                     console.info("[app]", "navigate", data);
                     // By default, trigger the route method; to disable, set ``trigger==false``.
                     // This is opposite of Backbone's default.
-                    app.router.navigate(data.url, _.extend({trigger: true}, data.options));
+                    if (_.has(data, "url")) {
+                        app.router.navigate(data.url, _.extend({trigger: true}, data.options));
+                    } else {
+                        // Construct URL from data.
+                        switch(data.view) {
+                            case "book":
+                                url = "books/" + data.id;
+                                break;
+                            default:
+                                url = "main";
+                                break;
+                        }
+
+                        app.router.navigate(url, _.extend({trigger: true}, data.options));
+                    }
                 }
 
             });
