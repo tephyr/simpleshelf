@@ -55,7 +55,7 @@ define([
          **/
         hookupAppEvents: function (app) {
             // Hook up specific views' events.
-            _.each([app.views.loginPageView, app.views.mainPageView],
+            _.each([app.views.loginPageView, app.views.mainPageView, app.views.editBookPageView],
                 function(view) {
                     view.on("all", _.bind(function(eventName, data) {
                         app.trigger(eventName, data);

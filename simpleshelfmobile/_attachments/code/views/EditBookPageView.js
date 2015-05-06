@@ -42,10 +42,11 @@ function(_, $, Backbone, Book) {
         },
 
         onSaveSuccess: function() {
-            window.alert("The book was successfully saved.");
+            this.trigger("app:navigate", {view: "book", id: this.model.id});
         },
 
         onSaveFailure: function() {
+            // TODO: handle better.
             alert("The book did not save correctly.");
         },
 
@@ -57,10 +58,10 @@ function(_, $, Backbone, Book) {
                 // Save to db, fire event.
                 console.info(this.model.toJSON());
                 $.when(
-                    this.model.save()
+                    this.model.save(null, {wait: true})
                 ).then(
-                    this.onSaveSuccess,
-                    this.onSaveFailure
+                    _.bind(this.onSaveSuccess, this),
+                    _.bind(this.onSaveFailure, this)
                 );
             }
         }
