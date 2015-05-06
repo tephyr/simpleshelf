@@ -13,17 +13,6 @@ define(function() {
                 var promise; // Maintain sync's Promise.
 
                 switch(method){
-                    case "create":
-                        console.log(method + ": " + JSON.stringify(model));
-
-                        // couchdb uses PUT for both creates & updates
-                        options.type = 'PUT';
-                        
-                        // save to couchdb
-                        promise = func(method, model, options);
-                        
-                        break;
-
                     case "delete":
                         console.log(method + ": " + JSON.stringify(model));
                         // include rev, or couchdb won't allow deletion
