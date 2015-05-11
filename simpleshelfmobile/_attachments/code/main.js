@@ -70,6 +70,7 @@ require([
         app.router = new Router();
         require("appevents").setupAppEvents(app);
         require("appevents").hookupAppEvents(app);
+        // require("appevents").setupJQMEvents(app);
 
         // Tidy initial view.
         $("body").removeClass("splash");

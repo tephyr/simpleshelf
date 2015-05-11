@@ -71,6 +71,19 @@ define([
             // app.views.loginPageView.on("all", _.bind(function(eventName, data) {
             //     app.trigger(eventName, data);
             // }, this));
+        },
+
+        setupJQMEvents: function(app) {
+            $("body").on("pagecontainerchange", function(event, ui) {
+                console.info("[JQM.pagecontainerchange]",
+                    "from " + ui.prevPage.attr("id"),
+                    "to " + ui.toPage.attr("id"));
+
+                // Perform page-specific actions post-change.
+                if (ui.toPage.attr("id") === "main") {
+                    console.info("[JQM.pagecontainerchange]", "refreshing listview for #main");
+                }
+            });
         }
     };
 
