@@ -38,7 +38,7 @@ function(_, $, Backbone, Book) {
         /** EVENTS **/
         onCancel: function(event) {
             event.preventDefault();
-            console.info("Cancelling a book!");
+            this.trigger("app:navigate", {view: "main"});
         },
 
         onSaveSuccess: function() {
