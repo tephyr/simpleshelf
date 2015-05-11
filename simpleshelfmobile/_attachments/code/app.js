@@ -33,8 +33,11 @@ define([
         catalog: {
             spinesInitialized: false,
             booksByLetterInitialized: false,
+            metadataUpToDate: false,
             spineCollection: new SpineCollection(),
             booksByLetterCollection: new BooksByLetterCollection(),
+            globalCountModel: new GlobalCountModel(),
+            bookCollection: new BookCollection(),
             /**
              * Load the spines collection, fetching only when necessary.
              **/
@@ -74,6 +77,30 @@ define([
                 }
 
                 return deferred;
+            },
+
+            /**
+             * Load (or reload) the global count and books data.
+             * @return Promise
+             **/
+            updateLibraryMetadata: function() {
+                var deferred = $.Deferred();
+
+                if (this.metadataUpToDate) {
+                    deferred.resolve();
+                } else {
+                    $.when(
+                        this.globalCountModel.fetch(),
+                        this.bookCollection.fetch()
+                    ).then(_.bind(function() {
+                            this.metadataUpToDate = true;
+                            deferred.resolve();
+                        }, this),
+                        deferred.reject
+                    );
+                }
+
+                return deferred;
             }
         }
     };
@@ -86,7 +113,7 @@ define([
         loginPageView: new LoginPageView({el: "#login"}),
         mainPageView: new MainPageView({
             el: "#main",
-            model: new GlobalCountModel(),
+            model: app.catalog.globalCountModel
         }),
         booksPageView: new BooksPageView({
             el: "#books",
@@ -102,7 +129,7 @@ define([
         })
     };
     // Add BookCollection to mainPageView.  Don't know why it won't work on initialization.
-    app.views.mainPageView.books = new BookCollection();
+    app.views.mainPageView.books = app.catalog.bookCollection;
 
     // Update headers for most views.
     require("appsetup").updateHeaders(

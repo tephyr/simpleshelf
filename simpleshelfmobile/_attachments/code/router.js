@@ -42,8 +42,7 @@ define([
         main: function() {
             this._log("/main");
             $.when(
-                app.views.mainPageView.model.fetch(),
-                app.views.mainPageView.books.fetch()
+                app.catalog.updateLibraryMetadata()
             ).always(_.bind(function() {
                 app.views.mainPageView.render();
                 this._changeScreen(app.views.mainPageView);

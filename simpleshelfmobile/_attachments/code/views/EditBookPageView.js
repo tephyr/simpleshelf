@@ -42,6 +42,7 @@ function(_, $, Backbone, Book) {
         },
 
         onSaveSuccess: function() {
+            this.trigger("app:bookChanged", {id: this.model.id});
             this.trigger("app:navigate", {view: "book", id: this.model.id});
         },
 

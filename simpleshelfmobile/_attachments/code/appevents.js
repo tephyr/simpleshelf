@@ -8,6 +8,12 @@ define([
     var eventInitializer = {
         setupAppEvents: function (app) {
             app.on({
+                "app:bookChanged": function(data) {
+                    // Notify catalog that metadata must be refreshed.
+                    console.info("[app]", "bookChanged", data);
+                    app.catalog.metadataUpToDate = false;
+                },
+
                 "app:requestLogin": function(data) {
                     console.info("[app]", "requestLogin", data);
                     couchUtils.login(data.username, data.password)
@@ -22,6 +28,7 @@ define([
                             // TODO: warn user about login failure.
                         });
                 },
+
                 "app:navigate": function(data) {
                     var url;
                     // This call is a little different than the native Backbone navigate,
