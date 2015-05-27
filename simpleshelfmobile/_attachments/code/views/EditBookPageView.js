@@ -64,6 +64,8 @@ function(_, $, Backbone, Book) {
                     _.bind(this.onSaveSuccess, this),
                     _.bind(this.onSaveFailure, this)
                 );
+            } else {
+                alert(this.model.validationError);
             }
         }
     });

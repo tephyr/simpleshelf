@@ -4,8 +4,9 @@
  */
  define([
     "underscore",
+    "underscore.string",
     "backbone"
-], function(_, Backbone) {
+], function(_, _s, Backbone) {
     var Book = Backbone.Model.extend({
         idAttribute: "_id",
         defaults: {
@@ -38,6 +39,27 @@
                 }
             }
             return response;
+        },
+
+        /**
+         * Validate model.
+         **/
+        validate: function(attrs, options) {
+            // Require title OR ISBN.
+            if (!this._checkForValue(attrs, "title") &&
+                !this._checkForValue(attrs, "isbn")) {
+                return "Missing title or ISBN.";
+            } else if (_s.trim(attrs.title) === "" && _s.trim(attrs.isbn) === "") {
+                // Keys exist but are empty strings.
+                return "Missing title or ISBN.";
+            }
+        },
+
+        /**
+         * Check if key exists and has a non-null value.
+         **/
+        _checkForValue: function(attrs, key) {
+            return (_.has(attrs, key) && !_.isNull(attrs[key]));
         }
     });
 
