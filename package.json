@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/tephyr/simpleshelf#readme",
   "devDependencies": {
+    "config": "^1.17.1",
     "gulp": "^3.9.0"
   }
 }
