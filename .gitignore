@@ -1,5 +1,6 @@
 # ignore these files #
 docs/_build/
+node_modules/
 next.txt
 README.html
 *.pyc

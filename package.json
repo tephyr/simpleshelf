@@ -1,0 +1,25 @@
+{
+  "name": "simpleshelf",
+  "version": "0.1.0",
+  "description": "A personal library manager, backed by CouchDB.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tephyr/simpleshelf.git"
+  },
+  "author": "Andrew Ittner",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/tephyr/simpleshelf/issues"
+  },
+  "homepage": "https://github.com/tephyr/simpleshelf#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  }
+}
