@@ -1,7 +1,8 @@
 var gulp = require('gulp'),
     _ = require('lodash'),
     exec = require('child_process').exec,
-    path = require('path');
+    path = require('path'),
+    push = require('couchdb-push');
 
 // Check for NODE_ENV; if doesn't exist, use 'personal'.
 if (_.isEmpty(process.env.NODE_ENV)) {
@@ -57,5 +58,23 @@ gulp.task('push', function(cb) {
             return cb(error); // return error
         }
         cb(); // finished task
+    });
+});
+
+/**
+ * Push SOURCE to DESTINATION using couchdb-push.
+ **/
+gulp.task('push-simple', function(cb) {
+    console.info("Pushing", settings.source, "to", settings.destination);
+    push(settings.destination, settings.source, function(err, resp) {
+        if (_.isObject(err)) {
+            // Handle failure.
+            console.error(err);
+            return cb(err);
+        } else {
+            // Handle success.
+            console.log(resp);
+            return cb();
+        }
     });
 });
