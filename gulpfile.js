@@ -14,6 +14,7 @@ var config = require('config');
 
 var settings = {
     source: path.resolve(config.get('source')),
+    sourceWatch: config.get('sourceWatch'),
     destination: config.get('destination')
 };
 
@@ -78,3 +79,16 @@ gulp.task('push-simple', function(cb) {
         }
     });
 });
+
+/**
+ * Watch for changes, trigger ``push-simple`` task.
+ **/
+gulp.task('push-simple:watch', function() {
+    gulp.watch(settings.sourceWatch, function(event) {
+        console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
+        gulp.start('push-simple');
+    })
+})
+
+// Watch files, run dev tasks.
+gulp.task('dev-watch', ['push-simple:watch']);
