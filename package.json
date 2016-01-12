@@ -23,6 +23,8 @@
     "config": "^1.17.1",
     "couchdb-push": "^2.3.0",
     "gulp": "^3.9.0",
-    "lodash": "^3.10.1"
+    "gulp-notify": "^2.2.0",
+    "lodash": "^3.10.1",
+    "node-notifier": "^4.4.0"
   }
 }

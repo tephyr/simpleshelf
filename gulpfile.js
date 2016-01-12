@@ -2,7 +2,9 @@ var gulp = require('gulp'),
     _ = require('lodash'),
     exec = require('child_process').exec,
     path = require('path'),
-    push = require('couchdb-push');
+    push = require('couchdb-push'),
+    notify = require("gulp-notify"),
+    notifier = require("node-notifier");
 
 // Check for NODE_ENV; if doesn't exist, use 'personal'.
 if (_.isEmpty(process.env.NODE_ENV)) {
@@ -75,6 +77,7 @@ gulp.task('push-simple', function(cb) {
         } else {
             // Handle success.
             console.log(resp);
+            notifier.notify({title: 'push-simple', message: JSON.stringify(resp, null, ' ')});
             return cb();
         }
     });
@@ -87,8 +90,8 @@ gulp.task('push-simple:watch', function() {
     gulp.watch(settings.sourceWatch, function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
         gulp.start('push-simple');
-    })
-})
+    });
+});
 
 // Watch files, run dev tasks.
 gulp.task('dev-watch', ['push-simple:watch']);
