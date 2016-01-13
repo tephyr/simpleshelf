@@ -20,11 +20,14 @@
   },
   "homepage": "https://github.com/tephyr/simpleshelf#readme",
   "devDependencies": {
+    "browserify": "^13.0.0",
     "config": "^1.17.1",
     "couchdb-push": "^2.3.0",
     "gulp": "^3.9.0",
     "gulp-notify": "^2.2.0",
+    "gulp-util": "^3.0.7",
     "lodash": "^3.10.1",
-    "node-notifier": "^4.4.0"
+    "node-notifier": "^4.4.0",
+    "vinyl-source-stream": "^1.1.0"
   }
 }

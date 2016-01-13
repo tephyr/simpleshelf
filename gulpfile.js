@@ -1,8 +1,11 @@
 var gulp = require('gulp'),
     _ = require('lodash'),
+    browserify = require('browserify'),
     exec = require('child_process').exec,
+    gutil = require('gulp-util'),
     path = require('path'),
     push = require('couchdb-push'),
+    source = require('vinyl-source-stream'),
     notify = require("gulp-notify"),
     notifier = require("node-notifier");
 
@@ -17,7 +20,15 @@ var config = require('config');
 var settings = {
     source: path.resolve(config.get('source')),
     sourceWatch: config.get('sourceWatch'),
-    destination: config.get('destination')
+    destination: config.get('destination'),
+    codeOutputPath: path.join(config.get('source'), '_attachments', 'code')
+};
+
+// Setup globs for watching file changes.
+settings.globs = {
+    'code': 'app/code/**/*.js',
+    'ui': path.join(config.get('source'), '_attachments') + '/**/*.html', 
+    'sass': 'app/styles/*.scss'
 };
 
 /**
@@ -28,6 +39,28 @@ gulp.task('default', function() {
     console.info("Current environment (NODE_ENV)", process.env.NODE_ENV);
     console.info("config.source", settings.source);
     console.info("config.destination", settings.destination);
+});
+
+/**
+ * Bundle production-ready code.
+ **/
+gulp.task('code', function () {
+    browserify('app/code/main.js')
+        .bundle()
+        .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+        .pipe(source('app.bundle.js'))  // give destination filename
+        .pipe(gulp.dest(settings.codeOutputPath));
+});
+
+/**
+ * Bundle debug-ready javascript.
+ **/
+gulp.task('code-dev', function () {
+    browserify('app/code/main.js', {debug: true})
+        .bundle()
+        .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+        .pipe(source('app.bundle.js'))  // give destination filename
+        .pipe(gulp.dest(settings.codeOutputPath));
 });
 
 /**
