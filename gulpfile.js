@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
     _ = require('lodash'),
     browserify = require('browserify'),
+    concat = require('gulp-concat'),
     exec = require('child_process').exec,
     gutil = require('gulp-util'),
     path = require('path'),
@@ -60,6 +61,37 @@ gulp.task('code-dev', function () {
         .bundle()
         .on('error', gutil.log.bind(gutil, 'Browserify Error'))
         .pipe(source('app.bundle.js'))  // give destination filename
+        .pipe(gulp.dest(settings.codeOutputPath));
+});
+
+/**
+ * Combine all app/code/lib libraries, *in order*, to a lib.bundle.js.
+ **/
+gulp.task('lib', function() {
+    var libsInOrder = [
+        'jquery.js',
+        'underscore.js',
+        'underscore.string.js',
+        'handlebars.js',
+        'backbone.js',
+        'md5.js',
+        // NOTE: using the following will require the jquery.couch.js file, typically
+        // available under /_utils/script/jquery.couch.js.
+        // 'jquery.couch.app.js',
+        // 'jquery.couch.app.util.js',
+        // 'jquery.couchForm.js',
+        // 'jquery.mustache.js',
+        // 'jquery.couchLogin.js',
+        // 'jquery.couchProfile.js',
+    ];
+
+    // Convert to relative paths.
+    var sources = _.map(libsInOrder, function(library) {
+        return 'app/lib/' + library;
+    });
+
+    return gulp.src(sources)
+        .pipe(concat('lib.bundle.js'))
         .pipe(gulp.dest(settings.codeOutputPath));
 });
 

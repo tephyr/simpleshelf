@@ -24,6 +24,7 @@
     "config": "^1.17.1",
     "couchdb-push": "^2.3.0",
     "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
     "gulp-notify": "^2.2.0",
     "gulp-util": "^3.0.7",
     "lodash": "^3.10.1",
