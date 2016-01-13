@@ -20,13 +20,6 @@ var settings = {
     destination: config.get('destination')
 };
 
-// Get custom location for erica executable.
-if (config.has('ericaBin')) {
-    settings.ericaBin = config.get('ericaBin');
-} else {
-    settings.ericaBin = 'erica';
-}
-
 /**
  * Show settings for this task runner.
  **/
@@ -38,36 +31,9 @@ gulp.task('default', function() {
 });
 
 /**
- * Push SOURCE to DESTINATION using erica.
- **/
-gulp.task('push', function(cb) {
-    var options = {
-        cwd: path.resolve('.'),
-        env: {
-            HOME: process.env.HOME,
-            PATH: process.env.PATH
-        }
-    },
-    cmd = settings.ericaBin + ' push ' + settings.source + ' ' + settings.destination;
-
-    console.info(cmd);
-
-    // erica push $SOURCE $DESTINATION
-    exec(cmd, options, function(error, stdout, stderr) {
-        console.log(stdout);
-        if (error !== null) {
-            console.log(`stderr: ${stderr}`);
-            console.log(`exec error: ${error}`);
-            return cb(error); // return error
-        }
-        cb(); // finished task
-    });
-});
-
-/**
  * Push SOURCE to DESTINATION using couchdb-push.
  **/
-gulp.task('push-simple', function(cb) {
+gulp.task('push', function(cb) {
     console.info("Pushing", settings.source, "to", settings.destination);
     push(settings.destination, settings.source, function(err, resp) {
         if (_.isObject(err)) {
@@ -77,21 +43,21 @@ gulp.task('push-simple', function(cb) {
         } else {
             // Handle success.
             console.log(resp);
-            notifier.notify({title: 'push-simple', message: JSON.stringify(resp, null, ' ')});
+            notifier.notify({title: 'push', message: JSON.stringify(resp, null, ' ')});
             return cb();
         }
     });
 });
 
 /**
- * Watch for changes, trigger ``push-simple`` task.
+ * Watch for changes, trigger ``push`` task.
  **/
-gulp.task('push-simple:watch', function() {
+gulp.task('push:watch', function() {
     gulp.watch(settings.sourceWatch, function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
-        gulp.start('push-simple');
+        gulp.start('push');
     });
 });
 
 // Watch files, run dev tasks.
-gulp.task('dev-watch', ['push-simple:watch']);
+gulp.task('dev-watch', ['push:watch']);
