@@ -56,12 +56,18 @@ gulp.task('code', function () {
 /**
  * Bundle debug-ready javascript.
  **/
-gulp.task('code-dev', function () {
-    browserify('app/code/main.js', {debug: true})
-        .bundle()
-        .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-        .pipe(source('app.bundle.js'))  // give destination filename
-        .pipe(gulp.dest(settings.codeOutputPath));
+gulp.task('code-dev', function (cb) {
+    // set up the browserify instance on a task basis
+    var b = browserify({
+        entries: 'app/code/main.js',
+        debug: true
+    });
+
+    // Return so gulp knows when task finishes.
+    return b.bundle()
+        .on('error', gutil.log.bind(gutil, 'Browserify Error')) // Set error handler
+        .pipe(source('app.bundle.js')) // give destination filename
+        .pipe(gulp.dest(settings.codeOutputPath)); // give destination directory
 });
 
 /**
@@ -98,7 +104,7 @@ gulp.task('lib', function() {
 /**
  * Push SOURCE to DESTINATION using couchdb-push.
  **/
-gulp.task('push', function(cb) {
+gulp.task('push', ['lib', 'code-dev'], function(cb) {
     console.info("Pushing", settings.source, "to", settings.destination);
     push(settings.destination, settings.source, function(err, resp) {
         if (_.isObject(err)) {
@@ -118,11 +124,18 @@ gulp.task('push', function(cb) {
  * Watch for changes, trigger ``push`` task.
  **/
 gulp.task('push:watch', function() {
-    gulp.watch(settings.sourceWatch, function(event) {
+    gulp.watch([settings.globs.code, settings.globs.ui], function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
         gulp.start('push');
     });
 });
 
 // Watch files, run dev tasks.
-gulp.task('dev-watch', ['push:watch']);
+gulp.task('dev-watch', function() {
+    // When any source code changes, combine/run browserify/push to server.
+    var watcher = gulp.watch([settings.globs.code, settings.globs.ui], ['push']);
+
+    watcher.on('change', function(event) {
+        console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
+    });
+});
