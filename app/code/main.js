@@ -1,28 +1,29 @@
-var Backbone = require("backbone"),
+var $ = require("jquery"),
+    Backbone = require("backbone"),
     _ = require("underscore"),
     appsetup = require("./appsetup.js"),
     appevents = require("./appevents.js");
 
-console.info(window.pageLoadedAt);
+$(document).ready(function() {
+    // Load plugins and widgets on the global $.
+    // require(["widgets/tags"]);
 
-// Load plugins and widgets on the global $.
-// require(["widgets/tags"]);
+    // Override BB sync.
+    appsetup.overrideBackboneSync(Backbone, _);
 
-// Override BB sync.
-appsetup.overrideBackboneSync(Backbone, _);
+    this.app = App; // singleton
 
-this.app = App; // singleton
+    // Setup top-level app objects.
+    app.router = new Router();
+    appevents.setupAppEvents(app);
+    appevents.hookupAppEvents(app);
 
-// Setup top-level app objects.
-app.router = new Router();
-appevents.setupAppEvents(app);
-appevents.hookupAppEvents(app);
+    // Tidy initial view.
+    $("body").removeClass("splash");
 
-// Tidy initial view.
-$("body").removeClass("splash");
+    // Start Backbone routing.
+    Backbone.history.start();
 
-// Start Backbone routing.
-Backbone.history.start();
-
-// Start app.
-this.app.run();
+    // Start app.
+    this.app.run();
+});
