@@ -63,6 +63,14 @@ gulp.task('code-dev', function (cb) {
         debug: true
     });
 
+    // Ignore modules in lib.bundle.js.
+    b.exclude('jquery');
+    b.exclude('underscore');
+    b.exclude('underscore.string');
+    b.exclude('handlebars');
+    b.exclude('backbone');
+    b.exclude('md5');
+
     // Return so gulp knows when task finishes.
     return b.bundle()
         .on('error', gutil.log.bind(gutil, 'Browserify Error')) // Set error handler
@@ -74,13 +82,7 @@ gulp.task('code-dev', function (cb) {
  * Combine all app/code/lib libraries, *in order*, to a lib.bundle.js.
  **/
 gulp.task('lib', function() {
-    var libsInOrder = [
-        'jquery.js',
-        'underscore.js',
-        'underscore.string.js',
-        'handlebars.js',
-        'backbone.js',
-        'md5.js',
+    // var libsInOrder = [
         // NOTE: using the following will require the jquery.couch.js file, typically
         // available under /_utils/script/jquery.couch.js.
         // 'jquery.couch.app.js',
@@ -89,16 +91,26 @@ gulp.task('lib', function() {
         // 'jquery.mustache.js',
         // 'jquery.couchLogin.js',
         // 'jquery.couchProfile.js',
-    ];
+    // ];
 
-    // Convert to relative paths.
-    var sources = _.map(libsInOrder, function(library) {
-        return 'app/lib/' + library;
-    });
+    // idea courtesy http://stackoverflow.com/a/24876996/562978
+    // List all 3rd-party libraries (all of which are node modules), and ``require`` them
+    // in this bundle (``lib.bundle.js``).
+    // Do **not** list them in the browserify() call, otherwise it will search for a *file*
+    // by that name.
+    var vendor = browserify();
+    vendor.require('jquery');
+    vendor.require('underscore');
+    vendor.require('underscore.string');
+    vendor.require('handlebars');
+    vendor.require('backbone');
+    vendor.require('md5');
 
-    return gulp.src(sources)
-        .pipe(concat('lib.bundle.js'))
-        .pipe(gulp.dest(settings.codeOutputPath));
+    // Return so gulp knows when task finishes.
+    return vendor.bundle()
+        .pipe(source('lib.bundle.js'))            // give destination filename
+        .pipe(gulp.dest(settings.codeOutputPath)) // give destination directory
+        .on('error', gutil.log);
 });
 
 /**

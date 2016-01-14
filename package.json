@@ -30,5 +30,13 @@
     "lodash": "^3.10.1",
     "node-notifier": "^4.4.0",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "backbone": "^1.2.3",
+    "handlebars": "^4.0.5",
+    "jquery": "^2.2.0",
+    "md5": "^2.0.0",
+    "underscore": "^1.8.3",
+    "underscore.string": "^3.2.2"
   }
 }
