@@ -1,4 +1,6 @@
-var appsetup = require("./appsetup.js"),
+var Backbone = require("backbone"),
+    _ = require("underscore"),
+    appsetup = require("./appsetup.js"),
     appevents = require("./appevents.js");
 
 console.info(window.pageLoadedAt);
