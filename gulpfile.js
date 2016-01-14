@@ -73,7 +73,12 @@ gulp.task('code-dev', function (cb) {
 
     // Return so gulp knows when task finishes.
     return b.bundle()
-        .on('error', gutil.log.bind(gutil, 'Browserify Error')) // Set error handler
+        .on('error', function(err) {
+            // print the error
+            gutil.log(gutil.colors.bgRed(err.message));
+            // end this stream (to prevent browserify from hanging the stream)
+            this.emit('end');
+        }) // Set error handler
         .pipe(source('app.bundle.js')) // give destination filename
         .pipe(gulp.dest(settings.codeOutputPath)); // give destination directory
 });
