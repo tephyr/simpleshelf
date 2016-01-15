@@ -2,31 +2,28 @@
 /**
  *  Collection of book data by first letter of title.
  **/
- define([
-    "underscore",
-    "backbone"
-], function(_, Backbone, Book) {
+var _ = require("underscore"),
+    Backbone = require("backbone");
 
-    var BooksByLetterCollection = Backbone.Collection.extend({
-        url: function() {
-            return "_view/books_by_letter?group=true";
-        },
+var BooksByLetterCollection = Backbone.Collection.extend({
+    url: function() {
+        return "_view/books_by_letter?group=true";
+    },
 
-        /**
-         * Parse the returned JSON.
-         **/
-        parse: function(response, options){
-            var parsed = [];
+    /**
+     * Parse the returned JSON.
+     **/
+    parse: function(response, options){
+        var parsed = [];
 
-            if (_.has(response, "rows") && _.isArray(response.rows)) {
-                _.each(response.rows, function(row) {
-                    parsed.push({id: row.key, value: row.value});
-                });
-            }
-
-            return parsed;
+        if (_.has(response, "rows") && _.isArray(response.rows)) {
+            _.each(response.rows, function(row) {
+                parsed.push({id: row.key, value: row.value});
+            });
         }
-    });
 
-    return BooksByLetterCollection;
+        return parsed;
+    }
 });
+
+module.exports = BooksByLetterCollection;

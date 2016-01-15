@@ -3,14 +3,11 @@
  * Store application-wide settings.
  * @return Singleton
  **/
-define([
-    "underscore",
-    "backbone"
-], function(_, Backbone) {
+var _ = require("underscore"),
+    Backbone = require("backbone");
 
-    var settings = Backbone.Model.extend({
+var settings = Backbone.Model.extend({
 
-    });
-
-    return new settings();
 });
+
+module.exports = new settings();

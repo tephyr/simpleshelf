@@ -1,74 +1,71 @@
 /**
  * Edit Book page.
- */
-define([
-    "underscore",
-    "jquery",
-    "backbone",
-    "models/Book"
-],
-function(_, $, Backbone, Book) {
-    var EditBookPage = Backbone.View.extend({
-        events: {
-            "click #editbook-submit": "onSubmit",
-            "click #editbook-cancel": "onCancel"
-        },
-        render: function() {
-            // Clear out any previous data.
-            this.$("form [type=text]").add("form textarea").val("");
-            console.info("model.id", _.isObject(this.model) ? this.model.id : "no model");
-        },
+ **/
+var _ = require("underscore"),
+    Backbone = require("backbone"),
+    Handlebars = require("handlebars"),
+    Book = require("../models/Book.js");
 
-        /**
-         * Create book, add all data to it.
-         **/
-        _fillModel: function() {
-            this.model.set({
-                title: this.$("#editbook-title").val(),
-                authors: this.$("#editbook-authors").val().split("\n"),
-                isbn: this.$("#editbook-isbn").val(),
-                publisher: this.$("#editbook-publisher").val(),
-                notePublic: this.$("#editbook-notes-public").val(),
-                notesPrivate: this.$("#editbook-notes-private").val()
-            });
+var EditBookPage = Backbone.View.extend({
+    events: {
+        "click #editbook-submit": "onSubmit",
+        "click #editbook-cancel": "onCancel"
+    },
+    render: function() {
+        // Clear out any previous data.
+        this.$("form [type=text]").add("form textarea").val("");
+        console.info("model.id", _.isObject(this.model) ? this.model.id : "no model");
+    },
 
-            this.model.set({"public": this.$("#editbook-public").val() === "on"});
-        },
+    /**
+     * Create book, add all data to it.
+     **/
+    _fillModel: function() {
+        this.model.set({
+            title: this.$("#editbook-title").val(),
+            authors: this.$("#editbook-authors").val().split("\n"),
+            isbn: this.$("#editbook-isbn").val(),
+            publisher: this.$("#editbook-publisher").val(),
+            notePublic: this.$("#editbook-notes-public").val(),
+            notesPrivate: this.$("#editbook-notes-private").val()
+        });
 
-        /** EVENTS **/
-        onCancel: function(event) {
-            event.preventDefault();
-            this.trigger("app:navigate", {view: "main"});
-        },
+        this.model.set({"public": this.$("#editbook-public").val() === "on"});
+    },
 
-        onSaveSuccess: function() {
-            this.trigger("app:bookChanged", {id: this.model.id});
-            this.trigger("app:navigate", {view: "book", id: this.model.id});
-        },
+    /** EVENTS **/
+    onCancel: function(event) {
+        event.preventDefault();
+        this.trigger("app:navigate", {view: "main"});
+    },
 
-        onSaveFailure: function() {
-            // TODO: handle better.
-            alert("The book did not save correctly.");
-        },
+    onSaveSuccess: function() {
+        this.trigger("app:bookChanged", {id: this.model.id});
+        this.trigger("app:navigate", {view: "book", id: this.model.id});
+    },
 
-        onSubmit: function(event) {
-            event.preventDefault();
-            console.info("Submitting a book!");
-            this._fillModel();
-            if (this.model.isValid()) {
-                // Save to db, fire event.
-                console.info(this.model.toJSON());
-                $.when(
-                    this.model.save(null, {wait: true})
-                ).then(
-                    _.bind(this.onSaveSuccess, this),
-                    _.bind(this.onSaveFailure, this)
-                );
-            } else {
-                alert(this.model.validationError);
-            }
+    onSaveFailure: function() {
+        // TODO: handle better.
+        alert("The book did not save correctly.");
+    },
+
+    onSubmit: function(event) {
+        event.preventDefault();
+        console.info("Submitting a book!");
+        this._fillModel();
+        if (this.model.isValid()) {
+            // Save to db, fire event.
+            console.info(this.model.toJSON());
+            $.when(
+                this.model.save(null, {wait: true})
+            ).then(
+                _.bind(this.onSaveSuccess, this),
+                _.bind(this.onSaveFailure, this)
+            );
+        } else {
+            alert(this.model.validationError);
         }
-    });
-
-    return EditBookPage;
+    }
 });
+
+module.exports = EditBookPage;

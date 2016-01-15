@@ -2,7 +2,9 @@ var $ = require("jquery"),
     Backbone = require("backbone"),
     _ = require("underscore"),
     appsetup = require("./appsetup.js"),
-    appevents = require("./appevents.js");
+    appevents = require("./appevents.js"),
+    simpleshelfApp = require("./app.js").app,
+    Router = require("./router.js");
 
 $(document).ready(function() {
     // Load plugins and widgets on the global $.
@@ -11,12 +13,12 @@ $(document).ready(function() {
     // Override BB sync.
     appsetup.overrideBackboneSync(Backbone, _);
 
-    this.app = App; // singleton
+    this.app = simpleshelfApp; // singleton
 
     // Setup top-level app objects.
-    app.router = new Router();
-    appevents.setupAppEvents(app);
-    appevents.hookupAppEvents(app);
+    this.app.router = new Router();
+    appevents.setupAppEvents(this.app);
+    appevents.hookupAppEvents(this.app);
 
     // Tidy initial view.
     $("body").removeClass("splash");

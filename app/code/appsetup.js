@@ -1,6 +1,8 @@
 /**
  * One-time application setup functions.
  */
+var _ = require("underscore");
+
 module.exports = {
     overrideBackboneSync: function(Backbone, _) {
         /**
