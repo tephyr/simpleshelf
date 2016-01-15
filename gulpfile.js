@@ -7,6 +7,7 @@ var gulp = require('gulp'),
     path = require('path'),
     push = require('couchdb-push'),
     source = require('vinyl-source-stream'),
+    stringify = require('stringify'),
     notify = require("gulp-notify"),
     notifier = require("node-notifier");
 
@@ -29,9 +30,11 @@ var settings = {
 // Setup globs for watching file changes.
 settings.globs = {
     'code': 'app/code/**/*.js',
+    'templates': 'app/code/**/*.html',
     'ui': path.join(config.get('source'), '_attachments') + '/**/*.html', 
     'sass': 'app/styles/*.scss'
 };
+settings.globsAll = _.values(settings.globs);
 
 /**
  * Helper function: bundle application code.
@@ -40,7 +43,11 @@ var appBundlerFn = function(isDebug) {
     // set up the browserify instance on a task basis
     var b = browserify({
         entries: 'app/code/main.js',
-        debug: isDebug
+        debug: isDebug,
+        transform: stringify({
+            extensions: ['.html'],
+            minify: false
+        })
     });
 
     // Ignore modules in lib.bundle.js.
@@ -145,7 +152,7 @@ gulp.task('push', ['lib', 'code-dev'], function(cb) {
  * Watch for changes, trigger ``push`` task.
  **/
 gulp.task('push:watch', function() {
-    gulp.watch([settings.globs.code, settings.globs.ui], function(event) {
+    gulp.watch(settings.globsAll, function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
         gulp.start('push');
     });
@@ -155,7 +162,7 @@ gulp.task('push:watch', function() {
 gulp.task('dev-watch', function() {
     settings.isDebug = true;
     // When any source code changes, combine/run browserify/push to server.
-    var watcher = gulp.watch([settings.globs.code, settings.globs.ui], ['push']);
+    var watcher = gulp.watch(settings.globsAll, ['push']);
 
     watcher.on('change', function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
@@ -166,7 +173,7 @@ gulp.task('dev-watch', function() {
 gulp.task('prod-watch', function() {
     settings.isDebug = false;
     // When any source code changes, combine/run browserify/push to server.
-    var watcher = gulp.watch([settings.globs.code, settings.globs.ui], ['push']);
+    var watcher = gulp.watch(settings.globsAll, ['push']);
 
     watcher.on('change', function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');

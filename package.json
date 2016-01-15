@@ -29,6 +29,7 @@
     "gulp-util": "^3.0.7",
     "lodash": "^3.10.1",
     "node-notifier": "^4.4.0",
+    "stringify": "^3.2.0",
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
