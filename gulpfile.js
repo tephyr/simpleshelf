@@ -22,7 +22,8 @@ var settings = {
     source: path.resolve(config.get('source')),
     sourceWatch: config.get('sourceWatch'),
     destination: config.get('destination'),
-    codeOutputPath: path.join(config.get('source'), '_attachments', 'code')
+    codeOutputPath: path.join(config.get('source'), '_attachments', 'code'),
+    isDebug: false
 };
 
 // Setup globs for watching file changes.
@@ -33,34 +34,13 @@ settings.globs = {
 };
 
 /**
- * Show settings for this task runner.
+ * Helper function: bundle application code.
  **/
-gulp.task('default', function() {
-    // place code for your default task here
-    console.info("Current environment (NODE_ENV)", process.env.NODE_ENV);
-    console.info("config.source", settings.source);
-    console.info("config.destination", settings.destination);
-});
-
-/**
- * Bundle production-ready code.
- **/
-gulp.task('code', function () {
-    browserify('app/code/main.js')
-        .bundle()
-        .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-        .pipe(source('app.bundle.js'))  // give destination filename
-        .pipe(gulp.dest(settings.codeOutputPath));
-});
-
-/**
- * Bundle debug-ready javascript.
- **/
-gulp.task('code-dev', function (cb) {
+var appBundlerFn = function(isDebug) {
     // set up the browserify instance on a task basis
     var b = browserify({
         entries: 'app/code/main.js',
-        debug: true
+        debug: isDebug
     });
 
     // Ignore modules in lib.bundle.js.
@@ -81,6 +61,30 @@ gulp.task('code-dev', function (cb) {
         }) // Set error handler
         .pipe(source('app.bundle.js')) // give destination filename
         .pipe(gulp.dest(settings.codeOutputPath)); // give destination directory
+};
+
+/**
+ * Show settings for this task runner.
+ **/
+gulp.task('default', function() {
+    // place code for your default task here
+    console.info("Current environment (NODE_ENV)", process.env.NODE_ENV);
+    console.info("config.source", settings.source);
+    console.info("config.destination", settings.destination);
+});
+
+/**
+ * Bundle production-ready code.
+ **/
+gulp.task('code', function () {
+    return appBundlerFn(false);
+});
+
+/**
+ * Bundle debug-ready javascript.
+ **/
+gulp.task('code-dev', function (cb) {
+    return appBundlerFn(settings.isDebug);
 });
 
 /**
@@ -149,6 +153,18 @@ gulp.task('push:watch', function() {
 
 // Watch files, run dev tasks.
 gulp.task('dev-watch', function() {
+    settings.isDebug = true;
+    // When any source code changes, combine/run browserify/push to server.
+    var watcher = gulp.watch([settings.globs.code, settings.globs.ui], ['push']);
+
+    watcher.on('change', function(event) {
+        console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
+    });
+});
+
+// Watch files, run production tasks.
+gulp.task('prod-watch', function() {
+    settings.isDebug = false;
     // When any source code changes, combine/run browserify/push to server.
     var watcher = gulp.watch([settings.globs.code, settings.globs.ui], ['push']);
 
