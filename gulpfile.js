@@ -36,6 +36,15 @@ settings.globs = {
 };
 settings.globsAll = _.values(settings.globs);
 
+var libraryModules = [
+    'jquery',
+    'underscore',
+    'underscore.string',
+    'handlebars',
+    'backbone',
+    'md5'
+];
+
 /**
  * Helper function: bundle application code.
  **/
@@ -51,12 +60,9 @@ var appBundlerFn = function(isDebug) {
     });
 
     // Ignore modules in lib.bundle.js.
-    b.exclude('jquery');
-    b.exclude('underscore');
-    b.exclude('underscore.string');
-    b.exclude('handlebars');
-    b.exclude('backbone');
-    b.exclude('md5');
+    _.each(libraryModules, function(lib) {
+        b.exclude(lib);
+    });
 
     // Return so gulp knows when task finishes.
     return b.bundle()
@@ -115,12 +121,9 @@ gulp.task('lib', function() {
     // Do **not** list them in the browserify() call, otherwise it will search for a *file*
     // by that name.
     var vendor = browserify();
-    vendor.require('jquery');
-    vendor.require('underscore');
-    vendor.require('underscore.string');
-    vendor.require('handlebars');
-    vendor.require('backbone');
-    vendor.require('md5');
+    _.each(libraryModules, function(lib) {
+        vendor.require(lib);
+    })
 
     // Return so gulp knows when task finishes.
     return vendor.bundle()
