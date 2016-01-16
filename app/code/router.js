@@ -2,9 +2,9 @@
 /**
  * Handle all routes.
  **/
-var _ = require("underscore"),
+var $ = require("jquery"),
+    _ = require("underscore"),
     Backbone = require("backbone"),
-    app = require("./app.js"),
     Book = require("./models/Book.js"),
     couchUtils = require("./couchutils.js");
 
@@ -22,6 +22,7 @@ var Router = Backbone.Router.extend({
     initialize: function(options) {
         this._lastPageId = null;
         this._currentPageId = null;
+        this._views = options.views;
     },
 
     /**
@@ -29,12 +30,12 @@ var Router = Backbone.Router.extend({
      */
     index: function() {
         this._log("/ route.");
-        // this._changeScreen(app.views.frontPageView);
+        // this._changeScreen(this._views.frontPageView);
     },
 
     login: function() {
         this._log("/login");
-        this._changeScreen(app.views.loginPageView);
+        this._changeScreen(this._views.loginPageView);
     },
 
     main: function() {
@@ -42,8 +43,8 @@ var Router = Backbone.Router.extend({
         $.when(
             app.catalog.updateLibraryMetadata()
         ).always(_.bind(function() {
-            app.views.mainPageView.render();
-            this._changeScreen(app.views.mainPageView);
+            this._views.mainPageView.render();
+            this._changeScreen(this._views.mainPageView);
         }, this));
     },
 
@@ -56,19 +57,19 @@ var Router = Backbone.Router.extend({
             app.catalog.loadBooksByLetter(),
             app.catalog.loadSpines()
         ).always(_.bind(function() {
-            this._changeScreen(app.views.booksPageView);
+            this._changeScreen(this._views.booksPageView);
         }, this));
     },
 
     book: function(bookId) {
         this._log("/book/" + bookId);
-        app.views.bookPageView.model.clear({"silent": true});
-        app.views.bookPageView.model.set("_id", bookId);
+        this._views.bookPageView.model.clear({"silent": true});
+        this._views.bookPageView.model.set("_id", bookId);
         $.when(
-            app.views.bookPageView.model.fetch()
+            this._views.bookPageView.model.fetch()
         ).always(_.bind(function() {
-            app.views.bookPageView.render();
-            this._changeScreen(app.views.bookPageView);
+            this._views.bookPageView.render();
+            this._changeScreen(this._views.bookPageView);
         }, this));
     },
 
@@ -77,9 +78,9 @@ var Router = Backbone.Router.extend({
      **/
     addbook: function() {
         this._log("/addbook");
-        app.views.editBookPageView.model = new Book();
-        app.views.editBookPageView.render();
-        this._changeScreen(app.views.editBookPageView);
+        this._views.editBookPageView.model = new Book();
+        this._views.editBookPageView.render();
+        this._changeScreen(this._views.editBookPageView);
     },
 
     /**
@@ -98,7 +99,7 @@ var Router = Backbone.Router.extend({
         }
         this._currentPageId = view.$el.attr("id");
 
-        $("body").pagecontainer("change", view.$el, changeOptions);
+        // $("body").pagecontainer("change", view.$el, changeOptions);
     },
 
     _log: function() {

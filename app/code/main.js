@@ -16,7 +16,7 @@ $(document).ready(function() {
     this.app = simpleshelfApp; // singleton
 
     // Setup top-level app objects.
-    this.app.router = new Router();
+    this.app.router = new Router({views: this.app.views});
     appevents.setupAppEvents(this.app);
     appevents.hookupAppEvents(this.app);
 
