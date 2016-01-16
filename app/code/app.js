@@ -145,21 +145,22 @@ appsetup.updateHeaders(
 appSettings.set({"urlPrefix": window.location.protocol + "//" + window.location.host});
 
 app.run = function() {
-    console.info("App running as of ", new Date());
+    var _logHeader = "[app.run]";
+    console.info(_logHeader, "App running as of ", new Date());
     // On initial load, check if user is already logged in.
     // If so, proceed to main page.
     // If not, show login.
     couchUtils.isLoggedIn()
         .done(function() {
-            console.log("Proceed to main page.");
+            console.log(_logHeader, "Proceed to main page.");
             app.trigger("app:navigate", {url: "main"});
         })
         .fail(function() {
-            console.warn("Need to log in.");
+            console.warn(_logHeader, "Need to log in.");
             app.router.navigate("login", {trigger: true});
         })
         .always(function() {
-            console.info("Done checking login status.");
+            console.info(_logHeader, "Done checking login status.");
         });
 };
 
