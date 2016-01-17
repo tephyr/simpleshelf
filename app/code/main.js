@@ -6,6 +6,10 @@ var $ = require("jquery"),
     simpleshelfApp = require("./app.js").app,
     Router = require("./router.js");
 
+// To support Bootstrap, add jQuery & Tether to the global namespace.
+window.$ = window.jQuery = require('jquery');
+window.Tether = require('tether');
+
 $(document).ready(function() {
     // Load plugins and widgets on the global $.
     // require(["widgets/tags"]);
