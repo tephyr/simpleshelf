@@ -1,12 +1,6 @@
 "use strict";
-// Start the main app logic.
-
-// define([
-//     "underscore",
-//     "couchutils"
-// ], function(_, couchUtils) {
-
-var _ = require("underscore");
+var _ = require("underscore"),
+    couchUtils = require("./couchutils.js");
 
 // app is already instantiated (as singleton), so simply add events to it.
 module.exports = {

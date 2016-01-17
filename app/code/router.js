@@ -23,6 +23,7 @@ var Router = Backbone.Router.extend({
         this._lastPageId = null;
         this._currentPageId = null;
         this._views = options.views;
+        this._catalog = options.catalog;
     },
 
     /**
@@ -41,7 +42,7 @@ var Router = Backbone.Router.extend({
     main: function() {
         this._log("/main");
         $.when(
-            app.catalog.updateLibraryMetadata()
+            this._catalog.updateLibraryMetadata()
         ).always(_.bind(function() {
             this._views.mainPageView.render();
             this._changeScreen(this._views.mainPageView);
@@ -54,8 +55,8 @@ var Router = Backbone.Router.extend({
         // Only load the spine collection *once*.
         // Since the view renders itself when the collection syncs, no need to call it here.
         $.when(
-            app.catalog.loadBooksByLetter(),
-            app.catalog.loadSpines()
+            this._catalog.loadBooksByLetter(),
+            this._catalog.loadSpines()
         ).always(_.bind(function() {
             this._changeScreen(this._views.booksPageView);
         }, this));
