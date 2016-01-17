@@ -44,7 +44,6 @@ var Router = Backbone.Router.extend({
         $.when(
             this._catalog.updateLibraryMetadata()
         ).always(_.bind(function() {
-            this._views.mainPageView.render();
             this._changeScreen(this._views.mainPageView);
         }, this));
     },

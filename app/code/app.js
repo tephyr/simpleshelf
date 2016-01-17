@@ -108,7 +108,6 @@ _.extend(app, Backbone.Events);
 app.views = {
     loginPageView: new LoginPageView(),
     mainPageView: new MainPageView({
-        el: "#main",
         model: app.catalog.globalCountModel
     }),
     booksPageView: new BooksPageView({
