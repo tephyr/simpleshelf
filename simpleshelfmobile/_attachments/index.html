@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>simpleshelf</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="style/bootstrap.css">
     <link rel="stylesheet" href="style/app.css">
     <script src="code/lib.bundle.js" type="text/javascript"></script>
@@ -10,23 +10,13 @@
     <script src="code/bootstrap.js" type="text/javascript"></script>
 </head>
 <body class="">
-    <div id="pageSplash">
-        <h1>simpleshelf: track your books</h1>
-    </div>
-    <div id="login" data-role="page">
-        <div data-role="header">
-            <h1>simpleshelf</h1>
+    <div id="pageSplash" class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>simpleshelf: track your books</h1>
+            </div>
         </div>
-        <div role="main" class="ui-content">
-            <h2>Log in</h2>
-            <form class="login-form">
-                <input type="text" data-clear-btn="true" name="login-username" id="login-username" value="" placeholder="User name">
-
-                <input type="password" data-clear-btn="true" name="login-password" id="login-password" value="" autocomplete="off" placeholder="Password">
-
-                <input type="button" value="Log in" name="login-action" id="login-action">
-            </form>
-        </div>
+        <div id="baseContent" class="row"></div>
     </div>
 
     <div id="main" data-role="page">
