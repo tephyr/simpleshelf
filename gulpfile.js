@@ -8,6 +8,7 @@ var gulp = require('gulp'),
     merge = require('merge-stream'),
     path = require('path'),
     push = require('couchdb-push'),
+    sass = require('gulp-sass'),
     source = require('vinyl-source-stream'),
     stringify = require('stringify'),
     notify = require("gulp-notify"),
@@ -166,9 +167,18 @@ gulp.task('clean:ui-framework', function() {
 });
 
 /**
+ * Build local SASS into CSS.
+ **/
+gulp.task('ui-local', function() {
+    gulp.src('app/styles/app.scss')
+        .pipe(sass().on('error', sass.logError))
+        .pipe(gulp.dest(settings.styleOutputPath));
+});
+
+/**
  * Push SOURCE to DESTINATION using couchdb-push.
  **/
-gulp.task('push', ['lib', 'code-dev', 'ui-framework'], function(cb) {
+gulp.task('push', ['lib', 'code-dev', 'ui-framework', 'ui-local'], function(cb) {
     console.info("Pushing", settings.source, "to", settings.destination);
     push(settings.destination, settings.source, function(err, resp) {
         if (_.isObject(err)) {
