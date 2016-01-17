@@ -208,7 +208,7 @@ gulp.task('push:watch', function() {
 gulp.task('dev-watch', function() {
     settings.isDebug = true;
     // When any source code changes, combine/run browserify/push to server.
-    var watcher = gulp.watch(settings.globsAll, ['push']);
+    var watcher = gulp.watch(settings.globsAll, {debounceDelay: 100}, ['push']);
 
     watcher.on('change', function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');

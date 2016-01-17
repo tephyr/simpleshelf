@@ -1,3 +1,6 @@
+/**
+ * Main entry point to simpleshelf app.
+ */
 var $ = require("jquery"),
     Backbone = require("backbone"),
     _ = require("underscore"),

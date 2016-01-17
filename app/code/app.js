@@ -1,5 +1,7 @@
 "use strict";
-// Start the main app logic.
+/**
+ * Application logic.
+ */
 var $ = require("jquery"),
     _ = require("underscore"),
     Backbone = require("backbone"),
