@@ -1,8 +1,9 @@
 # ignore these files #
 docs/_build/
+simpleshelfmobile/_attachments/code/
+simpleshelfmobile/_attachments/style/
 node_modules/
 config/personal.json
 next.txt
 README.html
 *.pyc
-.doit.db
