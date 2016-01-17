@@ -24,9 +24,6 @@ $(document).ready(function() {
     appevents.setupAppEvents(this.app);
     appevents.hookupAppEvents(this.app);
 
-    // Tidy initial view.
-    $("body").removeClass("splash");
-
     // Start Backbone routing.
     Backbone.history.start();
 
