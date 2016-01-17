@@ -1,12 +1,23 @@
 /**
  * Login page
  */
-var Backbone = require("backbone");
+var Backbone = require("backbone"),
+    Handlebars = require("handlebars"),
+    LoginTemplate = require("./templates/login.html");
 
 var loginPage = Backbone.View.extend({
     id: "login",
     events: {
-        "vclick #login-action": "onLogin"
+        "click #login-action": "onLogin"
+    },
+
+    initialize: function() {
+        this._template = Handlebars.compile(LoginTemplate);
+    },
+
+    render: function() {
+        this.$el.html(this._template());
+        return this;
     },
 
     /** EVENTS **/

@@ -100,10 +100,11 @@ var Router = Backbone.Router.extend({
         this._currentPageId = view.$el.attr("id");
 
         // $("body").pagecontainer("change", view.$el, changeOptions);
+        $("div#baseContent").append(view.render().$el);
     },
 
     _log: function() {
-        console.log("[router]", _.toArray(arguments).join(" "));
+        console.info("[router]", _.toArray(arguments).join(" "));
     }
 
 });
