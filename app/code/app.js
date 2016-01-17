@@ -23,7 +23,6 @@ var $ = require("jquery"),
     appevents = require("./appevents.js"),
     appsetup = require("./appsetup.js");
 
-console.info("app.js loaded.");
 var app = {
     // Catalog: all metadata regarding the library.
     // Typically, these data will change only when a books is added/edited/deleted.
