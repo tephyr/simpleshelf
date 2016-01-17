@@ -2,8 +2,10 @@ var gulp = require('gulp'),
     _ = require('lodash'),
     browserify = require('browserify'),
     concat = require('gulp-concat'),
+    del = require('del'),
     exec = require('child_process').exec,
     gutil = require('gulp-util'),
+    merge = require('merge-stream'),
     path = require('path'),
     push = require('couchdb-push'),
     source = require('vinyl-source-stream'),
@@ -24,6 +26,7 @@ var settings = {
     sourceWatch: config.get('sourceWatch'),
     destination: config.get('destination'),
     codeOutputPath: path.join(config.get('source'), '_attachments', 'code'),
+    styleOutputPath: path.join(config.get('source'), '_attachments', 'style'),
     isDebug: false
 };
 
@@ -42,7 +45,8 @@ var libraryModules = [
     'underscore.string',
     'handlebars',
     'backbone',
-    'md5'
+    'md5',
+    'tether'
 ];
 
 /**
@@ -133,9 +137,38 @@ gulp.task('lib', function() {
 });
 
 /**
+ * Copy 3rd-party UI framework files to _attachments.
+ * NOTE: set useDevFiles to settings.isDebug when ready to ship production code.
+ **/
+gulp.task('ui-framework', ['clean:ui-framework'], function() {
+    var useDevFiles = true,
+        pathParent = 'node_modules/bootstrap/dist/',
+        cssGlob = pathParent + 'css/bootstrap' + (useDevFiles ? ".css*" : ".min.*"),
+        jsGlob = pathParent + 'js/bootstrap' + (useDevFiles ? ".js" : ".min.js");
+
+    var bootstrapCSS = gulp.src(cssGlob)
+        .pipe(gulp.dest(settings.styleOutputPath));
+
+    var bootstrapJS = gulp.src(jsGlob)
+        .pipe(gulp.dest(settings.codeOutputPath));
+
+    return merge(bootstrapCSS, bootstrapJS);
+});
+
+/**
+ * Delete the ui framework files.
+ **/
+gulp.task('clean:ui-framework', function() {
+    return del([
+        settings.styleOutputPath + "/bootstrap.*",
+        settings.codeOutputPath + "/bootstrap.*"
+    ]);
+});
+
+/**
  * Push SOURCE to DESTINATION using couchdb-push.
  **/
-gulp.task('push', ['lib', 'code-dev'], function(cb) {
+gulp.task('push', ['lib', 'code-dev', 'ui-framework'], function(cb) {
     console.info("Pushing", settings.source, "to", settings.destination);
     push(settings.destination, settings.source, function(err, resp) {
         if (_.isObject(err)) {
