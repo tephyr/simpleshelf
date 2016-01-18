@@ -8,6 +8,7 @@ var _ = require("underscore"),
     BooksPageTemplate = require("./templates/bookspage.html");
 
 var BooksPage = Backbone.View.extend({
+    id: "booksPage",
     initialize: function(options) {
         // Names of collections that are ready to be rendered.
         this._collectionsReady = {

@@ -7,6 +7,7 @@ var _ = require("underscore"),
     MainPageTemplate = require("./templates/mainpage.html");
 
 var mainPage = Backbone.View.extend({
+    id: "mainPage",
     events: {
         "vclick #main-add-book": "onAddBook",
     },

@@ -6,7 +6,7 @@ var Backbone = require("backbone"),
     LoginTemplate = require("./templates/login.html");
 
 var loginPage = Backbone.View.extend({
-    id: "login",
+    id: "loginPage",
     events: {
         "click #login-action": "onLogin"
     },
