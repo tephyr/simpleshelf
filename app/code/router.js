@@ -50,7 +50,7 @@ var Router = Backbone.Router.extend({
 
     books: function() {
         this._log("/books");
-        
+
         // Only load the spine collection *once*.
         // Since the view renders itself when the collection syncs, no need to call it here.
         $.when(
@@ -87,15 +87,15 @@ var Router = Backbone.Router.extend({
      * Change to another view.
      */
     _changeScreen: function(view, options) {
-        if (!_.isNull(this._currentPageId)) {
+        if (!_.isNull(this._currentView)) {
             // Replacing view - kill existing.
             this._log("Changing from " + this._currentPageId);
             this._currentView.remove();
             $("div#baseContent").empty();
         }
         this._currentView = view;
-        this._currentPageId = view.$el.attr("id");
         $("#baseContent").append(view.render().$el);
+        this._currentPageId = view.$el.attr("id");
     },
 
     _log: function() {
