@@ -33,8 +33,10 @@ $(document).ready(function() {
     // Start Backbone routing.
     // NOTE: when silent===true, no views are automatically invoked.
     // So if the hash is on an existing route (like ``#login``), nothing will appear to happen.
-    // TODO: make the .history.start() and the app.run() call work better together.
-    Backbone.history.start({silent: true});
+    var historyStart = Backbone.history.start();
+    console.info("[main]", "Backbone.history.start",
+        historyStart, (historyStart ? "Found initial matching route" : "No initial matching route")
+    );
 
     // Start app.
     this.app.run();
