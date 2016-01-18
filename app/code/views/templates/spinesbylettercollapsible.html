@@ -1,5 +1,12 @@
-<div data-role="collapsible" data-title-letter="{{id}}">
-    <h3>{{id}} <span class="ui-li-count">{{value}}</span></h3>
-    <ul data-role="list-view">
-    </ul>
+<div class="card">
+    <div class="card-header" role="tab" id="heading-{{id}}">
+        <h4 class="card-title m-b-0">
+            <a data-toggle="collapse" data-parent="#booksAccordion" href="#collapse-book-{{id}}" aria-expanded="true" aria-controls="collapse-book-{{id}}">
+            {{id}} <span class="label label-info pull-xs-right">{{value}}</span>
+            </a>
+        </h4>
+    </div>
+    <div id="collapse-book-{{id}}" class="collapse" role="tabpanel" aria-labelledby="heading-{{id}}">
+        <div class="list-group list-group-flush"></div>
+    </div>
 </div>
