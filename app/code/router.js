@@ -20,8 +20,8 @@ var Router = Backbone.Router.extend({
     },
 
     initialize: function(options) {
-        this._lastPageId = null;
         this._currentPageId = null;
+        this._currentView = null;
         this._views = options.views;
         this._catalog = options.catalog;
     },
@@ -87,20 +87,15 @@ var Router = Backbone.Router.extend({
      * Change to another view.
      */
     _changeScreen: function(view, options) {
-        // console.info("Changing from", this._currentPageId, "to", view.$el.attr("id"),
-        //     "last==" + this._lastPageId);
-        // Check if moving to the previous page.
-        var changeOptions = {};
-        if (this._lastPageId === view.$el.attr("id")) {
-            changeOptions.reverse = true;
-            this._lastPageId = null;
-        } else {
-            this._lastPageId = this._currentPageId;
+        if (!_.isNull(this._currentPageId)) {
+            // Replacing view - kill existing.
+            this._log("Changing from " + this._currentPageId);
+            this._currentView.remove();
+            $("div#baseContent").empty();
         }
+        this._currentView = view;
         this._currentPageId = view.$el.attr("id");
-
-        // $("body").pagecontainer("change", view.$el, changeOptions);
-        $("div#baseContent").append(view.render().$el);
+        $("#baseContent").append(view.render().$el);
     },
 
     _log: function() {
