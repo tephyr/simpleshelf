@@ -1,12 +1,11 @@
 /**
  * Spines by first letter of title view.
  */
-    // "text!views/templates/spinesbylettercollapsible.html",
-    // "text!views/templates/spinelistitem.html"
-// function(_, Backbone, Handlebars, template, spineTemplate) {
 var _ = require("underscore"),
     Backbone = require("backbone"),
-    Handlebars = require("handlebars");
+    Handlebars = require("handlebars"),
+    template = require("./templates/spinesbylettercollapsible.html"),
+    spineTemplate = require("./templates/spinelistitem.html");
 
 var SpinesByLetterView = Backbone.View.extend({
 
@@ -26,25 +25,19 @@ var SpinesByLetterView = Backbone.View.extend({
     },
 
     postRender: function() {
-        // Turn it into a collapsible widget.
-        this.$el.collapsible();
         // Add the spines to the list.
         this._renderList();
-        // Turn the content into a listview.
-        this.$("ul").listview();
         return this;
     },
 
     _renderList: function() {
         var spines = this.spineCollection.where({firstLetter: this.model.id}),
-            $ul = this.$("ul");
+            $listParent = this.$(".list-group");
 
         // REFACTOR: create sub-view for spine.
         _.each(spines, function(spine) {
-            $ul.append(this.spineTemplate(spine.toJSON()));
+            $listParent.append(this.spineTemplate(spine.toJSON()));
         }, this);
-        // Refresh this listview widget.
-        // $ul.listview( "refresh" );
     },
 
     // EVENTS //

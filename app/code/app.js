@@ -111,7 +111,6 @@ app.views = {
         model: app.catalog.globalCountModel
     }),
     booksPageView: new BooksPageView({
-        el: "#books",
         collection: app.catalog.booksByLetterCollection,
         spineCollection: app.catalog.spineCollection
     }),

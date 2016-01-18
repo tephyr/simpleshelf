@@ -3,7 +3,9 @@
  */
 var _ = require("underscore"),
     Backbone = require("backbone"),
-    SpinesByLetterView = require("./SpinesByLetterView.js");
+    Handlebars = require("handlebars"),
+    SpinesByLetterView = require("./SpinesByLetterView.js"),
+    BooksPageTemplate = require("./templates/bookspage.html");
 
 var BooksPage = Backbone.View.extend({
     initialize: function(options) {
@@ -12,9 +14,12 @@ var BooksPage = Backbone.View.extend({
             "collection": false,
             "spineCollection": false
         };
-        this.$collapsibleParent = this.$("[role='main']");
+
+        this.template = Handlebars.compile(BooksPageTemplate);
+
         // Hold spine collection to pass to child views.
         this.spineCollection = _.has(options, "spineCollection") ? options.spineCollection : null;
+
         // EVENTS //
         // Render when the books_by_letter data syncs.
         this.listenTo(this.collection, "sync", function() {this.renderIfReady("collection");});
@@ -28,17 +33,24 @@ var BooksPage = Backbone.View.extend({
     },
 
     render: function() {
+        // Render this view.
+        this.$el.html(this.template);
+        // Render all sub-views.
         this.collection.each(this.addOne, this);
         return this;
     },
 
+    /**
+     * Add a single sub-view.
+     * @param {Object} model SpineCollection model
+     */
     addOne: function(model) {
         var view = new SpinesByLetterView({
             model: model,
             spineCollection: this.spineCollection
         });
         view.render();
-        this.$collapsibleParent.append(view.$el);
+        this.$("#booksData").append(view.$el);
         view.postRender();
         model.on("remove", view.remove, view);
     },
