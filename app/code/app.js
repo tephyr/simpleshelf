@@ -8,6 +8,7 @@ var $ = require("jquery"),
     Handlebars = require("handlebars"),
     appSettings = require("./settings.js"),
     couchUtils = require("./couchutils.js"),
+    NavbarView = require("./views/NavbarView.js"),
     LoginPageView = require("./views/LoginPageView.js"),
     MainPageView = require("./views/MainPageView.js"),
     BooksPageView = require("./views/BooksPageView.js"),
@@ -106,6 +107,7 @@ _.extend(app, Backbone.Events);
 
 // Setup up views hash to hold view objects & persist them for the application lifetime.
 app.views = {
+    navbarView: new NavbarView(),
     loginPageView: new LoginPageView(),
     mainPageView: new MainPageView({
         model: app.catalog.globalCountModel
@@ -161,6 +163,9 @@ app.run = function() {
         .always(function() {
             console.info(_logHeader, "Done checking login status.");
         });
+
+    // Load navbar.
+    $("body").prepend(app.views.navbarView.render().$el);
 };
 
 // Anything else that should be immediately available when the application launches, add here.
