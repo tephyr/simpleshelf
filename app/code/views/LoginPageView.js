@@ -8,7 +8,7 @@ var Backbone = require("backbone"),
 var loginPage = Backbone.View.extend({
     id: "loginPage",
     events: {
-        "click #login-action": "onLogin"
+        "submit .login-form": "onLogin"
     },
 
     initialize: function() {
@@ -27,9 +27,11 @@ var loginPage = Backbone.View.extend({
     onLogin: function(event) {
         // Trigger login event.
         this.trigger("app:requestLogin", {
-            username: this.$("#login-username").val(),
-            password: this.$("#login-password").val()
+            username: this.$("#loginUsername").val(),
+            password: this.$("#loginPassword").val()
         });
+        // Prevent default action.
+        return false;
     }
 });
 
