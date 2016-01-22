@@ -11,7 +11,7 @@ var $ = require("jquery"),
 // Define the application router.
 var Router = Backbone.Router.extend({
     routes: {
-        "": "index",
+        "": "main", // Use main as primary view.
         "login": "login",
         "main" : "main",
         "books": "books",
@@ -24,14 +24,6 @@ var Router = Backbone.Router.extend({
         this._currentView = null;
         this._views = options.views;
         this._catalog = options.catalog;
-    },
-
-    /**
-     * Index route (default)
-     */
-    index: function() {
-        this._log("/ route.");
-        // this._changeScreen(this._views.frontPageView);
     },
 
     login: function() {
