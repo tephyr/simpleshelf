@@ -20,10 +20,36 @@ var Router = Backbone.Router.extend({
     },
 
     initialize: function(options) {
+        this._logHeader = "[router]";
         this._currentPageId = null;
         this._currentView = null;
         this._views = options.views;
         this._catalog = options.catalog;
+        this._initialLoginHandled = false;
+    },
+
+    /**
+     * Fires before every route function.
+     * @param  {Function} callback Route handler
+     * @param  {Object(?)}   args     arguments
+     * @param  {String}   name
+     * @return {Undef}
+     */
+    execute: function(callback, args, name) {
+        if (!this._initialLoginHandled) {
+            // On first load, always check for login state.
+            this._initialLoginHandled = true;
+            this._log("<execute>", "Handling login for first time");
+
+            this._checkLoginStatus(callback, args, this);
+
+            // Stop this route; Promise from _checkLoginStatus will forward to login.
+            // TODO: once logged in, forward to initially requested page.
+            return false;
+        }
+
+        // Continue with normal routing.
+        if (callback) callback.apply(this, args);
     },
 
     login: function() {
@@ -90,10 +116,31 @@ var Router = Backbone.Router.extend({
         this._currentPageId = view.$el.attr("id");
     },
 
-    _log: function() {
-        console.info("[router]", _.toArray(arguments).join(" "));
-    }
+    /**
+     * On initial load, check if user is already logged in.
+     * If so, proceed to requested page.
+     * If not, show login.
+     *
+     * @return {Promise}
+     */
+    _checkLoginStatus: function(routeCB, routeArgs, routeContext) {
+        return couchUtils.isLoggedIn()
+            .done(function() {
+                console.log(routeContext._logHeader, "Proceed to requested page.");
+                routeCB.apply(routeContext, routeArgs);
+            })
+            .fail(function() {
+                console.warn(routeContext._logHeader, "Need to log in.");
+                routeContext.login();
+            })
+            .always(function() {
+                console.info(routeContext._logHeader, "Done checking login status.");
+            });
+    },
 
+    _log: function() {
+        console.info(this._logHeader, _.toArray(arguments).join(" "));
+    }
 });
 
-module.exports = Router;
+module.exports.Router = Router;

@@ -7,7 +7,7 @@ var $ = require("jquery"),
     appsetup = require("./appsetup.js"),
     appevents = require("./appevents.js"),
     simpleshelfApp = require("./app.js").app,
-    Router = require("./router.js");
+    Router = require("./router.js").Router;
 
 // To support Bootstrap, add jQuery & Tether to the global namespace.
 window.$ = window.jQuery = require('jquery');

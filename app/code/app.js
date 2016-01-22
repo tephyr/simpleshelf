@@ -7,7 +7,6 @@ var $ = require("jquery"),
     Backbone = require("backbone"),
     Handlebars = require("handlebars"),
     appSettings = require("./settings.js"),
-    couchUtils = require("./couchutils.js"),
     NavbarView = require("./views/NavbarView.js"),
     LoginPageView = require("./views/LoginPageView.js"),
     MainPageView = require("./views/MainPageView.js"),
@@ -148,21 +147,6 @@ appSettings.set({"urlPrefix": window.location.protocol + "//" + window.location.
 app.run = function() {
     var _logHeader = "[app.run]";
     console.info(_logHeader, "App running as of ", new Date());
-    // On initial load, check if user is already logged in.
-    // If so, proceed to main page.
-    // If not, show login.
-    couchUtils.isLoggedIn()
-        .done(function() {
-            console.log(_logHeader, "Proceed to main page.");
-            app.trigger("app:navigate", {url: "main"});
-        })
-        .fail(function() {
-            console.warn(_logHeader, "Need to log in.");
-            app.router.navigate("login", {trigger: true});
-        })
-        .always(function() {
-            console.info(_logHeader, "Done checking login status.");
-        });
 
     // Load navbar.
     $("body").prepend(app.views.navbarView.render().$el);
@@ -171,6 +155,4 @@ app.run = function() {
 // Anything else that should be immediately available when the application launches, add here.
 
 // Export app for module.
-module.exports = {
-    app: app
-};
+module.exports.app = app;
