@@ -28,7 +28,8 @@ var settings = {
     destination: config.get('destination'),
     codeOutputPath: path.join(config.get('source'), '_attachments', 'code'),
     styleOutputPath: path.join(config.get('source'), '_attachments', 'style'),
-    isDebug: false
+    isDebug: false,
+    libraryModules: config.get("libraryModules")
 };
 
 // Setup globs for watching file changes.
@@ -39,16 +40,6 @@ settings.globs = {
     'sass': 'app/styles/*.scss'
 };
 settings.globsAll = _.values(settings.globs);
-
-var libraryModules = [
-    'jquery',
-    'underscore',
-    'underscore.string',
-    'handlebars',
-    'backbone',
-    'md5',
-    'tether'
-];
 
 /**
  * Helper function: bundle application code.
@@ -65,7 +56,7 @@ var appBundlerFn = function(isDebug) {
     });
 
     // Ignore modules in lib.bundle.js.
-    _.each(libraryModules, function(lib) {
+    _.each(settings.libraryModules, function(lib) {
         b.exclude(lib);
     });
 
@@ -126,7 +117,7 @@ gulp.task('lib', function() {
     // Do **not** list them in the browserify() call, otherwise it will search for a *file*
     // by that name.
     var vendor = browserify();
-    _.each(libraryModules, function(lib) {
+    _.each(settings.libraryModules, function(lib) {
         vendor.require(lib);
     })
 
