@@ -3,12 +3,12 @@
     <form class="login-form">
         <fieldset class="form-group">
             <label for="loginUsername">User name</label>
-            <input type="text" class="form-control" name="loginUsername" id="loginUsername" value="" placeholder="User name">
+            <input type="text" class="form-control" name="loginUsername" id="loginUsername" value="" placeholder="User name" autocomplete="username" autofocus>
         </fieldset>
 
         <fieldset class="form-group">
             <label for="loginPassword">Password</label>
-            <input type="password" class="form-control" id="loginPassword" placeholder="Password" autocomplete="off">
+            <input type="password" class="form-control" id="loginPassword" placeholder="Password" autocomplete="current-password">
         </fieldset>
         <button type="submit" class="btn btn-primary" name="loginAction" id="loginAction">Log in</button>
     </form>
