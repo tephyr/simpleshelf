@@ -6,6 +6,7 @@ var $ = require("jquery"),
     _ = require("underscore"),
     Backbone = require("backbone"),
     Handlebars = require("handlebars"),
+    RegisterHandlebarHelpers = require("./handlebarhelpers.js"),
     appSettings = require("./settings.js"),
     NavbarView = require("./views/NavbarView.js"),
     LoginPageView = require("./views/LoginPageView.js"),
@@ -104,6 +105,9 @@ var app = {
 // Allow this object to receive & emit events.
 _.extend(app, Backbone.Events);
 
+// Prep Handlebars.
+RegisterHandlebarHelpers();
+
 // Setup up views hash to hold view objects & persist them for the application lifetime.
 app.views = {
     navbarView: new NavbarView(),
@@ -116,7 +120,6 @@ app.views = {
         spineCollection: app.catalog.spineCollection
     }),
     bookPageView: new BookPageView({
-        el: "#book",
         model: new BookModel()
     }),
     editBookPageView: new EditBookPageView({
@@ -148,7 +151,7 @@ app.run = function() {
     var _logHeader = "[app.run]";
     console.info(_logHeader, "App running as of ", new Date());
 
-    // Load navbar.
+    // Load navbar view.
     $("body").prepend(app.views.navbarView.render().$el);
 };
 
