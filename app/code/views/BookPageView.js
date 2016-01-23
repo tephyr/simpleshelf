@@ -1,16 +1,30 @@
 /**
- * Book page
+ * Individual book page view.
  **/
-    // "text!views/templates/bookactivities.html"
-// function(_, $, Backbone, Handlebars, ActivitiesTemplate) {
 var $ = require("jquery"),
     _ = require("underscore"),
     Backbone = require("backbone"),
     Handlebars = require("handlebars"),
+    BookPageTemplate = require("./templates/bookpage.html"),
     ActivitiesTemplate = require("./templates/bookactivities.html");
 
-var BookPage = Backbone.View.extend({
+var BookPageView = Backbone.View.extend({
+    id: "bookPage",
+
+    initialize: function() {
+        this._template = Handlebars.compile(BookPageTemplate);
+        return this;
+    },
+
     render: function() {
+        var data = this.model.toJSON();
+        // Add hints for template.
+        data._multipleAuthors = (this.model.get("authors").length > 1)
+        this.$el.html(this._template(data));
+        return this;
+    },
+
+    render2: function() {
         // Fill out existing structure.
         var fieldsStandardText = ["title", "isbn", "publisher", "notesPublic", "notesPrivate"],
             authors, fieldValue, activities, $ul, template, statuses;
@@ -84,4 +98,4 @@ var BookPage = Backbone.View.extend({
     }
 });
 
-module.exports = BookPage;
+module.exports = BookPageView;

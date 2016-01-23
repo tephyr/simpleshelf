@@ -7,7 +7,7 @@
     <div class="col-xs-12 col-md-9">{{isbn}}</div>
 </div>
 <div class="row">
-    <div class="col-xs-12 col-md-3 font-weight-bold">Author(s)</div>
+    <div class="col-xs-12 col-md-3 font-weight-bold">{{#if _multipleAuthors}}Authors{{else}}Author{{/if}}</div>
     <div class="col-xs-12 col-md-9">{{#bootstrapBasicList authors}}{{/bootstrapBasicList}}</div>
 </div>
 <div class="row">
