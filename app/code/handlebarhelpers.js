@@ -37,6 +37,19 @@ var registerHelpers = function() {
 
         return out + "</ul>";
     });
+
+    /**
+     * Make list of book tags.
+     */
+    Handlebars.registerHelper('bookTags', function(items, options) {
+        var out = "<div class=\"book-tags\">";
+
+        for (var i = 0; i < items.length; i++) {
+            out = out + "<span class=\"label label-pill label-primary\">" + items[i] + "</span>&nbsp;";
+        }
+
+        return out + "</div>";
+    });
 };
 
 module.exports = registerHelpers;
