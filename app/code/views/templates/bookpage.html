@@ -12,7 +12,7 @@
 </div>
 <div class="row">
     <div class="col-xs-12 col-md-3 font-weight-bold">Public</div>
-    <div class="col-xs-12 col-md-9">{{public}}</div>
+    <div class="col-xs-12 col-md-9">{{#if public}}Yes{{else}}No{{/if}}</div>
 </div>
 <div class="row">
     <div class="col-xs-12 col-md-3 font-weight-bold">Publisher</div>
@@ -28,13 +28,13 @@
 </div>
 <div class="row">
     <div class="col-xs-12 col-md-3 font-weight-bold">Activity</div>
-    <div class="col-xs-12 col-md-9">?</div>
+    <div class="col-xs-12 col-md-9">{{#bootstrapBasicList activities}}{{date}}: {{action}}{{/bootstrapBasicList}}</div>
 </div>
 <div class="row">
     <div class="col-xs-12 col-md-3 font-weight-bold">Status</div>
-    <div class="col-xs-12 col-md-9">?</div>
+    <div class="col-xs-12 col-md-9">{{#bootstrapBasicList _statusList}}{{statusKey}}: {{statusValue}}{{/bootstrapBasicList}}</div>
 </div>
 <div class="row">
     <div class="col-xs-12 col-md-3 font-weight-bold">Tags</div>
-    <div class="col-xs-12 col-md-9">?</div>
+    <div class="col-xs-12 col-md-9">{{#bookTags tags}}{{/bookTags}}</div>
 </div>
