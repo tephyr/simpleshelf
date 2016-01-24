@@ -4,17 +4,28 @@
 var _ = require("underscore"),
     Backbone = require("backbone"),
     Handlebars = require("handlebars"),
+    EditBookPageTemplate = require("./templates/editbookpage.html"),
     Book = require("../models/Book.js");
 
 var EditBookPage = Backbone.View.extend({
+    id: "editbook",
+
     events: {
-        "click #editbook-submit": "onSubmit",
-        "click #editbook-cancel": "onCancel"
+        "click #editbookSubmit": "onSubmit",
+        "click #editbookCancel": "onCancel"
     },
+
+    initialize: function() {
+        this._template = Handlebars.compile(EditBookPageTemplate);
+        return this;
+    },
+
     render: function() {
-        // Clear out any previous data.
-        this.$("form [type=text]").add("form textarea").val("");
+        // // Clear out any previous data.
+        // this.$("form [type=text]").add("form textarea").val("");
         console.info("model.id", _.isObject(this.model) ? this.model.id : "no model");
+        this.$el.html(this._template());
+        return this;
     },
 
     /**

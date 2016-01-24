@@ -122,9 +122,7 @@ app.views = {
     bookPageView: new BookPageView({
         model: new BookModel()
     }),
-    editBookPageView: new EditBookPageView({
-        el: "#editbook"
-    })
+    editBookPageView: new EditBookPageView()
 };
 // Add BookCollection to mainPageView.  Don't know why it won't work on initialization.
 app.views.mainPageView.books = app.catalog.bookCollection;
