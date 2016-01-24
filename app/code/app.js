@@ -127,21 +127,6 @@ app.views = {
 // Add BookCollection to mainPageView.  Don't know why it won't work on initialization.
 app.views.mainPageView.books = app.catalog.bookCollection;
 
-// Update headers for most views.
-appsetup.updateHeaders(
-    Handlebars,
-    {
-        headerIcons: HeaderIconsTemplate,
-        headerMenu: HeaderMenuTemplate
-    },
-    [
-        app.views.mainPageView,
-        app.views.booksPageView,
-        app.views.bookPageView,
-        app.views.editBookPageView
-    ]
-);
-
 // Initial settings.
 appSettings.set({"urlPrefix": window.location.protocol + "//" + window.location.host});
 
