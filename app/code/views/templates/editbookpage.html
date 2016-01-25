@@ -1,43 +1,43 @@
 <div class="row">
     <div class="col-xs-12">
-        <form>
+        <form class="editbook-form">
             <fieldset class="form-group">
                 <label for="editbookTitle">Title</label>
-                <input type="text" class="form-control" id="editbookTitle" placeholder="Title">
+                <input type="text" class="form-control" name="editbookTitle" placeholder="Title">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="editbookAuthors">Author(s)</label>
-                <textarea class="form-control" id="editbookAuthors" rows="3"></textarea>
+                <textarea class="form-control" name="editbookAuthors" rows="3"></textarea>
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="editbookISBN">ISBN</label>
-                <input type="text" class="form-control" id="editbookISBN" placeholder="ISBN">
+                <input type="text" class="form-control" name="editbookISBN" placeholder="ISBN">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="editbookPublisher">Publisher</label>
-                <input type="text" class="form-control" id="editbookPublisher" placeholder="Publisher">
+                <input type="text" class="form-control" name="editbookPublisher" placeholder="Publisher">
             </fieldset>
 
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" id="editbookPublic" value="">Public?
+                    <input type="checkbox" name="editbookPublic" value="">Public?
                 </label>
             </div>
 
             <fieldset class="form-group">
                 <label for="editbookNotesPublic">Public notes</label>
-                <textarea class="form-control" id="editbookNotesPublic" rows="3"></textarea>
+                <textarea class="form-control" name="editbookNotesPublic" rows="3"></textarea>
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="editbookNotesPrivate">Private notes</label>
-                <textarea class="form-control" id="editbookNotesPrivate" rows="3"></textarea>
+                <textarea class="form-control" name="editbookNotesPrivate" rows="3"></textarea>
             </fieldset>
 
-            <button type="submit" class="btn btn-primary btn-lg" id="editbookSubmit">Submit</button>&nbsp;<button type="submit" class="btn btn-secondary btn-lg" id="editbookCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-lg" name="editbookSubmit">Submit</button>&nbsp;<button class="btn btn-secondary btn-lg editbook-cancel">Cancel</button>
         </form>
     </div>
 </div>

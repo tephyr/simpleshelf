@@ -8,14 +8,16 @@ var _ = require("underscore"),
     Book = require("../models/Book.js");
 
 var EditBookPage = Backbone.View.extend({
-    id: "editbook",
+    id: "editBookPage",
 
     events: {
-        "click #editbookSubmit": "onSubmit",
-        "click #editbookCancel": "onCancel"
+        "submit .editbook-form": "onSubmit",
+        "click .editbook-cancel": "onCancel"
     },
 
     initialize: function() {
+        this._logHeader = "[EditBookPage]";
+        this._log("initialize");
         this._template = Handlebars.compile(EditBookPageTemplate);
         return this;
     },
@@ -23,7 +25,7 @@ var EditBookPage = Backbone.View.extend({
     render: function() {
         // // Clear out any previous data.
         // this.$("form [type=text]").add("form textarea").val("");
-        console.info("model.id", _.isObject(this.model) ? this.model.id : "no model");
+        this._log("model.id", _.isObject(this.model) ? this.model.id : "no model");
         this.$el.html(this._template());
         return this;
     },
@@ -46,6 +48,7 @@ var EditBookPage = Backbone.View.extend({
 
     /** EVENTS **/
     onCancel: function(event) {
+        this._log("onCancel");
         event.preventDefault();
         this.trigger("app:navigate", {view: "main"});
     },
@@ -62,11 +65,13 @@ var EditBookPage = Backbone.View.extend({
 
     onSubmit: function(event) {
         event.preventDefault();
-        console.info("Submitting a book!");
+        this._log("Submitting a book!");
+        return false;
+
         this._fillModel();
         if (this.model.isValid()) {
             // Save to db, fire event.
-            console.info(this.model.toJSON());
+            console.table(this.model.toJSON());
             $.when(
                 this.model.save(null, {wait: true})
             ).then(
@@ -76,6 +81,10 @@ var EditBookPage = Backbone.View.extend({
         } else {
             alert(this.model.validationError);
         }
+    },
+
+    _log: function() {
+        console.info(this._logHeader, _.toArray(arguments).join(" "));
     }
 });
 
