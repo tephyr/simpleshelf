@@ -109,6 +109,8 @@ _.extend(app, Backbone.Events);
 RegisterHandlebarHelpers();
 
 // Setup up views hash to hold view objects & persist them for the application lifetime.
+// NOTE: this requires more app overhead to remove views & their events from the DOM.
+// See router._changeScreen().
 app.views = {
     navbarView: new NavbarView(),
     loginPageView: new LoginPageView(),

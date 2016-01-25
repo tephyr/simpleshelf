@@ -26,6 +26,7 @@ var Router = Backbone.Router.extend({
         this._views = options.views;
         this._catalog = options.catalog;
         this._initialLoginHandled = false;
+        this._viewLogger = [];
     },
 
     /**
@@ -86,7 +87,6 @@ var Router = Backbone.Router.extend({
         $.when(
             this._views.bookPageView.model.fetch()
         ).always(_.bind(function() {
-            this._views.bookPageView.render();
             this._changeScreen(this._views.bookPageView);
         }, this));
     },
@@ -97,7 +97,6 @@ var Router = Backbone.Router.extend({
     addbook: function() {
         this._log("/addbook");
         this._views.editBookPageView.model = new Book();
-        this._views.editBookPageView.render();
         this._changeScreen(this._views.editBookPageView);
     },
 
@@ -108,12 +107,28 @@ var Router = Backbone.Router.extend({
         if (!_.isNull(this._currentView)) {
             // Replacing view - kill existing.
             this._log("Changing from " + this._currentPageId);
+            // Disconnect events.
+            this._currentView.undelegateEvents();
+            // Remove from DOM.
             this._currentView.remove();
-            $("div#baseContent").empty();
         }
+
         this._currentView = view;
         $("#baseContent").append(view.render().$el);
-        this._currentPageId = view.$el.attr("id");
+        this._currentPageId = view.$el.attr("id");  // TODO: switch to view.id.
+
+        // Only call delegateEvents() once view is re-used, since initialize() automatically
+        // calls it.
+        // NOTE: this is **necessary** when view *instances* are held by the application. If
+        // views were instantiated as needed, the events would always be applied and the second 
+        // and subsequent uses of that view would behave exactly like the first.
+        if (_.indexOf(this._viewLogger, this._currentPageId) !== -1) {
+            // Subsequent use of this view: hook up events.
+            view.delegateEvents();
+        } else {
+            this._viewLogger.push(this._currentPageId);
+        }
+        this._log("_viewLogger", this._viewLogger);
     },
 
     /**
