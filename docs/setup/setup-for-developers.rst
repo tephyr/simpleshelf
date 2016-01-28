@@ -2,7 +2,7 @@ Setup for developers
 ====================
 Overview
 ++++++++
-#. Build or install CouchDB.
+#. Build or install CouchDB_.
 #. Create & secure the database.
 #. Install couchapp build tools.
 #. Publish couchapp to database.
@@ -22,3 +22,6 @@ simpleshelf expects the database to require authentication.
 #. Test by going to the main page.
 
    There should now be a login link, if you have logged out of futon.  Otherwise, you will see the first page.
+
+
+.. _couchdb: http://couchdb.apache.org/
