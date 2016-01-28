@@ -2,6 +2,7 @@
  * Edit Book page.
  **/
 var _ = require("underscore"),
+    _s = require("underscore.string"),
     Backbone = require("backbone"),
     Handlebars = require("handlebars"),
     EditBookPageTemplate = require("./templates/editbookpage.html"),
@@ -32,18 +33,25 @@ var EditBookPage = Backbone.View.extend({
 
     /**
      * Create book, add all data to it.
+     * @param  {Array}   formArray  Array of form elements, from $.serializeArray
      **/
-    _fillModel: function() {
-        this.model.set({
-            title: this.$("#editbook-title").val(),
-            authors: this.$("#editbook-authors").val().split("\n"),
-            isbn: this.$("#editbook-isbn").val(),
-            publisher: this.$("#editbook-publisher").val(),
-            notePublic: this.$("#editbook-notes-public").val(),
-            notesPrivate: this.$("#editbook-notes-private").val()
+    _fillModel: function(formArray) {
+        // Convert serialized array of form values into object.
+        var formObject = {};
+        formArray.forEach(function(element) {
+            formObject[element.name] = element.value;
         });
 
-        this.model.set({"public": this.$("#editbook-public").val() === "on"});
+        this.model.set({
+            title: formObject["editbookTitle"],
+            authors: _s.lines(formObject["editbookAuthors"]),
+            isbn: formObject["editbookIsbn"],
+            publisher: formObject["editbookPublisher"],
+            notePublic: formObject["editbookNotesPublic"],
+            notesPrivate: formObject["editbookNotesPrivate"],
+        });
+
+        this.model.set({"public": formObject.editBookPublic === "on"});
     },
 
     /** EVENTS **/
@@ -66,9 +74,8 @@ var EditBookPage = Backbone.View.extend({
     onSubmit: function(event) {
         event.preventDefault();
         this._log("Submitting a book!");
-        return false;
 
-        this._fillModel();
+        this._fillModel($(event.currentTarget).serializeArray());
         if (this.model.isValid()) {
             // Save to db, fire event.
             console.table(this.model.toJSON());
