@@ -97,6 +97,29 @@ gulp.task('code-dev', function (cb) {
 });
 
 /**
+ * Build documentation.
+ */
+gulp.task('docs', function(cb) {
+    var options = {
+        cwd: path.join(path.resolve('.'), 'docs'),
+        env: {
+            HOME: process.env.HOME,
+            PATH: process.env.PATH
+        }
+    };
+
+    exec('make html', options, function(error, stdout, stderr) {
+        console.log(stdout);
+        if (error !== null) {
+            console.log(`stderr: ${stderr}`);
+            console.log(`exec error: ${error}`);
+            return cb(error); // return error
+        }
+        cb(); // finished task
+    });
+});
+
+/**
  * Combine all app/code/lib libraries, *in order*, to a lib.bundle.js.
  **/
 gulp.task('lib', function() {
