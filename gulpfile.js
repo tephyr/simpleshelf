@@ -4,9 +4,11 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     del = require('del'),
     exec = require('child_process').exec,
+    globby = require('globby'),
     gutil = require('gulp-util'),
     merge = require('merge-stream'),
     path = require('path'),
+    Promise = require('bluebird'),
     push = require('couchdb-push'),
     sass = require('gulp-sass'),
     source = require('vinyl-source-stream'),
@@ -15,6 +17,7 @@ var gulp = require('gulp'),
     notifier = require("node-notifier");
 
 // Check for NODE_ENV; if doesn't exist, use 'personal'.
+// Usage (BEFORE launching gulp): export NODE_ENV=somevalue
 if (_.isEmpty(process.env.NODE_ENV)) {
     process.env.NODE_ENV = "personal";
 }
@@ -31,6 +34,10 @@ var settings = {
     isDebug: false,
     libraryModules: config.get("libraryModules")
 };
+
+if (config.has("_docs")) {
+    settings._docs = config.get("_docs");
+}
 
 // Setup globs for watching file changes.
 settings.globs = {
@@ -94,6 +101,36 @@ gulp.task('code', function () {
  **/
 gulp.task('code-dev', function (cb) {
     return appBundlerFn(settings.isDebug);
+});
+
+/**
+ * Push documents to CouchDB.
+ * This involves significant workarounds, since https://github.com/jo/couchdb-compile does not
+ * recognize the _docs directory, which is the standard for CouchApps to hold standard documents.
+ */
+gulp.task('push-docs', function() {
+    if (_.has(settings, "_docs") && _.has(settings._docs, "source")) {
+        var pushDoc = Promise.promisify(push);
+
+        // Get list of paths from glob, then send each path to pushDoc fn.
+        var paths = globby.sync(settings._docs.source),
+            listOfPromises = _.map(paths, function(path) {
+                return pushDoc(settings.destination, path)
+                    .then(function(resp) {
+                        console.log(resp);
+                    })
+                    .finally(function() {
+                        console.info("Pushed", path);
+                    });
+            });
+
+        // Done!
+        return Promise.all(listOfPromises);
+
+    } else {
+        // Nothing to do, end this task succinctly.
+        gutil.noop();
+    }
 });
 
 /**
@@ -192,7 +229,7 @@ gulp.task('ui-local', function() {
 /**
  * Push SOURCE to DESTINATION using couchdb-push.
  **/
-gulp.task('push', ['lib', 'code-dev', 'ui-framework', 'ui-local'], function(cb) {
+gulp.task('push', ['push-docs', 'lib', 'code-dev', 'ui-framework', 'ui-local'], function(cb) {
     console.info("Pushing", settings.source, "to", settings.destination);
     push(settings.destination, settings.source, function(err, resp) {
         if (_.isObject(err)) {
