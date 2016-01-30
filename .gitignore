@@ -4,6 +4,8 @@ simpleshelfmobile/_attachments/code/
 simpleshelfmobile/_attachments/style/
 node_modules/
 config/personal.json
+config/demo.json
+config/demo-docs/
 next.txt
 README.html
 *.pyc
