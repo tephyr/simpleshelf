@@ -44,6 +44,7 @@ settings.globs = {
     'code': 'app/code/**/*.js',
     'templates': 'app/code/**/*.html',
     'ui': path.join(config.get('source'), '_attachments') + '/**/*.html', 
+    'couchdbViews': path.join(config.get('source'), 'views') + '/**/*.js', 
     'sass': 'app/styles/*.scss'
 };
 settings.globsAll = _.values(settings.globs);
