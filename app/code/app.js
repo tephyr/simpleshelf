@@ -13,6 +13,7 @@ var $ = require("jquery"),
     MainPageView = require("./views/MainPageView.js"),
     BooksPageView = require("./views/BooksPageView.js"),
     BookPageView = require("./views/BookPageView.js"),
+    AppConfigurationModel = require("./models/Configuration.js"),
     EditBookPageView = require("./views/EditBookPageView.js"),
     GlobalCountModel = require("./models/GlobalCount.js"),
     BookCollection = require("./models/BookCollection.js"),
@@ -141,6 +142,10 @@ app.run = function() {
 };
 
 // Anything else that should be immediately available when the application launches, add here.
+app.configuration = new AppConfigurationModel();
+app.configuration.fetch().then(function() {
+    console.info("[app]", "configuration loaded");
+});
 
 // Export app for module.
 module.exports.app = app;
