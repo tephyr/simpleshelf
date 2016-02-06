@@ -110,11 +110,14 @@ gulp.task('code-dev', function (cb) {
  * recognize the _docs directory, which is the standard for CouchApps to hold standard documents.
  */
 gulp.task('push-docs', function() {
-    if (_.has(settings, "_docs") && _.has(settings._docs, "source")) {
+    if (_.has(settings, "_docs")) {
         var pushDoc = Promise.promisify(push);
 
+        // Combine all paths from all keys in _docs.
+        var pathGlobs = _.values(settings._docs);
+
         // Get list of paths from glob, then send each path to pushDoc fn.
-        var paths = globby.sync(settings._docs.source),
+        var paths = globby.sync(pathGlobs),
             listOfPromises = _.map(paths, function(path) {
                 return pushDoc(settings.destination, path)
                     .then(function(resp) {

@@ -10,5 +10,8 @@
     ],
     "source": "simpleshelf",
     "sourceWatch": "simpleshelf/**/*",
-    "destination": "http://127.0.0.1:5984/simpleshelf"
+    "destination": "http://127.0.0.1:5984/simpleshelf",
+    "_docs": {
+        "configurationDefault": "./config/default-docs/simpleshelf-configuration-default.json"
+    }
 }
