@@ -109,6 +109,11 @@ _.extend(app, Backbone.Events);
 // Prep Handlebars.
 RegisterHandlebarHelpers();
 
+app.configuration = new AppConfigurationModel();
+app.configuration.fetch().then(function() {
+    console.info("[app]", "configuration loaded");
+});
+
 // Setup up views hash to hold view objects & persist them for the application lifetime.
 // NOTE: this requires more app overhead to remove views & their events from the DOM.
 // See router._changeScreen().
@@ -123,9 +128,12 @@ app.views = {
         spineCollection: app.catalog.spineCollection
     }),
     bookPageView: new BookPageView({
-        model: new BookModel()
+        model: new BookModel(),
+        configuration: app.configuration
     }),
-    editBookPageView: new EditBookPageView()
+    editBookPageView: new EditBookPageView({
+        configuration: app.configuration
+    })
 };
 // Add BookCollection to mainPageView.  Don't know why it won't work on initialization.
 app.views.mainPageView.books = app.catalog.bookCollection;
@@ -142,10 +150,6 @@ app.run = function() {
 };
 
 // Anything else that should be immediately available when the application launches, add here.
-app.configuration = new AppConfigurationModel();
-app.configuration.fetch().then(function() {
-    console.info("[app]", "configuration loaded");
-});
 
 // Export app for module.
 module.exports.app = app;
