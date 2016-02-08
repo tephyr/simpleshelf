@@ -16,18 +16,30 @@ var EditBookPage = Backbone.View.extend({
         "click .editbook-cancel": "onCancel"
     },
 
-    initialize: function() {
+    initialize: function(options) {
         this._logHeader = "[EditBookPage]";
         this._log("initialize");
         this._template = Handlebars.compile(EditBookPageTemplate);
+        this.configuration = options.configuration || {};
         return this;
     },
 
     render: function() {
         // // Clear out any previous data.
         // this.$("form [type=text]").add("form textarea").val("");
+
+        var ownershipConfig = this.configuration.get("ownership"),
+            readConfig = this.configuration.get("read"),
+            templateData = {
+                hasOwnership: (_.isArray(ownershipConfig) && ownershipConfig.length > 0),
+                hasRead: (_.isArray(readConfig) && readConfig.length > 0),
+                statusRead: readConfig,
+                statusOwnership: ownershipConfig
+            };
+
         this._log("model.id", _.isObject(this.model) ? this.model.id : "no model");
-        this.$el.html(this._template());
+        this.$el.html(this._template(templateData));
+
         return this;
     },
 

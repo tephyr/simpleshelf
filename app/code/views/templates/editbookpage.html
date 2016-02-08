@@ -37,6 +37,26 @@
                 <textarea class="form-control" name="editbookNotesPrivate" rows="3"></textarea>
             </fieldset>
 
+            <fieldset class="form-group {{#unless hasRead}}hidden-xs-up{{/unless}}">
+                <label for="editbookRead">Read</label>
+                <select class="form-control" id="editbookRead">
+                    <option value=""></option>
+                    {{#each statusRead}}
+                    <option value="{{this.[0]}}">{{this.[1]}}</option>
+                    {{/each}}
+                </select>
+            </fieldset>
+
+            <fieldset class="form-group {{#unless hasOwnership}}hidden-xs-up{{/unless}}">
+                <label for="editbookOwnership">Ownership</label>
+                <select class="form-control" id="editbookOwnership">
+                    <option value=""></option>
+                    {{#each statusOwnership}}
+                    <option value="{{this.[0]}}">{{this.[1]}}</option>
+                    {{/each}}
+                </select>
+            </fieldset>
+
             <button type="submit" class="btn btn-primary btn-lg" name="editbookSubmit">Submit</button>&nbsp;<button class="btn btn-secondary btn-lg editbook-cancel">Cancel</button>
         </form>
     </div>
