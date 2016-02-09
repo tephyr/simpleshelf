@@ -13,7 +13,8 @@ var EditBookPage = Backbone.View.extend({
 
     events: {
         "submit .editbook-form": "onSubmit",
-        "click .editbook-cancel": "onCancel"
+        "click .editbook-cancel": "onCancel",
+        "change #editbookRead": "onChangeRead"
     },
 
     initialize: function(options) {
@@ -71,6 +72,22 @@ var EditBookPage = Backbone.View.extend({
         this._log("onCancel");
         event.preventDefault();
         this.trigger("app:navigate", {view: "main"});
+    },
+
+    /**
+     * If the read status changes from the original, then activate the read date input.
+     * @param  {Object} event
+     * @return {undef}
+     */
+    onChangeRead: function(event) {
+        // Handle for Add Book setup (no model).
+        // TODO: handle when editing existing book.
+        var comparisonValue = "";
+        if (this.$("#editbookRead").val() !== comparisonValue) {
+            this.$("[name='editbookReadDate']").prop("readonly", false);
+        } else {
+            this.$("[name='editbookReadDate']").prop("readonly", true);
+        }
     },
 
     onSaveSuccess: function() {

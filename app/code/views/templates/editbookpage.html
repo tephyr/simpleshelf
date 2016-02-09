@@ -39,14 +39,14 @@
 
             <fieldset class="form-group {{#unless hasRead}}hidden-xs-up{{/unless}}">
                 <label for="editbookRead">Read</label>
-                <select class="form-control" id="editbookRead">
+                <select class="form-control" name="editbookRead" id="editbookRead">
                     <option value=""></option>
                     {{#each statusRead}}
                     <option value="{{this.[0]}}">{{this.[1]}}</option>
                     {{/each}}
                 </select>
                 <label for="editbookReadDate">As of</label>
-                <input type="text" class="form-control" name="editbookReadDate" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-disable-touch-keyboard="true" data-date-today-btn="linked" data-date-today-highlight="true" placeholder="yyyy-mm-dd">
+                <input type="text" class="form-control" name="editbookReadDate" data-provide="datepicker" data-date-assume-nearby-year="true" data-date-format="yyyy-mm-dd" data-date-disable-touch-keyboard="true" data-date-enable-on-readonly="false" data-date-today-btn="linked" data-date-today-highlight="true" placeholder="yyyy-mm-dd" readonly>
             </fieldset>
 
             <fieldset class="form-group {{#unless hasOwnership}}hidden-xs-up{{/unless}}">
