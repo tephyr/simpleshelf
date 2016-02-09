@@ -32,7 +32,9 @@ var settings = {
     codeOutputPath: path.join(config.get('source'), '_attachments', 'code'),
     styleOutputPath: path.join(config.get('source'), '_attachments', 'style'),
     isDebug: false,
-    libraryModules: config.get("libraryModules")
+    libraryModules: config.get("libraryModules"),
+    externalUIJSDev: config.get("externalUIJSDev"),
+    externalUICSSDev: config.get("externalUICSSDev")
 };
 
 if (config.has("_docs")) {
@@ -194,18 +196,12 @@ gulp.task('lib', function() {
 
 /**
  * Copy 3rd-party UI framework files to _attachments.
- * NOTE: set useDevFiles to settings.isDebug when ready to ship production code.
  **/
 gulp.task('ui-framework', ['clean:ui-framework'], function() {
-    var useDevFiles = true,
-        pathParent = 'node_modules/bootstrap/dist/',
-        cssGlob = pathParent + 'css/bootstrap' + (useDevFiles ? ".css*" : ".min.*"),
-        jsGlob = pathParent + 'js/bootstrap' + (useDevFiles ? ".js" : ".min.js");
-
-    var bootstrapCSS = gulp.src(cssGlob)
+    var bootstrapCSS = gulp.src(settings.externalUICSSDev)
         .pipe(gulp.dest(settings.styleOutputPath));
 
-    var bootstrapJS = gulp.src(jsGlob)
+    var bootstrapJS = gulp.src(settings.externalUIJSDev)
         .pipe(gulp.dest(settings.codeOutputPath));
 
     return merge(bootstrapCSS, bootstrapJS);
