@@ -1,12 +1,36 @@
 [
     {
-        "from": "/data/",
+        "from": "index",
+        "to": "/index.html",
+        "method": "*",
+        "query": {}
+    },
+    {
+        "from": "style/*",
+        "to": "/style/*",
+        "method": "*",
+        "query": {}
+    },
+    {
+        "from": "code/*",
+        "to": "/code/*",
+        "method": "*",
+        "query": {}
+    },
+    {
+        "from": "_view/*",
+        "to": "/_view/*",
+        "method": "*",
+        "query": {}
+    },
+    {
+        "from": "data/",
         "to": "../../",
         "method": "POST",
         "query": {}
     },
     {
-        "from": "/data/*",
+        "from": "data/*",
         "to": "../../*",
         "method": "*",
         "query": {}
