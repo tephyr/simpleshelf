@@ -13,7 +13,7 @@ var Book = Backbone.Model.extend({
         'public': true
     },
     url: function(){
-        var urlPrefix = '_rewrite/data/';
+        var urlPrefix = 'data/';
         if (this.isNew()) {
             // Do not include non-existent server ID.
             return urlPrefix;
