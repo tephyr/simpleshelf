@@ -47,9 +47,12 @@ settings.globs = {
     'templates': 'app/code/**/*.html',
     'ui': path.join(config.get('source'), '_attachments') + '/**/*.html', 
     'couchdbViews': path.join(config.get('source'), 'views') + '/**/*.js', 
+    'couchdbSettings': [
+        config.get('source') + '/rewrites.json'
+    ],
     'sass': 'app/styles/*.scss'
 };
-settings.globsAll = _.values(settings.globs);
+settings.globsAll = _.flattenDeep(_.values(settings.globs));
 
 /**
  * Helper function: bundle application code.
