@@ -6,8 +6,9 @@
  * @param secObj
  */
 function(newDoc, oldDoc, userCtx, secObj) {
-    var IS_DB_ADMIN = false;
-    var IS_LOGGED_IN_USER = false;
+    var IS_DB_ADMIN = false,
+        IS_LOGGED_IN_USER = false,
+        IS_DEMO_ROLE = false;
 
     secObj.admins = secObj.admins || {};
     secObj.admins.names = secObj.admins.names || [];
@@ -29,12 +30,18 @@ function(newDoc, oldDoc, userCtx, secObj) {
 
     if (userCtx.name !== null) {
         IS_LOGGED_IN_USER = true;
+
+        // Check if this user has the demo role.
+        IS_DEMO_ROLE = (userCtx.roles.indexOf("demo") !== -1);
     }
 
     if (IS_DB_ADMIN || IS_LOGGED_IN_USER) {
-        log('User : ' + userCtx.name + ' changing document: ' +  newDoc._id);
-    }
-    else {
+        if (IS_DEMO_ROLE) {
+            throw({'forbidden': 'Demo users cannot alter documents'});
+        } else {
+            log('User : ' + userCtx.name + ' changing document: ' +  newDoc._id);
+        }
+    } else {
         throw({'forbidden':'Only admins and users can alter documents'});
     }
 }
