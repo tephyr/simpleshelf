@@ -48,7 +48,8 @@ settings.globs = {
     'ui': path.join(config.get('source'), '_attachments') + '/**/*.html', 
     'couchdbViews': path.join(config.get('source'), 'views') + '/**/*.js', 
     'couchdbSettings': [
-        config.get('source') + '/rewrites.json'
+        config.get('source') + '/rewrites.json',
+        config.get('source') + '/*.js'
     ],
     'sass': 'app/styles/*.scss'
 };
