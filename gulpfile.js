@@ -55,6 +55,9 @@ settings.globs = {
 };
 settings.globsAll = _.flattenDeep(_.values(settings.globs));
 
+// Import external tasks, giving them the settings object.
+require("./tasks/bulk-update")(gulp, settings);
+
 /**
  * Helper function: bundle application code.
  **/

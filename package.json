@@ -36,6 +36,7 @@
     "node-notifier": "^4.4.0",
     "stringify": "^3.2.0",
     "tether": "^1.1.1",
+    "unirest": "^0.4.2",
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
