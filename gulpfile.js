@@ -57,6 +57,7 @@ require("./tasks/build-docs")(gulp, settings);
 require("./tasks/clean-ui-framework")(gulp, settings);
 require("./tasks/ui-framework")(gulp, settings);
 require("./tasks/ui-local")(gulp, settings);
+require("./tasks/bundle-lib")(gulp, settings);
 
 /**
  * Helper function: bundle application code.
@@ -115,41 +116,9 @@ gulp.task('code-dev', function (cb) {
 });
 
 /**
- * Combine all app/code/lib libraries, *in order*, to a lib.bundle.js.
- **/
-gulp.task('lib', function() {
-    // var libsInOrder = [
-        // NOTE: using the following will require the jquery.couch.js file, typically
-        // available under /_utils/script/jquery.couch.js.
-        // 'jquery.couch.app.js',
-        // 'jquery.couch.app.util.js',
-        // 'jquery.couchForm.js',
-        // 'jquery.mustache.js',
-        // 'jquery.couchLogin.js',
-        // 'jquery.couchProfile.js',
-    // ];
-
-    // idea courtesy http://stackoverflow.com/a/24876996/562978
-    // List all 3rd-party libraries (all of which are node modules), and ``require`` them
-    // in this bundle (``lib.bundle.js``).
-    // Do **not** list them in the browserify() call, otherwise it will search for a *file*
-    // by that name.
-    var vendor = browserify();
-    _.each(settings.libraryModules, function(lib) {
-        vendor.require(lib);
-    })
-
-    // Return so gulp knows when task finishes.
-    return vendor.bundle()
-        .pipe(source('lib.bundle.js'))            // give destination filename
-        .pipe(gulp.dest(settings.codeOutputPath)) // give destination directory
-        .on('error', gutil.log);
-});
-
-/**
  * Push SOURCE to DESTINATION using couchdb-push.
  **/
-gulp.task('push', ['lib', 'code-dev', 'ui-framework', 'ui-local'], function(cb) {
+gulp.task('push', ['bundle-lib', 'code-dev', 'ui-framework', 'ui-local'], function(cb) {
     console.info("Pushing", settings.source, "to", settings.destination);
     push(settings.destination, settings.source, function(err, resp) {
         if (_.isObject(err)) {
