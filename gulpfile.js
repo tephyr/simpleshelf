@@ -6,7 +6,6 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     path = require('path'),
     Promise = require('bluebird'),
-    push = require('couchdb-push'),
     source = require('vinyl-source-stream'),
     stringify = require('stringify'),
     notify = require("gulp-notify"),
@@ -58,6 +57,7 @@ require("./tasks/clean-ui-framework")(gulp, settings);
 require("./tasks/ui-framework")(gulp, settings);
 require("./tasks/ui-local")(gulp, settings);
 require("./tasks/bundle-lib")(gulp, settings);
+require("./tasks/push")(gulp, settings);
 
 /**
  * Helper function: bundle application code.
@@ -113,25 +113,6 @@ gulp.task('code', function () {
  **/
 gulp.task('code-dev', function (cb) {
     return appBundlerFn(settings.isDebug);
-});
-
-/**
- * Push SOURCE to DESTINATION using couchdb-push.
- **/
-gulp.task('push', ['bundle-lib', 'code-dev', 'ui-framework', 'ui-local'], function(cb) {
-    console.info("Pushing", settings.source, "to", settings.destination);
-    push(settings.destination, settings.source, function(err, resp) {
-        if (_.isObject(err)) {
-            // Handle failure.
-            console.error(err);
-            return cb(err);
-        } else {
-            // Handle success.
-            console.log(resp);
-            notifier.notify({title: 'push', message: JSON.stringify(resp, null, ' ')});
-            return cb();
-        }
-    });
 });
 
 /**
