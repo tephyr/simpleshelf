@@ -1,6 +1,5 @@
 var gulp = require('gulp'),
     _ = require('lodash'),
-    browserify = require('browserify'),
     concat = require('gulp-concat'),
     globby = require('globby'),
     gutil = require('gulp-util'),
@@ -58,37 +57,8 @@ require("./tasks/ui-framework")(gulp, settings);
 require("./tasks/ui-local")(gulp, settings);
 require("./tasks/bundle-lib")(gulp, settings);
 require("./tasks/push")(gulp, settings);
-
-/**
- * Helper function: bundle application code.
- **/
-var appBundlerFn = function(isDebug) {
-    // set up the browserify instance on a task basis
-    var b = browserify({
-        entries: 'app/code/main.js',
-        debug: isDebug,
-        transform: stringify({
-            extensions: ['.html'],
-            minify: false
-        })
-    });
-
-    // Ignore modules in lib.bundle.js.
-    _.each(settings.libraryModules, function(lib) {
-        b.exclude(lib);
-    });
-
-    // Return so gulp knows when task finishes.
-    return b.bundle()
-        .on('error', function(err) {
-            // print the error
-            gutil.log(gutil.colors.bgRed(err.message));
-            // end this stream (to prevent browserify from hanging the stream)
-            this.emit('end');
-        }) // Set error handler
-        .pipe(source('app.bundle.js')) // give destination filename
-        .pipe(gulp.dest(settings.codeOutputPath)); // give destination directory
-};
+require("./tasks/code-dev")(gulp, settings);
+require("./tasks/code")(gulp, settings);
 
 /**
  * Show settings for this task runner.
@@ -99,20 +69,6 @@ gulp.task('default', function() {
     console.info("config.source", settings.source);
     console.info("config.destination", settings.destination);
     console.info("Typical dev command: `gulp dev-watch docs-watch`");
-});
-
-/**
- * Bundle production-ready code.
- **/
-gulp.task('code', function () {
-    return appBundlerFn(false);
-});
-
-/**
- * Bundle debug-ready javascript.
- **/
-gulp.task('code-dev', function (cb) {
-    return appBundlerFn(settings.isDebug);
 });
 
 /**
