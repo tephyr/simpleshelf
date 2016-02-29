@@ -1,14 +1,6 @@
 var gulp = require('gulp'),
     _ = require('lodash'),
-    concat = require('gulp-concat'),
-    globby = require('globby'),
-    gutil = require('gulp-util'),
-    path = require('path'),
-    Promise = require('bluebird'),
-    source = require('vinyl-source-stream'),
-    stringify = require('stringify'),
-    notify = require("gulp-notify"),
-    notifier = require("node-notifier");
+    path = require('path');
 
 // Check for NODE_ENV; if doesn't exist, use 'personal'.
 // Usage (BEFORE launching gulp): export NODE_ENV=somevalue
