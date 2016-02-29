@@ -3,7 +3,6 @@ var gulp = require('gulp'),
     browserify = require('browserify'),
     concat = require('gulp-concat'),
     del = require('del'),
-    exec = require('child_process').exec,
     globby = require('globby'),
     gutil = require('gulp-util'),
     merge = require('merge-stream'),
@@ -57,6 +56,7 @@ settings.globsAll = _.flattenDeep(_.values(settings.globs));
 
 // Import external tasks, giving them the settings object.
 require("./tasks/bulk-update")(gulp, settings);
+require("./tasks/build-docs")(gulp, settings);
 
 /**
  * Helper function: bundle application code.
@@ -112,29 +112,6 @@ gulp.task('code', function () {
  **/
 gulp.task('code-dev', function (cb) {
     return appBundlerFn(settings.isDebug);
-});
-
-/**
- * Build documentation.
- */
-gulp.task('docs', function(cb) {
-    var options = {
-        cwd: path.join(path.resolve('.'), 'docs'),
-        env: {
-            HOME: process.env.HOME,
-            PATH: process.env.PATH
-        }
-    };
-
-    exec('make html', options, function(error, stdout, stderr) {
-        console.log(stdout);
-        if (error !== null) {
-            console.log(`stderr: ${stderr}`);
-            console.log(`exec error: ${error}`);
-            return cb(error); // return error
-        }
-        cb(); // finished task
-    });
 });
 
 /**
