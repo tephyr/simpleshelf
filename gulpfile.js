@@ -97,6 +97,7 @@ gulp.task('default', function() {
     console.info("Current environment (NODE_ENV)", process.env.NODE_ENV);
     console.info("config.source", settings.source);
     console.info("config.destination", settings.destination);
+    console.info("Typical dev command: `gulp dev-watch docs-watch`");
 });
 
 /**
@@ -236,7 +237,7 @@ gulp.task('ui-local', function() {
 /**
  * Push SOURCE to DESTINATION using couchdb-push.
  **/
-gulp.task('push', ['push-docs', 'lib', 'code-dev', 'ui-framework', 'ui-local'], function(cb) {
+gulp.task('push', ['lib', 'code-dev', 'ui-framework', 'ui-local'], function(cb) {
     console.info("Pushing", settings.source, "to", settings.destination);
     push(settings.destination, settings.source, function(err, resp) {
         if (_.isObject(err)) {
@@ -271,6 +272,18 @@ gulp.task('dev-watch', function() {
     watcher.on('change', function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
     });
+});
+
+// Watch files, run docs tasks.
+gulp.task('docs-watch', function() {
+    if (_.has(settings, "_docs")) {
+        // When any doc changes, push to server.
+        var watcher = gulp.watch(_.values(settings._docs), {debounceDelay: 100}, ['bulk-update']);
+
+        watcher.on('change', function(event) {
+            console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', pushing docs.');
+        });
+    }
 });
 
 // Watch files, run production tasks.
