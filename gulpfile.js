@@ -2,14 +2,11 @@ var gulp = require('gulp'),
     _ = require('lodash'),
     browserify = require('browserify'),
     concat = require('gulp-concat'),
-    del = require('del'),
     globby = require('globby'),
     gutil = require('gulp-util'),
-    merge = require('merge-stream'),
     path = require('path'),
     Promise = require('bluebird'),
     push = require('couchdb-push'),
-    sass = require('gulp-sass'),
     source = require('vinyl-source-stream'),
     stringify = require('stringify'),
     notify = require("gulp-notify"),
@@ -57,6 +54,9 @@ settings.globsAll = _.flattenDeep(_.values(settings.globs));
 // Import external tasks, giving them the settings object.
 require("./tasks/bulk-update")(gulp, settings);
 require("./tasks/build-docs")(gulp, settings);
+require("./tasks/clean-ui-framework")(gulp, settings);
+require("./tasks/ui-framework")(gulp, settings);
+require("./tasks/ui-local")(gulp, settings);
 
 /**
  * Helper function: bundle application code.
@@ -144,38 +144,6 @@ gulp.task('lib', function() {
         .pipe(source('lib.bundle.js'))            // give destination filename
         .pipe(gulp.dest(settings.codeOutputPath)) // give destination directory
         .on('error', gutil.log);
-});
-
-/**
- * Copy 3rd-party UI framework files to _attachments.
- **/
-gulp.task('ui-framework', ['clean:ui-framework'], function() {
-    var bootstrapCSS = gulp.src(settings.externalUICSSDev)
-        .pipe(gulp.dest(settings.styleOutputPath));
-
-    var bootstrapJS = gulp.src(settings.externalUIJSDev)
-        .pipe(gulp.dest(settings.codeOutputPath));
-
-    return merge(bootstrapCSS, bootstrapJS);
-});
-
-/**
- * Delete the ui framework files.
- **/
-gulp.task('clean:ui-framework', function() {
-    return del([
-        settings.styleOutputPath + "/bootstrap.*",
-        settings.codeOutputPath + "/bootstrap.*"
-    ]);
-});
-
-/**
- * Build local SASS into CSS.
- **/
-gulp.task('ui-local', function() {
-    gulp.src('app/styles/app.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest(settings.styleOutputPath));
 });
 
 /**
