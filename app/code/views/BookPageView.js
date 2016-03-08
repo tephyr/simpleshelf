@@ -5,7 +5,8 @@ var $ = require("jquery"),
     _ = require("underscore"),
     Backbone = require("backbone"),
     Handlebars = require("handlebars"),
-    BookPageTemplate = require("./templates/bookpage.html");
+    BookPageTemplate = require("./templates/bookpage.html"),
+    ActivitiesView = require("./ActivitiesView.js");
 
 var BookPageView = Backbone.View.extend({
     id: "bookPage",
@@ -25,7 +26,6 @@ var BookPageView = Backbone.View.extend({
 
         // Add hints for template.
         data._multipleAuthors = (this.model.get("authors").length > 1)
-        data._activities = data.activities || [];
         // Convert status object into list of objects with identical key/value keys.
         data._statusList = _.map(_.pairs(data.status || []), function(pair) {
             return {statusKey: pair[0], statusValue: pair[1]};
@@ -33,7 +33,23 @@ var BookPageView = Backbone.View.extend({
         data._tags = data.tags || [];
 
         this.$el.html(this._template(data));
+
+        this.addActivitiesView(this.model);
+
         return this;
+    },
+
+    /**
+     * Add the Activities sub-view.
+     * @param {Object} model SpineCollection model
+     */
+    addActivitiesView: function(model) {
+        var view = new ActivitiesView({
+            model: model
+        });
+        view.render();
+        this.$(".activitiesViewContainer").append(view.$el);
+        model.on("remove", view.remove, view);
     }
 });
 
