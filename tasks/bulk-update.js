@@ -12,10 +12,16 @@ module.exports = function(gulp, settings) {
             bulkDocs = {"docs": []},
             paths = globby.sync(pathGlobs);
 
+        var debug = false;
+
         // Generate list of paths to documents that must be uploaded.
         _.each(paths, function(jsonPath) {
             bulkDocs.docs.push(require(path.join(process.cwd(), jsonPath)));
         });
+
+        if (debug) {
+            console.info(_logHeader, bulkDocs);
+        }
 
         // Get docs matching keys of docs to add,
         // because they need to include the _rev value to force an update.
@@ -24,6 +30,10 @@ module.exports = function(gulp, settings) {
                 return doc._id;
             })
         };
+
+        if (debug) {
+            console.info(_logHeader, bulkKeys.keys);
+        }
 
         /**
          * Get all docs for the given keys (POST _all_docs).
@@ -49,7 +59,13 @@ module.exports = function(gulp, settings) {
 
             // Put all rev values into object.
             _.each(response.body.rows, function(doc) {
-                revsForDocs[doc.key] = doc.value.rev;
+                if (debug) {
+                    console.info(_logHeader, "[revUpdate]", doc);
+                }
+                // Make sure doc.value has "rev". If a new doc is sent, it won't have a "value" key.
+                if (_.has(doc, "value") && _.has(doc.value, "rev")) {
+                    revsForDocs[doc.key] = doc.value.rev;
+                }
             });
 
             // Iterate through bulkDocs, update doc with rev.
