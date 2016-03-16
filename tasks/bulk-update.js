@@ -92,7 +92,8 @@ module.exports = function(gulp, settings) {
                     .send(bulkDocs)
                     .end(function (response) {
                         // TODO: check that each doc has "ok": true response.
-                        console.log(_logHeader, "postBulkDocsAsync OK", response.body);
+                        console.log(_logHeader, "postBulkDocsAsync OK (status==" + response.status + ")",
+                            response.body);
                         resolve(response);
                     });
                 });
