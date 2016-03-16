@@ -34,8 +34,8 @@ var EditBookPage = Backbone.View.extend({
             templateData = {
                 hasOwnership: (_.isArray(ownershipConfig) && ownershipConfig.length > 0),
                 hasRead: (_.isArray(readConfig) && readConfig.length > 0),
-                statusRead: readConfig,
-                statusOwnership: ownershipConfig
+                statusRead: this._buildStatusValues("read"),
+                statusOwnership: this._buildStatusValues("ownership")
             };
 
         this._log("model.id", _.isObject(this.model) ? this.model.id : "no model");
@@ -45,12 +45,30 @@ var EditBookPage = Backbone.View.extend({
     },
 
     /**
+     * Build a list of [key, text] pairs for the Reading/Ownership status form input.
+     * @param  {String} status Which status to use.
+     * @return {Array}
+     */
+    _buildStatusValues: function(status) {
+        var result = [],
+            self = this;
+
+        _.each(this.configuration.get(status), function(key) {
+            result.push([key, self.configuration.getText(key)]);
+        });
+
+        return result;
+    },
+
+    /**
      * Create book, add all data to it.
      * @param  {Array}   formArray  Array of form elements, from $.serializeArray
      **/
     _fillModel: function(formArray) {
         // Convert serialized array of form values into object.
-        var formObject = {};
+        var formObject = {},
+            status = {};
+
         formArray.forEach(function(element) {
             formObject[element.name] = element.value;
         });
@@ -61,10 +79,21 @@ var EditBookPage = Backbone.View.extend({
             isbn: formObject["editbookIsbn"],
             publisher: formObject["editbookPublisher"],
             notePublic: formObject["editbookNotesPublic"],
-            notesPrivate: formObject["editbookNotesPrivate"],
+            notesPrivate: formObject["editbookNotesPrivate"]
         });
 
         this.model.set({"public": formObject.editBookPublic === "on"});
+
+        if (formObject.editbookRead || formObject.editbookOwnership) {
+            if (formObject.editbookRead) {
+                status["read"] = formObject.editbookRead;
+            }
+            if (formObject.editbookOwnership) {
+                status["ownership"] = formObject.editbookOwnership;
+            }
+
+            this.model.set("status", status);
+        }
     },
 
     /** EVENTS **/

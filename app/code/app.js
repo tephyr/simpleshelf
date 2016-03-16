@@ -110,9 +110,16 @@ _.extend(app, Backbone.Events);
 RegisterHandlebarHelpers();
 
 app.configuration = new AppConfigurationModel();
-app.configuration.fetch().then(function() {
-    console.info("[app]", "configuration loaded");
-});
+$.when(
+    app.configuration.fetch(),
+    app.configuration.fetchI18N()
+).then(
+    function() {
+        console.info("[app]", "configuration + translation loaded");
+    }, function() {
+        console.warn("[app]", "configuration + translation failed to load");
+    }
+);
 
 // Setup up views hash to hold view objects & persist them for the application lifetime.
 // NOTE: this requires more app overhead to remove views & their events from the DOM.

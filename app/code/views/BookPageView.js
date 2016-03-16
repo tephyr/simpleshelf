@@ -11,8 +11,9 @@ var $ = require("jquery"),
 var BookPageView = Backbone.View.extend({
     id: "bookPage",
 
-    initialize: function() {
+    initialize: function(options) {
         this._template = Handlebars.compile(BookPageTemplate);
+        this.configuration = options.configuration || {};
         return this;
     },
 
@@ -22,13 +23,14 @@ var BookPageView = Backbone.View.extend({
      * @return {Object} BookPageView
      */
     render: function() {
-        var data = this.model.toJSON();
+        var data = this.model.toJSON(),
+            self = this;
 
         // Add hints for template.
         data._multipleAuthors = (this.model.get("authors").length > 1)
         // Convert status object into list of objects with identical key/value keys.
         data._statusList = _.map(_.pairs(data.status || []), function(pair) {
-            return {statusKey: pair[0], statusValue: pair[1]};
+            return {statusKey: pair[0], statusValue: self.configuration.getText(pair[1])};
         });
         data._tags = data.tags || [];
 
@@ -45,7 +47,8 @@ var BookPageView = Backbone.View.extend({
      */
     addActivitiesView: function(model) {
         var view = new ActivitiesView({
-            model: model
+            model: model,
+            configuration: this.configuration
         });
         view.render();
         this.$(".activitiesViewContainer").append(view.$el);

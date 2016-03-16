@@ -20,6 +20,7 @@
     "sourceWatch": "simpleshelf/**/*",
     "destination": "http://127.0.0.1:5984/simpleshelf",
     "_docs": {
-        "configurationDefault": "./config/default-docs/simpleshelf-configuration-default.json"
+        "configurationDefault": "./config/default-docs/simpleshelf-configuration-default.json",
+        "i18nDefault": "./config/default-docs/simpleshelf-i18n-default.json"
     }
 }
