@@ -1,0 +1,27 @@
+{
+    "_id": "simpleshelf-i18n-default",
+    "type": "i18n",
+    "actions": {
+        "en": {
+            "book.read.queued": "Queued",
+            "book.read.started": "Started",
+            "book.read.finished": "Finished",
+            "book.read.stopped": "Stopped",
+            "book.read.setasreference": "Set as reference"
+        }
+    },
+    "statuses": {
+        "en": {
+            "to.read": "To read",
+            "reading": "Reading",
+            "finished": "Finished",
+            "abandoned": "Abandoned",
+            "reference": "Reference",
+            "personal": "Personal",
+            "library": "Library",
+            "on.loan": "On loan",
+            "loaned.out": "Loaned out",
+            "on.order": "On order"
+        }
+    }
+}

@@ -56,7 +56,7 @@
 
             <fieldset class="form-group {{#unless hasOwnership}}hidden-xs-up{{/unless}}">
                 <label for="editbookOwnership">Ownership</label>
-                <select class="form-control" id="editbookOwnership">
+                <select class="form-control" name="editbookOwnership" id="editbookOwnership">
                     <option value=""></option>
                     {{#each statusOwnership}}
                     <option value="{{this.[0]}}">{{this.[1]}}</option>

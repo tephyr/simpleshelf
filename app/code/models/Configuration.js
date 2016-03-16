@@ -7,12 +7,19 @@
  * 
  * @return Singleton
  **/
-var _ = require("underscore"),
+var $ = require("jquery"),
+    _ = require("underscore"),
     Backbone = require("backbone");
 
 var ConfigurationModel = Backbone.Model.extend({
     _logHeader: "[ConfigurationModel]",
     url: "_view/configuration",
+    urlI18N: "data/simpleshelf-i18n-default",
+    initialize: function() {
+        this.lang = "en";
+        this.translations = {};
+    },
+
     parse: function(response, options) {
         // - Find row with .key === "default"
         // - Use that as base.
@@ -30,8 +37,46 @@ var ConfigurationModel = Backbone.Model.extend({
                 }
             }
         }
-        console.info(this._logHeader, result);
         return result;
+    },
+
+    fetchI18N: function() {
+        var dfrd = $.Deferred(),
+            self = this;
+
+        $.ajax({
+            url: this.urlI18N,
+            dataType: "json"
+        }).done(function(data) {
+            self.translations = self._combineTranslations(data);
+            dfrd.resolve(data);
+        }).fail(function() {
+            dfrd.reject();
+        });
+
+        return dfrd;
+    },
+
+    /**
+     * Get translated text for a key.
+     * @param  {String} key
+     * @return {String}     translated text
+     */
+    getText: function(key) {
+        return _.has(this.translations, key) ? this.translations[key] : null;
+    },
+
+    /**
+     * Combined translated text for easy lookup
+     * @param  {Object} data i18n document
+     * @return {Object}      {key: translation}
+     */
+    _combineTranslations: function(data) {
+        return _.extendOwn(
+            {},
+            data.statuses[this.lang],
+            data.actions[this.lang]
+        );
     }
 });
 

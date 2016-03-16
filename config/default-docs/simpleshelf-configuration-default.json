@@ -3,18 +3,10 @@
     "type": "configuration",
     "configurationType": "default",
     "read": [
-        ["to.read", "To read"],
-        ["reading", "Reading"],
-        ["finished", "Finished"],
-        ["abandoned", "Abandoned"],
-        ["reference", "Reference"]
+        "to.read", "reading", "finished", "abandoned", "reference"
     ],
     "ownership": [
-        ["personal", "Personal"],
-        ["library", "Library"],
-        ["on.loan", "On loan"],
-        ["loaned.out", "Loaned out"],
-        ["on.order", "On order"]
+        "personal", "library", "on.loan", "loaned.out", "on.order"
     ],
     "actions": {
         "read": {
@@ -22,7 +14,7 @@
             "reading": "book.read.started",
             "finished": "book.read.finished",
             "abandoned": "book.read.stopped",
-            "reference": null
+            "reference": "book.read.setasreference"
         }
     }
 }

@@ -9,8 +9,9 @@ var $ = require("jquery"),
     ActivityView = require("./ActivityView.js");
 
 var ActivitiesView = Backbone.View.extend({
-    initialize: function() {
+    initialize: function(options) {
         this.template = Handlebars.compile(ActivitiesTemplate);
+        this.configuration = options.configuration || {};
     },
 
     render: function() {
@@ -24,7 +25,8 @@ var ActivitiesView = Backbone.View.extend({
 
     addOne: function(activity) {
         var view = new ActivityView({
-            data: activity
+            data: activity,
+            configuration: this.configuration
         });
         view.render();
         this.$("table > tbody").append(view.$el);
