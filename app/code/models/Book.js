@@ -7,6 +7,7 @@ var _ = require("underscore"),
     Backbone = require("backbone");
 
 var Book = Backbone.Model.extend({
+    _logHeader: "[Book]",
     idAttribute: "_id",
     defaults: {
         'type': 'book',
@@ -36,6 +37,13 @@ var Book = Backbone.Model.extend({
             if (_.has(response, "ok")) {
                 delete response["ok"];
             }
+        }
+
+        // Order the activities by date.
+        if (_.has(response, "activities")) {
+            response.activities = _.sortBy(response.activities, function(activity) {
+                return activity.date;
+            });
         }
         return response;
     },
