@@ -27,7 +27,7 @@ How to install
 #. Install gulp_ globally.
 #. Install node dependencies: ``npm install``.
 #. Create a database named ``simpleshelf`` in the local CouchDB instance.
-#. Push current code to your couchdb server: ``gulp bulk-docs push``
+#. Push current code to your couchdb server: ``gulp bulk-update push``
 
    This pushes both the code and the default documents to the local installation; see ``config/default.json``.
 
