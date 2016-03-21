@@ -6,7 +6,8 @@ var _ = require("underscore"),
     Backbone = require("backbone"),
     Handlebars = require("handlebars"),
     EditBookPageTemplate = require("./templates/editbookpage.html"),
-    Book = require("../models/Book.js");
+    Book = require("../models/Book.js"),
+    TagInputView = require("./TagInputView.js");
 
 var EditBookPage = Backbone.View.extend({
     id: "editBookPage",
@@ -22,6 +23,10 @@ var EditBookPage = Backbone.View.extend({
         this._log("initialize");
         this._template = Handlebars.compile(EditBookPageTemplate);
         this.configuration = options.configuration || {};
+        this._tagInputView = new TagInputView({
+            configuration: this.configuration,
+            tagCollection: options.tagCollection
+        });
         return this;
     },
 
@@ -40,6 +45,13 @@ var EditBookPage = Backbone.View.extend({
 
         this._log("model.id", _.isObject(this.model) ? this.model.id : "no model");
         this.$el.html(this._template(templateData));
+
+        // Render subviews.
+        // this._tagInputView.data: {
+        //         current: _.isObject(this.model) ? this.model.get("tags") : []
+        //     }
+        this._tagInputView.$el = this.$(".taginputparent");
+        this._tagInputView.render();
 
         return this;
     },
