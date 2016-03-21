@@ -1,0 +1,20 @@
+{
+    "_id": "demo-0385249497",
+    "status": {
+        "read": "finished",
+        "ownership": "personal"
+    },
+    "isbn": "0385249497",
+    "activities": [],
+    "title": "Hyperion",
+    "publisher": "Doubleday",
+    "notesPrivate": null,
+    "notesPublic": "1st in series (quadrology)",
+    "urls": {
+        "openlibrary": "https://openlibrary.org/books/OL2055137M/Hyperion"
+    },
+    "authors": ["Simmons, Dan"],
+    "type": "book",
+    "public": true,
+    "tags": ["fiction", "sci.fi", "series", "series.hyperion"]
+}

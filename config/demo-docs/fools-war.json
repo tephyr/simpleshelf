@@ -1,0 +1,20 @@
+{
+    "_id": "demo-9780446602938",
+    "status": {
+        "read": "finished",
+        "ownership": "personal"
+    },
+    "isbn": "9780446602938",
+    "activities": [],
+    "title": "Fool's war",
+    "publisher": "Aspect",
+    "notesPrivate": null,
+    "notesPublic": null,
+    "urls": {
+        "openlibrary": "https://openlibrary.org/books/OL7537404M/Fool's_War"
+    },
+    "authors": ["Zettel, Sarah"],
+    "type": "book",
+    "public": true,
+    "tags": ["fiction", "sci.fi", "author.to.watch"]
+}

@@ -1,0 +1,18 @@
+{
+    "_id": "demo-0517548232",
+    "status": {
+        "read": "to.read",
+        "ownership": "personal"
+    },
+    "isbn": "0517548232",
+    "activities": [],
+    "title": "Economics in one lesson",
+    "publisher": "Three Rivers Press",
+    "notesPrivate": null,
+    "notesPublic": null,
+    "urls": {},
+    "authors": ["Hazlitt, Henry"],
+    "type": "book",
+    "public": true,
+    "tags": ["non.fiction", "economics"]
+}

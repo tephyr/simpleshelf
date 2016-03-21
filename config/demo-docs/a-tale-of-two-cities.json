@@ -1,0 +1,20 @@
+{
+    "_id": "demo-0679729658",
+    "status": {
+        "read": "to.read",
+        "ownership": "personal"
+    },
+    "isbn": "0679729658",
+    "activities": [],
+    "title": "A tale of two cities",
+    "publisher": "Vintage Books",
+    "notesPrivate": null,
+    "notesPublic": "1st Vintage classics ed.",
+    "urls": {
+        "openlibrary": "https://openlibrary.org/books/OL1859004M/A_tale_of_two_cities"
+    },
+    "authors": ["Dickens, Charles"],
+    "type": "book",
+    "public": true,
+    "tags": ["fiction", "classic"]
+}

@@ -1,0 +1,19 @@
+{
+    "_id": "demo-0-451-51801-2",
+    "status": {
+        "read": "finished",
+        "ownership": "personal"
+    },
+    "isbn": "0-451-51801-2",
+    "activities": [],
+    "title": "Animal farm",
+    "publisher": "Harcourt Brace Jovanovich",
+    "notesPrivate": null,
+    "notesPublic": "Signet Classic",
+    "urls": {
+    },
+    "authors": ["Orwell, George"],
+    "type": "book",
+    "public": true,
+    "tags": ["fiction", "classic", "recmd"]
+}

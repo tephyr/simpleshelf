@@ -1,0 +1,20 @@
+{
+    "_id": "demo-0446527084",
+    "status": {
+        "read": "finished",
+        "ownership": "library"
+    },
+    "isbn": "0446527084",
+    "activities": [],
+    "title": "Fallen dragon",
+    "publisher": "Aspect",
+    "notesPrivate": null,
+    "notesPublic": null,
+    "urls": {
+        "openlibrary": "https://openlibrary.org/books/OL3944335M/Fallen_dragon"
+    },
+    "authors": ["Hamilton, Peter F."],
+    "type": "book",
+    "public": true,
+    "tags": ["fiction", "sci.fi", "recmd"]
+}

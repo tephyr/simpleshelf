@@ -1,0 +1,20 @@
+{
+    "_id": "demo-978-0804139021",
+    "status": {
+        "read": "finished",
+        "ownership": "library"
+    },
+    "isbn": "978-0804139021",
+    "activities": [],
+    "title": "The martian",
+    "publisher": "Crown",
+    "notesPrivate": null,
+    "notesPublic": null,
+    "urls": {
+        "openlibrary": "https://openlibrary.org/works/OL17091839W/The_Martian"
+    },
+    "authors": ["Weir, Andy"],
+    "type": "book",
+    "public": true,
+    "tags": ["fiction", "sci.fi"]
+}

@@ -1,0 +1,20 @@
+{
+    "_id": "demo-0618129030",
+    "status": {
+        "read": "to.read",
+        "ownership": "library"
+    },
+    "isbn": "0618129030",
+    "activities": [],
+    "title": "The Lord of the Rings: The fellowship of the ring",
+    "publisher": "Houghton Mifflin",
+    "notesPrivate": null,
+    "notesPublic": "1st in trilogy",
+    "urls": {
+        "openlibrary": "https://openlibrary.org/books/OL13569251M/The_fellowship_of_the_ring"
+    },
+    "authors": ["Tolkien, J.R.R."],
+    "type": "book",
+    "public": true,
+    "tags": ["fiction", "classic", "fantasy", "series", "series.lotr"]
+}

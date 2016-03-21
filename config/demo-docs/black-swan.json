@@ -1,0 +1,28 @@
+{
+    "_id": "demo-978-0-8129-7381-5",
+    "status": {
+        "read": "reading",
+        "ownership": "personal"
+    },
+    "isbn": "978-0-8129-7381-5",
+    "activities": [
+        {
+            "date": "2013-05-15",
+            "action": "book.read.queued"
+        },
+        {
+            "date": "2015-08-30",
+            "action": "book.read.started"
+        }
+    ],
+    "title": "The black swan",
+    "publisher": "Random House",
+    "notesPrivate": null,
+    "notesPublic": "2nd ed.",
+    "urls": {
+    },
+    "authors": ["Taleb, Nassim Nicholas"],
+    "type": "book",
+    "public": true,
+    "tags": ["non.fiction", "uncertainty", "forecasting"]
+}

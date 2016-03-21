@@ -1,0 +1,20 @@
+{
+    "_id": "demo-9780553256741",
+    "status": {
+        "read": "finished",
+        "ownership": "personal"
+    },
+    "isbn": "9780553256741",
+    "activities": [],
+    "title": "Yeager, an autobiography",
+    "publisher": "Bantam",
+    "notesPrivate": null,
+    "notesPublic": null,
+    "urls": {
+        "openlibrary": "https://openlibrary.org/works/OL16085506W/Yeager_an_autobiography"
+    },
+    "authors": ["Yeager, Chuck", "Janos, Leo"],
+    "type": "book",
+    "public": true,
+    "tags": ["non.fiction", "biography"]
+}
