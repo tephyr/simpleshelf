@@ -44,8 +44,9 @@
     "bootstrap": "^4.0.0-alpha.2",
     "bootstrap-datepicker": "^1.6.0",
     "handlebars": "^4.0.5",
-    "jquery": "^2.2.0",
+    "jquery": "^2.2.2",
     "md5": "^2.0.0",
+    "selectize": "^0.12.1",
     "underscore": "^1.8.3",
     "underscore.string": "^3.3.4"
   }

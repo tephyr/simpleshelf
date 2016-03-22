@@ -6,7 +6,8 @@
         "handlebars",
         "backbone",
         "md5",
-        "tether"
+        "tether",
+        "selectize"
     ],
     "externalUIJSDev": [
         "node_modules/bootstrap/dist/js/bootstrap.js",
@@ -14,7 +15,8 @@
     ],
     "externalUICSSDev": [
         "node_modules/bootstrap/dist/css/bootstrap.css*",
-        "node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.css*"
+        "node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.css*",
+        "node_modules/selectize/dist/css/selectize.css"
     ],
     "source": "simpleshelf",
     "sourceWatch": "simpleshelf/**/*",
