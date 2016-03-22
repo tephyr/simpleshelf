@@ -19,6 +19,7 @@ var $ = require("jquery"),
     BookCollection = require("./models/BookCollection.js"),
     BooksByLetterCollection = require("./models/BooksByLetterCollection.js"),
     SpineCollection = require("./models/SpineCollection.js"),
+    TagCollection = require("./models/TagCollection.js"),
     BookModel = require("./models/Book.js"),
     HeaderIconsTemplate = require("./views/templates/headericons.html"),
     HeaderMenuTemplate = require("./views/templates/headermenu.html"),
@@ -36,6 +37,7 @@ var app = {
         booksByLetterCollection: new BooksByLetterCollection(),
         globalCountModel: new GlobalCountModel(),
         bookCollection: new BookCollection(),
+        tagCollection: new TagCollection(),
         /**
          * Load the spines collection, fetching only when necessary.
          **/
@@ -139,7 +141,8 @@ app.views = {
         configuration: app.configuration
     }),
     editBookPageView: new EditBookPageView({
-        configuration: app.configuration
+        configuration: app.configuration,
+        tagCollection: app.catalog.tagCollection
     })
 };
 // Add BookCollection to mainPageView.  Don't know why it won't work on initialization.
@@ -151,6 +154,8 @@ appSettings.set({"urlPrefix": window.location.protocol + "//" + window.location.
 app.run = function() {
     var _logHeader = "[app.run]";
     console.info(_logHeader, "App running as of ", new Date());
+
+    app.catalog.tagCollection.fetch();
 
     // Load navbar view.
     $("body").prepend(app.views.navbarView.render().$el);
