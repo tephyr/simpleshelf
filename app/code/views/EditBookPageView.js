@@ -47,9 +47,7 @@ var EditBookPage = Backbone.View.extend({
         this.$el.html(this._template(templateData));
 
         // Render subviews.
-        // this._tagInputView.data: {
-        //         current: _.isObject(this.model) ? this.model.get("tags") : []
-        //     }
+        this._tagInputView.model = this.model;
         this._tagInputView.$el = this.$(".taginputparent");
         this._tagInputView.render();
 

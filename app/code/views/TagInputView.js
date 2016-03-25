@@ -1,5 +1,7 @@
 /**
  * Show and edit tags.
+ * Tabbing issue on Firefox: https://github.com/selectize/selectize.js/issues/396; fix has languished
+ * as PR since 2015-02-20.
  **/
 var $ = require("jquery"),
     _ = require("underscore"),
@@ -14,39 +16,32 @@ var TagInputView = Backbone.View.extend({
 
     initialize: function(options) {
         this.template = Handlebars.compile(TagInputTemplate);
-        this.data = options.data || {}; // {current: [], available: []}
         this.configuration = options.configuration || {};
         this.tagCollection = options.tagCollection || null;
     },
 
     render: function() {
-        this.$el.html(this.template(this.data));
+        this.$el.html(this.template());
         this.$("#simpleshelf-tag-input").selectize({
-            // items: [
-            //     "y"
-            // ],
-            // labelField: "name",
-            // valueField: "id",
             options: this.tagCollection.map(function(tag) {
                 return {"value": tag.id, "text": tag.id};
             }),
+            items: _.isObject(this.model) ? this.model.get("tags") : [],
             delimiter: ",",
             hideSelected: true,
             create: true,
-            onInitialize: function() {
-                console.info("selectize", "onInitialize()");
-            },
             onFocus: function() {
                 console.info("selectize", "onFocus()");
             },
-            onChange: function(value) {
-                console.info("selectize", "onChange()", value);
-            },
-            onDropdownOpen: function($dropdown) {
-                console.info("selectize", "onDropdownOpen()", $dropdown);
-            }
+            onChange: _.bind(this.onTagChange, this),
         });
         console.info(this._logHeader, "selectize ready?");
+    },
+
+    /* EVENTS */
+    onTagChange: function(value) {
+        console.info("selectize", "onChange()", value, value.split(","));
+        this.model.set("tags", value.split(","));
     }
 });
 
