@@ -1,5 +1,5 @@
 /**
- * Main page
+ * Main page view.
  **/
 var _ = require("underscore"),
     Backbone = require("backbone"),
@@ -28,8 +28,6 @@ var mainPage = Backbone.View.extend({
             authorCount: this.model.formatSimply("_author_instances"),
             tagCount: this.model.formatSimply("_tag_instances")
         };
-
-        console.table(basicData);
 
         this.$el.html(this._template(basicData));
 
