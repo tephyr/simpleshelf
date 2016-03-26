@@ -35,7 +35,7 @@ var BooksPage = Backbone.View.extend({
 
     render: function() {
         // Render this view.
-        this.$el.html(this.template);
+        this.$el.html(this.template());
         // Render all sub-views.
         this.collection.each(this.addOne, this);
         return this;
