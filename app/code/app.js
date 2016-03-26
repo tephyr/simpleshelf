@@ -91,7 +91,8 @@ var app = {
             } else {
                 $.when(
                     this.globalCountModel.fetch(),
-                    this.bookCollection.fetch()
+                    this.bookCollection.fetch(),
+                    this.spineCollection.fetch()
                 ).then(_.bind(function() {
                         this.metadataUpToDate = true;
                         deferred.resolve();
