@@ -10,6 +10,11 @@ var $ = require("jquery"),
 
 var BookPageView = Backbone.View.extend({
     id: "bookPage",
+    events: {
+        "click .add-another": "onAddAnother",
+        "click .delete-this": "onDelete"
+    },
+    _logHeader: "[BookPageView]",
 
     initialize: function(options) {
         this._template = Handlebars.compile(BookPageTemplate);
@@ -52,7 +57,30 @@ var BookPageView = Backbone.View.extend({
         });
         view.render();
         this.$(".activitiesViewContainer").append(view.$el);
-        model.on("remove", view.remove, view);
+        view.listenTo(model, "remove", view.remove);
+    },
+
+    // EVENTS //
+    onAddAnother: function(event) {
+        console.info(this._logHeader, "onAddAnother");
+    },
+
+    onDelete: function(event) {
+        console.info(this._logHeader, "onDelete");
+        var self = this;
+        // Verify.
+        if (window.confirm("Are you sure you want to delete this book?")) {
+            // Delete & forward to main page.
+            this.model.destroy({
+                wait: true, 
+                success: function() {
+                    self.trigger("app:bookDeleted", {ok: true});
+                },
+                error: function() {
+                    self.trigger("app:bookDeleted", {ok: false});
+                }
+            });
+        }
     }
 });
 

@@ -14,6 +14,16 @@ module.exports = {
                 app.catalog.metadataUpToDate = false;
             },
 
+            "app:bookDeleted": function(data) {
+                console.info(_logHeader, "deleteBook", data);
+                if (data.ok) {
+                    app.catalog.metadataUpToDate = false;
+                    this.trigger("app:navigate", {url: "main"});
+                } else {
+                    window.alert("Oops - problem removing...");
+                }
+            },
+
             "app:requestLogin": function(data) {
                 console.info(_logHeader, "requestLogin", data);
                 couchUtils.login(data.username, data.password)
