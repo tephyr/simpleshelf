@@ -13,9 +13,9 @@ var SpinesByLetterView = Backbone.View.extend({
         this.template = Handlebars.compile(template);
         this.spineTemplate = Handlebars.compile(spineTemplate);
         this.spineCollection = _.has(options, "spineCollection") ? options.spineCollection : null;
-        if (!_.isNull(this.spineCollection)) {
-            this.listenTo(this.spineCollection, "sync", this.onSpineSync);
-        }
+        // if (!_.isNull(this.spineCollection)) {
+        //     this.listenTo(this.spineCollection, "sync", this.onSpineSync);
+        // }
         return this;
     },
 

@@ -30,7 +30,7 @@ var ActivitiesView = Backbone.View.extend({
         });
         view.render();
         this.$("table > tbody").append(view.$el);
-        this.model.on("remove", view.remove, view);
+        view.listenTo(this.model, "remove", view.remove);
     }
 });
 

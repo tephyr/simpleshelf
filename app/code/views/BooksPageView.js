@@ -9,6 +9,8 @@ var _ = require("underscore"),
 
 var BooksPage = Backbone.View.extend({
     id: "booksPage",
+    _logHeader: "[BooksPageView]",
+
     initialize: function(options) {
         // Names of collections that are ready to be rendered.
         this._collectionsReady = {
@@ -19,17 +21,36 @@ var BooksPage = Backbone.View.extend({
         this.template = Handlebars.compile(BooksPageTemplate);
 
         // Hold spine collection to pass to child views.
-        this.spineCollection = _.has(options, "spineCollection") ? options.spineCollection : null;
+        this.spineCollection = options.spineCollection;
 
         // EVENTS //
         // Render when the books_by_letter data syncs.
-        this.listenTo(this.collection, "sync", function() {this.renderIfReady("collection");});
-        if (!_.isNull(this.spineCollection)) {
-            this.listenTo(this.spineCollection, "sync",
-                function() {this.renderIfReady("spineCollection");}
-            );
-        }
-        this.listenTo(this.collection, "reset", this.onCollectionReset);
+        // var signalCollectionFn = _.bind(function() {
+        //     console.info(this._logHeader, "collection.sync (via signalCollectionFn)");
+        //     this.renderIfReady("collection");
+        // }, this);
+        // var signalSpineCollectionFn = _.bind(function() {
+        //     console.info(this._logHeader, "collection.sync (via signalSpineCollectionFn)");
+        //     this.renderIfReady("spineCollection");
+        // }, this);
+
+        // this.listenTo(this.collection, "sync", signalCollectionFn);
+        // this.listenTo(this.collection, "reset", this.onCollectionReset);
+        // this.listenTo(this.spineCollection, "sync", signalSpineCollectionFn);
+        return this;
+    },
+
+    /**
+     * Override View.remove().
+     * @param  {Object} attributes 
+     * @param  {Object} options    
+     * @return {Object}            this
+     */
+    remove: function(attributes, options) {
+        console.info(this._logHeader, "remove");
+        this._collectionsReady.collection = false;
+        this._collectionsReady.spineCollection = false;
+        Backbone.View.prototype.remove.apply(this, arguments);
         return this;
     },
 
@@ -53,21 +74,22 @@ var BooksPage = Backbone.View.extend({
         view.render();
         this.$("#booksData").append(view.$el);
         view.postRender();
-        model.on("remove", view.remove, view);
+        view.listenTo(model, "remove", view.remove);
     },
 
     onCollectionReset: function() {
-        console.info("[BooksPageView]", "collection was reset");
+        console.info(this._logHeader, "collection was reset");
     },
 
     /**
      * Render only if both collections have signalled "sync".
      **/
     renderIfReady: function(name) {
-        console.info("[BooksPageView]", "ready to render", name);
         this._collectionsReady[name] = true;
-        if (this._collectionsReady.collection === true &&
-            this._collectionsReady.spineCollection === true) {
+        console.info(this._logHeader, "renderIfReady", this._collectionsReady,
+            "ready to render", name);
+        if (this._collectionsReady.collection &&
+            this._collectionsReady.spineCollection) {
             // Render the page & subviews.
             this.render();
         }
