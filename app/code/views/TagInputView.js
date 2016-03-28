@@ -30,17 +30,13 @@ var TagInputView = Backbone.View.extend({
             delimiter: ",",
             hideSelected: true,
             create: true,
-            onFocus: function() {
-                console.info("selectize", "onFocus()");
-            },
             onChange: _.bind(this.onTagChange, this),
         });
-        console.info(this._logHeader, "selectize ready?");
     },
 
     /* EVENTS */
     onTagChange: function(value) {
-        console.info("selectize", "onChange()", value, value.split(","));
+        console.info(this._logHeader, "selectize.onChange()", value.split(","));
         this.model.set("tags", value.split(","));
     }
 });
