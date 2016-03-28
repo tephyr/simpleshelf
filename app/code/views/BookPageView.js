@@ -62,11 +62,10 @@ var BookPageView = Backbone.View.extend({
 
     // EVENTS //
     onAddAnother: function(event) {
-        console.info(this._logHeader, "onAddAnother");
+        this.trigger("app:navigate", {url: "addbook"});
     },
 
     onDelete: function(event) {
-        console.info(this._logHeader, "onDelete");
         var self = this;
         // Verify.
         if (window.confirm("Are you sure you want to delete this book?")) {
