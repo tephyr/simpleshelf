@@ -25,7 +25,8 @@ $(document).ready(function() {
     // Setup top-level app objects.
     this.app.router = new Router({
         views: this.app.views,
-        catalog: this.app.catalog
+        catalog: this.app.catalog,
+        configuration: this.app.configuration
     });
     appevents.setupAppEvents(this.app);
     appevents.hookupAppEvents(this.app);

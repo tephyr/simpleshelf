@@ -13,6 +13,13 @@ var Book = Backbone.Model.extend({
         'type': 'book',
         'public': true
     },
+
+    initialize: function(attributes, options) {
+        if (_.isObject(attributes) && _.has(attributes, "configuration")) {
+            this._configuration = attributes.configuration;
+        }
+    },
+
     url: function(){
         var urlPrefix = 'data/';
         if (this.isNew()) {
