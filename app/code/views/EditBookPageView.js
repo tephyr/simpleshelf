@@ -96,13 +96,11 @@ var EditBookPage = Backbone.View.extend({
 
         if (formObject.editbookRead || formObject.editbookOwnership) {
             if (formObject.editbookRead) {
-                status["read"] = formObject.editbookRead;
+                this.model.changeStatus("read", formObject.editbookRead, formObject.editbookReadDate);
             }
             if (formObject.editbookOwnership) {
-                status["ownership"] = formObject.editbookOwnership;
+                this.model.changeStatus("ownership", formObject.editbookOwnership);
             }
-
-            this.model.set("status", status);
         }
     },
 

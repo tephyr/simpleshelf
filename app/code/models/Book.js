@@ -69,6 +69,42 @@ var Book = Backbone.Model.extend({
         }
     },
 
+    // NON-STANDARD METHODS //
+    /**
+     * Change a status, adding activity logging for some changes.
+     * @param  {String} statusKey   "read", "ownership", etc.
+     * @param  {String} statusValue New value for key
+     * @param  {String} asOfDate    iso8601-format date
+     * @return {Object}             this
+     */
+    changeStatus: function(statusKey, statusValue, asOfDate) {
+        var statusHash = {},
+            activities,
+            activityKey;
+
+        // Change locally.
+        statusHash = this.get("status") || {};
+        statusHash[statusKey] = statusValue;
+        this.set("status", statusHash);
+
+        // Log "read" status.
+        if (statusKey === "read") {
+            // Get activity key for the new read status (if any).
+            activityKey = this._configuration.getActivityForStatus(statusValue);
+
+            // If a value exists for this key, log as an activity.
+            if (!_.isNull(activityKey)) {
+                activities = this.get("activities") || [];
+
+                activities.push({"date": asOfDate, "action": activityKey});
+
+                this.set("activities", activities);
+            }
+        }
+
+        return this;
+    },
+
     /**
      * Check if key exists and has a non-null value.
      **/

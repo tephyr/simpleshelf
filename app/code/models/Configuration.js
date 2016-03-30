@@ -57,6 +57,22 @@ var ConfigurationModel = Backbone.Model.extend({
         return dfrd;
     },
 
+    getActivityForStatus: function(statusValue) {
+        // Combine all primary keys.
+        var activityStuff = {},
+            result = null;
+
+        _.map(this.get("actions"), function(actionsByStatus) {
+            _.extendOwn(activityStuff, actionsByStatus);
+        });
+
+        if (_.has(activityStuff, statusValue)) {
+            result = activityStuff[statusValue]
+        }
+
+        return result;
+    },
+
     /**
      * Get translated text for a key.
      * @param  {String} key
