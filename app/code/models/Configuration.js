@@ -23,20 +23,24 @@ var ConfigurationModel = Backbone.Model.extend({
     parse: function(response, options) {
         // - Find row with .key === "default"
         // - Use that as base.
-        // - TODO: apply other config objects.
-        var defaultConfig, result = {};
+        // - Apply other config objects.
+        var result = {}, configs;
 
         if (_.has(response, "rows") && _.isArray(response.rows)) {
             if (response.rows.length > 0) {
-                // Find default configuration.
-                var defaultConfig = _.findWhere(response.rows, {key: "default"});
-                if (defaultConfig) {
-                    result.read = defaultConfig.value.read;
-                    result.ownership = defaultConfig.value.ownership;
-                    result.actions = defaultConfig.value.actions;
-                }
+                // TODO: use _.chain().
+                configs = _.sortBy(response.rows, function(cfgDoc) {
+                    return (cfgDoc.key === "default") ? 0 : 1;
+                });
+                configs = _.pluck(configs, "value");
+                configs = _.map(configs, this._stripConfig);
+                _.each(configs, function(cfg) {
+                    result = _.extendOwn(result, cfg);
+                });
+                result = _.omit(result, "configurationType");
             }
         }
+
         return result;
     },
 
@@ -93,6 +97,15 @@ var ConfigurationModel = Backbone.Model.extend({
             data.statuses[this.lang],
             data.actions[this.lang]
         );
+    },
+
+    /**
+     * Return a config doc with just the goodies.
+     * @param  {Object} cfgDoc Config document
+     * @return {Object}        Config doc stripped of _id, _rev attributes
+     */
+    _stripConfig: function(cfgDoc) {
+        return _.omit(cfgDoc, ["_id", "_rev", "type"]);
     }
 });
 
