@@ -11,6 +11,7 @@ var $ = require("jquery"),
     NavbarView = require("./views/NavbarView.js"),
     LoginPageView = require("./views/LoginPageView.js"),
     MainPageView = require("./views/MainPageView.js"),
+    GlobalAlertView = require("./views/GlobalAlertView.js"),
     BooksPageView = require("./views/BooksPageView.js"),
     BookPageView = require("./views/BookPageView.js"),
     AppConfigurationModel = require("./models/Configuration.js"),
@@ -133,6 +134,9 @@ app.views = {
     mainPageView: new MainPageView({
         model: app.catalog.globalCountModel
     }),
+    globalAlertView: new GlobalAlertView({
+        configuration: app.configuration
+    }),
     booksPageView: new BooksPageView({
         collection: app.catalog.booksByLetterCollection,
         spineCollection: app.catalog.spineCollection
@@ -160,6 +164,8 @@ app.run = function() {
 
     // Load navbar view.
     $("body").prepend(app.views.navbarView.render().$el);
+    // Load global alert view.
+    $("#alertContent").append(app.views.globalAlertView.render().$el);
 };
 
 // Anything else that should be immediately available when the application launches, add here.

@@ -1,0 +1,40 @@
+/**
+ * Global alert view.
+ **/
+var _ = require("underscore"),
+    Backbone = require("backbone"),
+    Handlebars = require("handlebars"),
+    GlobalAlertTemplate = require("./templates/globalalert.html");
+
+var globalAlertView = Backbone.View.extend({
+    id: "globalAlert",
+
+    initialize: function(options) {
+        this.template = Handlebars.compile(GlobalAlertTemplate);
+        if (_.has(options, "configuration")) {
+            this.configuration = options.configuration;
+        }
+        return this;
+    },
+
+    render: function() {
+        var data = {},
+            messages = this.configuration.get("messages");
+
+        if (_.isObject(messages)) {
+            data.hasMsg = true;
+            if (_.has(messages, "global")) {
+                if (_.has(messages.global, "warning")) {
+                    data.alertClass = "alert-warning";
+                    data.alertMsg = messages.global.warning;
+                }
+            }
+        }
+
+        this.$el.html(this.template(data));
+
+        return this;
+    }
+});
+
+module.exports = globalAlertView;
