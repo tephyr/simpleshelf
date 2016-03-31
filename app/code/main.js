@@ -40,5 +40,7 @@ $(document).ready(function() {
     );
 
     // Start app.
-    this.app.run();
+    this.app.promises.initialConfiguration.then(
+        this.app.run
+    );
 });

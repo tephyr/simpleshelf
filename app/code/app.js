@@ -114,7 +114,8 @@ _.extend(app, Backbone.Events);
 RegisterHandlebarHelpers();
 
 app.configuration = new AppConfigurationModel();
-$.when(
+app.promises = {};
+app.promises.initialConfiguration = $.when(
     app.configuration.fetch(),
     app.configuration.fetchI18N()
 ).then(
