@@ -1,0 +1,10 @@
+{
+    "_id": "simpleshelf-configuration-custom",
+    "type": "configuration",
+    "configurationType": "custom",
+    "messages": {
+        "global": {
+            "warning": "This demo server does not allow changes.  Attempts to add, edit or delete books will fail."
+        }
+    }
+}
