@@ -1,5 +1,6 @@
 module.exports = function(gulp, settings) {
     var _ = require('lodash'),
+        fs = require('fs'),
         globby = require('globby'),
         path = require('path'),
         Promise = require('bluebird'),
@@ -7,16 +8,15 @@ module.exports = function(gulp, settings) {
 
     // Combine all documents into single array, under {"docs": []}.
     gulp.task("bulk-update", function() {
-        var _logHeader = "bulk-update",
+        var _logHeader = "[bulk-update]",
+            debug = false,
             pathGlobs = _.values(settings._docs),
             bulkDocs = {"docs": []},
             paths = globby.sync(pathGlobs);
 
-        var debug = false;
-
         // Generate list of paths to documents that must be uploaded.
         _.each(paths, function(jsonPath) {
-            bulkDocs.docs.push(require(path.join(process.cwd(), jsonPath)));
+            bulkDocs.docs.push(JSON.parse(fs.readFileSync(path.join(process.cwd(), jsonPath), 'utf8')));
         });
 
         if (debug) {
@@ -81,12 +81,16 @@ module.exports = function(gulp, settings) {
 
         /**
          * Add or update docs
-         * @param  {Object} bulkDocs CouchDB-ready payload for _bulkd_docs endpoint
+         * @param  {Object} bulkDocs CouchDB-ready payload for _bulk_docs endpoint
          * @return {Promise}
          */
         var postBulkDocsAsync = function(bulkDocs) {
             return new Promise(function(resolve, reject) {
                 // POST to _bulk_docs endpoint.
+                if (debug) {
+                    console.info(_logHeader, "[postBulkDocsAsync] pre", JSON.stringify(bulkDocs));
+                }
+
                 unirest.post(settings.destination + "/_bulk_docs")
                     .headers({'Accept': 'application/json', 'Content-Type': 'application/json'})
                     .send(bulkDocs)
