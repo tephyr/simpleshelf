@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
     _ = require('lodash'),
-    path = require('path');
+    path = require('path'),
+    analyzeJSHint = require('./util/gulp/analyze-jshint');
 
 // Check for NODE_ENV; if doesn't exist, use 'personal'.
 // Usage (BEFORE launching gulp): export NODE_ENV=somevalue
@@ -51,6 +52,7 @@ require("./tasks/bundle-lib")(gulp, settings);
 require("./tasks/push")(gulp, settings);
 require("./tasks/code-dev")(gulp, settings);
 require("./tasks/code")(gulp, settings);
+require("./tasks/analyze-jshint")(gulp, settings);
 
 /**
  * Show settings for this task runner.
@@ -81,6 +83,16 @@ gulp.task('dev-watch', function() {
 
     watcher.on('change', function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
+    });
+});
+
+// Watch files, run analyze tasks.
+gulp.task('analyze-watch', function() {
+    // When any source code changes, analyze with jshint.
+    var watcher = gulp.watch(settings.globs.code);
+
+    watcher.on('change', function(event) {
+        analyzeJSHint(event.path);
     });
 });
 
