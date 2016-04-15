@@ -1,8 +1,7 @@
 /**
  * Books page
  */
-var _ = require("underscore"),
-    Backbone = require("backbone"),
+var Backbone = require("backbone"),
     Handlebars = require("handlebars"),
     SpinesByLetterView = require("./SpinesByLetterView.js"),
     BooksPageTemplate = require("./templates/bookspage.html");
@@ -47,6 +46,7 @@ var BooksPage = Backbone.View.extend({
      * @return {Object}            this
      */
     remove: function(attributes, options) {
+        /* jshint unused: false */
         console.info(this._logHeader, "remove");
         this._collectionsReady.collection = false;
         this._collectionsReady.spineCollection = false;

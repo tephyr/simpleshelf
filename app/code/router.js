@@ -2,7 +2,7 @@
 /**
  * Handle all routes.
  **/
-var $ = require("jquery"),
+var $ = require("jquery"), // jshint ignore:line
     _ = require("underscore"),
     Backbone = require("backbone"),
     Book = require("./models/Book.js"),
@@ -38,6 +38,7 @@ var Router = Backbone.Router.extend({
      * @return {Undef}
      */
     execute: function(callback, args, name) {
+        /* jshint unused: false */
         if (!this._initialLoginHandled) {
             // On first load, always check for login state.
             this._initialLoginHandled = true;
@@ -51,7 +52,9 @@ var Router = Backbone.Router.extend({
         }
 
         // Continue with normal routing.
-        if (callback) callback.apply(this, args);
+        if (callback){
+            callback.apply(this, args);
+        }
     },
 
     login: function() {
@@ -107,6 +110,7 @@ var Router = Backbone.Router.extend({
      * Change to another view.
      */
     _changeScreen: function(view, options) {
+        /* jshint unused: false */
         if (!_.isNull(this._currentView)) {
             // Replacing view - kill existing.
             this._log("Changing from " + this._currentPageId);
