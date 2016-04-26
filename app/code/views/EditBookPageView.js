@@ -86,7 +86,7 @@ var EditBookPage = Backbone.View.extend({
     _fillModel: function(formArray) {
         // Convert serialized array of form values into object.
         var formObject = {},
-            status = {};
+            originalStatus = _.extend({}, this.model.get("status"));
 
         formArray.forEach(function(element) {
             formObject[element.name] = element.value;
@@ -103,12 +103,21 @@ var EditBookPage = Backbone.View.extend({
 
         this.model.set({"public": formObject.editbookPublic === "on"});
 
+        // Update change log if read/ownership status changed.
         if (formObject.editbookRead || formObject.editbookOwnership) {
             if (formObject.editbookRead) {
-                this.model.changeStatus("read", formObject.editbookRead, formObject.editbookReadDate);
+                // Do not update status unless it exists and is same as previous.
+                if (!(_.has(originalStatus, "read") &&
+                    originalStatus.read === formObject.editbookRead)) {
+                    this.model.changeStatus("read", formObject.editbookRead, formObject.editbookReadDate);
+                }
             }
             if (formObject.editbookOwnership) {
-                this.model.changeStatus("ownership", formObject.editbookOwnership);
+                // Do not update status unless it exists and is same as previous.
+                if (!(_.has(originalStatus, "ownership") &&
+                    originalStatus.ownership === formObject.editbookOwnership)) {
+                    this.model.changeStatus("ownership", formObject.editbookOwnership);
+                }
             }
         }
     },
