@@ -113,7 +113,8 @@ var Router = Backbone.Router.extend({
     editbook: function(bookId) {
         this._log("/editbook", bookId);
         this._views.editBookPageView.model = new Book({
-            _id: bookId,
+            _id: bookId
+        }, {
             configuration: this._configuration
         });
         $.when(

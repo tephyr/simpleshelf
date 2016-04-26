@@ -15,8 +15,8 @@ var Book = Backbone.Model.extend({
     },
 
     initialize: function(attributes, options) {
-        if (_.isObject(attributes) && _.has(attributes, "configuration")) {
-            this._configuration = attributes.configuration;
+        if (_.isObject(options) && _.has(options, "configuration")) {
+            this._configuration = options.configuration;
         }
     },
 
