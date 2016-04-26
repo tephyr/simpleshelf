@@ -3,27 +3,27 @@
         <form class="editbook-form">
             <fieldset class="form-group">
                 <label for="editbookTitle">Title</label>
-                <input type="text" class="form-control" name="editbookTitle" placeholder="Title">
+                <input type="text" class="form-control" name="editbookTitle" placeholder="Title" value="{{title}}">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="editbookAuthors">Author(s)</label>
-                <textarea class="form-control" name="editbookAuthors" rows="3"></textarea>
+                <textarea class="form-control" name="editbookAuthors" rows="3">{{authors}}</textarea>
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="editbookISBN">ISBN</label>
-                <input type="text" class="form-control" name="editbookISBN" placeholder="ISBN">
+                <input type="text" class="form-control" name="editbookISBN" placeholder="ISBN" value="{{isbn}}">
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="editbookPublisher">Publisher</label>
-                <input type="text" class="form-control" name="editbookPublisher" placeholder="Publisher">
+                <input type="text" class="form-control" name="editbookPublisher" placeholder="Publisher" value="{{publisher}}">
             </fieldset>
 
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="editbookPublic" value="on">Public?
+                    <input type="checkbox" name="editbookPublic" value="on" {{#if public}}checked{{/if}}>Public?
                 </label>
             </div>
 
@@ -33,12 +33,12 @@
 
             <fieldset class="form-group">
                 <label for="editbookNotesPublic">Public notes</label>
-                <textarea class="form-control" name="editbookNotesPublic" rows="3"></textarea>
+                <textarea class="form-control" name="editbookNotesPublic" rows="3">{{notesPublic}}</textarea>
             </fieldset>
 
             <fieldset class="form-group">
                 <label for="editbookNotesPrivate">Private notes</label>
-                <textarea class="form-control" name="editbookNotesPrivate" rows="3"></textarea>
+                <textarea class="form-control" name="editbookNotesPrivate" rows="3">{{notesPrivate}}</textarea>
             </fieldset>
 
             <div class="row {{#unless hasRead}}hidden-xs-up{{/unless}}">
@@ -47,7 +47,7 @@
                     <select class="form-control" name="editbookRead" id="editbookRead">
                         <option value=""></option>
                         {{#each statusRead}}
-                        <option value="{{this.[0]}}">{{this.[1]}}</option>
+                        <option value="{{this.[0]}}" {{#compare ../status.read this.[0]}}selected{{/compare}}>{{this.[1]}}</option>
                         {{/each}}
                     </select>
                 </fieldset>
@@ -63,7 +63,7 @@
                 <select class="form-control" name="editbookOwnership" id="editbookOwnership">
                     <option value=""></option>
                     {{#each statusOwnership}}
-                    <option value="{{this.[0]}}">{{this.[1]}}</option>
+                    <option value="{{this.[0]}}" {{#compare ../status.ownership this.[0]}}selected{{/compare}}>{{this.[1]}}</option>
                     {{/each}}
                 </select>
             </fieldset>

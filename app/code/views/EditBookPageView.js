@@ -31,19 +31,28 @@ var EditBookPage = Backbone.View.extend({
     },
 
     render: function() {
-        // // Clear out any previous data.
-        // this.$("form [type=text]").add("form textarea").val("");
-
         var ownershipConfig = this.configuration.get("ownership"),
             readConfig = this.configuration.get("read"),
             templateData = {
-                hasOwnership: (_.isArray(ownershipConfig) && ownershipConfig.length > 0),
-                hasRead: (_.isArray(readConfig) && readConfig.length > 0),
+                hasOwnership: _.isArray(ownershipConfig) && ownershipConfig.length > 0,
+                hasRead: _.isArray(readConfig) && readConfig.length > 0,
                 statusRead: this._buildStatusValues("read"),
                 statusOwnership: this._buildStatusValues("ownership")
             };
 
         this._log("model.id", _.isObject(this.model) ? this.model.id : "no model");
+        // Extend base data with existing model, if any.
+        if (_.isObject(this.model)) {
+            templateData = _.extend({}, templateData, this.model.toJSON());
+            // Fill in missing defaults.
+            if (!_.has(templateData, "public")) {
+                templateData.public = false;
+            }
+            if (_.has(templateData, "authors")) {
+                templateData.authors = templateData.authors.join("\n");
+            }
+        }
+
         this.$el.html(this._template(templateData));
 
         // Render subviews.
@@ -86,13 +95,13 @@ var EditBookPage = Backbone.View.extend({
         this.model.set({
             title: formObject["editbookTitle"],
             authors: _s.lines(formObject["editbookAuthors"]),
-            isbn: formObject["editbookIsbn"],
+            isbn: formObject["editbookISBN"],
             publisher: formObject["editbookPublisher"],
-            notePublic: formObject["editbookNotesPublic"],
+            notesPublic: formObject["editbookNotesPublic"],
             notesPrivate: formObject["editbookNotesPrivate"]
         });
 
-        this.model.set({"public": formObject.editBookPublic === "on"});
+        this.model.set({"public": formObject.editbookPublic === "on"});
 
         if (formObject.editbookRead || formObject.editbookOwnership) {
             if (formObject.editbookRead) {
