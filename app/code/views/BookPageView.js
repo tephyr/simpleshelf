@@ -11,6 +11,7 @@ var $ = require("jquery"),
 var BookPageView = Backbone.View.extend({
     id: "bookPage",
     events: {
+        "click .edit-this": "onEditThis",
         "click .add-another": "onAddAnother",
         "click .delete-this": "onDelete"
     },
@@ -32,7 +33,7 @@ var BookPageView = Backbone.View.extend({
             self = this;
 
         // Add hints for template.
-        data._multipleAuthors = (this.model.get("authors").length > 1)
+        data._multipleAuthors = this.model.get("authors").length > 1;
         // Convert status object into list of objects with identical key/value keys.
         data._statusList = _.map(_.pairs(data.status || []), function(pair) {
             return {statusKey: pair[0], statusValue: self.configuration.getText(pair[1])};
@@ -80,6 +81,10 @@ var BookPageView = Backbone.View.extend({
                 }
             });
         }
+    },
+
+    onEditThis: function(event) {
+        this.trigger("app:navigate", {url: "editbook/" + this.model.id});
     }
 });
 

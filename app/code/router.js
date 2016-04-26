@@ -16,7 +16,8 @@ var Router = Backbone.Router.extend({
         "main" : "main",
         "books": "books",
         "books/:id": "book",
-        "addbook": "addbook"
+        "addbook": "addbook",
+        "editbook/:id": "editbook"
     },
 
     initialize: function(options) {
@@ -104,6 +105,22 @@ var Router = Backbone.Router.extend({
             configuration: this._configuration
         });
         this._changeScreen(this._views.editBookPageView);
+    },
+
+    /**
+     * Show the edit book view with existing data.
+     **/
+    editbook: function(bookId) {
+        this._log("/editbook", bookId);
+        this._views.editBookPageView.model = new Book({
+            _id: bookId,
+            configuration: this._configuration
+        });
+        $.when(
+            this._views.editBookPageView.model.fetch()
+        ).always(_.bind(function(){
+            this._changeScreen(this._views.editBookPageView);
+        }, this));
     },
 
     /**
