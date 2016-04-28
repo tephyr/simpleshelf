@@ -1,4 +1,5 @@
 # ignore these files #
+build/
 docs/_build/
 simpleshelfmobile/_attachments/code/
 simpleshelfmobile/_attachments/style/
