@@ -30,7 +30,9 @@ if (config.has("_docs")) {
 
 // Setup globs for watching file changes.
 settings.globs = {
-    'code': 'app/code/**/*.js',
+    'allCode': 'app/code/**/*.js',
+    'code': ['app/code/**/*.js', '!app/code/test/**/*.js'],
+    'testCode': 'app/code/test/**/*.js',
     'templates': 'app/code/**/*.html',
     'ui': path.join(config.get('source'), '_attachments') + '/**/*.html', 
     'couchdbViews': path.join(config.get('source'), 'views') + '/**/*.js', 
@@ -40,7 +42,10 @@ settings.globs = {
     ],
     'sass': 'app/styles/*.scss'
 };
-settings.globsAll = _.flattenDeep(_.values(settings.globs));
+// All code that should be seen in dev or prod.
+settings.globsAll = _.flattenDeep(_.values(_.omit(settings.globs, ['allCode', 'testCode'])));
+// Only code under test.
+settings.globsTest = settings.globs.allCode;
 
 // Import external tasks, giving them the settings object.
 require("./tasks/bulk-update")(gulp, settings);
@@ -115,6 +120,16 @@ gulp.task('prod-watch', function() {
     settings.isDebug = false;
     // When any source code changes, combine/run browserify/push to server.
     var watcher = gulp.watch(settings.globsAll, ['push']);
+
+    watcher.on('change', function(event) {
+        console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
+    });
+});
+
+// Watch files, run test tasks.
+gulp.task('test-watch', function() {
+    // When any test or source code changes, combine/run browserify/run tests.
+    var watcher = gulp.watch(settings.globsTest, {debounceDelay: 100}, ['test-phantom']);
 
     watcher.on('change', function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
