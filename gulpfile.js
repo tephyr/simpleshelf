@@ -53,6 +53,7 @@ require("./tasks/push")(gulp, settings);
 require("./tasks/code-dev")(gulp, settings);
 require("./tasks/code")(gulp, settings);
 require("./tasks/analyze-jshint")(gulp, settings);
+require("./tasks/test-phantom.js")(gulp, settings);
 
 /**
  * Show settings for this task runner.
