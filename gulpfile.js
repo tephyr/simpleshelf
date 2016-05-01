@@ -29,11 +29,12 @@ if (config.has("_docs")) {
 }
 
 // Setup globs for watching file changes.
+// Encase any values in arrays that should be joined with other values.
 settings.globs = {
-    'allCode': 'app/code/**/*.js',
+    'allCode': ['app/code/**/*.js'],
     'code': ['app/code/**/*.js', '!app/code/test/**/*.js'],
-    'testCode': 'app/code/test/**/*.js',
-    'templates': 'app/code/**/*.html',
+    'testCode': ['app/code/test/**/*.js', 'app/code/test/*.html'],
+    'templates': ['app/code/**/*.html', '!app/code/test/*.html'],
     'ui': path.join(config.get('source'), '_attachments') + '/**/*.html', 
     'couchdbViews': path.join(config.get('source'), 'views') + '/**/*.js', 
     'couchdbSettings': [
@@ -45,7 +46,7 @@ settings.globs = {
 // All code that should be seen in dev or prod.
 settings.globsAll = _.flattenDeep(_.values(_.omit(settings.globs, ['allCode', 'testCode'])));
 // Only code under test.
-settings.globsTest = settings.globs.allCode;
+settings.globsTest = _.flattenDeep([settings.globs.allCode, settings.globs.testCode]);
 
 // Import external tasks, giving them the settings object.
 require("./tasks/bulk-update")(gulp, settings);
