@@ -24,7 +24,8 @@ var settings = {
     externalUICSSDev: config.get("externalUICSSDev"),
     externalUICSSTest: config.get("externalUICSSTest"),
     testSource: path.resolve(config.get('testSource')),
-    testOutputPath: config.get("outputTest")
+    testOutputPath: config.get("outputTest"),
+    dynamic: {} // To contain any cross-task variables.
 };
 
 if (config.has("_docs")) {
@@ -67,6 +68,8 @@ require("./tasks/bundle-test-lib.js")(gulp, settings);
 require("./tasks/ui-test.js")(gulp, settings);
 require("./tasks/build-tests.js")(gulp, settings);
 require("./tasks/copy-test-lib.js")(gulp, settings);
+require("./tasks/browser-sync-init.js")(gulp, settings);
+require("./tasks/browser-sync-reload.js")(gulp, settings);
 
 /**
  * Show settings for this task runner.
@@ -134,9 +137,9 @@ gulp.task('prod-watch', function() {
 });
 
 // Watch files, run test tasks.
-gulp.task('test-watch', function() {
+gulp.task('test-watch', ['browser-sync-init'], function() {
     // When any test or source code changes, combine/run browserify/run tests.
-    var watcher = gulp.watch(settings.globsTest, {debounceDelay: 100}, ['test-phantom']);
+    var watcher = gulp.watch(settings.globsTest, {debounceDelay: 100}, ['browser-sync-reload']);
 
     watcher.on('change', function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
