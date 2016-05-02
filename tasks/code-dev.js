@@ -1,10 +1,11 @@
 module.exports = function(gulp, settings) {
-    var appBundlerFn = require("./app-bundler")(gulp, settings).appBundlerFn;
+    var appBundlerFn = require("./util-bundlers.js")(gulp, settings).appBundlerFn;
 
     /**
      * Bundle debug-ready javascript.
      **/
     gulp.task('code-dev', function (cb) {
-        return appBundlerFn(settings.isDebug);
+        return appBundlerFn('app/code/main.js', settings.isDebug,
+            settings.libraryModules, 'app.bundle.js', settings.codeOutputPath);
     });
 };
