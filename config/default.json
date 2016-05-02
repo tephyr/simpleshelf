@@ -9,6 +9,10 @@
         "tether",
         "selectize"
     ],
+    "testLibraryModules": [
+        "mocha",
+        "chai"
+    ],
     "externalUIJSDev": [
         "node_modules/bootstrap/dist/js/bootstrap.js",
         "node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"
@@ -18,9 +22,14 @@
         "node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.css*",
         "node_modules/selectize/dist/css/selectize.css"
     ],
+    "externalUICSSTest": [
+        "node_modules/mocha/mocha.css"
+    ],
     "source": "simpleshelf",
+    "testSource": "./app/code/test/",
     "sourceWatch": "simpleshelf/**/*",
     "destination": "http://127.0.0.1:5984/simpleshelf",
+    "outputTest": "./output",
     "_docs": {
         "configurationDefault": "./config/default-docs/simpleshelf-configuration-default.json",
         "i18nDefault": "./config/default-docs/simpleshelf-i18n-default.json"

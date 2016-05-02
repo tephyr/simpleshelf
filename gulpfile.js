@@ -21,7 +21,10 @@ var settings = {
     isDebug: false,
     libraryModules: config.get("libraryModules"),
     externalUIJSDev: config.get("externalUIJSDev"),
-    externalUICSSDev: config.get("externalUICSSDev")
+    externalUICSSDev: config.get("externalUICSSDev"),
+    externalUICSSTest: config.get("externalUICSSTest"),
+    testSource: path.resolve(config.get('testSource')),
+    testOutputPath: config.get("outputTest")
 };
 
 if (config.has("_docs")) {
@@ -60,7 +63,10 @@ require("./tasks/code-dev")(gulp, settings);
 require("./tasks/code")(gulp, settings);
 require("./tasks/analyze-jshint")(gulp, settings);
 require("./tasks/test-phantom.js")(gulp, settings);
-require("./tasks/test-prep.js")(gulp, settings);
+require("./tasks/bundle-test-lib.js")(gulp, settings);
+require("./tasks/ui-test.js")(gulp, settings);
+require("./tasks/build-tests.js")(gulp, settings);
+require("./tasks/copy-test-lib.js")(gulp, settings);
 
 /**
  * Show settings for this task runner.

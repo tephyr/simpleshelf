@@ -1,9 +1,10 @@
 module.exports = function(gulp, settings) {
-    var mochaPhantomJS = require('gulp-mocha-phantomjs');
+    var path = require('path'),
+        mochaPhantomJS = require('gulp-mocha-phantomjs');
      
-    gulp.task('test-phantom', ['test-prep', 'bundle-lib'], function () {
+    gulp.task('test-phantom', ['build-tests'], function () {
         return gulp
-            .src('./app/code/test/runner.html')
+            .src(path.join(settings.testOutputPath, 'runner.html'))
             .pipe(mochaPhantomJS());
     });
 };
