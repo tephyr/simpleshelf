@@ -26,4 +26,20 @@ describe('EditBookPageView', function() {
 
     });
 
+    describe.skip('get data from form', function () {
+
+        it("should include title", function() {
+            expect(view).to.be.an('object');
+        });
+
+        it("should include isbn", function() {
+            expect(view).to.be.an('object');
+        });
+
+        it("must include EITHER title OR isbn", function() {
+            expect(view).to.be.an('object');
+        });
+
+    });
+
 });
