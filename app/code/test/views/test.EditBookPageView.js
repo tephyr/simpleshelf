@@ -82,19 +82,60 @@ describe('EditBookPageView', function() {
 
     });
 
-    describe.skip('get data from form', function () {
+    describe('pull data from form', function () {
+
+        beforeEach(function() {
+            config = new Configuration();
+            helperConfigBasic(config);
+            view = new EditBookPageView({configuration: config});
+            book = new Book({}, {configuration: config});
+            view.model = book;
+        });
 
         it("should include title", function() {
-            expect(view).to.be.an('object');
+            var data = {title: "The title"};
+            view._fillModel(helperFormBasic(data));
+            expect(book.get("title")).to.equal(data.title);
         });
 
         it("should include isbn", function() {
-            expect(view).to.be.an('object');
+            var data = {isbn: "123456"};
+            view._fillModel(helperFormBasic(data));
+            expect(book.get("isbn")).to.equal(data.isbn);
         });
 
-        it("must include EITHER title OR isbn", function() {
-            expect(view).to.be.an('object');
+        it("must convert authors to array", function() {
+            var data = {authors: "One\nTwo"};
+            view._fillModel(helperFormBasic(data));
+            expect(book.get("authors")).to.be.instanceOf(Array)
+                .and.have.lengthOf(2)
+                .and.include.members(["Two", "One"]);
         });
+
+        it("must set all standard fields", function() {
+            var data = {
+                title: "Abc",
+                isbn: "012345",
+                authors: "Author One",
+                publisher: "The publisher",
+                public: "on",
+                notesPublic: "Public notes",
+                notesPrivate: "Private notes"
+            };
+
+            view._fillModel(helperFormBasic(data));
+            expect(book.get("authors")).to.have.lengthOf(1).and.include.members([data.authors]);
+            expect(book.get("publisher")).to.equal(data.publisher);
+            expect(book.get("public")).to.be.true;
+            expect(book.get("notesPublic")).to.equal(data.notesPublic);
+            expect(book.get("notesPrivate")).to.equal(data.notesPrivate);
+
+        });
+
+        it("must read tags");
+        it("must update changelog for reading");
+        it("must update changelog for reading w/date");
+        it("must update changelog for ownership");
 
     });
 
@@ -112,5 +153,17 @@ describe('EditBookPageView', function() {
                 }
             }
         });
+    }
+
+    function helperFormBasic(bookData) {
+        return [
+            {name: "editbookTitle", value: bookData.title},
+            {name: "editbookAuthors", value: bookData.authors},
+            {name: "editbookISBN", value: bookData.isbn},
+            {name: "editbookPublisher", value: bookData.publisher},
+            {name: "editbookPublic", value: bookData.public},
+            {name: "editbookNotesPublic", value: bookData.notesPublic},
+            {name: "editbookNotesPrivate", value: bookData.notesPrivate}
+        ];
     }
 });
