@@ -49,6 +49,37 @@ describe('EditBookPageView', function() {
             expect(view._buildTemplateData()).to.not.include.keys('title', 'isbn', 'authors');
         });
 
+        it("should have the basics for an existing model", function() {
+            book.set({'title': 'Test title', 'isbn': '12345', 'authors': ['Author One']});
+            expect(view._buildTemplateData()).to.be.an('object');
+            expect(view._buildTemplateData()).to.include.keys('hasOwnership', 'hasRead',
+                'statusRead', 'statusOwnership', 'title', 'isbn', 'authors');
+        });
+
+        it("should not have a configuration element", function() {
+            // Ensure that the configuration model does not accidentally get included in the data.
+            expect(view._buildTemplateData()).to.not.include.keys('configuration');
+        });
+
+        it("should convert missing 'public' to false", function() {
+            book.unset('public');
+            expect(book.get('public')).to.be.undefined;
+            expect(view._buildTemplateData()).to.have.property('public', false);
+            book.set('public', false);
+            expect(view._buildTemplateData()).to.have.property('public', false);
+            book.set('public', true);
+            expect(view._buildTemplateData()).to.have.property('public', true);
+        });
+
+        it("should convert authors to \\n-delimited string", function() {
+            book.set("authors", ["Just One"]);
+            expect(book.get("authors")).to.be.an.array;
+            expect(view._buildTemplateData()).to.have.property('authors', "Just One");
+            book.set("authors", ["One", "Two"]);
+            expect(book.get("authors")).to.be.an.array;
+            expect(view._buildTemplateData()).to.have.property('authors', "One\nTwo");
+        });
+
     });
 
     describe.skip('get data from form', function () {
