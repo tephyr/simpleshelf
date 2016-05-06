@@ -31,29 +31,9 @@ var EditBookPage = Backbone.View.extend({
     },
 
     render: function() {
-        var ownershipConfig = this.configuration.get("ownership"),
-            readConfig = this.configuration.get("read"),
-            templateData = {
-                hasOwnership: _.isArray(ownershipConfig) && ownershipConfig.length > 0,
-                hasRead: _.isArray(readConfig) && readConfig.length > 0,
-                statusRead: this._buildStatusValues("read"),
-                statusOwnership: this._buildStatusValues("ownership")
-            };
-
         this._log("model.id", _.isObject(this.model) ? this.model.id : "no model");
-        // Extend base data with existing model, if any.
-        if (_.isObject(this.model)) {
-            templateData = _.extend({}, templateData, this.model.toJSON());
-            // Fill in missing defaults.
-            if (!_.has(templateData, "public")) {
-                templateData.public = false;
-            }
-            if (_.has(templateData, "authors")) {
-                templateData.authors = templateData.authors.join("\n");
-            }
-        }
 
-        this.$el.html(this._template(templateData));
+        this.$el.html(this._template(this._buildTemplateData()));
 
         // Render subviews.
         this._tagInputView.model = this.model;
@@ -77,6 +57,31 @@ var EditBookPage = Backbone.View.extend({
         });
 
         return result;
+    },
+
+    _buildTemplateData: function() {
+        var ownershipConfig = this.configuration.get("ownership"),
+            readConfig = this.configuration.get("read"),
+            templateData = {
+                hasOwnership: _.isArray(ownershipConfig) && ownershipConfig.length > 0,
+                hasRead: _.isArray(readConfig) && readConfig.length > 0,
+                statusRead: this._buildStatusValues("read"),
+                statusOwnership: this._buildStatusValues("ownership")
+            };
+
+        // Extend base data with existing model, if any.
+        if (_.isObject(this.model)) {
+            templateData = _.extend({}, templateData, this.model.toJSON());
+            // Fill in missing defaults.
+            if (!_.has(templateData, "public")) {
+                templateData.public = false;
+            }
+            if (_.has(templateData, "authors")) {
+                templateData.authors = templateData.authors.join("\n");
+            }
+        }
+
+        return templateData;
     },
 
     /**
