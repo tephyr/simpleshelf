@@ -63,6 +63,7 @@ require("./tasks/push")(gulp, settings);
 require("./tasks/code-dev")(gulp, settings);
 require("./tasks/code")(gulp, settings);
 require("./tasks/analyze-jshint")(gulp, settings);
+require("./tasks/test-in-browser.js")(gulp, settings);
 require("./tasks/test-phantom.js")(gulp, settings);
 require("./tasks/bundle-test-lib.js")(gulp, settings);
 require("./tasks/ui-test.js")(gulp, settings);
@@ -79,7 +80,7 @@ gulp.task('default', function() {
     console.info("Current environment (NODE_ENV)", process.env.NODE_ENV);
     console.info("config.source", settings.source);
     console.info("config.destination", settings.destination);
-    console.info("Typical dev command: `gulp dev-watch docs-watch`");
+    console.info("Typical dev command: `gulp dev-watch docs-watch test-watch`");
 });
 
 /**
