@@ -140,7 +140,8 @@ gulp.task('prod-watch', function() {
 // Watch files, run test tasks.
 gulp.task('test-watch', ['browser-sync-init'], function() {
     // When any test or source code changes, combine/run browserify/run tests.
-    var watcher = gulp.watch(settings.globsTest, {debounceDelay: 100}, ['browser-sync-reload']);
+    var watcher = gulp.watch(settings.globsTest, {debounceDelay: 100},
+        ['browser-sync-reload', 'test-phantom']);
 
     watcher.on('change', function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
