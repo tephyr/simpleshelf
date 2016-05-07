@@ -1,16 +1,8 @@
 var gulp = require('gulp'),
     _ = require('lodash'),
     path = require('path'),
-    analyzeJSHint = require('./util/gulp/analyze-jshint');
-
-// Check for NODE_ENV; if doesn't exist, use 'personal'.
-// Usage (BEFORE launching gulp): export NODE_ENV=somevalue
-if (_.isEmpty(process.env.NODE_ENV)) {
-    process.env.NODE_ENV = "personal";
-}
-
-// Must be loaded *after* NODE_ENV is set.
-var config = require('config');
+    analyzeJSHint = require('./util/gulp/analyze-jshint'),
+    config = require('config');
 
 var settings = {
     source: path.resolve(config.get('source')),
@@ -77,7 +69,14 @@ require("./tasks/browser-sync-reload.js")(gulp, settings);
  **/
 gulp.task('default', function() {
     // place code for your default task here
-    console.info("Current environment (NODE_ENV)", process.env.NODE_ENV);
+    if (_.isEmpty(process.env.NODE_ENV)) {
+        // process.env.NODE_ENV = "personal";
+        console.warn("*** No environment set (NODE_ENV is empty); using default. ***");
+        console.info("\tUsage (BEFORE launching gulp): export NODE_ENV=somevalue");
+        console.info("\tUsage (PER-USE): NODE_ENV=somevalue gulp");
+    } else {
+        console.info("Current environment (NODE_ENV)", process.env.NODE_ENV);
+    }
     console.info("config.source", settings.source);
     console.info("config.destination", settings.destination);
     console.info("Typical dev command: `gulp dev-watch docs-watch test-watch`");

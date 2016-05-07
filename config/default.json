@@ -25,9 +25,9 @@
     "externalUICSSTest": [
         "node_modules/mocha/mocha.css"
     ],
-    "source": "simpleshelf",
+    "source": "simpleshelfmobile",
     "testSource": "./app/code/test/",
-    "sourceWatch": "simpleshelf/**/*",
+    "sourceWatch": "simpleshelfmobile/**/*",
     "destination": "http://127.0.0.1:5984/simpleshelf",
     "outputTest": "./output",
     "_docs": {
