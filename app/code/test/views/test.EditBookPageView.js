@@ -132,8 +132,37 @@ describe('EditBookPageView', function() {
 
         });
 
-        it("must read tags");
-        it("must update changelog for reading");
+        it("must set status fields", function() {
+            var data = {
+                title: "Abc",
+                isbn: "012345",
+                statusRead: "to.read",
+                statusOwnership: "personal"
+            };
+
+            view._fillModel(helperFormBasic(data));
+            var status = book.get("status");
+
+            expect(status)
+                .to.be.instanceOf(Object)
+                .and.include.keys("read", "ownership");
+            expect(status["read"]).to.equal("to.read");
+            expect(status["ownership"]).to.equal("personal");
+        });
+
+        it.skip("must trigger status change for reading", function() {
+            var data = {
+                title: "Abc",
+                isbn: "012345",
+                statusRead: "to.read"
+            };
+
+            view._fillModel(helperFormBasic(data));
+
+        });
+
+        it("must not update changelog when reading/ownership did not change");
+
         it("must update changelog for reading w/date");
         it("must update changelog for ownership");
 
@@ -163,7 +192,9 @@ describe('EditBookPageView', function() {
             {name: "editbookPublisher", value: bookData.publisher},
             {name: "editbookPublic", value: bookData.public},
             {name: "editbookNotesPublic", value: bookData.notesPublic},
-            {name: "editbookNotesPrivate", value: bookData.notesPrivate}
+            {name: "editbookNotesPrivate", value: bookData.notesPrivate},
+            {name: "editbookRead", value: bookData.statusRead},
+            {name: "editbookOwnership", value: bookData.statusOwnership}
         ];
     }
 });
