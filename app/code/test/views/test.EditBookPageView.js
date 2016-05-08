@@ -1,4 +1,5 @@
-var expect = require('chai').expect;
+var expect = require('chai').expect,
+    sinon = require('sinon');
 
 var EditBookPageView = require("../../views/EditBookPageView.js"),
     Configuration = require("../../models/Configuration.js"),
@@ -150,7 +151,27 @@ describe('EditBookPageView', function() {
             expect(status["ownership"]).to.equal("personal");
         });
 
-        it.skip("must trigger status change for reading", function() {
+    });
+
+    describe("log status changes", function() {
+
+        beforeEach(function() {
+            config = new Configuration();
+            helperConfigBasic(config);
+            view = new EditBookPageView({configuration: config});
+            book = new Book({}, {configuration: config});
+            view.model = book;
+
+            // Spy on book.changeStatus.
+            sinon.spy(book, "changeStatus");
+        });
+
+        afterEach(function() {
+            // Unwind spy.
+            book.changeStatus.restore();
+        });
+
+        it("must trigger status change for reading", function() {
             var data = {
                 title: "Abc",
                 isbn: "012345",
@@ -159,12 +180,68 @@ describe('EditBookPageView', function() {
 
             view._fillModel(helperFormBasic(data));
 
+            expect(book.changeStatus.calledOnce).to.be.true;
         });
 
-        it("must not update changelog when reading/ownership did not change");
+        it("must update changelog for reading w/date", function(){
+            var data = {
+                title: "Abc",
+                isbn: "012345",
+                statusRead: "to.read",
+                readDate: "2016-05-05"
+            };
 
-        it("must update changelog for reading w/date");
-        it("must update changelog for ownership");
+            view._fillModel(helperFormBasic(data));
+
+            expect(book.changeStatus.calledOnce).to.be.true;
+            expect(book.changeStatus.calledWithExactly("read", data.statusRead, data.readDate))
+                .to.be.true;
+        });
+
+        it("must trigger status change for ownership", function() {
+            var data = {
+                title: "Abc",
+                isbn: "012345",
+                statusOwnership: "personal"
+            };
+
+            view._fillModel(helperFormBasic(data));
+
+            expect(book.changeStatus.calledOnce).to.be.true;
+        });
+
+        it("must trigger status change for read & ownership", function() {
+            var data = {
+                title: "Abc",
+                isbn: "012345",
+                statusRead: 'to.read',
+                statusOwnership: "personal"
+            };
+
+            view._fillModel(helperFormBasic(data));
+
+            expect(book.changeStatus.callCount).to.equal(2);
+        });
+
+        it("must not trigger status change when reading/ownership did not change", function() {
+            var data = {
+                title: "Abc",
+                isbn: "012345",
+                statusRead: 'to.read',
+                statusOwnership: "personal"
+            };
+
+            // Initial submission.
+            view._fillModel(helperFormBasic(data));
+
+            data.title = "Abc changed";
+
+            // Changed submission.
+            view._fillModel(helperFormBasic(data));
+
+            // Should have still only called it twice.
+            expect(book.changeStatus.callCount).to.equal(2);
+        });
 
     });
 
@@ -194,6 +271,7 @@ describe('EditBookPageView', function() {
             {name: "editbookNotesPublic", value: bookData.notesPublic},
             {name: "editbookNotesPrivate", value: bookData.notesPrivate},
             {name: "editbookRead", value: bookData.statusRead},
+            {name: "editbookReadDate", value: bookData.readDate},
             {name: "editbookOwnership", value: bookData.statusOwnership}
         ];
     }
