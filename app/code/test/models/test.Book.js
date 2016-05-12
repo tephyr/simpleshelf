@@ -1,8 +1,7 @@
 var expect = require('chai').expect,
     sinon = require('sinon'),
-    testUtilities = require("../testUtilities.js");
-
-var Configuration = require("../../models/Configuration.js"),
+    testUtilities = require("../testUtilities.js"),
+    Configuration = require("../../models/Configuration.js"),
     Book = require("../../models/Book.js");
 
 describe('Book', function() {
@@ -34,8 +33,44 @@ describe('Book', function() {
     });
 
     describe("validation", function() {
-        it("must require title or isbn");
-        it("must check for empty strings in title & isbn");
+        beforeEach(function() {
+            config = new Configuration();
+            testUtilities.helperConfigBasic(config);
+            book = new Book({}, {configuration: config});
+        });
+
+        it("must require title or isbn", function() {
+            // Verify that book does not have title or isbn.
+            expect(book.has('title')).to.be.false;
+            expect(book.has('isbn')).to.be.false;
+
+            // Now check validate().
+            expect(book.isValid()).to.be.false;
+            book.set('title', 'valid title');
+            expect(book.isValid()).to.be.true;
+            book.unset('title').set('isbn', '0123');
+            expect(book.isValid()).to.be.true;
+        });
+
+        it("must check for empty strings in title & isbn", function() {
+            // Test title.
+            book.set('title', '');
+            expect(book.isValid()).to.be.false;
+            book.set('title', '    '); // 4 spaces
+            expect(book.isValid()).to.be.false;
+
+            // Test ISBN.
+            book.unset('title').set('isbn', '');
+            expect(book.isValid()).to.be.false;
+            book.set('isbn', '    '); // 4 spaces
+            expect(book.isValid()).to.be.false;
+
+            // Test both.
+            book.set({'title': '', 'isbn': ''});
+            expect(book.isValid()).to.be.false;
+            book.set({'title': '    ', 'isbn': '    '});
+            expect(book.isValid()).to.be.false;
+        });
     });
 
     describe("status", function() {
