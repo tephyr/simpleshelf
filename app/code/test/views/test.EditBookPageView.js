@@ -1,5 +1,6 @@
 var expect = require('chai').expect,
-    sinon = require('sinon');
+    sinon = require('sinon'),
+    testUtilities = require("../testUtilities.js");
 
 var EditBookPageView = require("../../views/EditBookPageView.js"),
     Configuration = require("../../models/Configuration.js"),
@@ -16,7 +17,7 @@ describe('EditBookPageView', function() {
     describe('verify objects', function () {
         beforeEach(function() {
             config = new Configuration();
-            helperConfigBasic(config);
+            testUtilities.helperConfigBasic(config);
             view = new EditBookPageView({configuration: config});
             book = new Book({configuration: config});
         });
@@ -37,7 +38,7 @@ describe('EditBookPageView', function() {
 
         beforeEach(function() {
             config = new Configuration();
-            helperConfigBasic(config);
+            testUtilities.helperConfigBasic(config);
             view = new EditBookPageView({configuration: config});
             book = new Book({}, {configuration: config});
             view.model = book;
@@ -87,7 +88,7 @@ describe('EditBookPageView', function() {
 
         beforeEach(function() {
             config = new Configuration();
-            helperConfigBasic(config);
+            testUtilities.helperConfigBasic(config);
             view = new EditBookPageView({configuration: config});
             book = new Book({}, {configuration: config});
             view.model = book;
@@ -157,7 +158,7 @@ describe('EditBookPageView', function() {
 
         beforeEach(function() {
             config = new Configuration();
-            helperConfigBasic(config);
+            testUtilities.helperConfigBasic(config);
             view = new EditBookPageView({configuration: config});
             book = new Book({}, {configuration: config});
             view.model = book;
@@ -244,22 +245,6 @@ describe('EditBookPageView', function() {
         });
 
     });
-
-    function helperConfigBasic(configModel) {
-        configModel.set({
-            'read': ['to.read', 'reading', 'finished'],
-            'ownership': ['personal', 'library'],
-            'actions': {
-                "read": {
-                    "to.read": "book.read.queued",
-                    "reading": "book.read.started",
-                    "finished": "book.read.finished",
-                    "abandoned": "book.read.stopped",
-                    "reference": "book.read.setasreference"
-                }
-            }
-        });
-    }
 
     function helperFormBasic(bookData) {
         return [
