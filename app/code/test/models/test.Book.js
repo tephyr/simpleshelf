@@ -73,11 +73,58 @@ describe('Book', function() {
         });
     });
 
-    describe("status", function() {
-        it("must log any status");
-        it("must log read status");
-        it("must check if new read status has associated activity");
-        it("must add log entry with date on read status change");
+    describe("changeStatus", function() {
+        beforeEach(function() {
+            config = new Configuration();
+            testUtilities.helperConfigBasic(config);
+            book = new Book({}, {configuration: config});
+        });
+
+        // changeStatus: function(statusKey, statusValue, asOfDate)
+        it("must change any status", function() {
+            expect(book.get("status")).to.be.undefined;
+            book.changeStatus("ownership", "library");
+            expect(book.get("status"))
+                .to.be.an('object')
+                .and.to.include.keys("ownership");
+        });
+
+        it("must log 'read' status", function() {
+            book.changeStatus("read", "to.read");
+            var activities = book.get("activities");
+            expect(activities)
+                .to.be.an('Array')
+                .and.have.lengthOf(1);
+            expect(activities[0])
+                .to.be.an('object')
+                .and.to.include.keys("date", "action");
+        });
+
+        it("must add log entry with date on read status change", function() {
+            book.changeStatus("read", "to.read", "2016-01-02");
+            var activities = book.get("activities");
+            expect(activities[0])
+                .to.be.an('object')
+                .and.to.deep.equal({date: "2016-01-02", action: "book.read.queued"});
+
+            book.changeStatus("read", "reading", "2016-02-03");
+            activities = book.get("activities");
+            expect(activities).to.have.lengthOf(2);
+            expect(activities[1])
+                .to.be.an('object')
+                .and.to.deep.equal({date: "2016-02-03", action: "book.read.started"});
+        });
+
+        it("must only log 'read' status changes", function() {
+            book.changeStatus("read", "reading", "2016-01-02");
+            book.changeStatus("ownership", "personal");
+            book.changeStatus("read", "abandoned", "2016-01-03");
+
+            var activities = book.get("activities");
+            expect(activities)
+                .to.be.an('Array')
+                .and.have.lengthOf(2);
+        });
     });
 
     describe("activities", function() {
