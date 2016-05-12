@@ -7,7 +7,7 @@ module.exports = function(gulp, settings) {
      */
     gulp.task('test-phantom', ['build-tests'], function () {
         return gulp
-            .src(path.join(settings.testOutputPath, 'runner.html'))
+            .src(path.join(settings.testOutputPath, 'index.html'))
             .pipe(mochaPhantomJS());
     });
 };

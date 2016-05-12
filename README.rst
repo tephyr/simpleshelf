@@ -43,7 +43,7 @@ Done!  simpleshelf is now available for use; load the UI at http://127.0.0.1:598
 How to test
 -----------
 * ``gulp test-phantom``: runs the PhantomJS_ test runner, outputting to the console.
-* ``gulp test-in-browser``: runs the BrowserSync runner, launching (or updating) the test page, typically at http://localhost:3000/runner.html.
+* ``gulp test-in-browser``: runs the BrowserSync runner, launching (or updating) the test page, typically at http://localhost:3000/index.html.
 * ``gulp test-watch``: run the console *and* browser tests, reloading both when any code changes.
 
 Documentation
