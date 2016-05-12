@@ -15,6 +15,11 @@ var Book = Backbone.Model.extend({
     },
 
     initialize: function(attributes, options) {
+        if (_.isObject(attributes) && _.has(attributes, "configuration")) {
+            // NOT ALLOWED.
+            throw(new Error("configuration not allowed as a Book attribute."));
+        }
+
         if (_.isObject(options) && _.has(options, "configuration")) {
             this._configuration = options.configuration;
         }
