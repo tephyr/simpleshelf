@@ -19,7 +19,7 @@ describe('EditBookPageView', function() {
             config = new Configuration();
             testUtilities.helperConfigBasic(config);
             view = new EditBookPageView({configuration: config});
-            book = new Book({configuration: config});
+            book = new Book({}, {configuration: config});
         });
 
         it("should create a valid view object", function() {
