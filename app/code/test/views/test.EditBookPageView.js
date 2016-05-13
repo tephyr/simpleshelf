@@ -18,7 +18,7 @@ describe('EditBookPageView', function() {
         beforeEach(function() {
             config = new Configuration();
             testUtilities.helperConfigBasic(config);
-            view = new EditBookPageView({configuration: config});
+            view = new EditBookPageView({configuration: config, okToLog: false});
             book = new Book({}, {configuration: config});
         });
 
@@ -39,7 +39,7 @@ describe('EditBookPageView', function() {
         beforeEach(function() {
             config = new Configuration();
             testUtilities.helperConfigBasic(config);
-            view = new EditBookPageView({configuration: config});
+            view = new EditBookPageView({configuration: config, okToLog: false});
             book = new Book({}, {configuration: config});
             view.model = book;
         });
@@ -89,7 +89,7 @@ describe('EditBookPageView', function() {
         beforeEach(function() {
             config = new Configuration();
             testUtilities.helperConfigBasic(config);
-            view = new EditBookPageView({configuration: config});
+            view = new EditBookPageView({configuration: config, okToLog: false});
             book = new Book({}, {configuration: config});
             view.model = book;
         });
@@ -159,7 +159,7 @@ describe('EditBookPageView', function() {
         beforeEach(function() {
             config = new Configuration();
             testUtilities.helperConfigBasic(config);
-            view = new EditBookPageView({configuration: config});
+            view = new EditBookPageView({configuration: config, okToLog: false});
             book = new Book({}, {configuration: config});
             view.model = book;
 

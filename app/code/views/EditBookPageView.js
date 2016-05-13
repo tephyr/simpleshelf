@@ -19,6 +19,7 @@ var EditBookPage = Backbone.View.extend({
     },
 
     initialize: function(options) {
+        this._okToLog = _.has(options, "okToLog") ? options.okToLog : true;
         this._logHeader = "[EditBookPage]";
         this._log("initialize");
         this._template = Handlebars.compile(EditBookPageTemplate);
@@ -180,7 +181,9 @@ var EditBookPage = Backbone.View.extend({
     },
 
     _log: function() {
-        console.info(this._logHeader, _.toArray(arguments).join(" "));
+        if (this._okToLog) {
+            console.info(this._logHeader, _.toArray(arguments).join(" "));
+        }
     }
 });
 
