@@ -7,9 +7,9 @@ module.exports = function(gulp, settings) {
     /**
      * Push SOURCE to DESTINATION using couchdb-push.
      **/
-    gulp.task('push', ['bundle-lib', 'code-dev', 'ui-framework', 'ui-local'], function(cb) {
-        console.info("Pushing", settings.source, "to", settings.destination);
-        push(settings.destination, settings.source, function(err, resp) {
+    gulp.task('push', ['build-app'], function(cb) {
+        console.info("Pushing", settings.ddocOutput, "to", settings.destination);
+        push(settings.destination, settings.ddocOutput, function(err, resp) {
             if (_.isObject(err)) {
                 // Handle failure.
                 console.error(err);

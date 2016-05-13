@@ -5,11 +5,12 @@ var gulp = require('gulp'),
     config = require('config');
 
 var settings = {
-    source: path.resolve(config.get('source')),
-    sourceWatch: config.get('sourceWatch'),
+    clientSource: path.resolve(config.get('clientSource')),
+    ddocSource: path.resolve(config.get('ddocSource')),
+    ddocOutput: config.get('outputDDoc'),
     destination: config.get('destination'),
-    codeOutputPath: path.join(config.get('source'), '_attachments', 'code'),
-    styleOutputPath: path.join(config.get('source'), '_attachments', 'style'),
+    codeOutputPath: path.join(config.get('outputDDoc'), '_attachments', 'code'),
+    styleOutputPath: path.join(config.get('outputDDoc'), '_attachments', 'style'),
     isDebug: false,
     libraryModules: config.get("libraryModules"),
     externalUIJSDev: config.get("externalUIJSDev"),
@@ -31,15 +32,14 @@ settings.globs = {
     'code': ['app/code/**/*.js', '!app/code/test/**/*.js'],
     'testCode': ['app/code/test/**/*.js', 'app/code/test/*.html'],
     'templates': ['app/code/**/*.html', '!app/code/test/*.html'],
-    'ui': path.join(config.get('source'), '_attachments') + '/**/*.html', 
-    'couchdbViews': path.join(config.get('source'), 'views') + '/**/*.js', 
-    'couchdbSettings': [
-        config.get('source') + '/rewrites.json',
-        config.get('source') + '/*.js'
-    ],
-    'sass': 'app/styles/*.scss'
+    'ui': path.join(settings.clientSource, '/**/*.html'),
+    'directUI': path.join(settings.clientSource, '*.html'),
+    'ddoc': path.join(settings.ddocSource, '**/*'),
+    'sass': 'app/style/*.scss'
 };
+
 // All code that should be seen in dev or prod.
+// (Get all values in globs **except** allCode & testCode, which are better handled by 'code'.)
 settings.globsAll = _.flattenDeep(_.values(_.omit(settings.globs, ['allCode', 'testCode'])));
 // Only code under test.
 settings.globsTest = _.flattenDeep([settings.globs.allCode, settings.globs.testCode]);
@@ -54,6 +54,8 @@ require("./tasks/bundle-lib")(gulp, settings);
 require("./tasks/push")(gulp, settings);
 require("./tasks/code-dev")(gulp, settings);
 require("./tasks/code")(gulp, settings);
+require("./tasks/build-app")(gulp, settings);
+require("./tasks/build-ddoc")(gulp, settings);
 require("./tasks/analyze-jshint")(gulp, settings);
 require("./tasks/test-in-browser.js")(gulp, settings);
 require("./tasks/test-phantom.js")(gulp, settings);
@@ -77,8 +79,12 @@ gulp.task('default', function() {
     } else {
         console.info("Current environment (NODE_ENV)", process.env.NODE_ENV);
     }
-    console.info("config.source", settings.source);
-    console.info("config.destination", settings.destination);
+    console.info("config.clientSource", settings.clientSource);
+    console.info("config.ddocSource", settings.ddocSource);
+
+    console.info("Build output (config.outputDDoc)", settings.ddocOutput);
+    console.info("Server design doc (config.destination)", settings.destination);
+    console.info();
     console.info("Typical dev command: `gulp dev-watch docs-watch test-watch`");
 });
 
