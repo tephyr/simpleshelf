@@ -17,6 +17,7 @@ var $ = require("jquery"),
     AppConfigurationModel = require("./models/Configuration.js"),
     EditBookPageView = require("./views/EditBookPageView.js"),
     GlobalCountModel = require("./models/GlobalCount.js"),
+    ReadingStatsModel = require("./models/ReadingStats.js"),
     BookCollection = require("./models/BookCollection.js"),
     BooksByLetterCollection = require("./models/BooksByLetterCollection.js"),
     SpineCollection = require("./models/SpineCollection.js"),
@@ -37,6 +38,7 @@ var app = {
         spineCollection: new SpineCollection(),
         booksByLetterCollection: new BooksByLetterCollection(),
         globalCountModel: new GlobalCountModel(),
+        readingStatsModel: new ReadingStatsModel(),
         bookCollection: new BookCollection(),
         tagCollection: new TagCollection(),
         /**
@@ -92,6 +94,7 @@ var app = {
             } else {
                 $.when(
                     this.globalCountModel.fetch(),
+                    this.readingStatsModel.fetch(),
                     this.bookCollection.fetch(),
                     this.spineCollection.fetch()
                 ).then(_.bind(function() {
@@ -133,7 +136,8 @@ app.views = {
     navbarView: new NavbarView(),
     loginPageView: new LoginPageView(),
     mainPageView: new MainPageView({
-        model: app.catalog.globalCountModel
+        model: app.catalog.globalCountModel,
+        readingStats: app.catalog.readingStatsModel
     }),
     globalAlertView: new GlobalAlertView({
         configuration: app.configuration
