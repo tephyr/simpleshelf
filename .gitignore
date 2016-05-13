@@ -1,6 +1,6 @@
 # ignore these files #
 docs/_build/
-output/
+output-*/
 simpleshelfmobile/_attachments/code/
 simpleshelfmobile/_attachments/style/
 node_modules/
