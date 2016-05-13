@@ -12,8 +12,9 @@ var mainPage = Backbone.View.extend({
         "vclick #main-add-book": "onAddBook",
     },
 
-    initialize: function() {
+    initialize: function(options) {
         this.books = null;
+        this.readingStats = options.readingStats;
         this._template = Handlebars.compile(MainPageTemplate);
         return this;
     },
@@ -26,7 +27,8 @@ var mainPage = Backbone.View.extend({
             }),
             bookCount: this.model.formatSimply("_book_instances"),
             authorCount: this.model.formatSimply("_author_instances"),
-            tagCount: this.model.formatSimply("_tag_instances")
+            tagCount: this.model.formatSimply("_tag_instances"),
+            avgReadingTime: this.readingStats.get("avg") || "N/A"
         };
 
         this.$el.html(this._template(basicData));

@@ -1,6 +1,6 @@
 <div class="row">
-    <div class="col-xs-12">
-        <h3>Reading <span class="label label-info pull-xs-right pull-md-none">{{currentlyReadingCount}}</span></h3>
+    <div class="col-xs-12 col-md-4">
+        <h3>Reading <span class="label label-info pull-xs-right">{{currentlyReadingCount}}</span></h3>
     </div>
 </div>
 <div class="row">
@@ -23,6 +23,18 @@
             <a class="list-group-item" href="#books">Books <span class="label label-info pull-xs-right">{{bookCount}}</span></a>
             <a class="list-group-item" href="#authors">Authors <span class="label label-info pull-xs-right">{{authorCount}}</span></a>
             <a class="list-group-item" href="#tags">Tags <span class="label label-info pull-xs-right">{{tagCount}}</span></a>
+        </div>
+    </div>
+</div>
+
+<div class="row m-t-1">
+    <div class="col-xs-12 col-md-4">
+        <div class="list-group">
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading text-xs-center">Stats</h4>
+            </div>
+            <div class="list-group-item">Average reading time (days) <span class="label label-info pull-xs-right">{{avgReadingTime}}</span>
+            </div>
         </div>
     </div>
 </div>
