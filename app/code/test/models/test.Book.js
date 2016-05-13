@@ -127,8 +127,57 @@ describe('Book', function() {
         });
     });
 
-    describe("activities", function() {
-        it("must parse activities by date");
+    describe("parse", function() {
+        beforeEach(function() {
+            config = new Configuration();
+            testUtilities.helperConfigBasic(config);
+            book = new Book({}, {configuration: config});
+        });
+
+        it("must order activities by date", function() {
+            var parsedResponse = book.parse(basicBookResponse());
+
+            expect(parsedResponse)
+                .to.contain.all.keys("activities", "_id"); // At *least* these keys.
+
+            expect(parsedResponse.activities)
+                .to.be.an('Array')
+                .and.to.have.lengthOf(3);
+
+            expect(parsedResponse.activities[0])
+                .to.deep.equal({"date": "2016-04-01", "action": "book.read.queued"});
+            expect(parsedResponse.activities[1])
+                .to.deep.equal({"date": "2016-05-01", "action": "book.read.started"});
+            expect(parsedResponse.activities[2])
+                .to.deep.equal({"date": "2016-06-01", "action": "book.read.finished"});
+        });
     });
+
+    function basicBookResponse() {
+        return {
+                "_id": "demo-0679729658",
+                "status": {
+                    "read": "finished",
+                    "ownership": "personal"
+                },
+                "isbn": "0679729658",
+                "activities": [
+                    {"date": "2016-06-01", "action": "book.read.finished"},
+                    {"date": "2016-04-01", "action": "book.read.queued"},
+                    {"date": "2016-05-01", "action": "book.read.started"}
+                ],
+                "title": "A tale of two cities",
+                "publisher": "Vintage Books",
+                "notesPrivate": null,
+                "notesPublic": "1st Vintage classics ed.",
+                "urls": {
+                    "openlibrary": "https://openlibrary.org/books/OL1859004M/A_tale_of_two_cities"
+                },
+                "authors": ["Dickens, Charles"],
+                "type": "book",
+                "public": true,
+                "tags": ["fiction", "classic"]
+            };
+    }
 
 });
