@@ -7,7 +7,7 @@ function(keys, values, rereduce) {
             'count': values.reduce(function(a, b) { return a + b.count; }, 0)
         };
 
-        result.avg = result.sum / result.count;
+        result.avg = Math.round((result.sum / result.count)*10)/10; // Round to 1 decimal point.
 
         return result;
 
@@ -17,7 +17,7 @@ function(keys, values, rereduce) {
             'min': Math.min.apply(null, values),
             'max': Math.max.apply(null, values),
             'count': values.length,
-            'avg': sum(values) / values.length
+            'avg': Math.round((sum(values) / values.length)*10)/10 // Round to 1 decimal point.
         };
     }
 }
