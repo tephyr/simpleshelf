@@ -101,7 +101,7 @@ var Router = Backbone.Router.extend({
      **/
     addbook: function() {
         this._log("/addbook");
-        this._views.editBookPageView.model = new Book({
+        this._views.editBookPageView.model = new Book({}, {
             configuration: this._configuration
         });
         this._changeScreen(this._views.editBookPageView);
