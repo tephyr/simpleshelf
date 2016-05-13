@@ -132,7 +132,12 @@ var EditBookPage = Backbone.View.extend({
     onCancel: function(event) {
         this._log("onCancel");
         event.preventDefault();
-        this.trigger("app:navigate", {view: "main"});
+
+        if (this.model.isNew()) {
+            this.trigger("app:navigate", {view: "main"});
+        } else {
+            this.trigger("app:navigate", {view: "book", id: this.model.id});
+        }
     },
 
     /**
