@@ -30,6 +30,7 @@ if (config.has("_docs")) {
 settings.globs = {
     'allCode': ['app/code/**/*.js'],
     'code': ['app/code/**/*.js', '!app/code/test/**/*.js'],
+    'ddocCode': path.join(settings.ddocSource, '**/*.js'),
     'testCode': ['app/code/test/**/*.js', 'app/code/test/*.html'],
     'templates': ['app/code/**/*.html', '!app/code/test/*.html'],
     'ui': path.join(settings.clientSource, '/**/*.html'),
@@ -39,8 +40,8 @@ settings.globs = {
 };
 
 // All code that should be seen in dev or prod.
-// (Get all values in globs **except** allCode & testCode, which are better handled by 'code'.)
-settings.globsAll = _.flattenDeep(_.values(_.omit(settings.globs, ['allCode', 'testCode'])));
+// (Get all values in globs **except** allCode, testCode, ddocCode, which are better handled by 'code'.)
+settings.globsAll = _.flattenDeep(_.values(_.omit(settings.globs, ['allCode', 'ddocCode', 'testCode'])));
 // Only code under test.
 settings.globsTest = _.flattenDeep([settings.globs.allCode, settings.globs.testCode]);
 
@@ -112,7 +113,7 @@ gulp.task('dev-watch', function() {
 // Watch files, run analyze tasks.
 gulp.task('analyze-watch', function() {
     // When any source code changes, analyze with jshint.
-    var watcher = gulp.watch(settings.globs.code);
+    var watcher = gulp.watch([settings.globs.code, settings.globs.ddocCode]);
 
     watcher.on('change', function(event) {
         analyzeJSHint(event.path);
