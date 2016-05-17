@@ -35,6 +35,7 @@ settings.globs = {
     'templates': ['app/code/**/*.html', '!app/code/test/*.html'],
     'ui': path.join(settings.clientSource, '/**/*.html'),
     'directUI': path.join(settings.clientSource, '*.html'),
+    'images': path.join(settings.clientSource, 'img', '**/*'),
     'ddoc': path.join(settings.ddocSource, '**/*'),
     'sass': 'app/style/*.scss'
 };
