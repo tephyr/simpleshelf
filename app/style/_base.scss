@@ -1,0 +1,10 @@
+// Show a book image next to the main page menu.
+#mainPage {
+    background: url("../img/open-book-grey.svg") no-repeat;
+    background-position: right center;
+    background-size: 50%;
+
+    @include media-breakpoint-down(sm) {
+        background-image: none;
+    }
+}
