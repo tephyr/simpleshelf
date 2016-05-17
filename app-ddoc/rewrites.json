@@ -6,6 +6,12 @@
         "query": {}
     },
     {
+        "from": "img/*",
+        "to": "/img/*",
+        "method": "*",
+        "query": {}
+    },
+    {
         "from": "style/*",
         "to": "/style/*",
         "method": "*",
