@@ -87,7 +87,8 @@ gulp.task('default', function() {
     console.info("Build output (config.outputDDoc)", settings.ddocOutput);
     console.info("Server design doc (config.destination)", settings.destination);
     console.info();
-    console.info("Typical dev command: `gulp dev-watch docs-watch test-watch`");
+    console.info("Typical dev command: `gulp push dev-watch docs-watch test-watch`");
+    console.info("  (This pushes the current code to CouchDB, then watches for changes.)");
 });
 
 /**
