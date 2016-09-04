@@ -61,6 +61,13 @@ module.exports = {
 
                     app.router.navigate(url, _.extend({trigger: true}, data.options));
                 }
+            },
+
+            'routerChange': function(data) {
+                console.info(_logHeader, 'ROUTERCHANGE FIRED!', data);
+                // Always notify navbar when route changes.
+                let homeData = { home: data.route === 'main' };
+                app.views.navbarView.setHomeView(homeData);
             }
 
         });
@@ -89,5 +96,13 @@ module.exports = {
 
         // Hookup router to app.
         app.router.on('all', fnBindAll);
+        app.router.on('all', _.bind(function() {
+            // Only match specific routes, by watching for ['route', SOMEROUTE, params]
+            //  (3-item argument signature).  Makes it easier to check individual routes.
+            if (arguments[0] === 'route') {
+                let eventData = _.assign({route: arguments[1], params: arguments[2]});
+                app.trigger('routerChange', eventData);
+            }
+        }, this));
     }
 };

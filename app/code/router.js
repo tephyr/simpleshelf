@@ -11,12 +11,12 @@ var $ = require("jquery"), // jshint ignore:line
 // Define the application router.
 var Router = Backbone.Router.extend({
     routes: {
-        "": "main", // Use main as primary view.
-        "login": "login",
-        "main" : "main",
-        "books": "books",
-        "books/:id": "book",
-        "addbook": "addbook",
+        ""          : "main", // Use main as primary view.
+        "login"     : "login",
+        "main"      : "main",
+        "books"     : "books",
+        "books/:id" : "book",
+        "addbook"   : "addbook",
         "editbook/:id": "editbook"
     },
 
@@ -153,6 +153,7 @@ var Router = Backbone.Router.extend({
         } else {
             this._viewLogger.push(this._currentPageId);
         }
+
         this._log("_viewLogger", this._viewLogger);
     },
 
