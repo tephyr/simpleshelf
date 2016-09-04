@@ -34,9 +34,15 @@ $(document).ready(function() {
     // Start Backbone routing.
     // NOTE: when silent===true, no views are automatically invoked.
     // So if the hash is on an existing route (like ``#login``), nothing will appear to happen.
-    var historyStart = Backbone.history.start();
+    // Read this before enabling pushState: http://stackoverflow.com/questions/9328513/backbone-js-and-pushstate
+    let currentPath = location.pathname;
+    let historyStart = Backbone.history.start({
+        // pushState: true,
+        root: currentPath
+    });
     console.info("[main]", "Backbone.history.start",
-        historyStart, (historyStart ? "Found initial matching route" : "No initial matching route")
+        historyStart, (historyStart ? "Found initial matching route" : "No initial matching route"),
+        'currentPath', currentPath
     );
 
     // Start app.
