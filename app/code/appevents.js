@@ -79,10 +79,15 @@ module.exports = {
             app.views.editBookPageView
         ];
 
+        let fnBindAll = _.bind(function(eventName, data) {
+            app.trigger(eventName, data);
+        }, this)
+
         _.each(views, function(view) {
-                view.on("all", _.bind(function(eventName, data) {
-                    app.trigger(eventName, data);
-                }, this));
-            }, this);
+            view.on("all", fnBindAll);
+        }, this);
+
+        // Hookup router to app.
+        app.router.on('all', fnBindAll);
     }
 };
