@@ -1,9 +1,15 @@
 // Show a book image on the navbar.
-#navigationView nav {
-    @include media-breakpoint-down(sm) {
-        background-image: url("../img/open-book-grey.svg");
-        background-position: 96% center;
-        background-repeat: no-repeat;
-        background-size: 15%;
+#navigationView {
+    nav {
+        @include media-breakpoint-down(sm) {
+            background-image: url("../img/open-book-grey.svg");
+            background-position: 96% center;
+            background-repeat: no-repeat;
+            background-size: 15%;
+        }
+    }
+
+    &.home #navbarBrand::before {
+        content: "« "; // &laquo;
     }
 }
