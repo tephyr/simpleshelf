@@ -45,7 +45,7 @@ var registerHelpers = function() {
         var out = "<div class=\"book-tags\">";
 
         for (var i = 0; i < items.length; i++) {
-            out = out + "<span class=\"label label-pill label-primary\">" + items[i] + "</span>&nbsp;";
+            out = out + "<span class=\"tag tag-pill tag-primary\">" + items[i] + "</span>&nbsp;";
         }
 
         return out + "</div>";
