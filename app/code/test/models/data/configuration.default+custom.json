@@ -1,0 +1,37 @@
+{
+    "total_rows": 2,
+    "offset": 0,
+    "rows": [{
+        "id": "simpleshelf-configuration-custom",
+        "key": "custom",
+        "value": {
+            "_id": "simpleshelf-configuration-custom",
+            "_rev": "34-5d0aaeb7c3d220ea0e0e2853fe6fe799",
+            "type": "configuration",
+            "configurationType": "custom",
+            "messages": {
+                "global": {}
+            }
+        }
+    }, {
+        "id": "simpleshelf-configuration-default",
+        "key": "default",
+        "value": {
+            "_id": "simpleshelf-configuration-default",
+            "_rev": "54-094ab30e8e1a8cad1ee567fa24060bb1",
+            "type": "configuration",
+            "configurationType": "default",
+            "read": ["to.read", "reading", "finished", "abandoned", "reference"],
+            "ownership": ["personal", "library", "on.loan", "loaned.out", "on.order"],
+            "actions": {
+                "read": {
+                    "to.read": "book.read.queued",
+                    "reading": "book.read.started",
+                    "finished": "book.read.finished",
+                    "abandoned": "book.read.stopped",
+                    "reference": "book.read.setasreference"
+                }
+            }
+        }
+    }]
+}
