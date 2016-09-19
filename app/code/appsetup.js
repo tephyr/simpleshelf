@@ -9,7 +9,6 @@ module.exports = {
          * Override the original Backbone.sync, customize only as necessary
          */
         Backbone.sync = _.wrap(Backbone.sync, function(func, method, model, options){
-            console.info("BB.sync", method);
             var promise; // Maintain sync's Promise.
 
             switch(method){
