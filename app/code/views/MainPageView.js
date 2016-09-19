@@ -31,6 +31,13 @@ var mainPage = Backbone.View.extend({
             avgReadingTime: this.readingStats.get("avg") || "N/A"
         };
 
+        // Figure avg reading time's explanation.
+        if (this.readingStats.get('count') === 1) {
+            basicData.readingRecordsAvgExplanation = 'For one book.';
+        } else {
+            basicData.readingRecordsAvgExplanation = 'Across ' + this.readingStats.get('count') + ' book readings.';
+        }
+
         this.$el.html(this._template(basicData));
 
         return this;
