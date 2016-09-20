@@ -78,6 +78,48 @@ var ConfigurationModel = Backbone.Model.extend({
     },
 
     /**
+     * Get messages for any particular view, or 'global'.
+     * @param  {String} viewName Name of view, or 'global'
+     * @return {Object}          {alertType, alertMsg, dismiss: t/f}
+     */
+    getMessagesForView: function(viewName) {
+        var tmpO,
+            score = {
+                success: 20,
+                info: 15,
+                warning: 10,
+                danger: 5
+            };
+
+        // Map messages to view format.
+        var msgs = _.map(this.get('messages')[viewName], function(msg) {
+            if (_.has(msg, 'dismiss')) {
+                tmpO = {dismiss: msg.dismiss};
+            } else {
+                tmpO = {dismiss: true};
+            }
+
+            _.each(['warning', 'info', 'success', 'danger'], function(level) {
+                if (_.has(msg, level)) {
+                    tmpO.alertType = level;
+                    tmpO.alertMsg = msg[level];
+                }
+            });
+            return tmpO;
+        });
+
+        try {
+            msgs = _.sortBy(msgs, function(msg) {
+                return score[msg.alertType];
+            });
+        } catch(exc) {
+            // Don't worry if config had a bad key, just show the messages unsorted.
+        }
+
+        return msgs;
+    },
+
+    /**
      * Get translated text for a key.
      * @param  {String} key
      * @return {String}     translated text

@@ -1,6 +1,5 @@
 var expect = require('chai').expect,
     sinon = require('sinon'),
-    testUtilities = require("../testUtilities.js"),
     Configuration = require("../../models/Configuration.js");
 
 /**
@@ -49,6 +48,38 @@ describe('Configuration', function() {
             expect(msgsGlobal[0])
                 .to.be.an('object')
                 .and.to.have.keys('warning', 'dismiss');
+        });
+    });
+
+    describe('messages', function() {
+        it('must get all global messages', function() {
+            var config = new Configuration(require('./data/configuration.messages.global.json'), {parse: true});
+            var messagesForView = config.getMessagesForView('global');
+
+            expect(messagesForView)
+                .to.be.an('Array')
+                .and.to.have.lengthOf(4);
+
+            expect(messagesForView[0])
+                .to.be.an('object')
+                .and.to.have.all.keys('alertMsg', 'alertType', 'dismiss')
+                .and.to.have.deep.property('alertType', 'danger');
+
+            expect(messagesForView[1])
+                .to.be.an('object')
+                .and.to.have.property('alertType').that.equals('warning');
+
+            expect(messagesForView[1]).to.have.property('alertMsg').that.equals('warning message');
+            expect(messagesForView[1]).to.have.property('dismiss').that.is.true;
+
+            expect(messagesForView[2])
+                .to.be.an('object')
+                .and.to.have.deep.property('alertType', 'info');
+            expect(messagesForView[2]).to.have.property('dismiss', false);
+
+            expect(messagesForView[3])
+                .to.be.an('object')
+                .and.to.have.deep.property('alertType', 'success');
         });
     });
 });

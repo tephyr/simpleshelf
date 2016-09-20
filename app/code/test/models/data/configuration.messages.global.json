@@ -1,0 +1,22 @@
+{
+    "total_rows": 2,
+    "offset": 0,
+    "rows": [{
+        "id": "simpleshelf-configuration-custom",
+        "key": "custom",
+        "value": {
+            "_id": "simpleshelf-configuration-custom",
+            "_rev": "34-5d0aaeb7c3d220ea0e0e2853fe6fe799",
+            "type": "configuration",
+            "configurationType": "custom",
+            "messages": {
+                "global": [
+                    {"warning": "warning message", "dismiss": true},
+                    {"info": "info message", "dismiss": false},
+                    {"danger": "dangerous message", "dismiss": false},
+                    {"success": "successful message", "dismiss": true}
+                ]
+            }
+        }
+    }]
+}
