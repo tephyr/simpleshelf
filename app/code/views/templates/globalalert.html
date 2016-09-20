@@ -1,11 +1,13 @@
 <div class="row">
     <div class="col-xs-12">
         {{#each messages}}
-        <div class="alert alert-{{alertType}} fade in" role="alert">
+        <div class="alert alert-{{alertType}} fade in {{#if dismiss}}alert-dismissible{{/if}}" role="alert">
+            {{#if dismiss}}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            {{alertMsg}}
+            {{/if}}
+            {{{alertMsg}}}
         </div>
         {{/each}}
     </div>
