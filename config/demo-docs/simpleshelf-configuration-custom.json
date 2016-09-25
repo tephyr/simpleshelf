@@ -3,8 +3,8 @@
     "type": "configuration",
     "configurationType": "custom",
     "messages": {
-        "global": {
-            "warning": "This demo server does not allow changes.  Attempts to add, edit or delete books will fail."
-        }
+        "global": [
+            {"warning": "This demo server does not allow changes.  Attempts to add, edit or delete books will fail.", "dismiss": false}
+        ]
     }
 }
