@@ -4,6 +4,7 @@ node_modules/
 output-*/
 config/*-personal.json
 config/*-demo.json
+config/personal-*/
 next.txt
 README.html
 *.pyc
