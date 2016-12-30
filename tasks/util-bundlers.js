@@ -3,21 +3,31 @@ module.exports = function(gulp, settings) {
         browserify = require('browserify'),
         gutil = require('gulp-util'),
         source = require('vinyl-source-stream'),
-        stringify = require('stringify');
+        stringify = require('stringify'),
+        babelify = require('babelify');
 
     return {
         /**
          * Helper function: bundle application code.
          **/
         appBundlerFn: function(entries, isDebug, vendorLibraries, destinationName, destinationDir) {
+            console.info('[appBundlerFn]', 'isDebug', isDebug);
             // set up the browserify instance on a task basis
-            var b = browserify({
-                entries: entries,
-                debug: isDebug,
-                transform: stringify({
+            var transforms = [
+                stringify({
                     extensions: ['.html'],
                     minify: false
                 })
+            ];
+
+            if (isDebug) {
+                transforms.push(babelify);
+            }
+
+            var b = browserify({
+                entries: entries,
+                debug: isDebug,
+                transform: transforms
             });
 
             // Ignore modules in lib.bundle.js.
