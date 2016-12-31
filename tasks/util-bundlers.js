@@ -11,7 +11,7 @@ module.exports = function(gulp, settings) {
          * Helper function: bundle application code.
          **/
         appBundlerFn: function(entries, isDebug, vendorLibraries, destinationName, destinationDir) {
-            console.info('[appBundlerFn]', 'isDebug', isDebug);
+            console.info('[appBundlerFn]', 'isDebug', isDebug, 'entries', entries);
             // set up the browserify instance on a task basis
             var transforms = [
                 stringify({
