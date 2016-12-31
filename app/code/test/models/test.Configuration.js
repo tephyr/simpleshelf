@@ -8,6 +8,8 @@ var expect = require('chai').expect,
 describe('Configuration', function() {
 
     describe('parsing: basic', function() {
+        var config;
+
         beforeEach(function() {
             config = new Configuration();
         });
