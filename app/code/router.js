@@ -2,14 +2,14 @@
 /**
  * Handle all routes.
  **/
-var $ = require("jquery"), // jshint ignore:line
+let $ = require("jquery"), // jshint ignore:line
     _ = require("underscore"),
     Backbone = require("backbone"),
     Book = require("./models/Book.js"),
     couchUtils = require("./couchutils.js");
 
 // Define the application router.
-var Router = Backbone.Router.extend({
+let Router = Backbone.Router.extend({
     routes: {
         ""          : "main", // Use main as primary view.
         "login"     : "login",
@@ -184,4 +184,4 @@ var Router = Backbone.Router.extend({
     }
 });
 
-module.exports.Router = Router;
+export default Router;
