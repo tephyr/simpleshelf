@@ -1,3 +1,5 @@
+import Router from './router';
+
 /**
  * Main entry point to simpleshelf app.
  */
@@ -7,8 +9,6 @@ let $ = require("jquery"),
     appsetup = require("./appsetup.js"),
     appevents = require("./appevents.js"),
     simpleshelfApp = require("./app.js").app;
-
-import Router from './router';
 
 // To support Bootstrap, add jQuery & Tether to the global namespace.
 window.$ = window.jQuery = require('jquery');
