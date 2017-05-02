@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row mt-md-2">
     <div class="col-12 col-md-8">
         <form class="editbook-form">
             <fieldset class="row form-group">
@@ -11,14 +11,14 @@
                 <div class="col-12 col-md-10"><textarea class="form-control" name="editbookAuthors" rows="3">{{authors}}</textarea></div>
             </fieldset>
 
-            <fieldset class="form-group">
-                <label for="editbookISBN">ISBN</label>
-                <input type="text" class="form-control" name="editbookISBN" placeholder="ISBN" value="{{isbn}}">
+            <fieldset class="form-group row">
+                <label for="editbookISBN" class="col-12 col-md-2">ISBN</label>
+                <div class="col-12 col-md-10"><input type="text" class="form-control" name="editbookISBN" placeholder="ISBN" value="{{isbn}}"></div>
             </fieldset>
 
-            <fieldset class="form-group">
-                <label for="editbookPublisher">Publisher</label>
-                <input type="text" class="form-control" name="editbookPublisher" placeholder="Publisher" value="{{publisher}}">
+            <fieldset class="form-group row">
+                <label for="editbookPublisher" class="col-12 col-md-2">Publisher</label>
+                <div class="col-12 col-md-10"><input type="text" class="form-control" name="editbookPublisher" placeholder="Publisher" value="{{publisher}}"></div>
             </fieldset>
 
             <div class="form-check">
@@ -31,14 +31,14 @@
                 
             </div>
 
-            <fieldset class="form-group">
-                <label for="editbookNotesPublic">Public notes</label>
-                <textarea class="form-control" name="editbookNotesPublic" rows="3">{{notesPublic}}</textarea>
+            <fieldset class="form-group row">
+                <label for="editbookNotesPublic" class="col-12 col-md-2">Public notes</label>
+                <div class="col-12 col-md-10"><textarea class="form-control" name="editbookNotesPublic" rows="3">{{notesPublic}}</textarea></div>
             </fieldset>
 
-            <fieldset class="form-group">
-                <label for="editbookNotesPrivate">Private notes</label>
-                <textarea class="form-control" name="editbookNotesPrivate" rows="3">{{notesPrivate}}</textarea>
+            <fieldset class="form-group row">
+                <label for="editbookNotesPrivate" class="col-12 col-md-2">Private notes</label>
+                <div class="col-12 col-md-10"><textarea class="form-control" name="editbookNotesPrivate" rows="3">{{notesPrivate}}</textarea></div>
             </fieldset>
 
             <div class="row {{#unless hasRead}}hidden-up{{/unless}}">
@@ -58,17 +58,26 @@
                 </fieldset>
             </div>
 
-            <fieldset class="form-group {{#unless hasOwnership}}hidden-up{{/unless}}">
-                <label for="editbookOwnership">Ownership</label>
-                <select class="form-control" name="editbookOwnership" id="editbookOwnership">
-                    <option value=""></option>
-                    {{#each statusOwnership}}
-                    <option value="{{this.[0]}}" {{#compare ../status.ownership this.[0]}}selected{{/compare}}>{{this.[1]}}</option>
-                    {{/each}}
-                </select>
+            <fieldset class="row form-group {{#unless hasOwnership}}hidden-up{{/unless}}">
+                <label for="editbookOwnership" class="col-12 col-md-2">Ownership</label>
+                <div class="col-12 col-md-10">
+                    <select class="form-control" name="editbookOwnership" id="editbookOwnership">
+                        <option value=""></option>
+                        {{#each statusOwnership}}
+                        <option value="{{this.[0]}}" {{#compare ../status.ownership this.[0]}}selected{{/compare}}>{{this.[1]}}</option>
+                        {{/each}}
+                    </select>
+                </div>
             </fieldset>
 
-            <button type="submit" class="btn btn-primary btn-lg" name="editbookSubmit">Submit</button>&nbsp;<button class="btn btn-secondary btn-lg editbook-cancel">Cancel</button>
+            <div class="row justify-content-center mb-2 mb-md-1">
+                <div class="col col-auto">
+                    <button type="submit" class="btn btn-primary btn-lg" name="editbookSubmit">Submit</button>
+                </div>
+                <div class="col col-auto">
+                    <button class="btn btn-secondary btn-lg editbook-cancel">Cancel</button>
+                </div>
+            </div>
         </form>
     </div>
 </div>
