@@ -21,15 +21,17 @@
                 <div class="col-12 col-md-10"><input type="text" class="form-control" name="editbookPublisher" placeholder="Publisher" value="{{publisher}}"></div>
             </fieldset>
 
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" name="editbookPublic" class="form-check-input" value="on" {{#if public}}checked{{/if}}>Public?
-                </label>
+            <div class="row">
+                <div class="col push-md-2">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" name="editbookPublic" class="form-check-input" value="on" {{#if public}}checked{{/if}}>&nbsp;Public?
+                        </label>
+                    </div>
+                </div>
             </div>
 
-            <div class="taginputparent">
-                
-            </div>
+            <div class="taginputparent" />
 
             <fieldset class="form-group row">
                 <label for="editbookNotesPublic" class="col-12 col-md-2">Public notes</label>
@@ -43,18 +45,26 @@
 
             <div class="row {{#unless hasRead}}hidden-up{{/unless}}">
                 <fieldset class="form-group col-6">
-                    <label for="editbookRead">Read</label>
-                    <select class="form-control" name="editbookRead" id="editbookRead">
-                        <option value=""></option>
-                        {{#each statusRead}}
-                        <option value="{{this.[0]}}" {{#compare ../status.read this.[0]}}selected{{/compare}}>{{this.[1]}}</option>
-                        {{/each}}
-                    </select>
+                    <div class="row">
+                        <label for="editbookRead" class="col-12 col-md-4">Read</label>
+                        <div class="col-12 col-md-8">
+                            <select class="form-control" name="editbookRead" id="editbookRead">
+                                <option value=""></option>
+                                {{#each statusRead}}
+                                <option value="{{this.[0]}}" {{#compare ../status.read this.[0]}}selected{{/compare}}>{{this.[1]}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
                 </fieldset>
                 
                 <fieldset class="form-group col-6">
-                    <label for="editbookReadDate">As of</label>
-                    <input type="text" class="form-control" name="editbookReadDate" data-provide="datepicker" data-date-assume-nearby-year="true" data-date-format="yyyy-mm-dd" data-date-disable-touch-keyboard="true" data-date-enable-on-readonly="false" data-date-today-btn="linked" data-date-today-highlight="true" placeholder="yyyy-mm-dd" readonly>
+                    <div class="row">
+                        <label for="editbookReadDate" class="col-12 col-md-4 text-md-right">As of</label>
+                        <div class="col">
+                            <input type="text" class="form-control" name="editbookReadDate" data-provide="datepicker" data-date-assume-nearby-year="true" data-date-format="yyyy-mm-dd" data-date-disable-touch-keyboard="true" data-date-enable-on-readonly="false" data-date-today-btn="linked" data-date-today-highlight="true" placeholder="yyyy-mm-dd" readonly>
+                        </div>
+                    </div>
                 </fieldset>
             </div>
 
