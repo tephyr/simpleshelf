@@ -1,14 +1,14 @@
 <div class="row">
     <div class="col-12 col-md-8">
         <form class="editbook-form">
-            <fieldset class="form-group">
-                <label for="editbookTitle">Title</label>
-                <input type="text" class="form-control" name="editbookTitle" placeholder="Title" value="{{title}}">
+            <fieldset class="row form-group">
+                <label for="editbookTitle" class="col-12 col-md-2">Title</label>
+                <div class="col-12 col-md-10"><input type="text" class="form-control" name="editbookTitle" placeholder="Title" value="{{title}}"></div>
             </fieldset>
 
-            <fieldset class="form-group">
-                <label for="editbookAuthors">Author(s)</label>
-                <textarea class="form-control" name="editbookAuthors" rows="3">{{authors}}</textarea>
+            <fieldset class="form-group row">
+                <label for="editbookAuthors" class="col-12 col-md-2">Author(s)</label>
+                <div class="col-12 col-md-10"><textarea class="form-control" name="editbookAuthors" rows="3">{{authors}}</textarea></div>
             </fieldset>
 
             <fieldset class="form-group">
@@ -21,9 +21,9 @@
                 <input type="text" class="form-control" name="editbookPublisher" placeholder="Publisher" value="{{publisher}}">
             </fieldset>
 
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="editbookPublic" value="on" {{#if public}}checked{{/if}}>Public?
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="checkbox" name="editbookPublic" class="form-check-input" value="on" {{#if public}}checked{{/if}}>Public?
                 </label>
             </div>
 
