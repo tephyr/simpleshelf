@@ -11,7 +11,15 @@
     },
     "extends": "eslint:recommended",
     "rules": {
+        "curly": ["warn", "multi-line"],
         "no-console": 0,
+        "no-var": 1,
+        "prefer-const": "warn",
+        "prefer-template": "warn",
+        "quotes": ["warn", "single", {
+            "avoidEscape": true,
+            "allowTemplateLiterals": true
+        }],
         "semi": 2
     }
 }
