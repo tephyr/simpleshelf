@@ -1,7 +1,7 @@
 var gulp = require('gulp'),
     _ = require('lodash'),
     path = require('path'),
-    analyzeJSHint = require('./util/gulp/analyze-jshint'),
+    lintSpecific = require('./util/gulp/lint-specific'),
     config = require('config');
 
 var settings = {
@@ -58,7 +58,7 @@ require("./tasks/code-dev")(gulp, settings);
 require("./tasks/code")(gulp, settings);
 require("./tasks/build-app")(gulp, settings);
 require("./tasks/build-ddoc")(gulp, settings);
-require("./tasks/analyze-jshint")(gulp, settings);
+require("./tasks/lint")(gulp, settings);
 require("./tasks/test-in-browser.js")(gulp, settings);
 require("./tasks/test-phantom.js")(gulp, settings);
 require("./tasks/bundle-test-lib.js")(gulp, settings);
@@ -118,7 +118,7 @@ gulp.task('analyze-watch', function() {
     var watcher = gulp.watch([settings.globs.code, settings.globs.ddocCode]);
 
     watcher.on('change', function(event) {
-        analyzeJSHint(event.path);
+        lintSpecific(event.path);
     });
 });
 
