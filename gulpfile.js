@@ -11,7 +11,7 @@ var settings = {
     destination: config.get('destination'),
     codeOutputPath: path.join(config.get('outputDDoc'), '_attachments', 'code'),
     styleOutputPath: path.join(config.get('outputDDoc'), '_attachments', 'style'),
-    isDebug: false,
+    isDebug: config.has('debug') ? config.get('debug') : false,
     libraryModules: config.get("libraryModules"),
     externalUIJSDev: config.get("externalUIJSDev"),
     externalUICSSDev: config.get("externalUICSSDev"),

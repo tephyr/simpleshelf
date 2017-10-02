@@ -14,19 +14,16 @@ module.exports = function(gulp, settings) {
             console.info('[appBundlerFn]', 'isDebug', isDebug, 'entries', entries);
             // set up the browserify instance on a task basis
             var transforms = [
+                babelify,
                 stringify({
                     extensions: ['.html'],
                     minify: false
                 })
             ];
 
-            if (isDebug) {
-                transforms.push(babelify);
-            }
-
             var b = browserify({
                 entries: entries,
-                debug: isDebug,
+                debug: isDebug, // Enables source maps.
                 transform: transforms
             });
 
