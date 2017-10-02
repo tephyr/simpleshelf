@@ -15,7 +15,8 @@
     ],
     "externalUIJSDev": [
         "node_modules/bootstrap/dist/js/bootstrap.js",
-        "node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"
+        "node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.js",
+        "node_modules/popper.js/dist/umd/popper.min.js"
     ],
     "externalUICSSDev": [
         "node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.css*",
