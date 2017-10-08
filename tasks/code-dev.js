@@ -5,7 +5,13 @@ module.exports = function(gulp, settings) {
      * Bundle debug-ready javascript.
      **/
     gulp.task('code-dev', function (cb) {
-        return appBundlerFn('app/code/main.js', settings.isDebug,
-            settings.libraryModules, 'app.bundle.js', settings.codeOutputPath);
+        return appBundlerFn({
+            entries: 'app/code/main.js',
+            paths: settings.extraPaths,
+            isDebug: settings.isDebug,
+            vendorLibraries: settings.libraryModules,
+            destinationName: 'app.bundle.js',
+            destinationDir: settings.codeOutputPath
+        });
     });
 };

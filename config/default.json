@@ -28,6 +28,7 @@
     "clientSource": "./app",
     "ddocSource": "./app-ddoc/",
     "testSource": "./app/code/test/",
+    "extraPaths": ["./app/code/util"],
     "destination": "http://127.0.0.1:5984/simpleshelf",
     "outputDDoc": "./output-ddoc",
     "outputTest": "./output-test",

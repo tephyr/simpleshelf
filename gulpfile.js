@@ -13,6 +13,7 @@ var settings = {
     styleOutputPath: path.join(config.get('outputDDoc'), '_attachments', 'style'),
     isDebug: config.has('debug') ? config.get('debug') : false,
     libraryModules: config.get("libraryModules"),
+    extraPaths: config.get("extraPaths"),
     externalUIJSDev: config.get("externalUIJSDev"),
     externalUICSSDev: config.get("externalUICSSDev"),
     externalUICSSTest: config.get("externalUICSSTest"),

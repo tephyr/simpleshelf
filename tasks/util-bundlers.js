@@ -9,9 +9,10 @@ module.exports = function(gulp, settings) {
     return {
         /**
          * Helper function: bundle application code.
+         * @param {Object} options {entries, paths, isDebug, vendorLibraries, destinationName, destinationDir}
          **/
-        appBundlerFn: function(entries, isDebug, vendorLibraries, destinationName, destinationDir) {
-            console.info('[appBundlerFn]', 'isDebug', isDebug, 'entries', entries);
+        appBundlerFn: function(options) {
+            // console.info('[appBundlerFn]', 'isDebug', options.isDebug, 'entries', options.entries);
             // set up the browserify instance on a task basis
             var transforms = [
                 babelify,
@@ -22,13 +23,14 @@ module.exports = function(gulp, settings) {
             ];
 
             var b = browserify({
-                entries: entries,
-                debug: isDebug, // Enables source maps.
-                transform: transforms
+                entries: options.entries,
+                debug: options.isDebug, // Enables source maps.
+                transform: transforms,
+                paths: options.paths    // "Global" paths to include (no-directory imports).
             });
 
             // Ignore modules in lib.bundle.js.
-            _.each(vendorLibraries, function(lib) {
+            _.each(options.vendorLibraries, function(lib) {
                 b.exclude(lib);
             });
 
@@ -40,8 +42,8 @@ module.exports = function(gulp, settings) {
                     // end this stream (to prevent browserify from hanging the stream)
                     this.emit('end');
                 }) // Set error handler
-                .pipe(source(destinationName)) // give destination filename
-                .pipe(gulp.dest(destinationDir)); // give destination directory
+                .pipe(source(options.destinationName)) // give destination filename
+                .pipe(gulp.dest(options.destinationDir)); // give destination directory
         },
 
         /**
