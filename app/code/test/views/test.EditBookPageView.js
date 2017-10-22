@@ -75,10 +75,10 @@ describe('EditBookPageView', function() {
 
         it("should convert authors to \\n-delimited string", function() {
             book.set("authors", ["Just One"]);
-            expect(book.get("authors")).to.be.an.array;
+            expect(book.get("authors")).to.be.an('array');
             expect(view._buildTemplateData()).to.have.property('authors', "Just One");
             book.set("authors", ["One", "Two"]);
-            expect(book.get("authors")).to.be.an.array;
+            expect(book.get("authors")).to.be.an('array');
             expect(view._buildTemplateData()).to.have.property('authors', "One\nTwo");
         });
 
