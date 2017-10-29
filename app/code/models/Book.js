@@ -2,11 +2,9 @@
 /**
  * Model for individual books.
  */
-var _ = require("underscore"),
-    _s = require("underscore.string"),
-    Backbone = require("backbone");
+import {_, _s, Backbone} from 'DefaultImports';
 
-var Book = Backbone.Model.extend({
+const Book = Backbone.Model.extend({
     _logHeader: "[Book]",
     idAttribute: "_id",
     defaults: {
@@ -26,7 +24,7 @@ var Book = Backbone.Model.extend({
     },
 
     url: function(){
-        var urlPrefix = 'data/';
+        let urlPrefix = 'data/';
         if (this.isNew()) {
             // Do not include non-existent server ID.
             return urlPrefix;
@@ -118,4 +116,4 @@ var Book = Backbone.Model.extend({
     }
 });
 
-module.exports = Book;
+export {Book};

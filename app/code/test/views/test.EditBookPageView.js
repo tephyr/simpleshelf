@@ -3,8 +3,9 @@ var expect = require('chai').expect,
     testUtilities = require("../testUtilities.js");
 
 var EditBookPageView = require("../../views/EditBookPageView.js"),
-    Configuration = require("../../models/Configuration.js"),
-    Book = require("../../models/Book.js");
+    Configuration = require("../../models/Configuration.js");
+
+import {Book} from '../../models/Book.js';
 
 describe('EditBookPageView', function() {
 
