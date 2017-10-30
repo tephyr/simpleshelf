@@ -1,8 +1,9 @@
-var expect = require('chai').expect,
+const expect = require('chai').expect,
     sinon = require('sinon'),
     testUtilities = require("../testUtilities.js"),
-    Configuration = require("../../models/Configuration.js"),
-    Book = require("../../models/Book.js");
+    Configuration = require("../../models/Configuration.js");
+
+import {Book} from '../../models/Book.js';
 
 describe('Book', function() {
 
@@ -153,6 +154,40 @@ describe('Book', function() {
         });
     });
 
+    describe('metadata', () => {
+        beforeEach(() => {
+            config = new Configuration();
+            testUtilities.helperConfigBasic(config);
+            book = new Book(basicBookResponse(), {configuration: config});
+        });
+
+        it('must contain a canonicalTitle key & value', () => {
+            expect(book.has('canonicalTitle')).to.be.true;
+            expect(book.get('canonicalTitle')).to.not.equal(book.get('title'));
+        });
+
+        it('must parse canonicalTitle', () => {
+            const bookWithTitle = new Book({title: 'The title', canonicalTitle: 'title, The'}, {configuration: config});
+            expect(bookWithTitle.has('canonicalTitle')).to.be.true;
+            expect(bookWithTitle.get('canonicalTitle')).to.equal('title, The');
+        });
+
+        it('must set canonicalTitle on the client for [a, an, the]', () => {
+            const testData = [
+                [{title: 'A title'}, 'title, A'],
+                [{title: 'An interesting title'}, 'interesting title, An'],
+                [{title: 'The interesting title'}, 'interesting title, The'],
+                [{title: 'There is no title'}, 'There is no title']
+            ];
+
+            testData.forEach((info) => {
+                let bookWithTitle = new Book({}, {configuration: config});
+                bookWithTitle.set(info[0]);
+                expect(bookWithTitle.get('canonicalTitle')).to.equal(info[1]);
+            });
+        });
+    });
+
     function basicBookResponse() {
         return {
                 "_id": "demo-0679729658",
@@ -167,6 +202,7 @@ describe('Book', function() {
                     {"date": "2016-05-01", "action": "book.read.started"}
                 ],
                 "title": "A tale of two cities",
+                "canonicalTitle": "tale of two cities, A",
                 "publisher": "Vintage Books",
                 "notesPrivate": null,
                 "notesPublic": "1st Vintage classics ed.",

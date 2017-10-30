@@ -4,6 +4,8 @@
  */
 import {_, _s, Backbone} from 'DefaultImports';
 
+const PREFIXES = ['a', 'an', 'the'];
+
 const Book = Backbone.Model.extend({
     _logHeader: "[Book]",
     idAttribute: "_id",
@@ -21,6 +23,8 @@ const Book = Backbone.Model.extend({
         if (_.isObject(options) && _.has(options, "configuration")) {
             this._configuration = options.configuration;
         }
+
+        this.on('change:title', this._onChangeTitle, this);
     },
 
     url: function(){
@@ -113,6 +117,27 @@ const Book = Backbone.Model.extend({
      **/
     _checkForValue: function(attrs, key) {
         return (_.has(attrs, key) && !_.isNull(attrs[key]));
+    },
+
+    _onChangeTitle(model, value) {
+        if (_s.trim(value).length === 0) {
+            return;
+        }
+
+        let canonicalized = false;
+
+        const titleWords = value.split(' ');
+        _.forEach(PREFIXES, (prefix) => {
+            if (titleWords[0].toLowerCase() === prefix) {
+                model.set('canonicalTitle', `${_.rest(titleWords).join(' ')}, ${titleWords[0]}`, {silent: true});
+                // TODO: break out.
+                canonicalized = true;
+            }
+        });
+
+        if (!canonicalized) {
+            model.set('canonicalTitle', value);
+        }
     }
 });
 
