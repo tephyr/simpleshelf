@@ -61,7 +61,7 @@ require("./tasks/build-app")(gulp, settings);
 require("./tasks/build-ddoc")(gulp, settings);
 require("./tasks/lint")(gulp, settings);
 require("./tasks/test-in-browser.js")(gulp, settings);
-require("./tasks/test-phantom.js")(gulp, settings);
+require("./tasks/test-headless.js")(gulp, settings);
 require("./tasks/bundle-test-lib.js")(gulp, settings);
 require("./tasks/ui-test.js")(gulp, settings);
 require("./tasks/build-tests.js")(gulp, settings);
@@ -150,7 +150,7 @@ gulp.task('prod-watch', function() {
 gulp.task('test-watch', ['browser-sync-init'], function() {
     // When any test or source code changes, combine/run browserify/run tests.
     var watcher = gulp.watch(settings.globsTest, {debounceDelay: 100},
-        ['browser-sync-reload', 'test-phantom']);
+        ['browser-sync-reload', 'test-headless']);
 
     watcher.on('change', function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
