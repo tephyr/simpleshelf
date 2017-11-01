@@ -20,53 +20,23 @@
   },
   "homepage": "https://github.com/tephyr/simpleshelf#readme",
   "babel": {
-    "plugins": [
-      "transform-es2015-arrow-functions",
-      "transform-es2015-block-scoped-functions",
-      "transform-es2015-classes",
-      "transform-es2015-computed-properties",
-      "transform-es2015-destructuring",
-      "transform-es2015-duplicate-keys",
-      "transform-es2015-for-of",
-      "transform-es2015-function-name",
-      "transform-es2015-literals",
-      "transform-es2015-modules-commonjs",
-      "transform-es2015-object-super",
-      "transform-es2015-parameters",
-      "transform-es2015-shorthand-properties",
-      "transform-es2015-spread",
-      "transform-es2015-sticky-regex",
-      "transform-es2015-template-literals",
-      "transform-es2015-typeof-symbol",
-      "transform-es2015-unicode-regex"
-    ],
     "presets": [
-      "es2017",
-      "es2016"
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": [
+              "last 2 Firefox versions", "last 2 Chrome versions", "last 2 Edge versions"
+            ]
+          }
+        }
+      ]
     ]
   },
   "devDependencies": {
-    "babel-plugin-transform-es2015-arrow-functions": "^6.8.0",
-    "babel-plugin-transform-es2015-block-scoped-functions": "^6.8.0",
-    "babel-plugin-transform-es2015-classes": "^6.18.0",
-    "babel-plugin-transform-es2015-computed-properties": "^6.8.0",
-    "babel-plugin-transform-es2015-destructuring": "^6.19.0",
-    "babel-plugin-transform-es2015-duplicate-keys": "^6.8.0",
-    "babel-plugin-transform-es2015-for-of": "^6.18.0",
-    "babel-plugin-transform-es2015-function-name": "^6.9.0",
-    "babel-plugin-transform-es2015-literals": "^6.8.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
-    "babel-plugin-transform-es2015-object-super": "^6.8.0",
-    "babel-plugin-transform-es2015-parameters": "^6.21.0",
-    "babel-plugin-transform-es2015-shorthand-properties": "^6.18.0",
-    "babel-plugin-transform-es2015-spread": "^6.8.0",
-    "babel-plugin-transform-es2015-sticky-regex": "^6.8.0",
-    "babel-plugin-transform-es2015-template-literals": "^6.8.0",
-    "babel-plugin-transform-es2015-typeof-symbol": "^6.18.0",
-    "babel-plugin-transform-es2015-unicode-regex": "^6.11.0",
-    "babel-preset-es2016": "^6.16.0",
-    "babel-preset-es2017": "^6.16.0",
-    "babelify": "^7.3.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^8.0.0",
     "bluebird": "^3.5.1",
     "browser-sync": "^2.18.13",
     "browserify": "^14.5.0",
