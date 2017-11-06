@@ -1,8 +1,7 @@
 {
     "libraryModules": [
         "jquery",
-        "underscore",
-        "underscore.string",
+        "lodash",
         "handlebars",
         "backbone",
         "md5",

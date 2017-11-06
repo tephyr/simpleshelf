@@ -1,12 +1,10 @@
-"use strict";
 /**
  *  Collection of books.
  **/
-var _ = require("underscore"),
-    Backbone = require("backbone"),
-    Book = require("./Book.js");
+import {_, Backbone} from 'DefaultImports';
+import {Book} from './Book';
 
-var BookCollection = Backbone.Collection.extend({
+const BookCollection = Backbone.Collection.extend({
     model: Book,
     url: function() {
         // TODO: this filters by status.read===reading; add option to get all books & different statuses.
@@ -28,4 +26,4 @@ var BookCollection = Backbone.Collection.extend({
     }
 });
 
-module.exports = BookCollection;
+export {BookCollection};

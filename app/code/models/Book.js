@@ -1,7 +1,7 @@
 /**
  * Model for individual books.
  */
-import {_, _s, Backbone} from 'DefaultImports';
+import {_, Backbone} from 'DefaultImports';
 
 const PREFIXES = ['a', 'an', 'the'];
 
@@ -69,7 +69,7 @@ const Book = Backbone.Model.extend({
         if (!this._checkForValue(attrs, 'title') &&
             !this._checkForValue(attrs, 'isbn')) {
             return 'Missing title or ISBN.';
-        } else if (_s.trim(attrs.title) === '' && _s.trim(attrs.isbn) === '') {
+        } else if (_.trim(attrs.title) === '' && _.trim(attrs.isbn) === '') {
             // Keys exist but are empty strings.
             return 'Missing title or ISBN.';
         }
@@ -119,7 +119,7 @@ const Book = Backbone.Model.extend({
     },
 
     _onChangeTitle(model, value) {
-        if (_s.trim(value).length === 0) {
+        if (_.trim(value).length === 0) {
             return;
         }
 
@@ -128,7 +128,7 @@ const Book = Backbone.Model.extend({
         const titleWords = value.split(' ');
         _.forEach(PREFIXES, (prefix) => {
             if (titleWords[0].toLowerCase() === prefix) {
-                model.set('canonicalTitle', `${_.rest(titleWords).join(' ')}, ${titleWords[0]}`, {silent: true});
+                model.set('canonicalTitle', `${_.tail(titleWords).join(' ')}, ${titleWords[0]}`, {silent: true});
                 // TODO: break out.
                 canonicalized = true;
             }

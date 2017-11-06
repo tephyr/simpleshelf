@@ -1,15 +1,12 @@
-"use strict";
 /**
  * Handle all routes.
  **/
-let $ = require("jquery"), // jshint ignore:line
-    _ = require("underscore"),
-    Backbone = require("backbone"),
-    Book = require("./models/Book.js"),
-    couchUtils = require("./couchutils.js");
+import {$, _, Backbone} from 'DefaultImports';
+import {Book} from './models/Book';
+const couchUtils = require("./couchutils.js");
 
 // Define the application router.
-let Router = Backbone.Router.extend({
+const Router = Backbone.Router.extend({
     routes: {
         ""          : "main", // Use main as primary view.
         "login"     : "login",

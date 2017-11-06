@@ -1,15 +1,14 @@
 /**
  * Edit Book page.
  **/
-var _ = require("underscore"),
-    _s = require("underscore.string"),
-    Backbone = require("backbone"),
-    Handlebars = require("handlebars"),
+import {_, Backbone} from 'DefaultImports';
+import {Book} from '../models/Book';
+
+const Handlebars = require("handlebars"),
     EditBookPageTemplate = require("./templates/editbookpage.html"),
-    Book = require("../models/Book.js"),
     TagInputView = require("./TagInputView.js");
 
-var EditBookPage = Backbone.View.extend({
+const EditBookPage = Backbone.View.extend({
     id: "editBookPage",
 
     events: {
@@ -100,7 +99,7 @@ var EditBookPage = Backbone.View.extend({
 
         this.model.set({
             title: formObject["editbookTitle"],
-            authors: _s.lines(formObject["editbookAuthors"]),
+            authors: _.split(formObject["editbookAuthors"], '\n'),
             isbn: formObject["editbookISBN"],
             publisher: formObject["editbookPublisher"],
             notesPublic: formObject["editbookNotesPublic"],

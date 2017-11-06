@@ -1,12 +1,9 @@
-"use strict";
 /**
  * Get count of database-wide values.
  **/
-var _ = require("underscore"),
-    _s = require("underscore.string"),
-    Backbone = require("backbone");
+import {_, Backbone} from 'DefaultImports';
 
-var GlobalCountModel = Backbone.Model.extend({
+const GlobalCountModel = Backbone.Model.extend({
     url: function() {
         return "_view/global?group=true";
     },
@@ -30,7 +27,7 @@ var GlobalCountModel = Backbone.Model.extend({
         var result = this.attributes;
         // Customize the strings.
         _.each(_.pairs(this.attributes), function(pair) {
-            result[pair[0] + "_fmt"] = _s.numberFormat(pair[1], 0);
+            result[pair[0] + "_fmt"] = new Intl.NumberFormat().format(pair[1]);
         });
         return result;
     },
@@ -40,9 +37,9 @@ var GlobalCountModel = Backbone.Model.extend({
      * Format a field simply (commas after thousands).
      */
     formatSimply: function(fieldName) {
-        return _s.numberFormat(this.get(fieldName), 0);
+        return new Intl.NumberFormat().format(this.get(fieldName), 0);
     }
 
 });
 
-module.exports = GlobalCountModel;
+export {GlobalCountModel};

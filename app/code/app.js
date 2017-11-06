@@ -1,11 +1,8 @@
-"use strict";
 /**
  * Application logic.
  */
-var $ = require("jquery"),
-    _ = require("underscore"),
-    Backbone = require("backbone"),
-    Handlebars = require("handlebars"),
+import {$, _, Backbone} from 'DefaultImports';
+var Handlebars = require("handlebars"),
     RegisterHandlebarHelpers = require("./handlebarhelpers.js"),
     appSettings = require("./settings.js"),
     NavbarView = require("./views/NavbarView.js"),
@@ -16,17 +13,17 @@ var $ = require("jquery"),
     BookPageView = require("./views/BookPageView.js"),
     AppConfigurationModel = require("./models/Configuration.js"),
     EditBookPageView = require("./views/EditBookPageView.js"),
-    GlobalCountModel = require("./models/GlobalCount.js"),
     ReadingStatsModel = require("./models/ReadingStats.js"),
-    BookCollection = require("./models/BookCollection.js"),
     BooksByLetterCollection = require("./models/BooksByLetterCollection.js"),
     SpineCollection = require("./models/SpineCollection.js"),
     TagCollection = require("./models/TagCollection.js"),
-    BookModel = require("./models/Book.js"),
     HeaderIconsTemplate = require("./views/templates/headericons.html"),
     HeaderMenuTemplate = require("./views/templates/headermenu.html"),
     appevents = require("./appevents.js"),
     appsetup = require("./appsetup.js");
+import {Book} from './models/Book';
+import {BookCollection} from './models/BookCollection';
+import {GlobalCountModel} from './models/GlobalCount';
 
 var app = {
     // Catalog: all metadata regarding the library.
@@ -147,7 +144,7 @@ app.views = {
         spineCollection: app.catalog.spineCollection
     }),
     bookPageView: new BookPageView({
-        model: new BookModel(),
+        model: new Book(),
         configuration: app.configuration
     }),
     editBookPageView: new EditBookPageView({
