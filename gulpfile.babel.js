@@ -26,6 +26,14 @@ if (config.has("_docs")) {
     settings._docs = config.get("_docs");
 }
 
+if (config.has('ddocModules')) {
+    let modulePaths = _.map(config.get('ddocModules'), (modulePath) => {
+        return path.join('node_modules', modulePath);
+    });
+
+    settings.ddocModules = modulePaths;
+}
+
 // Setup globs for watching file changes.
 // Encase any values in arrays that should be joined with other values.
 settings.globs = {
