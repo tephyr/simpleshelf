@@ -27,7 +27,6 @@
     "clientSource": "./app",
     "ddocSource": "./app-ddoc/",
     "ddocModules": [
-        "lodash/lodash.min.js"
     ],
     "testSource": "./app/code/test/",
     "extraPaths": ["./app/code/util"],
