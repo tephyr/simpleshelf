@@ -2,7 +2,8 @@
  * Show reading time for books that have a start & finish.
  */
 function(doc){
-    var _ = require('views/lib/underscore'),
+    var _ = require('views/lib/lodash'),
+        utils = require('views/lib/utils'),
         moment = require('views/lib/moment'),
         sortedActivities,
         start = null,
@@ -10,7 +11,7 @@ function(doc){
         result = 0;
 
     // Find books.
-    if (doc.type && doc.type === "book") {
+    if (utils.types.isBook(doc)) {
         // Find books with activities.
         if (doc.activities && doc.activities.length > 0) {
             // Get sorted activities.

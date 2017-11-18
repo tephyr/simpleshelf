@@ -2,11 +2,13 @@
  * Index tags.
  */
 function(doc){
-    if (doc.type && doc.type === "book"){
-        if (doc.tags && doc.tags.length){
-            for (var idx in doc.tags){
-                emit(doc.tags[idx], 1);
-            }
+    const utils = require('views/lib/utils');
+
+    if (utils.types.isBook(doc)) {
+        if (doc.tags && doc.tags.length) {
+            doc.tags.forEach(function(tag) {
+                emit(tag, 1);
+            });
         }
     }
 }

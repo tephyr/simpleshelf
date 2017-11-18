@@ -2,10 +2,11 @@
  * Show all spines (basic book info).
  */
 function(doc){
-    var _ = require('views/lib/underscore'),
+    var _ = require('views/lib/lodash'),
+        utils = require('views/lib/utils'),
         spine;
 
-    if (_.has(doc, "type") && doc.type === "book"
+    if (utils.types.isBook(doc)
         && _.has(doc, "urls") && _.keys(doc.urls).length > 0) {
         // Build spine attributes.
         spine = {

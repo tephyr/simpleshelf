@@ -3,9 +3,9 @@
  * Expect at least 2: simpleshelf.configuration.default and simpleshelf.configuration.custom.
  */
 function(doc) {
-    var _ = require('views/lib/underscore');
+    const utils = require('views/lib/utils');
 
-    if (_.has(doc, "type") && doc.type === "configuration") {
+    if (utils.types.isConfig(doc)) {
         emit(doc.configurationType || "unknown", doc);
     }
 }

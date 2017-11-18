@@ -3,11 +3,10 @@
  * Returns "?" for null titles, "0" for non-alphabetics.
  **/
 function getFirstLetter(doc) {
-    var _ = require('views/lib/underscore'),
-        utils = require('views/lib/utils'),
+    var utils = require('views/lib/utils'),
         result;
 
-    if (_.isNull(doc.title)) {
+    if (doc.title === null) {
         result = "?";
     } else {
         firstLetter = doc.title[0].toLowerCase();

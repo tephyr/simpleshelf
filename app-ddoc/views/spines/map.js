@@ -2,12 +2,12 @@
  * Show all spines (basic book info).
  */
 function(doc){
-    var _ = require('views/lib/underscore'),
+    var utils = require('views/lib/utils'),
         bookUtils = require('views/lib/bookutils').bookutils,
         firstLetter,
         spine;
 
-    if (_.has(doc, "type") && doc.type === "book") {
+    if (utils.types.isBook(doc)) {
         firstLetter = bookUtils.getFirstLetter(doc);
 
         // Build spine attributes.
