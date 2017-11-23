@@ -161,18 +161,16 @@ describe('Book', function() {
             book = new Book(basicBookResponse(), {configuration: config});
         });
 
-        it('must contain a canonicalTitle key & value', () => {
-            expect(book.has('canonicalTitle')).to.be.true;
-            expect(book.get('canonicalTitle')).to.not.equal(book.get('title'));
+        it('must contain a canonicalTitle method', () => {
+            expect(book.getCanonicalTitle).to.be.instanceof(Function);
         });
 
         it('must parse canonicalTitle', () => {
             const bookWithTitle = new Book({title: 'The title', canonicalTitle: 'title, The'}, {configuration: config});
-            expect(bookWithTitle.has('canonicalTitle')).to.be.true;
-            expect(bookWithTitle.get('canonicalTitle')).to.equal('title, The');
+            expect(bookWithTitle.getCanonicalTitle()).to.equal('title, The');
         });
 
-        it('must set canonicalTitle on the client for [a, an, the]', () => {
+        it('canonicalTitle must handle all prefixes ([a, an, the])', () => {
             const testData = [
                 [{title: 'A title'}, 'title, A'],
                 [{title: 'An interesting title'}, 'interesting title, An'],
@@ -183,7 +181,7 @@ describe('Book', function() {
             testData.forEach((info) => {
                 let bookWithTitle = new Book({}, {configuration: config});
                 bookWithTitle.set(info[0]);
-                expect(bookWithTitle.get('canonicalTitle')).to.equal(info[1]);
+                expect(bookWithTitle.getCanonicalTitle()).to.equal(info[1]);
             });
         });
     });
@@ -202,7 +200,7 @@ describe('Book', function() {
                     {"date": "2016-05-01", "action": "book.read.started"}
                 ],
                 "title": "A tale of two cities",
-                "canonicalTitle": "tale of two cities, A",
+                // "canonicalTitle": "tale of two cities, A",
                 "publisher": "Vintage Books",
                 "notesPrivate": null,
                 "notesPublic": "1st Vintage classics ed.",

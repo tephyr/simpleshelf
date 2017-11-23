@@ -22,8 +22,6 @@ const Book = Backbone.Model.extend({
         if (_.isObject(options) && _.has(options, 'configuration')) {
             this._configuration = options.configuration;
         }
-
-        this.on('change:title', this._onChangeTitle, this);
     },
 
     url: function(){
@@ -111,32 +109,32 @@ const Book = Backbone.Model.extend({
         return this;
     },
 
+    getCanonicalTitle() {
+        const value = _.trim(this.get('title'));
+
+        if (value.length === 0) {
+            return '';
+        }
+
+        let canonicalized = false, canonicalTitle;
+
+        const titleWords = value.split(' ');
+        _.forEach(PREFIXES, (prefix) => {
+            if (titleWords[0].toLowerCase() === prefix) {
+                canonicalTitle = `${_.tail(titleWords).join(' ')}, ${titleWords[0]}`;
+                canonicalized = true;
+                return false;
+            }
+        });
+
+        return canonicalized ? canonicalTitle : value;
+    },
+
     /**
      * Check if key exists and has a non-null value.
      **/
     _checkForValue: function(attrs, key) {
         return (_.has(attrs, key) && !_.isNull(attrs[key]));
-    },
-
-    _onChangeTitle(model, value) {
-        if (_.trim(value).length === 0) {
-            return;
-        }
-
-        let canonicalized = false;
-
-        const titleWords = value.split(' ');
-        _.forEach(PREFIXES, (prefix) => {
-            if (titleWords[0].toLowerCase() === prefix) {
-                model.set('canonicalTitle', `${_.tail(titleWords).join(' ')}, ${titleWords[0]}`, {silent: true});
-                // TODO: break out.
-                canonicalized = true;
-            }
-        });
-
-        if (!canonicalized) {
-            model.set('canonicalTitle', value);
-        }
     }
 });
 
