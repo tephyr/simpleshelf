@@ -1,7 +1,7 @@
 import Router from './router';
 import {$, Backbone, _} from 'DefaultImports';
 import tether from 'tether';
-import appsetup from './appsetup';
+import {AppSetup} from './appsetup';
 import appevents from './appevents';
 import {app as simpleshelfApp} from './app';
 
@@ -18,7 +18,7 @@ $(function() {
     // require(["widgets/tags"]);
 
     // Override BB sync.
-    appsetup.overrideBackboneSync(Backbone, _);
+    AppSetup.overrideBackboneSync(Backbone, _);
 
     this.app = simpleshelfApp; // singleton
 

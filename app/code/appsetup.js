@@ -1,9 +1,9 @@
 /**
  * One-time application setup functions.
  */
-var _ = require("underscore");
+import {_} from 'DefaultImports';
 
-module.exports = {
+const AppSetup = {
     overrideBackboneSync: function(Backbone, _) {
         /**
          * Override the original Backbone.sync, customize only as necessary
@@ -36,3 +36,5 @@ module.exports = {
         });
     }
 };
+
+export {AppSetup};
