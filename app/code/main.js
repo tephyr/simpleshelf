@@ -1,20 +1,19 @@
 import Router from './router';
+import {$, Backbone, _} from 'DefaultImports';
+import tether from 'tether';
+import appsetup from './appsetup';
+import appevents from './appevents';
+import {app as simpleshelfApp} from './app';
 
 /**
  * Main entry point to simpleshelf app.
  */
-let $ = require("jquery"),
-    Backbone = require("backbone"),
-    _ = require("underscore"),
-    appsetup = require("./appsetup.js"),
-    appevents = require("./appevents.js"),
-    simpleshelfApp = require("./app.js").app;
 
 // To support Bootstrap, add jQuery & Tether to the global namespace.
-window.$ = window.jQuery = require('jquery');
-window.Tether = require('tether');
+window.$ = window.jQuery = $;
+window.Tether = tether;
 
-$(document).ready(function() {
+$(function() {
     // Load plugins and widgets on the global $.
     // require(["widgets/tags"]);
 
@@ -51,4 +50,3 @@ $(document).ready(function() {
         this.app.run
     );
 });
-
