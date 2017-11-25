@@ -42,7 +42,7 @@ $(function() {
     });
     console.info("[main]", "Backbone.history.start",
         historyStart, (historyStart ? "Found initial matching route" : "No initial matching route"),
-        'currentPath', currentPath
+        currentPath
     );
 
     // Start app.
