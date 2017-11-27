@@ -3,6 +3,7 @@
  **/
 import {$, _, Backbone} from 'DefaultImports';
 import {Book} from './models/Book';
+import {Hub} from 'Hub';
 const couchUtils = require("./couchutils.js");
 
 // Define the application router.
@@ -26,6 +27,8 @@ const Router = Backbone.Router.extend({
         this._initialLoginHandled = false;
         this._viewLogger = [];
         this._configuration = options.configuration;
+
+        this.listenTo(Hub, 'router:navigate', this.onNavigate);
     },
 
     /**
@@ -119,6 +122,10 @@ const Router = Backbone.Router.extend({
         ).always(_.bind(function(){
             this._changeScreen(this._views.editBookPageView);
         }, this));
+    },
+
+    onNavigate: function(fragment, options) {
+        this.navigate(fragment, options);
     },
 
     /**

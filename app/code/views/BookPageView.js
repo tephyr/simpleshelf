@@ -1,6 +1,8 @@
 /**
  * Individual book page view.
  **/
+import {Hub} from 'Hub';
+
 var $ = require("jquery"),
     _ = require("underscore"),
     Backbone = require("backbone"),
@@ -63,7 +65,7 @@ var BookPageView = Backbone.View.extend({
 
     // EVENTS //
     onAddAnother: function(event) {
-        this.trigger("app:navigate", {url: "addbook"});
+        Hub.trigger("app:navigate", {url: "addbook"});
     },
 
     onDelete: function(event) {
@@ -74,17 +76,17 @@ var BookPageView = Backbone.View.extend({
             this.model.destroy({
                 wait: true, 
                 success: function() {
-                    self.trigger("app:bookDeleted", {ok: true});
+                    Hub.trigger("app:bookDeleted", {ok: true});
                 },
                 error: function() {
-                    self.trigger("app:bookDeleted", {ok: false});
+                    Hub.trigger("app:bookDeleted", {ok: false});
                 }
             });
         }
     },
 
     onEditThis: function(event) {
-        this.trigger("app:navigate", {url: "editbook/" + this.model.id});
+        Hub.trigger("app:navigate", {url: "editbook/" + this.model.id});
     }
 });
 
