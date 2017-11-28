@@ -6,6 +6,7 @@ import {Backbone, _} from 'DefaultImports';
  * Brokered events:
  * - app:navigate           (any view signals a route change)
  * - router:navigate        (Hub triggers a route change)
+ * - routechanged           (router navigated to different route)
  */
 class HubModule {
     constructor() {

@@ -29,6 +29,7 @@ const Router = Backbone.Router.extend({
         this._configuration = options.configuration;
 
         this.listenTo(Hub, 'router:navigate', this.onNavigate);
+        this.on('route', (route, params) => { Hub.trigger('routechanged', {route, params}); });
     },
 
     /**

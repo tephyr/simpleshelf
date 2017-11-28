@@ -6,6 +6,8 @@ var Backbone = require("backbone"),
     Handlebars = require("handlebars"),
     NavbarTemplate = require("./templates/navbar.html");
 
+import {Hub} from 'Hub';
+
 var navigationView = Backbone.View.extend({
     id: "navigationView",
     events: {
@@ -14,6 +16,7 @@ var navigationView = Backbone.View.extend({
 
     initialize: function() {
         this._template = Handlebars.compile(NavbarTemplate);
+        this.listenTo(Hub, 'routechanged', this.onRouteChange);
     },
 
     render: function() {
@@ -25,10 +28,10 @@ var navigationView = Backbone.View.extend({
 
     /**
      * Modify this view when on home page.
-     * @param {Object} data {home: bool}
+     * @param {Bool} isHome true to show home view
      */
-    setHomeView: function(data) {
-        if (_.has(data, 'home') && data.home) {
+    setHomeView: function(isHome) {
+        if (!isHome) {
             this.$el.removeClass('home');
         } else {
             this.$el.addClass('home');
@@ -38,6 +41,10 @@ var navigationView = Backbone.View.extend({
     /** EVENTS **/
     onClickHome: function(event) {
         // TODO: here for testing; currently a noop.
+    },
+
+    onRouteChange: function(eventData={}) {
+        this.setHomeView(eventData.route === 'main');
     }
 });
 
