@@ -23,7 +23,7 @@ var Handlebars = require("handlebars"),
 import {Book} from './models/Book';
 import {BookCollection} from './models/BookCollection';
 import {GlobalCountModel} from './models/GlobalCount';
-import {NavbarView} from './views/NavbarView';
+import {NavigationView} from './views/NavigationView';
 
 var app = {
     // Catalog: all metadata regarding the library.
@@ -130,7 +130,7 @@ app.promises.initialConfiguration = $.when(
 // NOTE: this requires more app overhead to remove views & their events from the DOM.
 // See router._changeScreen().
 app.views = {
-    navbarView: new NavbarView(),
+    navigationView: new NavigationView(),
     loginPageView: new LoginPageView(),
     mainPageView: new MainPageView({
         model: app.catalog.globalCountModel,
@@ -165,7 +165,7 @@ app.run = function() {
     app.catalog.tagCollection.fetch();
 
     // Load navbar view.
-    $("body").prepend(app.views.navbarView.render().$el);
+    $("body").prepend(app.views.navigationView.render().$el);
     // Load global alert view.
     $("#alertContent").append(app.views.globalAlertView.render().$el);
 };

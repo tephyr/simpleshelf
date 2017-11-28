@@ -6,8 +6,8 @@ import {Hub} from 'Hub';
 import * as Handlebars from 'handlebars';
 import NavbarTemplate from './templates/navbar.html';
 
-const NavbarView = Backbone.View.extend({
-    id: "navbarView",
+const NavigationView = Backbone.View.extend({
+    id: "navigationView",
     events: {
         "click #navbarBrand": "onClickHome"
     },
@@ -46,4 +46,4 @@ const NavbarView = Backbone.View.extend({
     }
 });
 
-export {NavbarView};
+export {NavigationView};
