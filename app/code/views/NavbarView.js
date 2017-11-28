@@ -1,15 +1,13 @@
 /**
  * Navigation bar view.
  */
-var Backbone = require("backbone"),
-    _ = require('underscore'),
-    Handlebars = require("handlebars"),
-    NavbarTemplate = require("./templates/navbar.html");
-
+import {_, Backbone} from 'DefaultImports';
 import {Hub} from 'Hub';
+import * as Handlebars from 'handlebars';
+import NavbarTemplate from './templates/navbar.html';
 
-var navigationView = Backbone.View.extend({
-    id: "navigationView",
+const NavbarView = Backbone.View.extend({
+    id: "navbarView",
     events: {
         "click #navbarBrand": "onClickHome"
     },
@@ -48,4 +46,4 @@ var navigationView = Backbone.View.extend({
     }
 });
 
-module.exports = navigationView;
+export {NavbarView};

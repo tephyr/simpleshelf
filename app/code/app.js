@@ -5,7 +5,6 @@ import {$, _, Backbone} from 'DefaultImports';
 var Handlebars = require("handlebars"),
     RegisterHandlebarHelpers = require("./handlebarhelpers.js"),
     appSettings = require("./settings.js"),
-    NavbarView = require("./views/NavbarView.js"),
     LoginPageView = require("./views/LoginPageView.js"),
     MainPageView = require("./views/MainPageView.js"),
     GlobalAlertView = require("./views/GlobalAlertView.js"),
@@ -24,6 +23,7 @@ var Handlebars = require("handlebars"),
 import {Book} from './models/Book';
 import {BookCollection} from './models/BookCollection';
 import {GlobalCountModel} from './models/GlobalCount';
+import {NavbarView} from './views/NavbarView';
 
 var app = {
     // Catalog: all metadata regarding the library.
