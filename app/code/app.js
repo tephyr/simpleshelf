@@ -11,99 +11,16 @@ var Handlebars = require("handlebars"),
     BookPageView = require("./views/BookPageView.js"),
     AppConfigurationModel = require("./models/Configuration.js"),
     EditBookPageView = require("./views/EditBookPageView.js"),
-    ReadingStatsModel = require("./models/ReadingStats.js"),
-    BooksByLetterCollection = require("./models/BooksByLetterCollection.js"),
-    SpineCollection = require("./models/SpineCollection.js"),
-    TagCollection = require("./models/TagCollection.js"),
     HeaderIconsTemplate = require("./views/templates/headericons.html"),
     HeaderMenuTemplate = require("./views/templates/headermenu.html"),
     appevents = require("./appevents.js"),
     appsetup = require("./appsetup.js");
 import {Book} from './models/Book';
-import {BookCollection} from './models/BookCollection';
-import {GlobalCountModel} from './models/GlobalCount';
 import {NavigationView} from './views/NavigationView';
+import {Catalog} from 'Catalog';
 
 var app = {
-    // Catalog: all metadata regarding the library.
-    // Typically, these data will change only when a books is added/edited/deleted.
-    catalog: {
-        spinesInitialized: false,
-        booksByLetterInitialized: false,
-        metadataUpToDate: false,
-        spineCollection: new SpineCollection(),
-        booksByLetterCollection: new BooksByLetterCollection(),
-        globalCountModel: new GlobalCountModel(),
-        readingStatsModel: new ReadingStatsModel(),
-        bookCollection: new BookCollection(),
-        tagCollection: new TagCollection(),
-        /**
-         * Load the spines collection, fetching only when necessary.
-         **/
-        loadSpines: function(forceLoad) {
-            var deferred = $.Deferred();
-            if (!this.spinesInitialized || forceLoad) {
-                this.spineCollection.fetch()
-                    .done(function() {
-                        deferred.resolve();
-                    })
-                    .fail(function() {
-                        deferred.reject();
-                    })
-                    .always(_.bind(function() {
-                        this.spinesInitialized = true;
-                    }, this));
-            } else {
-                deferred.resolve();
-            }
-
-            return deferred;
-        },
-        /**
-         * Load the books-by-letter collection, fetching only when necessary.
-         **/
-        loadBooksByLetter: function(forceLoad) {
-            var deferred = $.Deferred();
-            if (!this.booksByLetterInitialized || forceLoad) {
-                this.booksByLetterCollection.fetch()
-                    .done(deferred.resolve)
-                    .fail(deferred.reject)
-                    .always(_.bind(function() {
-                        this.booksByLetterInitialized = true;
-                    }, this));
-            } else {
-                deferred.resolve();
-            }
-
-            return deferred;
-        },
-
-        /**
-         * Load (or reload) the global count and books data.
-         * @return Promise
-         **/
-        updateLibraryMetadata: function() {
-            var deferred = $.Deferred();
-
-            if (this.metadataUpToDate) {
-                deferred.resolve();
-            } else {
-                $.when(
-                    this.globalCountModel.fetch(),
-                    this.readingStatsModel.fetch(),
-                    this.bookCollection.fetch(),
-                    this.spineCollection.fetch()
-                ).then(_.bind(function() {
-                        this.metadataUpToDate = true;
-                        deferred.resolve();
-                    }, this),
-                    deferred.reject
-                );
-            }
-
-            return deferred;
-        }
-    }
+    catalog: Catalog
 };
 
 // Allow this object to receive & emit events.
