@@ -30,4 +30,4 @@ var TagCollection = Backbone.Collection.extend({
     }
 });
 
-module.exports = TagCollection;
+export {TagCollection};

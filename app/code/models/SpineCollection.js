@@ -43,4 +43,4 @@ var SpineCollection = Backbone.Collection.extend({
     }
 });
 
-module.exports = SpineCollection;
+export {SpineCollection};

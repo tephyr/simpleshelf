@@ -24,4 +24,4 @@ var ReadingStatsModel = Backbone.Model.extend({
     }
 });
 
-module.exports = ReadingStatsModel;
+export {ReadingStatsModel};

@@ -26,4 +26,4 @@ var BooksByLetterCollection = Backbone.Collection.extend({
     }
 });
 
-module.exports = BooksByLetterCollection;
+export {BooksByLetterCollection};
