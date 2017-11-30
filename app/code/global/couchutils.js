@@ -1,11 +1,10 @@
 /**
  * Utilities for accessing CouchDB.
  **/
-var $ = require("jquery"),
-    _ = require("underscore"),
-    appSettings = require("./settings.js");
+import {$, _} from 'DefaultImports';
+import {appSettings} from 'settings';
 
-var couchUtils = {
+const CouchUtils = {
     /**
      * Get UUIDs directly from CouchDB.
      **/
@@ -75,4 +74,4 @@ var couchUtils = {
 
 };
 
-module.exports = couchUtils;
+export {CouchUtils};

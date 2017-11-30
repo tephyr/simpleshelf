@@ -1,13 +1,12 @@
-"use strict";
 /**
  * Store application-wide settings.
  * @return Singleton
  **/
-var _ = require("underscore"),
-    Backbone = require("backbone");
+import {Backbone} from 'DefaultImports';
 
-var settings = Backbone.Model.extend({
+const SettingsModel = Backbone.Model.extend({
 
 });
 
-module.exports = new settings();
+const appSettings = new SettingsModel();
+export {appSettings};
