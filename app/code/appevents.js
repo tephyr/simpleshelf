@@ -1,6 +1,6 @@
 "use strict";
-var _ = require("underscore"),
-    couchUtils = require("./couchutils.js");
+var _ = require("underscore");
+    // couchUtils = require("./couchutils.js");
 
 // app is already instantiated (as singleton), so simply add events to it.
 module.exports = {
@@ -49,7 +49,6 @@ module.exports = {
     hookupAppEvents: function (app) {
         // Hook up specific views' events.
         var views = [
-            app.views.loginPageView,
             app.views.mainPageView,
             app.views.bookPageView,
             app.views.editBookPageView

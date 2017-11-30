@@ -4,7 +4,8 @@
 import {$, _, Backbone} from 'DefaultImports';
 import {Book} from './models/Book';
 import {Hub} from 'Hub';
-const couchUtils = require("./couchutils.js");
+import {CouchUtils} from 'couchutils';
+import {LoginPageView} from './views/LoginPageView';
 
 // Define the application router.
 const Router = Backbone.Router.extend({
@@ -25,7 +26,7 @@ const Router = Backbone.Router.extend({
         this._views = options.views;
         this._catalog = options.catalog;
         this._initialLoginHandled = false;
-        this._viewLogger = [];
+        // this._viewLogger = [];
         this._configuration = options.configuration;
 
         this.listenTo(Hub, 'router:navigate', this.onNavigate);
@@ -61,7 +62,7 @@ const Router = Backbone.Router.extend({
 
     login: function() {
         this._log("/login");
-        this._changeScreen(this._views.loginPageView);
+        this._changeScreen(new LoginPageView());
     },
 
     main: function() {
@@ -145,9 +146,10 @@ const Router = Backbone.Router.extend({
 
         this._currentView = view;
         $("#baseContent").append(view.render().$el);
-        this._currentPageId = view.$el.attr("id");  // TODO: switch to view.id.
+        // this._currentPageId = view.$el.attr("id");  // TODO: switch to view.id.
+        this._currentPageId = view.id;
 
-        // Only call delegateEvents() once view is re-used, since initialize() automatically
+/*        // Only call delegateEvents() once view is re-used, since initialize() automatically
         // calls it.
         // NOTE: this is **necessary** when view *instances* are held by the application. If
         // views were instantiated as needed, the events would always be applied and the second 
@@ -160,7 +162,7 @@ const Router = Backbone.Router.extend({
         }
 
         this._log("_viewLogger", this._viewLogger);
-    },
+*/    },
 
     /**
      * On initial load, check if user is already logged in.
@@ -170,7 +172,7 @@ const Router = Backbone.Router.extend({
      * @return {Promise}
      */
     _checkLoginStatus: function(routeCB, routeArgs, routeContext) {
-        return couchUtils.isLoggedIn()
+        return CouchUtils.isLoggedIn()
             .done(function() {
                 console.log(routeContext._logHeader, "Proceed to requested page.");
                 routeCB.apply(routeContext, routeArgs);

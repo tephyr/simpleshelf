@@ -2,10 +2,9 @@
  * Application logic.
  */
 import {$, _, Backbone} from 'DefaultImports';
+import {appSettings} from 'settings';
 var Handlebars = require("handlebars"),
     RegisterHandlebarHelpers = require("./handlebarhelpers.js"),
-    appSettings = require("./settings.js"),
-    LoginPageView = require("./views/LoginPageView.js"),
     MainPageView = require("./views/MainPageView.js"),
     GlobalAlertView = require("./views/GlobalAlertView.js"),
     BooksPageView = require("./views/BooksPageView.js"),
@@ -131,7 +130,6 @@ app.promises.initialConfiguration = $.when(
 // See router._changeScreen().
 app.views = {
     navigationView: new NavigationView(),
-    loginPageView: new LoginPageView(),
     mainPageView: new MainPageView({
         model: app.catalog.globalCountModel,
         readingStats: app.catalog.readingStatsModel
