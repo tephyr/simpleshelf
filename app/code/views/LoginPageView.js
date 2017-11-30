@@ -1,11 +1,12 @@
 /**
  * Login page
  */
-var Backbone = require("backbone"),
-    Handlebars = require("handlebars"),
-    LoginTemplate = require("./templates/login.html");
+import {Backbone} from 'DefaultImports';
+import * as Handlebars from 'handlebars';
+import LoginTemplate from './templates/login.html';
+import {Hub} from 'Hub'
 
-var loginPage = Backbone.View.extend({
+const LoginPageView = Backbone.View.extend({
     id: "loginPage",
     events: {
         "submit .login-form": "onLogin"
@@ -26,7 +27,7 @@ var loginPage = Backbone.View.extend({
      */
     onLogin: function(event) {
         // Trigger login event.
-        this.trigger("app:requestLogin", {
+        Hub.trigger("app:requestlogin", {
             username: this.$("#loginUsername").val(),
             password: this.$("#loginPassword").val()
         });
@@ -35,4 +36,4 @@ var loginPage = Backbone.View.extend({
     }
 });
 
-module.exports = loginPage;
+export {LoginPageView};
