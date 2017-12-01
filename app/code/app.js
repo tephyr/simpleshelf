@@ -6,14 +6,11 @@ import {appSettings} from 'settings';
 var Handlebars = require("handlebars"),
     RegisterHandlebarHelpers = require("./handlebarhelpers.js"),
     GlobalAlertView = require("./views/GlobalAlertView.js"),
-    BookPageView = require("./views/BookPageView.js"),
-    AppConfigurationModel = require("./models/Configuration.js"),
     EditBookPageView = require("./views/EditBookPageView.js"),
     HeaderIconsTemplate = require("./views/templates/headericons.html"),
     HeaderMenuTemplate = require("./views/templates/headermenu.html"),
     appevents = require("./appevents.js"),
     appsetup = require("./appsetup.js");
-import {Book} from './models/Book';
 import {NavigationView} from './views/NavigationView';
 import {Catalog} from 'Catalog';
 
@@ -27,11 +24,10 @@ _.extend(app, Backbone.Events);
 // Prep Handlebars.
 RegisterHandlebarHelpers();
 
-app.configuration = new AppConfigurationModel();
 app.promises = {};
 app.promises.initialConfiguration = $.when(
-    app.configuration.fetch(),
-    app.configuration.fetchI18N()
+    Catalog.configuration.fetch(),
+    Catalog.configuration.fetchI18N()
 ).then(
     function() {
         console.info("[app]", "configuration + translation loaded");
@@ -46,14 +42,10 @@ app.promises.initialConfiguration = $.when(
 app.views = {
     navigationView: new NavigationView(),
     globalAlertView: new GlobalAlertView({
-        configuration: app.configuration
-    }),
-    bookPageView: new BookPageView({
-        model: new Book(),
-        configuration: app.configuration
+        configuration: Catalog.configuration
     }),
     editBookPageView: new EditBookPageView({
-        configuration: app.configuration,
+        configuration: Catalog.configuration,
         tagCollection: app.catalog.tagCollection
     })
 };

@@ -9,6 +9,7 @@ import {CouchUtils} from 'couchutils';
 import {LoginPageView} from './views/LoginPageView';
 import {MainPageView} from './views/MainPageView';
 import {BooksPageView} from './views/BooksPageView';
+import {BookPageView}  from './views/BookPageView';
 
 // Define the application router.
 const Router = Backbone.Router.extend({
@@ -100,13 +101,18 @@ const Router = Backbone.Router.extend({
 
     book: function(bookId) {
         this._log("/book/" + bookId);
-        this._views.bookPageView.model.clear({"silent": true});
-        this._views.bookPageView.model.set("_id", bookId);
+        const bookPageView = new BookPageView({
+            model: new Book(),
+            configuration: Catalog.configuration
+        });
+
+        // this._views.bookPageView.model.clear({"silent": true});
+        bookPageView.model.set("_id", bookId);
         $.when(
-            this._views.bookPageView.model.fetch()
-        ).always(_.bind(function() {
-            this._changeScreen(this._views.bookPageView);
-        }, this));
+            bookPageView.model.fetch()
+        ).always(() => {
+            this._changeScreen(bookPageView);
+        });
     },
 
     /**
