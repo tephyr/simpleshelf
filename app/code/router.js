@@ -4,8 +4,10 @@
 import {$, _, Backbone} from 'DefaultImports';
 import {Book} from './models/Book';
 import {Hub} from 'Hub';
+import {Catalog} from 'Catalog';
 import {CouchUtils} from 'couchutils';
 import {LoginPageView} from './views/LoginPageView';
+import {BooksPageView} from './views/BooksPageView';
 
 // Define the application router.
 const Router = Backbone.Router.extend({
@@ -24,7 +26,6 @@ const Router = Backbone.Router.extend({
         this._currentPageId = null;
         this._currentView = null;
         this._views = options.views;
-        this._catalog = options.catalog;
         this._initialLoginHandled = false;
         // this._viewLogger = [];
         this._configuration = options.configuration;
@@ -68,7 +69,7 @@ const Router = Backbone.Router.extend({
     main: function() {
         this._log("/main");
         $.when(
-            this._catalog.updateLibraryMetadata()
+            Catalog.updateLibraryMetadata()
         ).always(_.bind(function() {
             this._changeScreen(this._views.mainPageView);
         }, this));
@@ -80,11 +81,15 @@ const Router = Backbone.Router.extend({
         // Only load the spine collection *once*.
         // Since the view renders itself when the collection syncs, no need to call it here.
         $.when(
-            this._catalog.loadBooksByLetter(),
-            this._catalog.loadSpines()
-        ).always(_.bind(function() {
-            this._changeScreen(this._views.booksPageView);
-        }, this));
+            Catalog.loadBooksByLetter(),
+            Catalog.loadSpines()
+        ).always(() => {
+            const booksPageView = new BooksPageView({
+                collection: Catalog.booksByLetterCollection,
+                spineCollection: Catalog.spineCollection
+            });
+            this._changeScreen(booksPageView);
+        });
     },
 
     book: function(bookId) {

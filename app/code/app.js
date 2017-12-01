@@ -7,7 +7,6 @@ var Handlebars = require("handlebars"),
     RegisterHandlebarHelpers = require("./handlebarhelpers.js"),
     MainPageView = require("./views/MainPageView.js"),
     GlobalAlertView = require("./views/GlobalAlertView.js"),
-    BooksPageView = require("./views/BooksPageView.js"),
     BookPageView = require("./views/BookPageView.js"),
     AppConfigurationModel = require("./models/Configuration.js"),
     EditBookPageView = require("./views/EditBookPageView.js"),
@@ -53,10 +52,6 @@ app.views = {
     }),
     globalAlertView: new GlobalAlertView({
         configuration: app.configuration
-    }),
-    booksPageView: new BooksPageView({
-        collection: app.catalog.booksByLetterCollection,
-        spineCollection: app.catalog.spineCollection
     }),
     bookPageView: new BookPageView({
         model: new Book(),
