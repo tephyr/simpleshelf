@@ -1,12 +1,13 @@
 /**
  * Books page
  */
-var Backbone = require("backbone"),
-    Handlebars = require("handlebars"),
-    SpinesByLetterView = require("./SpinesByLetterView.js"),
-    BooksPageTemplate = require("./templates/bookspage.html");
+import {Backbone} from 'DefaultImports';
+import * as Handlebars from 'handlebars';
+import BooksPageTemplate from './templates/bookspage.html';
 
-var BooksPage = Backbone.View.extend({
+const SpinesByLetterView = require("./SpinesByLetterView.js");
+
+const BooksPageView = Backbone.View.extend({
     id: "booksPage",
     _logHeader: "[BooksPageView]",
 
@@ -96,4 +97,4 @@ var BooksPage = Backbone.View.extend({
     }
 });
 
-module.exports = BooksPage;
+export {BooksPageView};
