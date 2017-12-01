@@ -7,6 +7,7 @@ import {Hub} from 'Hub';
 import {Catalog} from 'Catalog';
 import {CouchUtils} from 'couchutils';
 import {LoginPageView} from './views/LoginPageView';
+import {MainPageView} from './views/MainPageView';
 import {BooksPageView} from './views/BooksPageView';
 
 // Define the application router.
@@ -70,9 +71,14 @@ const Router = Backbone.Router.extend({
         this._log("/main");
         $.when(
             Catalog.updateLibraryMetadata()
-        ).always(_.bind(function() {
-            this._changeScreen(this._views.mainPageView);
-        }, this));
+        ).always(() => {
+            const mainPageView = new MainPageView({
+                model: Catalog.globalCountModel,
+                readingStats: Catalog.readingStatsModel
+            });
+            mainPageView.books = Catalog.bookCollection; // TODO: pass in as option.
+            this._changeScreen(mainPageView);
+        });
     },
 
     books: function() {

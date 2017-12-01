@@ -49,7 +49,6 @@ module.exports = {
     hookupAppEvents: function (app) {
         // Hook up specific views' events.
         var views = [
-            app.views.mainPageView,
             app.views.bookPageView,
             app.views.editBookPageView
         ];

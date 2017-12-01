@@ -5,7 +5,6 @@ import {$, _, Backbone} from 'DefaultImports';
 import {appSettings} from 'settings';
 var Handlebars = require("handlebars"),
     RegisterHandlebarHelpers = require("./handlebarhelpers.js"),
-    MainPageView = require("./views/MainPageView.js"),
     GlobalAlertView = require("./views/GlobalAlertView.js"),
     BookPageView = require("./views/BookPageView.js"),
     AppConfigurationModel = require("./models/Configuration.js"),
@@ -46,10 +45,6 @@ app.promises.initialConfiguration = $.when(
 // See router._changeScreen().
 app.views = {
     navigationView: new NavigationView(),
-    mainPageView: new MainPageView({
-        model: app.catalog.globalCountModel,
-        readingStats: app.catalog.readingStatsModel
-    }),
     globalAlertView: new GlobalAlertView({
         configuration: app.configuration
     }),
@@ -62,8 +57,6 @@ app.views = {
         tagCollection: app.catalog.tagCollection
     })
 };
-// Add BookCollection to mainPageView.  Don't know why it won't work on initialization.
-app.views.mainPageView.books = app.catalog.bookCollection;
 
 // Initial settings.
 appSettings.set({"urlPrefix": window.location.protocol + "//" + window.location.host});
