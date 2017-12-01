@@ -2,15 +2,12 @@
  * Individual book page view.
  **/
 import {Hub} from 'Hub';
+import {$, _, Backbone} from 'DefaultImports';
+import * as Handlebars from 'handlebars';
+import BookPageTemplate from './templates/bookpage.html';
+const ActivitiesView = require("./ActivitiesView.js");
 
-var $ = require("jquery"),
-    _ = require("underscore"),
-    Backbone = require("backbone"),
-    Handlebars = require("handlebars"),
-    BookPageTemplate = require("./templates/bookpage.html"),
-    ActivitiesView = require("./ActivitiesView.js");
-
-var BookPageView = Backbone.View.extend({
+const BookPageView = Backbone.View.extend({
     id: "bookPage",
     events: {
         "click .edit-this": "onEditThis",
@@ -37,7 +34,7 @@ var BookPageView = Backbone.View.extend({
         // Add hints for template.
         data._multipleAuthors = this.model.get("authors").length > 1;
         // Convert status object into list of objects with identical key/value keys.
-        data._statusList = _.map(_.pairs(data.status || []), function(pair) {
+        data._statusList = _.map(_.toPairs(data.status || []), function(pair) {
             return {statusKey: pair[0], statusValue: self.configuration.getText(pair[1])};
         });
         data._tags = data.tags || [];
@@ -69,7 +66,6 @@ var BookPageView = Backbone.View.extend({
     },
 
     onDelete: function(event) {
-        var self = this;
         // Verify.
         if (window.confirm("Are you sure you want to delete this book?")) {
             // Delete & forward to main page.
@@ -90,4 +86,4 @@ var BookPageView = Backbone.View.extend({
     }
 });
 
-module.exports = BookPageView;
+export {BookPageView};
