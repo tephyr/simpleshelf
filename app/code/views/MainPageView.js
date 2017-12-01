@@ -1,12 +1,12 @@
 /**
  * Main page view.
  **/
-var _ = require("underscore"),
-    Backbone = require("backbone"),
-    Handlebars = require("handlebars"),
-    MainPageTemplate = require("./templates/mainpage.html");
+import {Backbone, _} from 'DefaultImports';
+import * as Handlebars from 'handlebars';
+import MainPageTemplate from './templates/mainpage.html';
+import {Hub} from 'Hub';
 
-var mainPage = Backbone.View.extend({
+const MainPageView = Backbone.View.extend({
     id: "mainPage",
     events: {
         "vclick #main-add-book": "onAddBook",
@@ -49,10 +49,10 @@ var mainPage = Backbone.View.extend({
      */
     onAddBook: function(event) {
         event.preventDefault();
-        this.trigger("app:navigate", {
+        Hub.trigger("app:navigate", {
             url: "addbook"
         });
     }
 });
 
-module.exports = mainPage;
+export {MainPageView};
