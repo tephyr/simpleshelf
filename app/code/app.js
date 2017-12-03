@@ -11,9 +11,6 @@ const app = {
     catalog: Catalog
 };
 
-// Allow this object to receive & emit events.
-_.extend(app, Backbone.Events);
-
 app.promises = {};
 app.promises.initialConfiguration = $.when(
     Catalog.configuration.fetch(),
@@ -51,5 +48,4 @@ app.run = function() {
 
 // Anything else that should be immediately available when the application launches, add here.
 
-// Export app for module.
-module.exports.app = app;
+export {app};

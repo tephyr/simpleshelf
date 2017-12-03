@@ -29,7 +29,6 @@ const Router = Backbone.Router.extend({
         this._currentPageId = null;
         this._currentView = null;
         this._initialLoginHandled = false;
-        // this._viewLogger = [];
         this._configuration = options.configuration;
 
         this.listenTo(Hub, 'router:navigate', this.onNavigate);
@@ -156,31 +155,15 @@ const Router = Backbone.Router.extend({
         if (!_.isNull(this._currentView)) {
             // Replacing view - kill existing.
             this._log("Changing from " + this._currentPageId);
-            // Disconnect events.
-            this._currentView.undelegateEvents();
             // Remove from DOM.
             this._currentView.remove();
         }
 
         this._currentView = view;
         $("#baseContent").append(view.render().$el);
-        // this._currentPageId = view.$el.attr("id");  // TODO: switch to view.id.
         this._currentPageId = view.id;
 
-/*        // Only call delegateEvents() once view is re-used, since initialize() automatically
-        // calls it.
-        // NOTE: this is **necessary** when view *instances* are held by the application. If
-        // views were instantiated as needed, the events would always be applied and the second 
-        // and subsequent uses of that view would behave exactly like the first.
-        if (_.indexOf(this._viewLogger, this._currentPageId) !== -1) {
-            // Subsequent use of this view: hook up events.
-            view.delegateEvents();
-        } else {
-            this._viewLogger.push(this._currentPageId);
-        }
-
-        this._log("_viewLogger", this._viewLogger);
-*/    },
+    },
 
     /**
      * On initial load, check if user is already logged in.
