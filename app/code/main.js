@@ -2,7 +2,6 @@ import Router from './router';
 import {$, Backbone, _} from 'DefaultImports';
 import tether from 'tether';
 import {AppSetup} from './appsetup';
-import appevents from './appevents';
 import {app as simpleshelfApp} from './app';
 
 /**
@@ -27,8 +26,6 @@ $(function() {
         views: this.app.views,
         configuration: this.app.configuration
     });
-    appevents.setupAppEvents(this.app);
-    appevents.hookupAppEvents(this.app);
 
     // Start Backbone routing.
     // NOTE: when silent===true, no views are automatically invoked.

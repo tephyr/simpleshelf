@@ -1,10 +1,13 @@
 import {Backbone, _} from 'DefaultImports';
 import {CouchUtils} from 'couchutils';
+import {Catalog} from 'Catalog';
 
 /**
- * Hub module for applicaiton.
+ * Hub module for application.
  * @type {Object}
  * Brokered events:
+ * - app:bookChanged        (book modified)
+ * - app:bookDeleted        (book deleted; TODO:REFACTOR)
  * - app:navigate           (any view signals a route change)
  * - app:requestlogin
  * - router:navigate        (Hub triggers a route change)
@@ -16,8 +19,26 @@ class HubModule {
     }
 
     setupEvents() {
+        this.on('app:bookChanged', this.onBookChanged);
+        this.on('app:bookDeleted', this.onBookDeleted);
         this.on('app:navigate', this.onNavigate);
         this.on('app:requestlogin', this.onRequestLogin);
+    }
+
+    onBookChanged(data) {
+        // Notify catalog that metadata must be refreshed.
+        console.info(this._logHeader, "bookChanged", data);
+        Catalog.metadataUpToDate = false;
+    }
+
+    onBookDeleted(data) {
+        console.info(this._logHeader, "deleteBook", data);
+        if (data.ok) {
+            Catalog.metadataUpToDate = false;
+            this.trigger("app:navigate", {url: "main"});
+        } else {
+            window.alert("Oops - problem removing...");
+        }
     }
 
     onNavigate(data) {

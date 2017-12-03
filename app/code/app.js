@@ -8,7 +8,6 @@ var Handlebars = require("handlebars"),
     GlobalAlertView = require("./views/GlobalAlertView.js"),
     HeaderIconsTemplate = require("./views/templates/headericons.html"),
     HeaderMenuTemplate = require("./views/templates/headermenu.html"),
-    appevents = require("./appevents.js"),
     appsetup = require("./appsetup.js");
 import {NavigationView} from './views/NavigationView';
 import {Catalog} from 'Catalog';
