@@ -2,14 +2,14 @@ var expect = require('chai').expect,
     sinon = require('sinon'),
     testUtilities = require("../testUtilities.js");
 
-var EditBookPageView = require("../../views/EditBookPageView.js"),
-    Configuration = require("../../models/Configuration.js");
+const Configuration = require("../../models/Configuration.js");
 
 import {Book} from '../../models/Book.js';
+import {EditBookPageView} from '../../views/EditBookPageView';
 
 describe('EditBookPageView', function() {
 
-    var view, book, config;
+    let view, book, config;
 
     // beforeEach(function() {
     //     console.log("EditBookPageView:beforeEach fired");

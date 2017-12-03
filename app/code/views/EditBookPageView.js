@@ -2,13 +2,14 @@
  * Edit Book page.
  **/
 import {_, Backbone} from 'DefaultImports';
+import {Hub} from '../global/Hub';
 import {Book} from '../models/Book';
+import * as Handlebars from 'handlebars';
+import EditBookPageTemplate from './templates/editbookpage.html';
 
-const Handlebars = require("handlebars"),
-    EditBookPageTemplate = require("./templates/editbookpage.html"),
-    TagInputView = require("./TagInputView.js");
+const TagInputView = require("./TagInputView.js");
 
-const EditBookPage = Backbone.View.extend({
+const EditBookPageView = Backbone.View.extend({
     id: "editBookPage",
 
     events: {
@@ -133,9 +134,9 @@ const EditBookPage = Backbone.View.extend({
         event.preventDefault();
 
         if (this.model.isNew()) {
-            this.trigger("app:navigate", {view: "main"});
+            Hub.trigger("app:navigate", {view: "main"});
         } else {
-            this.trigger("app:navigate", {view: "book", id: this.model.id});
+            Hub.trigger("app:navigate", {view: "book", id: this.model.id});
         }
     },
 
@@ -156,8 +157,8 @@ const EditBookPage = Backbone.View.extend({
     },
 
     onSaveSuccess: function() {
-        this.trigger("app:bookChanged", {id: this.model.id});
-        this.trigger("app:navigate", {view: "book", id: this.model.id});
+        Hub.trigger("app:bookChanged", {id: this.model.id});
+        Hub.trigger("app:navigate", {view: "book", id: this.model.id});
     },
 
     onSaveFailure: function() {
@@ -191,4 +192,4 @@ const EditBookPage = Backbone.View.extend({
     }
 });
 
-module.exports = EditBookPage;
+export {EditBookPageView};
