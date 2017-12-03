@@ -18,9 +18,9 @@ const BookCollection = Backbone.Collection.extend({
     },
 
     url: function() {
-        // TODO: this filters by status.read===reading; add option to get all books & different statuses.
-        return "_view/books?key=%22reading%22&reduce=false";
+        return "_view/books?reduce=false";
     },
+
     /**
      * Parse the returned JSON.
      **/
