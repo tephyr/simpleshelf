@@ -21,6 +21,8 @@ const Book = Backbone.Model.extend({
 
         if (_.isObject(options) && _.has(options, 'configuration')) {
             this._configuration = options.configuration;
+        } else {
+            throw(new Error('configuration option missing.'));
         }
     },
 

@@ -102,11 +102,10 @@ const Router = Backbone.Router.extend({
     book: function(bookId) {
         this._log("/book/" + bookId);
         const bookPageView = new BookPageView({
-            model: new Book(),
+            model: new Book({_id: bookId}, {configuration: Catalog.configuration}),
             configuration: Catalog.configuration
         });
 
-        bookPageView.model.set("_id", bookId);
         $.when(
             bookPageView.model.fetch()
         ).always(() => {
@@ -120,7 +119,7 @@ const Router = Backbone.Router.extend({
     addbook: function() {
         this._log("/addbook");
         const editBookPageView = new EditBookPageView({
-            model: new Book({}),
+            model: new Book({}, {configuration: Catalog.configuration}),
             configuration: Catalog.configuration,
             tagCollection: Catalog.tagCollection
         });
@@ -133,9 +132,7 @@ const Router = Backbone.Router.extend({
     editbook: function(bookId) {
         this._log("/editbook", bookId);
         const editBookPageView = new EditBookPageView({
-            model: new Book({
-                _id: bookId
-            }),
+            model: new Book({_id: bookId}, {configuration: Catalog.configuration}),
             configuration: Catalog.configuration,
             tagCollection: Catalog.tagCollection
         });

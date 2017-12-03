@@ -9,6 +9,15 @@ describe('Book', function() {
 
     var book, config;
 
+    describe('creation', function() {
+        it('must throw error when missing configuration', () => {
+            const createBook = () => {
+                const book = new Book();
+            };
+            expect(createBook).to.throw();
+        });
+    });
+
     describe("basic functionality", function() {
         beforeEach(function() {
             config = new Configuration();

@@ -7,6 +7,8 @@ import {BookCollection} from '../models/BookCollection';
 import {TagCollection} from '../models/TagCollection';
 const AppConfigurationModel = require('../models/Configuration.js');
 
+const config = new AppConfigurationModel();
+
 // CatalogModule: all metadata regarding the library.
 // Typically, these data will change only when a books is added/edited/deleted.
 const CatalogModule = {
@@ -17,9 +19,9 @@ const CatalogModule = {
     booksByLetterCollection: new BooksByLetterCollection(),
     globalCountModel: new GlobalCountModel(),
     readingStatsModel: new ReadingStatsModel(),
-    bookCollection: new BookCollection(),
+    bookCollection: new BookCollection(null, {configuration: config}),
     tagCollection: new TagCollection(),
-    configuration: new AppConfigurationModel(),
+    configuration: config,
 
     /**
      * Load the spines collection, fetching only when necessary.
