@@ -10,6 +10,7 @@ import {LoginPageView} from './views/LoginPageView';
 import {MainPageView} from './views/MainPageView';
 import {BooksPageView} from './views/BooksPageView';
 import {BookPageView}  from './views/BookPageView';
+import {EditBookPageView} from './views/EditBookPageView.js';
 
 // Define the application router.
 const Router = Backbone.Router.extend({
@@ -27,7 +28,6 @@ const Router = Backbone.Router.extend({
         this._logHeader = "[router]";
         this._currentPageId = null;
         this._currentView = null;
-        this._views = options.views;
         this._initialLoginHandled = false;
         // this._viewLogger = [];
         this._configuration = options.configuration;
@@ -106,7 +106,6 @@ const Router = Backbone.Router.extend({
             configuration: Catalog.configuration
         });
 
-        // this._views.bookPageView.model.clear({"silent": true});
         bookPageView.model.set("_id", bookId);
         $.when(
             bookPageView.model.fetch()
@@ -120,10 +119,12 @@ const Router = Backbone.Router.extend({
      **/
     addbook: function() {
         this._log("/addbook");
-        this._views.editBookPageView.model = new Book({}, {
-            configuration: this._configuration
+        const editBookPageView = new EditBookPageView({
+            model: new Book({}),
+            configuration: Catalog.configuration,
+            tagCollection: Catalog.tagCollection
         });
-        this._changeScreen(this._views.editBookPageView);
+        this._changeScreen(editBookPageView);
     },
 
     /**
@@ -131,15 +132,18 @@ const Router = Backbone.Router.extend({
      **/
     editbook: function(bookId) {
         this._log("/editbook", bookId);
-        this._views.editBookPageView.model = new Book({
-            _id: bookId
-        }, {
-            configuration: this._configuration
+        const editBookPageView = new EditBookPageView({
+            model: new Book({
+                _id: bookId
+            }),
+            configuration: Catalog.configuration,
+            tagCollection: Catalog.tagCollection
         });
+
         $.when(
-            this._views.editBookPageView.model.fetch()
+            editBookPageView.model.fetch()
         ).always(_.bind(function(){
-            this._changeScreen(this._views.editBookPageView);
+            this._changeScreen(editBookPageView);
         }, this));
     },
 

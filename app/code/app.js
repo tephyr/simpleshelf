@@ -6,7 +6,6 @@ import {appSettings} from 'settings';
 var Handlebars = require("handlebars"),
     RegisterHandlebarHelpers = require("./handlebarhelpers.js"),
     GlobalAlertView = require("./views/GlobalAlertView.js"),
-    EditBookPageView = require("./views/EditBookPageView.js"),
     HeaderIconsTemplate = require("./views/templates/headericons.html"),
     HeaderMenuTemplate = require("./views/templates/headermenu.html"),
     appevents = require("./appevents.js"),
@@ -43,10 +42,6 @@ app.views = {
     navigationView: new NavigationView(),
     globalAlertView: new GlobalAlertView({
         configuration: Catalog.configuration
-    }),
-    editBookPageView: new EditBookPageView({
-        configuration: Catalog.configuration,
-        tagCollection: app.catalog.tagCollection
     })
 };
 
