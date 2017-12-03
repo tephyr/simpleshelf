@@ -8,7 +8,7 @@ module.exports = function(gulp, settings) {
         // Lastly, bundle the test code (app/code/test/...).
         return appBundlerFn({
             entries: './app/code/test/testIndex.js',
-            paths: 'app/code/util/',
+            paths: settings.extraPaths,
             isDebug: settings.isDebug,
             vendorLibraries: settings.libraryModules,
             destinationName: 'test.bundle.js',
