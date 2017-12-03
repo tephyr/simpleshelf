@@ -3,14 +3,11 @@
  */
 import {$, _, Backbone} from 'DefaultImports';
 import {appSettings} from 'settings';
-var GlobalAlertView = require("./views/GlobalAlertView.js"),
-    HeaderIconsTemplate = require("./views/templates/headericons.html"),
-    HeaderMenuTemplate = require("./views/templates/headermenu.html"),
-    appsetup = require("./appsetup.js");
-import {NavigationView} from './views/NavigationView';
 import {Catalog} from 'Catalog';
+import {NavigationView} from './views/NavigationView';
+import {GlobalAlertView} from './views/GlobalAlertView';
 
-var app = {
+const app = {
     catalog: Catalog
 };
 
@@ -41,7 +38,7 @@ app.views = {
 appSettings.set({"urlPrefix": window.location.protocol + "//" + window.location.host});
 
 app.run = function() {
-    var _logHeader = "[app.run]";
+    const _logHeader = "[app.run]";
     console.info(_logHeader, "App running as of ", new Date());
 
     app.catalog.tagCollection.fetch();

@@ -1,12 +1,10 @@
 /**
  * Global alert view.
  **/
-var _ = require("underscore"),
-    Backbone = require("backbone"),
-    Handlebars = require("handlebars"),
-    GlobalAlertTemplate = require("./templates/globalalert.html");
+import {_, Backbone, Handlebars} from 'DefaultImports';
+import GlobalAlertTemplate from './templates/globalalert.html';
 
-var globalAlertView = Backbone.View.extend({
+const GlobalAlertView = Backbone.View.extend({
     id: "globalAlert",
 
     initialize: function(options) {
@@ -28,4 +26,4 @@ var globalAlertView = Backbone.View.extend({
     }
 });
 
-module.exports = globalAlertView;
+export {GlobalAlertView};
