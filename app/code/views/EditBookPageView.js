@@ -1,10 +1,9 @@
 /**
  * Edit Book page.
  **/
-import {_, Backbone} from 'DefaultImports';
+import {_, Backbone, Handlebars} from 'DefaultImports';
 import {Hub} from '../global/Hub';
 import {Book} from '../models/Book';
-import * as Handlebars from 'handlebars';
 import EditBookPageTemplate from './templates/editbookpage.html';
 
 const TagInputView = require("./TagInputView.js");

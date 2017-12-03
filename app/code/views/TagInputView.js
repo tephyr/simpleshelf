@@ -3,8 +3,7 @@
  * Tabbing issue on Firefox: https://github.com/selectize/selectize.js/issues/396; fix has languished
  * as PR since 2015-02-20.
  **/
-import {$, _, Backbone} from 'DefaultImports';
-import Handlebars from "handlebars";
+import {$, _, Backbone, Handlebars} from 'DefaultImports';
 import Selectize from "selectize";
 import TagInputTemplate from "./templates/taginput.html";
 

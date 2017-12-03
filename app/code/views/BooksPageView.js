@@ -1,8 +1,7 @@
 /**
  * Books page
  */
-import {Backbone} from 'DefaultImports';
-import * as Handlebars from 'handlebars';
+import {Backbone, Handlebars} from 'DefaultImports';
 import BooksPageTemplate from './templates/bookspage.html';
 
 const SpinesByLetterView = require("./SpinesByLetterView.js");

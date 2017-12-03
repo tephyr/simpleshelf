@@ -2,8 +2,7 @@
  * Individual book page view.
  **/
 import {Hub} from 'Hub';
-import {$, _, Backbone} from 'DefaultImports';
-import * as Handlebars from 'handlebars';
+import {$, _, Backbone, Handlebars} from 'DefaultImports';
 import BookPageTemplate from './templates/bookpage.html';
 const ActivitiesView = require("./ActivitiesView.js");
 

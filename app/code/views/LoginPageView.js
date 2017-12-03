@@ -1,8 +1,7 @@
 /**
  * Login page
  */
-import {Backbone} from 'DefaultImports';
-import * as Handlebars from 'handlebars';
+import {Backbone, Handlebars} from 'DefaultImports';
 import LoginTemplate from './templates/login.html';
 import {Hub} from 'Hub'
 

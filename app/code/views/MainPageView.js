@@ -1,8 +1,7 @@
 /**
  * Main page view.
  **/
-import {Backbone, _} from 'DefaultImports';
-import * as Handlebars from 'handlebars';
+import {Backbone, _, Handlebars} from 'DefaultImports';
 import MainPageTemplate from './templates/mainpage.html';
 import {Hub} from 'Hub';
 

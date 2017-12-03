@@ -1,9 +1,8 @@
 /**
  * Navigation bar view.
  */
-import {_, Backbone} from 'DefaultImports';
+import {_, Backbone, Handlebars} from 'DefaultImports';
 import {Hub} from 'Hub';
-import * as Handlebars from 'handlebars';
 import NavbarTemplate from './templates/navbar.html';
 
 const NavigationView = Backbone.View.extend({

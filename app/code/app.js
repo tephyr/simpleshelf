@@ -3,9 +3,7 @@
  */
 import {$, _, Backbone} from 'DefaultImports';
 import {appSettings} from 'settings';
-var Handlebars = require("handlebars"),
-    RegisterHandlebarHelpers = require("./handlebarhelpers.js"),
-    GlobalAlertView = require("./views/GlobalAlertView.js"),
+var GlobalAlertView = require("./views/GlobalAlertView.js"),
     HeaderIconsTemplate = require("./views/templates/headericons.html"),
     HeaderMenuTemplate = require("./views/templates/headermenu.html"),
     appsetup = require("./appsetup.js");
@@ -19,9 +17,6 @@ var app = {
 // Allow this object to receive & emit events.
 _.extend(app, Backbone.Events);
 
-// Prep Handlebars.
-RegisterHandlebarHelpers();
-
 app.promises = {};
 app.promises.initialConfiguration = $.when(
     Catalog.configuration.fetch(),
@@ -34,9 +29,7 @@ app.promises.initialConfiguration = $.when(
     }
 );
 
-// Setup up views hash to hold view objects & persist them for the application lifetime.
-// NOTE: this requires more app overhead to remove views & their events from the DOM.
-// See router._changeScreen().
+// Setup views hash to hold non-routable view objects & persist them for the application lifetime.
 app.views = {
     navigationView: new NavigationView(),
     globalAlertView: new GlobalAlertView({

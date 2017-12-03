@@ -1,7 +1,9 @@
-var Handlebars = require("handlebars"),
-    _ = require("underscore");
-
-var registerHelpers = function() {
+/**
+ * Add helpers to Handlebars.
+ * @param {Object} _          Lodash library
+ * @param {Object} Handlebars current Handlebars library
+ */
+const RegisterHandlebarHelpers = function(_, Handlebars) {
     /**
      * Basic list helper example
      * @param  {Array} items
@@ -105,4 +107,4 @@ var registerHelpers = function() {
     });
 };
 
-module.exports = registerHelpers;
+export {RegisterHandlebarHelpers};
