@@ -133,6 +133,23 @@ const Book = Backbone.Model.extend({
     },
 
     /**
+     * Get a sortable canonical title (only alphanumeric values, no whitespace).
+     * @return {String}
+     */
+    getCanonicalTitleSortable() {
+        let cTitle = this.getCanonicalTitle().toLowerCase();
+        return cTitle.replace(/[^a-z0-9]/g, "");
+    },
+
+    /**
+     * Get first letter of canonical title, as lowercase.
+     * @return {String}
+     */
+    getCanonicalTitleKey() {
+        return this.getCanonicalTitleSortable().slice(0, 1);
+    },
+
+    /**
      * Check if key exists and has a non-null value.
      **/
     _checkForValue: function(attrs, key) {
