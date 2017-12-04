@@ -1,5 +1,5 @@
 import {_, Backbone, Handlebars} from 'DefaultImports';
-import SpinesTemplate from './templates/spinesbylettercollapsible.html';
+import SpinesSectionTemplate from './templates/spinessection.html';
 import {SpineView} from './SpineView';
 
 /**
@@ -10,7 +10,7 @@ class SpinesSectionView extends Backbone.View {
         super(options);
         this._key = options.key;
         this._count = options.count;
-        this.template = Handlebars.compile(SpinesTemplate);
+        this.template = Handlebars.compile(SpinesSectionTemplate);
     }
 
     render() {
