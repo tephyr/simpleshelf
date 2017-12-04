@@ -83,17 +83,11 @@ const Router = Backbone.Router.extend({
 
     books: function() {
         this._log("/books");
-
-        // Only load the spine collection *once*.
-        // Since the view renders itself when the collection syncs, no need to call it here.
-        $.when(
-            Catalog.loadBooksByLetter()
-        ).always(() => {
-            const booksPageView = new BooksPageView({
-                collection: Catalog.bookCollection,
-            });
-            this._changeScreen(booksPageView);
+        // TODO: ensure collection loaded before showing view.
+        const booksPageView = new BooksPageView({
+            collection: Catalog.bookCollection,
         });
+        this._changeScreen(booksPageView);
     },
 
     book: function(bookId) {
