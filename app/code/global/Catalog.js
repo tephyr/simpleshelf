@@ -1,5 +1,4 @@
 import {$, _} from 'DefaultImports';
-import {SpineCollection} from '../models/SpineCollection';
 import {BooksByLetterCollection} from '../models/BooksByLetterCollection';
 import {GlobalCountModel} from '../models/GlobalCount';
 import {ReadingStatsModel} from '../models/ReadingStats';
@@ -15,7 +14,6 @@ const CatalogModule = {
     spinesInitialized: false,
     booksByLetterInitialized: false,
     metadataUpToDate: false,
-    spineCollection: new SpineCollection(),
     booksByLetterCollection: new BooksByLetterCollection(),
     globalCountModel: new GlobalCountModel(),
     readingStatsModel: new ReadingStatsModel(),
@@ -23,28 +21,6 @@ const CatalogModule = {
     tagCollection: new TagCollection(),
     configuration: config,
 
-    /**
-     * Load the spines collection, fetching only when necessary.
-     **/
-    loadSpines: function(forceLoad) {
-        var deferred = $.Deferred();
-        if (!this.spinesInitialized || forceLoad) {
-            this.spineCollection.fetch()
-                .done(function() {
-                    deferred.resolve();
-                })
-                .fail(function() {
-                    deferred.reject();
-                })
-                .always(_.bind(function() {
-                    this.spinesInitialized = true;
-                }, this));
-        } else {
-            deferred.resolve();
-        }
-
-        return deferred;
-    },
     /**
      * Load the books-by-letter collection, fetching only when necessary.
      **/
@@ -77,8 +53,7 @@ const CatalogModule = {
             $.when(
                 this.globalCountModel.fetch(),
                 this.readingStatsModel.fetch(),
-                this.bookCollection.fetch(),
-                this.spineCollection.fetch()
+                this.bookCollection.fetch()
             ).then(_.bind(function() {
                     this.metadataUpToDate = true;
                     deferred.resolve();

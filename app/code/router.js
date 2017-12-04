@@ -87,8 +87,7 @@ const Router = Backbone.Router.extend({
         // Only load the spine collection *once*.
         // Since the view renders itself when the collection syncs, no need to call it here.
         $.when(
-            Catalog.loadBooksByLetter(),
-            Catalog.loadSpines()
+            Catalog.loadBooksByLetter()
         ).always(() => {
             const booksPageView = new BooksPageView({
                 collection: Catalog.bookCollection,
