@@ -91,8 +91,7 @@ const Router = Backbone.Router.extend({
             Catalog.loadSpines()
         ).always(() => {
             const booksPageView = new BooksPageView({
-                collection: Catalog.booksByLetterCollection,
-                spineCollection: Catalog.spineCollection
+                collection: Catalog.bookCollection,
             });
             this._changeScreen(booksPageView);
         });
