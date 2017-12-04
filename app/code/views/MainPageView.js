@@ -19,9 +19,11 @@ const MainPageView = Backbone.View.extend({
     },
 
     render: function() {
-        var basicData = {
-            currentlyReadingCount: this.books.size(),
-            currentBooks: this.books.map(function(book) {
+        const currentlyReadingBooks = this.books.getBooksByStatus({read: 'reading'}); // TODO: use enums
+
+        const basicData = {
+            currentlyReadingCount: currentlyReadingBooks.length,
+            currentBooks: _.map(currentlyReadingBooks, (book) => {
                 return {id: book.get("_id"), title: book.get("title")};
             }),
             bookCount: this.model.formatSimply("_book_instances"),
