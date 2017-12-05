@@ -92,16 +92,13 @@ const Router = Backbone.Router.extend({
 
     book: function(bookId) {
         this._log("/book/" + bookId);
+        const book = Catalog.bookCollection.get(bookId);
         const bookPageView = new BookPageView({
-            model: new Book({_id: bookId}, {configuration: Catalog.configuration}),
+            model: book,
             configuration: Catalog.configuration
         });
 
-        $.when(
-            bookPageView.model.fetch()
-        ).always(() => {
-            this._changeScreen(bookPageView);
-        });
+        this._changeScreen(bookPageView);
     },
 
     /**
@@ -110,7 +107,7 @@ const Router = Backbone.Router.extend({
     addbook: function() {
         this._log("/addbook");
         const editBookPageView = new EditBookPageView({
-            model: new Book({}, {configuration: Catalog.configuration}),
+            model: new Book({}),
             configuration: Catalog.configuration,
             tagCollection: Catalog.tagCollection
         });
@@ -122,17 +119,14 @@ const Router = Backbone.Router.extend({
      **/
     editbook: function(bookId) {
         this._log("/editbook", bookId);
+        const book = Catalog.bookCollection.get(bookId);
         const editBookPageView = new EditBookPageView({
-            model: new Book({_id: bookId}, {configuration: Catalog.configuration}),
+            model: book,
             configuration: Catalog.configuration,
             tagCollection: Catalog.tagCollection
         });
 
-        $.when(
-            editBookPageView.model.fetch()
-        ).always(_.bind(function(){
-            this._changeScreen(editBookPageView);
-        }, this));
+        this._changeScreen(editBookPageView);
     },
 
     onNavigate: function(fragment, options) {

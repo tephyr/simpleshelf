@@ -19,8 +19,8 @@ describe('EditBookPageView', function() {
         beforeEach(function() {
             config = new Configuration();
             testUtilities.helperConfigBasic(config);
-            view = new EditBookPageView({configuration: config, okToLog: false});
-            book = new Book({}, {configuration: config});
+            book = new Book({});
+            view = new EditBookPageView({model:book, configuration: config, okToLog: false});
         });
 
         it("should create a valid view object", function() {
@@ -40,9 +40,8 @@ describe('EditBookPageView', function() {
         beforeEach(function() {
             config = new Configuration();
             testUtilities.helperConfigBasic(config);
-            view = new EditBookPageView({configuration: config, okToLog: false});
-            book = new Book({}, {configuration: config});
-            view.model = book;
+            book = new Book({});
+            view = new EditBookPageView({model: book, configuration: config, okToLog: false});
         });
 
         it("should have the basics for a new model", function() {
@@ -90,9 +89,8 @@ describe('EditBookPageView', function() {
         beforeEach(function() {
             config = new Configuration();
             testUtilities.helperConfigBasic(config);
-            view = new EditBookPageView({configuration: config, okToLog: false});
-            book = new Book({}, {configuration: config});
-            view.model = book;
+            book = new Book({});
+            view = new EditBookPageView({model: book, configuration: config, okToLog: false});
         });
 
         it("should include title", function() {
@@ -160,9 +158,8 @@ describe('EditBookPageView', function() {
         beforeEach(function() {
             config = new Configuration();
             testUtilities.helperConfigBasic(config);
-            view = new EditBookPageView({configuration: config, okToLog: false});
-            book = new Book({}, {configuration: config});
-            view.model = book;
+            book = new Book({});
+            view = new EditBookPageView({model: book, configuration: config, okToLog: false});
 
             // Spy on book.changeStatus.
             sinon.spy(book, "changeStatus");

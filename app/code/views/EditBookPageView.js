@@ -27,6 +27,9 @@ const EditBookPageView = Backbone.View.extend({
             configuration: this.configuration,
             tagCollection: options.tagCollection
         });
+
+        this.model.configuration = this.configuration;
+
         return this;
     },
 

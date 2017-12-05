@@ -8,6 +8,7 @@ const PREFIXES = ['a', 'an', 'the'];
 const Book = Backbone.Model.extend({
     _logHeader: '[Book]',
     idAttribute: '_id',
+    configuration: null, // Set by caller only when needed for status changes.
     defaults: {
         'type': 'book',
         'public': true
@@ -17,12 +18,6 @@ const Book = Backbone.Model.extend({
         if (_.isObject(attributes) && _.has(attributes, 'configuration')) {
             // NOT ALLOWED.
             throw(new Error('configuration not allowed as a Book attribute.'));
-        }
-
-        if (_.isObject(options) && _.has(options, 'configuration')) {
-            this._configuration = options.configuration;
-        } else {
-            throw(new Error('configuration option missing.'));
         }
     },
 
@@ -95,8 +90,11 @@ const Book = Backbone.Model.extend({
 
         // Log 'read' status.
         if (statusKey === 'read') {
+            if (!_.isObject(this.configuration)) {
+                throw(new Error('Must have a valid configuration.'));
+            }
             // Get activity key for the new read status (if any).
-            activityKey = this._configuration.getActivityForStatus(statusValue);
+            activityKey = this.configuration.getActivityForStatus(statusValue);
 
             // If a value exists for this key, log as an activity.
             if (!_.isNull(activityKey)) {

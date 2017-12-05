@@ -10,9 +10,9 @@ describe('Book', function() {
     var book, config;
 
     describe('creation', function() {
-        it('must throw error when missing configuration', () => {
+        it('must throw error if configuration passed in', () => {
             const createBook = () => {
-                const book = new Book();
+                const book = new Book({configuration: {}});
             };
             expect(createBook).to.throw();
         });
@@ -87,7 +87,8 @@ describe('Book', function() {
         beforeEach(function() {
             config = new Configuration();
             testUtilities.helperConfigBasic(config);
-            book = new Book({}, {configuration: config});
+            book = new Book({});
+            book.configuration = config;
         });
 
         // changeStatus: function(statusKey, statusValue, asOfDate)

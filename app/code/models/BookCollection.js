@@ -5,16 +5,9 @@ import {_, Backbone} from 'DefaultImports';
 import {Book} from './Book';
 
 const BookCollection = Backbone.Collection.extend({
+    model: Book,
     initialize: function(models, options) {
         this._configuration = options.configuration;
-    },
-
-    model: function(attrs, options) {
-        if (!_.has(options, 'configuration')) {
-            options.configuration = this._configuration;
-        }
-
-        return new Book(attrs, options);
     },
 
     url: function() {
