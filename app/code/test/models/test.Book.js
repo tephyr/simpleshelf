@@ -164,15 +164,11 @@ describe('Book', function() {
         });
     });
 
-    describe('metadata', () => {
+    describe('canonical title', () => {
         beforeEach(() => {
             config = new Configuration();
             testUtilities.helperConfigBasic(config);
             book = new Book(basicBookResponse(), {configuration: config});
-        });
-
-        it('must contain a canonicalTitle method', () => {
-            expect(book.getCanonicalTitle).to.be.instanceof(Function);
         });
 
         it('must parse canonicalTitle', () => {
@@ -180,7 +176,7 @@ describe('Book', function() {
             expect(bookWithTitle.getCanonicalTitle()).to.equal('title, The');
         });
 
-        it('canonicalTitle must handle all prefixes ([a, an, the])', () => {
+        it('must handle all prefixes ([a, an, the])', () => {
             const testData = [
                 [{title: 'A title'}, 'title, A'],
                 [{title: 'An interesting title'}, 'interesting title, An'],
@@ -192,6 +188,50 @@ describe('Book', function() {
                 let bookWithTitle = new Book({}, {configuration: config});
                 bookWithTitle.set(info[0]);
                 expect(bookWithTitle.getCanonicalTitle()).to.equal(info[1]);
+            });
+        });
+
+        it('must handle non-alphanumeric', () => {
+            const testData = [
+                [{title: '"A quoted title"'}, '"A quoted title"']
+            ];
+
+            testData.forEach((info) => {
+                let bookWithTitle = new Book({}, {configuration: config});
+                bookWithTitle.set(info[0]);
+                expect(bookWithTitle.getCanonicalTitle()).to.equal(info[1]);
+            });
+        });
+
+        it('must make a sortable title', () => {
+            const testData = [
+                [{title: 'A title'}, 'title a'],
+                [{title: 'An interesting title'}, 'interesting title an'],
+                [{title: 'The interesting title'}, 'interesting title the'],
+                [{title: 'There is no title'}, 'there is no title'],
+                [{title: '"A quote to preserve"'}, 'a quote to preserve']
+            ];
+
+            testData.forEach((info) => {
+                let bookWithTitle = new Book({}, {configuration: config});
+                bookWithTitle.set(info[0]);
+                expect(bookWithTitle.getCanonicalTitleSortable()).to.equal(info[1]);
+            });
+        });
+
+        it('must make a sortable key', () => {
+            const testData = [
+                [{title: 'A title'}, 't'],
+                [{title: 'An interesting title'}, 'i'],
+                [{title: 'Bark'}, 'b'],
+                [{title: '32 days'}, '3'],
+                [{title: '"A quote to preserve"'}, 'a']
+            ];
+
+            testData.forEach((info) => {
+                let bookWithTitle = new Book({}, {configuration: config});
+                bookWithTitle.set(info[0]);
+                expect(bookWithTitle.getCanonicalTitleKey()).to.equal(info[1]);
             });
         });
     });

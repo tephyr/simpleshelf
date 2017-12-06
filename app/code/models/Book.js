@@ -136,7 +136,7 @@ const Book = Backbone.Model.extend({
      */
     getCanonicalTitleSortable() {
         let cTitle = this.getCanonicalTitle().toLowerCase();
-        return cTitle.replace(/[^a-z0-9]/g, "");
+        return cTitle.replace(/[^ a-z0-9]/g, "");
     },
 
     /**
