@@ -76,21 +76,26 @@ const BookCollection = Backbone.Collection.extend({
      */
     getSpineSummary: function() {
         const result = {'?': 0};
+        const isDigitRegEx = /[0-9]/;
         let cTitle, titleKey;
 
         this.forEach((book) => {
             cTitle = book.getCanonicalTitle();
-            if (_.isNil(cTitle)) {
+            if (_.isNil(cTitle) || cTitle.length === 0) {
                 result['?'] = result['?'] + 1;
             } else {
-                titleKey = cTitle.slice(0, 1).toLowerCase(); // TODO: non-alphabetic characters
-                if (_.has(result, titleKey)) {
+                titleKey = book.getCanonicalTitleKey();
+                if (titleKey.match(isDigitRegEx)) {
+                    result['?'] = result['?'] + 1;
+                } else if (_.has(result, titleKey)) {
                     result[titleKey] = result[titleKey] + 1;
                 } else {
                     result[titleKey] = 1;
                 }
             }
         });
+
+        if (result['?'] === 0) { delete result['?']; }
 
         return result;
     }

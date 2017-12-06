@@ -1,0 +1,26 @@
+{
+    "total_rows": 3,
+    "offset": 0,
+    "rows": [{
+        "id": "id-a",
+        "key": "_book",
+        "value": {
+            "_id": "id-a",
+            "title": "15 days"
+        },
+    },{
+        "id": "id-b",
+        "key": "_book",
+        "value": {
+            "_id": "id-b",
+            "title": "Alphabet!"
+        }
+    },{
+        "id": "id-c",
+        "key": "_book",
+        "value": {
+            "_id": "id-c",
+            "title": "99 bottles"
+        }
+    }]
+}
