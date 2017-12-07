@@ -31,7 +31,6 @@ const BooksPageView = Backbone.View.extend({
 
         _.forEach(sectionKeys, (key) => {
             count = sectionData[key];
-            console.log(this._logHeader, 'addAll', key, count);
             this.addOne(key, count);
         });
     },

@@ -14,7 +14,12 @@ class SpinesSectionView extends Backbone.View {
     }
 
     render() {
-        this.$el.append(this.template({id: this._key, value: this._count}));
+        // Template expects id, idText, value.  idText is visible to user.
+        const templateData = {id: this._key, idText: this._key, value: this._count};
+        if (this._key === '?') {
+            templateData.id = '0'; // Accordion cannot handle '?' in href.
+        }
+        this.$el.append(this.template(templateData));
 
         _.forEach(this.collection.getBooksByTitleSection(this._key), (book) => {
             this.addOne(book);
