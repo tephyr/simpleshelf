@@ -12,6 +12,7 @@ const BooksPageView = Backbone.View.extend({
 
     initialize: function(options) {
         this.template = Handlebars.compile(BooksPageTemplate);
+        this._isRendered = false;
 
         return this;
     },
@@ -21,6 +22,7 @@ const BooksPageView = Backbone.View.extend({
         this.$el.html(this.template());
         // Render all child views.
         this.addAll();
+        this._isRendered = true;
         return this;
     },
 
@@ -47,7 +49,9 @@ const BooksPageView = Backbone.View.extend({
         view.render();
         this.$("#booksData").append(view.$el);
         // view.listenTo(model, "remove", view.remove);
-    }
+    },
+
+    isRendered: function() { return this._isRendered; }
 });
 
 export {BooksPageView};

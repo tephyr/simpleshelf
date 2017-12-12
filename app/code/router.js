@@ -30,6 +30,7 @@ const Router = Backbone.Router.extend({
         this._currentView = null;
         this._initialLoginHandled = false;
         this._configuration = options.configuration;
+        this._constantViews = {}; // Hold view instance behind a particular route.
 
         this.listenTo(Hub, 'router:navigate', this.onNavigate);
         this.on('route', (route, params) => { Hub.trigger('routechanged', {route, params}); });
@@ -82,12 +83,15 @@ const Router = Backbone.Router.extend({
     },
 
     books: function() {
-        this._log("/books");
+        this._log('/books', 'view ready?', _.has(this._constantViews, 'books'));
         // TODO: ensure collection loaded before showing view.
-        const booksPageView = new BooksPageView({
-            collection: Catalog.bookCollection,
-        });
-        this._changeScreen(booksPageView);
+        if (!_.has(this._constantViews, 'books')) {
+            this._constantViews.books = new BooksPageView({
+                collection: Catalog.bookCollection,
+            });
+        }
+
+        this._changeScreen(this._constantViews.books);
     },
 
     book: function(bookId) {
@@ -137,18 +141,30 @@ const Router = Backbone.Router.extend({
      * Change to another view.
      */
     _changeScreen: function(view, options) {
-        /* jshint unused: false */
-        if (!_.isNull(this._currentView)) {
-            // Replacing view - kill existing.
-            this._log("Changing from " + this._currentPageId);
+        // TODO: delegate/undelegate other constantViews.
+        if (this._currentView === this._constantViews.books) {
+            this._currentView.undelegateEvents();
+            this._currentView.$el.hide();
+        } else if (!_.isNull(this._currentView)) {
             // Remove from DOM.
             this._currentView.remove();
         }
 
         this._currentView = view;
-        $("#baseContent").append(view.render().$el);
-        this._currentPageId = view.id;
 
+        // TODO: handle other constantViews.
+        if (this._currentView === this._constantViews.books) {
+            if (this._currentView.isRendered()) {
+                this._currentView.delegateEvents();
+                this._currentView.$el.show();
+            } else {
+                $("#baseContent").append(this._currentView.render().$el);
+            }
+        } else {
+            $("#baseContent").append(view.render().$el);
+        }
+
+        this._currentPageId = view.id;
     },
 
     /**
