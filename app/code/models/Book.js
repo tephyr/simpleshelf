@@ -19,6 +19,13 @@ const Book = Backbone.Model.extend({
             // NOT ALLOWED.
             throw(new Error('configuration not allowed as a Book attribute.'));
         }
+
+        this.priorData = {
+            'canonicalTitle': this.getCanonicalTitle(),
+            'canonicalTitleKey': this.getCanonicalTitleKey()
+        };
+
+        this.on('sync', this.onSync);
     },
 
     url: function(){
@@ -152,6 +159,17 @@ const Book = Backbone.Model.extend({
      **/
     _checkForValue: function(attrs, key) {
         return (_.has(attrs, key) && !_.isNull(attrs[key]));
+    },
+
+    /**
+     * Store canonical data for next edit.
+     * @param  {Object} model
+     * @param  {Object} response
+     * @param  {Object} options
+     */
+    onSync: function(model, response, options) {
+        this.priorData.canonicalTitle = this.getCanonicalTitle();
+        this.priorData.canonicalTitleKey = this.getCanonicalTitleKey();
     }
 });
 

@@ -236,6 +236,51 @@ describe('Book', function() {
         });
     });
 
+    describe('editing', () => {
+        let fakeXHR, requests;
+
+        beforeEach(() => {
+            config = new Configuration();
+            testUtilities.helperConfigBasic(config);
+            book = new Book(basicBookResponse(), {configuration: config});
+
+            fakeXHR = sinon.useFakeXMLHttpRequest();
+            requests = [];
+            fakeXHR.onCreate = function (req) {
+                requests.push(req);
+            };
+        });
+
+        afterEach(() => {
+            fakeXHR.restore();
+        });
+
+        it('must store the prior canonicalTitle & key', () => {
+            // priorData must exist before editing.
+            expect(book.priorData).to.be.an('object')
+                .and.to.include.keys(['canonicalTitle', 'canonicalTitleKey']);
+            book.set('title', 'Another tale of more cities');
+            expect(book.priorData).to.deep.equal({canonicalTitle: 'tale of two cities, A', canonicalTitleKey: 't'});
+        });
+
+        it('must retain the correct canonicalTitle & key after a save', () => {
+            const expectedBody = {
+                ok: true,
+                id: "demo-0679729658",
+                rev: '8-d66ca414'
+            };
+
+            book.set('title', 'Yet another tale of more cities');
+            book.save({wait: true});
+
+            // Have mock XHR respond.
+            requests[0].respond(201, {"Content-Type": "application/json"}, JSON.stringify(expectedBody));
+
+            expect(requests).to.have.length(1);
+            expect(book.priorData).to.deep.equal({canonicalTitle: 'Yet another tale of more cities', canonicalTitleKey: 'y'});
+        });
+    });
+
     function basicBookResponse() {
         return {
                 "_id": "demo-0679729658",
@@ -250,7 +295,6 @@ describe('Book', function() {
                     {"date": "2016-05-01", "action": "book.read.started"}
                 ],
                 "title": "A tale of two cities",
-                // "canonicalTitle": "tale of two cities, A",
                 "publisher": "Vintage Books",
                 "notesPrivate": null,
                 "notesPublic": "1st Vintage classics ed.",
