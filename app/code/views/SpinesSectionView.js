@@ -31,6 +31,17 @@ class SpinesSectionView extends Backbone.View {
     addOne(book) {
         const view = new SpineView({model: book});
         this.$('.list-group-flush').append(view.render().el);
+        this.listenTo(book, 'destroy', this.onBookDestroyed);
+    }
+
+    onBookDestroyed() {
+        // Lower count by one, or remove entirely.
+        if (this._count === 1) {
+            this.remove();
+        } else {
+            this._count--;
+            this.$('.section-count').text(this._count);
+        }
     }
 };
 
