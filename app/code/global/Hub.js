@@ -35,7 +35,7 @@ class HubModule {
         console.info(this._logHeader, "deleteBook", data);
         if (data.ok) {
             Catalog.metadataUpToDate = false;
-            this.trigger("app:navigate", {url: "main"});
+            this.trigger("app:navigate", {url: "books"});
         } else {
             window.alert("Oops - problem removing...");
         }
