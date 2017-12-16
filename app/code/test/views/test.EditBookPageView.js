@@ -1,9 +1,8 @@
-var expect = require('chai').expect,
+const expect = require('chai').expect,
     sinon = require('sinon'),
     testUtilities = require("../testUtilities.js");
 
-const Configuration = require("../../models/Configuration.js");
-
+import {Catalog} from '../../global/Catalog';
 import {Book} from '../../models/Book.js';
 import {EditBookPageView} from '../../views/EditBookPageView';
 
@@ -17,10 +16,9 @@ describe('EditBookPageView', function() {
 
     describe('verify objects', function () {
         beforeEach(function() {
-            config = new Configuration();
-            testUtilities.helperConfigBasic(config);
+            testUtilities.helperConfigBasic(Catalog.configuration);
             book = new Book({});
-            view = new EditBookPageView({model:book, configuration: config, okToLog: false});
+            view = new EditBookPageView({model:book, catalog: Catalog, okToLog: false});
         });
 
         it("should create a valid view object", function() {
@@ -38,10 +36,9 @@ describe('EditBookPageView', function() {
         // from model (blank for add, non-blank for edit).
 
         beforeEach(function() {
-            config = new Configuration();
-            testUtilities.helperConfigBasic(config);
+            testUtilities.helperConfigBasic(Catalog.configuration);
             book = new Book({});
-            view = new EditBookPageView({model: book, configuration: config, okToLog: false});
+            view = new EditBookPageView({model: book, catalog: Catalog, okToLog: false});
         });
 
         it("should have the basics for a new model", function() {
@@ -87,10 +84,9 @@ describe('EditBookPageView', function() {
     describe('pull data from form', function () {
 
         beforeEach(function() {
-            config = new Configuration();
-            testUtilities.helperConfigBasic(config);
+            testUtilities.helperConfigBasic(Catalog.configuration);
             book = new Book({});
-            view = new EditBookPageView({model: book, configuration: config, okToLog: false});
+            view = new EditBookPageView({model: book, catalog: Catalog, okToLog: false});
         });
 
         it("should include title", function() {
@@ -156,10 +152,9 @@ describe('EditBookPageView', function() {
     describe("log status changes", function() {
 
         beforeEach(function() {
-            config = new Configuration();
-            testUtilities.helperConfigBasic(config);
+            testUtilities.helperConfigBasic(Catalog.configuration);
             book = new Book({});
-            view = new EditBookPageView({model: book, configuration: config, okToLog: false});
+            view = new EditBookPageView({model: book, catalog: Catalog, okToLog: false});
 
             // Spy on book.changeStatus.
             sinon.spy(book, "changeStatus");

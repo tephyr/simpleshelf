@@ -110,10 +110,10 @@ const Router = Backbone.Router.extend({
      **/
     addbook: function() {
         this._log("/addbook");
+        const book = new Book({});
         const editBookPageView = new EditBookPageView({
-            model: new Book({}),
-            configuration: Catalog.configuration,
-            tagCollection: Catalog.tagCollection
+            model: book,
+            catalog: Catalog
         });
         this._changeScreen(editBookPageView);
     },
@@ -126,8 +126,7 @@ const Router = Backbone.Router.extend({
         const book = Catalog.bookCollection.get(bookId);
         const editBookPageView = new EditBookPageView({
             model: book,
-            configuration: Catalog.configuration,
-            tagCollection: Catalog.tagCollection
+            catalog: Catalog
         });
 
         this._changeScreen(editBookPageView);

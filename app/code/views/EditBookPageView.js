@@ -22,10 +22,11 @@ const EditBookPageView = Backbone.View.extend({
         this._logHeader = "[EditBookPage]";
         this._log("initialize");
         this._template = Handlebars.compile(EditBookPageTemplate);
-        this.configuration = options.configuration || {};
+        this.catalog = options.catalog;
+        this.configuration = this.catalog.configuration;
         this._tagInputView = new TagInputView({
             configuration: this.configuration,
-            tagCollection: options.tagCollection
+            tagCollection: options.catalog.tagCollection
         });
 
         this.model.configuration = this.configuration;
@@ -176,6 +177,9 @@ const EditBookPageView = Backbone.View.extend({
         if (this.model.isValid()) {
             // Save to db, fire event.
             console.table(this.model.toJSON());
+            if (this.model.isNew()) {
+                this.catalog.bookCollection.add(this.model);
+            }
             $.when(
                 this.model.save(null, {wait: true})
             ).then(
