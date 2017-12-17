@@ -3,6 +3,7 @@
  * - collection: BookCollection
  */
 import {_, Backbone, Handlebars} from 'DefaultImports';
+import {Hub} from 'Hub';
 import BooksPageTemplate from './templates/bookspage.html';
 import {SpinesSectionView} from './SpinesSectionView';
 
@@ -13,6 +14,7 @@ const BooksPageView = Backbone.View.extend({
     initialize: function(options) {
         this.template = Handlebars.compile(BooksPageTemplate);
         this._isRendered = false;
+        this.listenTo(Hub, 'catalog:bookadded', this.onBookAdded);
 
         return this;
     },
@@ -51,7 +53,15 @@ const BooksPageView = Backbone.View.extend({
         // view.listenTo(model, "remove", view.remove);
     },
 
-    isRendered: function() { return this._isRendered; }
+    isRendered: function() { return this._isRendered; },
+
+    onBookAdded(data) {
+        // Creating a new section?
+        if (data.sectionCount === 1) {
+            // TODO: Insert in correct order.
+            this.addOne(key, 1);
+        }
+    }
 });
 
 export {BooksPageView};
