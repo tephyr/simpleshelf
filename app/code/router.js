@@ -71,7 +71,8 @@ const Router = Backbone.Router.extend({
     main: function() {
         this._log("/main");
         $.when(
-            Catalog.updateLibraryMetadata()
+            Catalog.updateLibraryMetadata(),
+            Catalog.fetchBooks()
         ).always(() => {
             const mainPageView = new MainPageView({
                 model: Catalog.globalCountModel,

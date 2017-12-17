@@ -11,11 +11,27 @@ const config = new AppConfigurationModel();
 // Typically, these data will change only when a books is added/edited/deleted.
 const CatalogModule = {
     metadataUpToDate: false,
+    booksFetched: false,
     globalCountModel: new GlobalCountModel(),
     readingStatsModel: new ReadingStatsModel(),
     bookCollection: new BookCollection(null, {configuration: config}),
     tagCollection: new TagCollection(),
     configuration: config,
+
+    fetchBooks: function() {
+        const dfrd = $.Deferred();
+
+        if (this.booksFetched) {
+            dfrd.resolve();
+        } else {
+            $.when(this.bookCollection.fetch()).then(() => {
+                this.booksFetched = true;
+                dfrd.resolve();
+            });
+        }
+
+        return dfrd;
+    },
 
     /**
      * Load (or reload) the global count and books data.
@@ -29,8 +45,7 @@ const CatalogModule = {
         } else {
             $.when(
                 this.globalCountModel.fetch(),
-                this.readingStatsModel.fetch(),
-                this.bookCollection.fetch()
+                this.readingStatsModel.fetch()
             ).then(_.bind(function() {
                     this.metadataUpToDate = true;
                     deferred.resolve();
