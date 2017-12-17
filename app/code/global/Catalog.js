@@ -3,6 +3,7 @@ import {GlobalCountModel} from '../models/GlobalCount';
 import {ReadingStatsModel} from '../models/ReadingStats';
 import {BookCollection} from '../models/BookCollection';
 import {TagCollection} from '../models/TagCollection';
+import {Util} from 'Util';
 const AppConfigurationModel = require('../models/Configuration.js');
 
 const config = new AppConfigurationModel();
@@ -71,11 +72,13 @@ class CatalogModule {
         if (this.booksFetched) {
             // sectionKey, sectionCount
             const sectionData = this.bookCollection.getSpineSummary(),
-                sectionKey = model.getCanonicalTitleKey();
+                sectionKey = model.getCanonicalTitleKey(),
+                sectionKeyIsAlphabetic = Util.isAlphabetic(sectionKey);
 
             this.trigger('catalog:bookadded', {
                 model,
                 sectionKey,
+                sectionKeyIsAlphabetic,
                 sectionCount: sectionData[sectionKey]
             });
         }

@@ -2,6 +2,7 @@
  *  Collection of books.
  **/
 import {_, Backbone} from 'DefaultImports';
+import {Util} from 'Util';
 import {Book} from './Book';
 
 const BookCollection = Backbone.Collection.extend({
@@ -54,10 +55,9 @@ const BookCollection = Backbone.Collection.extend({
      * @return {Array}
      */
     getBooksByTitleSection(key) {
-        const isAlphaRegex = /[a-z]/;
         const booksInSection = this.filter((book) => {
             if (key === '?') {
-                return !isAlphaRegex.test(book.getCanonicalTitleKey());
+                return !Util.isAlphabetic(book.getCanonicalTitleKey());
             } else  {
                 return book.getCanonicalTitleKey() === key;
             }
