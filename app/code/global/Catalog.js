@@ -1,4 +1,4 @@
-import {$, _} from 'DefaultImports';
+import {$, _, Backbone} from 'DefaultImports';
 import {GlobalCountModel} from '../models/GlobalCount';
 import {ReadingStatsModel} from '../models/ReadingStats';
 import {BookCollection} from '../models/BookCollection';
@@ -7,18 +7,21 @@ const AppConfigurationModel = require('../models/Configuration.js');
 
 const config = new AppConfigurationModel();
 
-// CatalogModule: all metadata regarding the library.
-// Typically, these data will change only when a books is added/edited/deleted.
-const CatalogModule = {
-    metadataUpToDate: false,
-    booksFetched: false,
-    globalCountModel: new GlobalCountModel(),
-    readingStatsModel: new ReadingStatsModel(),
-    bookCollection: new BookCollection(null, {configuration: config}),
-    tagCollection: new TagCollection(),
-    configuration: config,
+/**
+ * CatalogModule: all metadata regarding the library.
+ */
+class CatalogModule {
+    constructor() {
+        this.metadataUpToDate = false;
+        this.booksFetched = false;
+        this.globalCountModel = new GlobalCountModel();
+        this.readingStatsModel = new ReadingStatsModel();
+        this.bookCollection = new BookCollection(null, {configuration: config});
+        this.tagCollection = new TagCollection();
+        this.configuration = config;
+    }
 
-    fetchBooks: function() {
+    fetchBooks() {
         const dfrd = $.Deferred();
 
         if (this.booksFetched) {
@@ -31,13 +34,13 @@ const CatalogModule = {
         }
 
         return dfrd;
-    },
+    }
 
     /**
      * Load (or reload) the global count and books data.
      * @return Promise
      **/
-    updateLibraryMetadata: function() {
+    updateLibraryMetadata() {
         var deferred = $.Deferred();
 
         if (this.metadataUpToDate) {
@@ -58,7 +61,8 @@ const CatalogModule = {
     }
 };
 
-// TODO: switch from const to class (safely create singleton CatalogModule).
-// const catalog = new CatalogModule();
+// Create singleton, decorate with Events.
+const catalog = new CatalogModule();
+_.extend(catalog, Backbone.Events);
 
-export {CatalogModule as Catalog};
+export {catalog as Catalog};
