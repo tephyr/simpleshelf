@@ -59,10 +59,33 @@ class CatalogModule {
 
         return deferred;
     }
+
+    // EVENTS //
+
+    /**
+     * Filter & customize the payload for a book added event.
+     * @param  {Object} model
+     */
+    onBookAdded(model) {
+        // Ignore initial fetch.
+        if (this.booksFetched) {
+            // sectionKey, sectionCount
+            const sectionData = this.bookCollection.getSpineSummary(),
+                sectionKey = model.getCanonicalTitleKey();
+
+            this.trigger('catalog:bookadded', {
+                model,
+                sectionKey,
+                sectionCount: sectionData[sectionKey]
+            });
+        }
+    }
 };
 
 // Create singleton, decorate with Events.
 const catalog = new CatalogModule();
 _.extend(catalog, Backbone.Events);
+
+catalog.listenTo(catalog.bookCollection, 'add', catalog.onBookAdded);
 
 export {catalog as Catalog};
