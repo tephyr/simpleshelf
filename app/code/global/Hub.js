@@ -10,6 +10,7 @@ import {Catalog} from 'Catalog';
  * - app:bookDeleted        (book deleted; TODO:REFACTOR)
  * - app:navigate           (any view signals a route change)
  * - app:requestlogin
+ * * catalog:bookadded      (book added *after* initial fetch)
  * - router:navigate        (Hub triggers a route change)
  * - routechanged           (router navigated to different route)
  */
@@ -23,6 +24,11 @@ class HubModule {
         this.on('app:bookDeleted', this.onBookDeleted);
         this.on('app:navigate', this.onNavigate);
         this.on('app:requestlogin', this.onRequestLogin);
+        this.listenTo(Catalog, 'all', this.proxyEvents);
+    }
+
+    proxyEvents(eventName, data) {
+        this.trigger(eventName, data);
     }
 
     onBookChanged(data) {
