@@ -6,11 +6,12 @@ import {Catalog} from 'Catalog';
  * Hub module for application.
  * @type {Object}
  * Brokered events:
- * - app:bookChanged        (book modified)
+ * - app:bookchanged        (book modified)
  * - app:bookDeleted        (book deleted; TODO:REFACTOR)
  * - app:navigate           (any view signals a route change)
  * - app:requestlogin
  * * catalog:bookadded      (book added *after* initial fetch)
+ * - catalog:bookchanged    (book edited)
  * - router:navigate        (Hub triggers a route change)
  * - routechanged           (router navigated to different route)
  */
@@ -20,7 +21,7 @@ class HubModule {
     }
 
     setupEvents() {
-        this.on('app:bookChanged', this.onBookChanged);
+        this.on('app:bookchanged', this.onBookChanged);
         this.on('app:bookDeleted', this.onBookDeleted);
         this.on('app:navigate', this.onNavigate);
         this.on('app:requestlogin', this.onRequestLogin);

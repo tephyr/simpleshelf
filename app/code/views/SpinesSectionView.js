@@ -1,5 +1,6 @@
 import {_, Backbone, Handlebars} from 'DefaultImports';
 import {Hub} from 'Hub';
+import {Util} from 'Util';
 import SpinesSectionTemplate from './templates/spinessection.html';
 import {SpineView} from './SpineView';
 
@@ -14,6 +15,7 @@ class SpinesSectionView extends Backbone.View {
         this._count = options.count;
         this.template = Handlebars.compile(SpinesSectionTemplate);
         this.listenTo(Hub, 'catalog:bookadded', this.onBookAdded);
+        this.listenTo(Hub, 'catalog:bookchanged', this.onBookChanged);
     }
 
     render() {
@@ -32,14 +34,14 @@ class SpinesSectionView extends Backbone.View {
     }
 
     addOne(book) {
-        const view = new SpineView({model: book});
+        const view = new SpineView({model: book, initialKey: this._key});
         this.$('.list-group-flush').append(view.render().el);
         this.listenTo(book, 'destroy', this.onBookDestroyed);
     }
 
     insertOne(book) {
         const booksInSection = this.collection.getBooksByTitleSection(this._key),
-            view = new SpineView({model: book});
+            view = new SpineView({model: book, initialKey: this._key});
         
         if (book.id === _.head(booksInSection).id) {
             // first
@@ -58,6 +60,10 @@ class SpinesSectionView extends Backbone.View {
         this.listenTo(book, 'destroy', this.onBookDestroyed);
     }
 
+    removeOne(book) {
+        book.trigger('removefromsection', {sectionKey: this._key});
+    }
+
     onBookAdded(data) {
         if (this._key === '?') {
             if (!data.sectionKeyIsAlphabetic) {
@@ -70,6 +76,23 @@ class SpinesSectionView extends Backbone.View {
         }
     }
 
+    onBookChanged(data) {
+        const bookChanged = this.collection.get(data.id),
+            bookKey = bookChanged.getCanonicalTitleKey();
+
+        // No longer in this section?
+        if (this._isKeyMatch(data.originalKey)) {
+            if (!this._isKeyMatch(bookKey)) {
+                this.removeOne(bookChanged);
+            }
+        }
+
+        // In this section now?
+        if (this._isKeyMatch(bookKey)) {
+            this.insertOne(bookChanged);
+        }
+    }
+
     onBookDestroyed() {
         // Lower count by one, or remove entirely.
         if (this._count === 1) {
@@ -77,6 +100,14 @@ class SpinesSectionView extends Backbone.View {
         } else {
             this._count--;
             this.$('.section-count').text(this._count);
+        }
+    }
+
+    _isKeyMatch(keyToCheck) {
+        if (this._key === '?') {
+            return !Util.isAlphabetic(keyToCheck);
+        } else {
+            return this._key === keyToCheck;
         }
     }
 };

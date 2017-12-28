@@ -31,6 +31,8 @@ const EditBookPageView = Backbone.View.extend({
 
         this.model.configuration = this.configuration;
 
+        this._originalKey = this.model.isNew() ? null : this.model.getCanonicalTitleKey();
+
         return this;
     },
 
@@ -160,7 +162,9 @@ const EditBookPageView = Backbone.View.extend({
     },
 
     onSaveSuccess: function() {
-        Hub.trigger("app:bookChanged", {id: this.model.id});
+        if (!_.isNull(this._originalKey)) {
+            Hub.trigger("catalog:bookchanged", {id: this.model.id, originalKey: this._originalKey});
+        }
         Hub.trigger("app:navigate", {view: "book", id: this.model.id});
     },
 
