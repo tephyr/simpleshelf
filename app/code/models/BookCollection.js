@@ -56,11 +56,7 @@ const BookCollection = Backbone.Collection.extend({
      */
     getBooksByTitleSection(key) {
         const booksInSection = this.filter((book) => {
-            if (key === '?') {
-                return !Util.isAlphabetic(book.getCanonicalTitleKey());
-            } else  {
-                return book.getCanonicalTitleKey() === key;
-            }
+            return book.getCanonicalTitleKey() === key;
         });
 
         if (booksInSection.length > 1) {
@@ -78,7 +74,6 @@ const BookCollection = Backbone.Collection.extend({
      */
     getSpineSummary: function() {
         const result = {'?': 0};
-        const isDigitRegex = /[0-9]/;
         let cTitle, titleKey;
 
         this.forEach((book) => {
@@ -87,9 +82,7 @@ const BookCollection = Backbone.Collection.extend({
                 result['?'] = result['?'] + 1;
             } else {
                 titleKey = book.getCanonicalTitleKey();
-                if (isDigitRegex.test(titleKey)) {
-                    result['?'] = result['?'] + 1;
-                } else if (_.has(result, titleKey)) {
+                if (_.has(result, titleKey)) {
                     result[titleKey] = result[titleKey] + 1;
                 } else {
                     result[titleKey] = 1;

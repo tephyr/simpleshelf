@@ -26,11 +26,7 @@ class SpineView extends Backbone.View {
     }
 
     onRemoveFromSection(data) {
-        if (data.sectionKey === '?') {
-            if (!Util.isAlphabetic(this._initialKey)) {
-                this.remove();
-            }
-        } else if (data.sectionKey === this._initialKey) {
+        if (data.sectionKey === this._initialKey) {
             this.remove();
         }
     }

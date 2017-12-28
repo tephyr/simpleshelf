@@ -224,7 +224,7 @@ describe('Book', function() {
                 [{title: 'A title'}, 't'],
                 [{title: 'An interesting title'}, 'i'],
                 [{title: 'Bark'}, 'b'],
-                [{title: '32 days'}, '3'],
+                [{title: '32 days'}, '?'],
                 [{title: '"A quote to preserve"'}, 'a']
             ];
 

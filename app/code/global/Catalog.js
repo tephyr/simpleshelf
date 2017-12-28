@@ -72,13 +72,11 @@ class CatalogModule {
         if (this.booksFetched) {
             // sectionKey, sectionCount
             const sectionData = this.bookCollection.getSpineSummary(),
-                sectionKey = model.getCanonicalTitleKey(),
-                sectionKeyIsAlphabetic = Util.isAlphabetic(sectionKey);
+                sectionKey = model.getCanonicalTitleKey();
 
             this.trigger('catalog:bookadded', {
                 model,
                 sectionKey,
-                sectionKeyIsAlphabetic,
                 sectionCount: sectionData[sectionKey]
             });
         }

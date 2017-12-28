@@ -65,14 +65,8 @@ class SpinesSectionView extends Backbone.View {
     }
 
     onBookAdded(data) {
-        if (this._key === '?') {
-            if (!data.sectionKeyIsAlphabetic) {
-                this.insertOne(data.model);
-            }
-        } else {
-            if (data.sectionKey === this._key) {
-                this.insertOne(data.model);
-            }
+        if (data.sectionKey === this._key) {
+            this.insertOne(data.model);
         }
     }
 
@@ -81,14 +75,14 @@ class SpinesSectionView extends Backbone.View {
             bookKey = bookChanged.getCanonicalTitleKey();
 
         // No longer in this section?
-        if (this._isKeyMatch(data.originalKey)) {
-            if (!this._isKeyMatch(bookKey)) {
+        if (this._key === data.originalKey) {
+            if (this._key !== bookKey) {
                 this.removeOne(bookChanged);
             }
         }
 
         // In this section now?
-        if (this._isKeyMatch(bookKey)) {
+        if (this._key === bookKey) {
             this.insertOne(bookChanged);
         }
     }
@@ -100,14 +94,6 @@ class SpinesSectionView extends Backbone.View {
         } else {
             this._count--;
             this.$('.section-count').text(this._count);
-        }
-    }
-
-    _isKeyMatch(keyToCheck) {
-        if (this._key === '?') {
-            return !Util.isAlphabetic(keyToCheck);
-        } else {
-            return this._key === keyToCheck;
         }
     }
 };

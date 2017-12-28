@@ -2,6 +2,7 @@
  * Model for individual books.
  */
 import {_, Backbone} from 'DefaultImports';
+import {Util} from 'Util';
 
 const PREFIXES = ['a', 'an', 'the'];
 
@@ -151,7 +152,8 @@ const Book = Backbone.Model.extend({
      * @return {String}
      */
     getCanonicalTitleKey() {
-        return this.getCanonicalTitleSortable().slice(0, 1);
+        const key = this.getCanonicalTitleSortable().slice(0, 1);
+        return Util.isAlphabetic(key) ? key : '?';
     },
 
     /**
