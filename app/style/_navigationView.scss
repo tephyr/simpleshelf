@@ -1,22 +1,2 @@
-#navigationView {
-    nav {
-        // Show a book image on the navbar for mobile.
-        @include media-breakpoint-down(sm) {
-            background-image: url("../img/open-book-grey.svg");
-            background-position: 96% center;
-            background-repeat: no-repeat;
-            background-size: 15%;
-        }
-    }
-
-    // Show the left-double-arrow on all pages EXCEPT main.
-    & #navbarBrand:before {
-        content: "« "; // &laquo;
-        opacity: 0;
-        transition: all 0.8s;
-    }
-
-    &.home #navbarBrand:before {
-        opacity: 1;
-    }
-}
+// #navigationView {
+// }

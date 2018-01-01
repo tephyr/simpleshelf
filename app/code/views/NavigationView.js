@@ -41,7 +41,18 @@ const NavigationView = Backbone.View.extend({
     },
 
     onRouteChange: function(eventData={}) {
+        let currentMenuSelector;
+        switch(eventData.route) {
+            case 'books':
+            case 'authors':
+            case 'tags':
+                currentMenuSelector = `.menu-item-${eventData.route}`;
+                break;
+        }
+
         this.setHomeView(eventData.route === 'main');
+        this.$('#navbarNav .nav-item').not(currentMenuSelector).removeClass('active');
+        this.$(`#navbarNav .nav-item${currentMenuSelector}`).addClass('active');
     }
 });
 
