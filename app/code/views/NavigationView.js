@@ -53,6 +53,9 @@ const NavigationView = Backbone.View.extend({
         this.setHomeView(eventData.route === 'main');
         this.$('#navbarNav .nav-item').not(currentMenuSelector).removeClass('active');
         this.$(`#navbarNav .nav-item${currentMenuSelector}`).addClass('active');
+
+        // Automatically collapse navigation menu after route change.
+        this.$('#navbarNav').collapse('hide');
     }
 });
 
