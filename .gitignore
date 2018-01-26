@@ -1,6 +1,7 @@
 # ignore these files #
 docs/_build/
 node_modules/
+docker-couchdb/
 output-*/
 config/*-personal.json
 config/*-demo.json
