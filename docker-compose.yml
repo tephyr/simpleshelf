@@ -1,0 +1,37 @@
+# Cribbed from https://github.com/DanWahlin/CodeWithDanDockerServices
+#. Run docker-compose build
+#. Run docker-compose up
+    
+version: "3.1"
+ 
+services:
+        
+    node:
+      container_name: node-front
+      build: 
+        context: .
+        dockerfile: .docker/node-front.dockerfile
+      ports:
+        - "8080:8080"
+      volumes:
+        - .:/var/www/simpleshelf
+      working_dir: /var/www/simpleshelf
+      depends_on:
+        - couchdb
+      networks:
+        - simpleshelf-network
+      
+    couchdb:
+      container_name: couchdb
+      image: apache/couchdb
+      volumes:
+        - ./docker-couchdb/data:/opt/couchdb/data
+        - ./docker-couchdb/etc:/opt/couchdb/etc/
+      ports:
+        - "5984:5984"
+      networks:
+        - simpleshelf-network
+
+networks:
+    simpleshelf-network:
+      driver: bridge
