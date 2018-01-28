@@ -15,6 +15,7 @@ services:
         - "8080:8080"
       volumes:
         - .:/var/www/simpleshelf
+        - ./config:/opt/simpleshelf/config
       working_dir: /var/www/simpleshelf
       depends_on:
         - couchdb
@@ -28,6 +29,7 @@ services:
         - ./docker-couchdb/data:/opt/couchdb/data
         - ./docker-couchdb/etc:/opt/couchdb/etc/
       ports:
+        # Remove "5984:" to lock out external access.
         - "5984:5984"
       networks:
         - simpleshelf-network

@@ -10,8 +10,8 @@ RUN mkdir -p /var/log/pm2
 
 EXPOSE 		8080
 
-ENTRYPOINT ["pm2", "start", "server.js","--name","simpleshelf","--log","/var/log/pm2/pm2.log","--watch","--no-daemon"]
-
+# Use config from ./config/server-config.json.
+ENTRYPOINT ["pm2", "start", "/opt/simpleshelf/config/server-config.json", "--no-daemon"]
 
 # To build:
 # docker build -f node-front.dockerfile --tag node_front ../
