@@ -8,10 +8,10 @@ module.exports = function(gulp, settings) {
      **/
     gulp.task('ui-local', function() {
         var uiFiles = gulp.src(settings.globs.directUI)
-            .pipe(gulp.dest(path.join(settings.ddocOutput, '_attachments')));
+            .pipe(gulp.dest(path.join(settings.staticOutputPath)));
 
         var imageFiles = gulp.src(settings.globs.images)
-            .pipe(gulp.dest(path.join(settings.ddocOutput, '_attachments', 'img')));
+            .pipe(gulp.dest(path.join(settings.staticOutputPath, 'img')));
 
         var buildSass = gulp.src(settings.globs.sass)
             .pipe(sass({

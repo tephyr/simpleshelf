@@ -32,6 +32,7 @@
     "extraPaths": ["./app/code/util", "./app/code/global"],
     "destination": "http://127.0.0.1:5984/simpleshelf",
     "outputDDoc": "./output-ddoc",
+    "outputPublic": "./output-public",
     "outputTest": "./output-test",
     "_docs": {
         "configurationDefault": "./config/default-docs/simpleshelf-configuration-default.json",
