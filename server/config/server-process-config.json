@@ -6,10 +6,7 @@
     "out_file"    : "/var/log/pm2/pm2.log",
     "error_file"  : "/var/log/pm2/pm2.log",
     "env": {
-      "NODE_ENV": "development"
-    },
-    "env_production" : {
-       "NODE_ENV": "production"
+      "NODE_CONFIG_DIR": "/opt/simpleshelf/config"
     }
   }]
 }
