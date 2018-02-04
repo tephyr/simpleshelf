@@ -1,10 +1,18 @@
+const config = require('config');
 const express = require('express');
 const app = express();
 const proxy = require('http-proxy-middleware');
-const nano = require('nano')('http://couchdb:5984'),
-    simpleshelfDB = nano.use('simpleshelf-dev-personal');
+console.info('NODE_ENV: ' + config.util.getEnv('NODE_ENV'));
+console.info('[couchdbServer]', config.get('couchdbServer'), '[databaseName]', config.get('databaseName'));
+const nano = require('nano')(config.get('couchdbServer')),
+    simpleshelfDB = nano.use(config.get('databaseName'));
 
 const port = process.env.PORT || 8080;
+const baseProxy = {
+    target: config.get('couchdbServer'),
+    changeOrigin: true,
+    logLevel: 'debug'
+};
 
 app.use('/', express.static('output-public'));
 app.get('/simpleshelf', (req, res) => {
@@ -28,13 +36,17 @@ app.get('/simpleshelf', (req, res) => {
     res.send('!!');
 });*/
 
-app.use('/api', proxy({
-    target: 'http://couchdb:5984',
-    changeOrigin: true,
+app.use('/auth', proxy(Object.assign({}, baseProxy, {
+    pathRewrite: {
+        '^/auth' : ''           // remove base path
+    }
+})));
+
+app.use('/api', proxy(Object.assign({}, baseProxy, {
+    target: config.get('couchdbServer') + '/' + config.get('databaseName'),
     pathRewrite: {
         '^/api' : ''           // remove base path
-    },
-    logLevel: 'debug'
-}));
+    }
+})));
 
 app.listen(8080, () => console.log(`Example app listening on port ${port}!!!`));
