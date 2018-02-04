@@ -11,11 +11,16 @@ services:
       build: 
         context: .
         dockerfile: .docker/node-front.dockerfile
+      environment:
+        - NODE_ENV
       ports:
         - "8080:8080"
       volumes:
-        - .:/var/www/simpleshelf
-        - ./config:/opt/simpleshelf/config
+        - ./server:/var/www/simpleshelf
+        - ./node_modules:/var/www/simpleshelf/node_modules
+        - ./output-public:/var/www/simpleshelf/output-public
+        - ./server/config:/opt/simpleshelf/config
+        - ./server/log:/var/log
       working_dir: /var/www/simpleshelf
       depends_on:
         - couchdb
