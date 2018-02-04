@@ -3,9 +3,11 @@ docs/_build/
 node_modules/
 docker-couchdb/
 output-*/
+server/log/
 config/*-personal.json
 config/*-demo.json
 config/personal-*/
+server/config/local*.json
 next.txt
 README.html
 *.pyc
