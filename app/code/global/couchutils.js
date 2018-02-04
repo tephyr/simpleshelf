@@ -32,7 +32,7 @@ const CouchUtils = {
         var dfrd = $.Deferred();
 
         $.ajax({
-            url: appSettings.get("urlPrefix") + "/_session",
+            url: appSettings.get("urlPrefix") + "/auth/_session",
             dataType: "json"
         }).done(function(data) {
             // Payload must have userCtx.name !== null.
@@ -56,7 +56,7 @@ const CouchUtils = {
         // $.Deferred callbacks: done, fail, always
         return $.ajax({
             type: "POST",
-            url: appSettings.get("urlPrefix") + "/_session",
+            url: appSettings.get("urlPrefix") + "/auth/_session",
             dataType: "json",
             data: {
                 name: userName,
@@ -68,7 +68,7 @@ const CouchUtils = {
     logout: function() {
         return $.ajax({
             type: "DELETE",
-            url: appSettings.get("urlPrefix") + "/_session"
+            url: appSettings.get("urlPrefix") + "/auth/_session"
         });
     }
 
