@@ -43,7 +43,7 @@
     "browser-sync": "^2.23.1",
     "browserify": "^14.5.0",
     "chai": "^4.1.2",
-    "config": "^1.29.0",
+    "config": "^1.29.4",
     "couchdb-push": "^2.3.2",
     "del": "^3.0.0",
     "globby": "^7.1.1",
