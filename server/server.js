@@ -2,8 +2,11 @@ const config = require('config');
 const express = require('express');
 const app = express();
 const proxy = require('http-proxy-middleware');
+
 console.info('NODE_ENV: ' + config.util.getEnv('NODE_ENV'));
-console.info('[couchdbServer]', config.get('couchdbServer'), '[databaseName]', config.get('databaseName'));
+console.info('[couchdbServer]', config.get('couchdbServer'), '[databaseName]', config.get('databaseName'),
+    '[designDoc]', config.get('designDoc'));
+
 const nano = require('nano')(config.get('couchdbServer')),
     simpleshelfDB = nano.use(config.get('databaseName'));
 
@@ -14,7 +17,11 @@ const baseProxy = {
     logLevel: 'debug'
 };
 
+/* ROUTES */
+// Main: static files from output-public/
 app.use('/', express.static('output-public'));
+
+// Access info about current db through nano.
 app.get('/simpleshelf', (req, res) => {
     nano.db.list(function(err, body) {
         if (err) {
@@ -30,22 +37,27 @@ app.get('/simpleshelf', (req, res) => {
     });
 });
 
-/*app.all('*', (req, res) => {
-    // res.send(`Hello world, from ${req.path} route`);
-    console.info(`Rec'd ${req.method} method from ${req.path} path`);
-    res.send('!!');
-});*/
-
-app.use('/auth', proxy(Object.assign({}, baseProxy, {
+// Access session calls
+app.use('/auth/_session', proxy(Object.assign({}, baseProxy, {
     pathRewrite: {
         '^/auth' : ''           // remove base path
     }
 })));
 
-app.use('/api', proxy(Object.assign({}, baseProxy, {
+// Access data from current db.
+app.use('/data', proxy(Object.assign({}, baseProxy, {
     target: config.get('couchdbServer') + '/' + config.get('databaseName'),
     pathRewrite: {
-        '^/api' : ''           // remove base path
+        '^/data' : ''           // remove base path
+    }
+})));
+
+// Access specific view functions from current design doc.
+// api/_design/simpleshelfmobile/_view/global
+app.use('/view', proxy(Object.assign({}, baseProxy, {
+    target: config.get('couchdbServer') + '/' + config.get('databaseName'),
+    pathRewrite: {
+        '^/view' : '/_design/' + config.get('designDoc') + '/_view/'
     }
 })));
 

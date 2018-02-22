@@ -1,4 +1,5 @@
 {
     "couchdbServer": "http://couchdb:5984",
-    "databaseName": "simpleshelf"
+    "databaseName": "simpleshelf",
+    "designDoc": "simpleshelfmobile"
 }
