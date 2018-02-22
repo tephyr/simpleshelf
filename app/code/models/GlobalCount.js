@@ -5,7 +5,7 @@ import {_, Backbone} from 'DefaultImports';
 
 const GlobalCountModel = Backbone.Model.extend({
     url: function() {
-        return "_view/global?group=true";
+        return "view/global?group=true";
     },
 
     /**

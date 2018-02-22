@@ -12,7 +12,7 @@ const BookCollection = Backbone.Collection.extend({
     },
 
     url: function() {
-        return "_view/books?reduce=false";
+        return "view/books?reduce=false";
     },
 
     /**

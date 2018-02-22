@@ -7,7 +7,7 @@ var _ = require("underscore"),
 
 var ReadingStatsModel = Backbone.Model.extend({
     url: function() {
-        return "_view/reading_time";
+        return "view/reading_time";
     },
 
     /**
