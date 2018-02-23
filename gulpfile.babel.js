@@ -143,17 +143,6 @@ gulp.task('docs-watch', function() {
     }
 });
 
-// Watch files, run production tasks.
-gulp.task('prod-watch', function() {
-    settings.isDebug = false;
-    // When any source code changes, combine/run browserify/push to server.
-    var watcher = gulp.watch(settings.globsAll, ['push']);
-
-    watcher.on('change', function(event) {
-        console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
-    });
-});
-
 // Watch files, run test tasks.
 gulp.task('test-watch', ['browser-sync-init'], function() {
     // When any test or source code changes, combine/run browserify/run tests.
