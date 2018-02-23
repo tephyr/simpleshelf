@@ -2,13 +2,13 @@ module.exports = function(gulp, settings) {
     var appBundlerFn = require("./util-bundlers.js")(gulp, settings).appBundlerFn;
 
     /**
-     * Bundle production-ready code.
+     * Bundle debug-ready javascript.
      **/
-    gulp.task('code', function () {
+    gulp.task('code', function (cb) {
         return appBundlerFn({
             entries: 'app/code/main.js',
-            paths: 'app/code/util/',
-            isDebug: false,
+            paths: settings.extraPaths,
+            isDebug: settings.isDebug,
             vendorLibraries: settings.libraryModules,
             destinationName: 'app.bundle.js',
             destinationDir: settings.codeOutputPath
