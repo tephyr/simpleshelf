@@ -38,23 +38,17 @@ if (config.has('ddocModules')) {
 // Setup globs for watching file changes.
 // Encase any values in arrays that should be joined with other values.
 settings.globs = {
-    'allCode': ['app/code/**/*.js'],
-    'code': ['app/code/**/*.js', '!app/code/test/**/*.js'],
+    'allCode': [path.join(settings.clientSource, '/**/*.js')],
+    'appCode': [path.join(settings.clientSource, '/**/*.js'), '!' + path.join(settings.clientSource, '/code/test/**/*')],
     'ddocCode': path.join(settings.ddocSource, '**/*.js'),
-    'testCode': ['app/code/test/**/*.js', 'app/code/test/*.html'],
-    'templates': ['app/code/**/*.html', '!app/code/test/*.html'],
+    'testCode': [path.join(settings.clientSource, '/code/test/**/*.js'), path.join(settings.clientSource, '/code/test/*.html')],
+    'templates': [path.join(settings.clientSource, '/code/**/*.html'), '!' + path.join(settings.clientSource, '/code/test/*.html')],
     'ui': path.join(settings.clientSource, '/**/*.html'),
     'directUI': path.join(settings.clientSource, '*.html'),
     'images': path.join(settings.clientSource, 'img', '**/*'),
     'ddoc': path.join(settings.ddocSource, '**/*'),
-    'sass': 'app/style/*.scss'
+    'sass': path.join(settings.clientSource, '/style/*.scss')
 };
-
-// All code that should be seen in dev or prod.
-// (Get all values in globs **except** allCode, testCode, ddocCode, which are better handled by 'code'.)
-settings.globsAll = _.flattenDeep(_.values(_.omit(settings.globs, ['allCode', 'ddocCode', 'testCode'])));
-// Only code under test.
-settings.globsTest = _.flattenDeep([settings.globs.allCode, settings.globs.testCode]);
 
 // Import external tasks, giving them the settings object.
 require("./tasks/bulk-update")(gulp, settings);
@@ -96,25 +90,26 @@ gulp.task('default', function() {
     console.info("Build output (config.outputDDoc)", settings.ddocOutput);
     console.info("Server design doc (config.destination)", settings.destination);
     console.info();
-    console.info("Typical dev command: `gulp push dev-watch docs-watch test-watch`");
-    console.info("  (This pushes the current code to CouchDB, then watches for changes.)");
+    console.info("Typical dev command: `gulp app-watch ddoc-watch test-watch docs-watch`");
+    console.info("  (This pushes the current code to CouchDB, builds the UI, then watches for changes.)");
 });
 
 /**
  * Watch for changes, trigger ``push`` task.
  **/
-gulp.task('push:watch', function() {
-    gulp.watch(settings.globsAll, function(event) {
+gulp.task('ddoc-watch', function() {
+    gulp.watch(settings.globs.ddoc, function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
         gulp.start('push');
     });
 });
 
-// Watch files, run dev tasks.
-gulp.task('dev-watch', function() {
+// Watch files, build app (front-end only).
+gulp.task('app-watch', function() {
     settings.isDebug = true;
-    // When any source code changes, combine/run browserify/push to server.
-    var watcher = gulp.watch(settings.globsAll, {debounceDelay: 100}, ['push']);
+    // When any app code changes, combine/run browserify.
+    const watchList = _.flattenDeep(_.values(_.pick(settings.globs, ['ui', 'images', 'sass', 'appCode'])));
+    const watcher = gulp.watch(watchList, {debounceDelay: 100}, ['build-app']);
 
     watcher.on('change', function(event) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
@@ -124,7 +119,7 @@ gulp.task('dev-watch', function() {
 // Watch files, run analyze tasks.
 gulp.task('analyze-watch', function() {
     // When any source code changes, analyze with jshint.
-    var watcher = gulp.watch([settings.globs.code, settings.globs.ddocCode]);
+    const watcher = gulp.watch([settings.globs.appCode, settings.globs.ddocCode]);
 
     watcher.on('change', function(event) {
         lintSpecific(event.path);
@@ -146,7 +141,7 @@ gulp.task('docs-watch', function() {
 // Watch files, run test tasks.
 gulp.task('test-watch', ['browser-sync-init'], function() {
     // When any test or source code changes, combine/run browserify/run tests.
-    var watcher = gulp.watch(settings.globsTest, {debounceDelay: 100},
+    const watcher = gulp.watch(_.flattenDeep([settings.globs.allCode, settings.globs.testCode]), {debounceDelay: 100},
         ['browser-sync-reload'/*, 'test-headless'*/]);
 
     watcher.on('change', function(event) {

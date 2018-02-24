@@ -36,7 +36,7 @@ Done!  simpleshelf is now available for use; load the UI at http://127.0.0.1:598
 
 **Ongoing development**:
 
-#. Set gulp to watch for changes (``gulp dev-watch docs-watch test-watch``).
+#. Set gulp to watch for changes (``gulp app-watch ddoc-watch docs-watch test-watch``).
 #. Modify code or documents.
 #. Reload the design doc.
 

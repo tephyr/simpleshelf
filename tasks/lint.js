@@ -5,6 +5,6 @@ module.exports = function(gulp, settings) {
      * @return {Stream}
      */
     gulp.task('lint', function () {
-        return lintSpecific(settings.globs.code);
+        return lintSpecific(settings.globs.appCode);
     });
 };
