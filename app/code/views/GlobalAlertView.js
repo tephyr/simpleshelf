@@ -2,6 +2,7 @@
  * Global alert view.
  **/
 import {_, Backbone, Handlebars} from 'DefaultImports';
+import {Hub} from 'Hub';
 import GlobalAlertTemplate from './templates/globalalert.html';
 
 const GlobalAlertView = Backbone.View.extend({
@@ -12,6 +13,8 @@ const GlobalAlertView = Backbone.View.extend({
         if (_.has(options, "configuration")) {
             this.configuration = options.configuration;
         }
+
+        this.listenToOnce(Hub, 'catalog:configfetched', this.render);
         return this;
     },
 

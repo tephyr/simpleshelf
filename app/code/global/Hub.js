@@ -10,8 +10,10 @@ import {Catalog} from 'Catalog';
  * - app:bookDeleted        (book deleted; TODO:REFACTOR)
  * - app:navigate           (any view signals a route change)
  * - app:requestlogin
+ * * app:userloggedin       (anytime user successfully logs in)
  * * catalog:bookadded      (book added *after* initial fetch)
  * - catalog:bookchanged    (book edited)
+ * - catalog:configfetched
  * - router:navigate        (Hub triggers a route change)
  * - routechanged           (router navigated to different route)
  */
@@ -25,6 +27,7 @@ class HubModule {
         this.on('app:bookDeleted', this.onBookDeleted);
         this.on('app:navigate', this.onNavigate);
         this.on('app:requestlogin', this.onRequestLogin);
+        this.on('app:userloggedin', this.onUserLoggedIn);
         this.listenTo(Catalog, 'all', this.proxyEvents);
     }
 
@@ -77,14 +80,32 @@ class HubModule {
         CouchUtils.login(data.username, data.password)
             .done(() => {
                 console.log(this._logHeader, "Logged in!");
-                // Proceed to main page.
-                this.trigger("app:navigate", {url: "main"});
+                this.trigger('app:userloggedin');
             })
             .fail(() => {
                 console.warn(this._logHeader, "Login failed!");
                 // Stay on current page.
                 // TODO: warn user about login failure.
             });
+    }
+
+    onUserLoggedIn() {
+        // Check if configuration loaded.
+        // If not, load **first**, then proceed.
+        if (!Catalog.configFetched) {
+            $.when(
+                Catalog.configuration.fetch(),
+                Catalog.configuration.fetchI18N()
+            ).then(() => {
+                Catalog.configFetched = true;
+                this.trigger('catalog:configfetched');
+                // Proceed to main page.
+                this.trigger("app:navigate", {url: "main"});
+            });
+        } else {
+            // Proceed to main page.
+            this.trigger("app:navigate", {url: "main"});
+        }
     }
 };
 

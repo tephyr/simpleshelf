@@ -4,9 +4,9 @@ import {ReadingStatsModel} from '../models/ReadingStats';
 import {BookCollection} from '../models/BookCollection';
 import {TagCollection} from '../models/TagCollection';
 import {Util} from 'Util';
-const AppConfigurationModel = require('../models/Configuration.js');
+import {ConfigurationModel} from '../models/Configuration.js';
 
-const config = new AppConfigurationModel();
+const config = new ConfigurationModel();
 
 /**
  * CatalogModule: all metadata regarding the library.
@@ -15,6 +15,7 @@ class CatalogModule {
     constructor() {
         this.metadataUpToDate = false;
         this.booksFetched = false;
+        this.configFetched = false;
         this.globalCountModel = new GlobalCountModel();
         this.readingStatsModel = new ReadingStatsModel();
         this.bookCollection = new BookCollection(null, {configuration: config});
