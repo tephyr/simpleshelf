@@ -8,7 +8,7 @@ var _ = require("underscore"),
 var TagCollection = Backbone.Collection.extend({
 
     url: function() {
-        return "_view/tags?group=true";
+        return "view/tags?group=true";
     },
 
     /**
