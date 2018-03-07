@@ -1,7 +1,7 @@
 /**
  * Application logic.
  */
-import {$, _, Backbone} from 'DefaultImports';
+import {$} from 'DefaultImports';
 import {appSettings} from 'settings';
 import {Catalog} from 'Catalog';
 import {NavigationView} from './views/NavigationView';
@@ -10,18 +10,6 @@ import {GlobalAlertView} from './views/GlobalAlertView';
 const app = {
     catalog: Catalog
 };
-
-app.promises = {};
-app.promises.initialConfiguration = $.when(
-    Catalog.configuration.fetch(),
-    Catalog.configuration.fetchI18N()
-).then(
-    function() {
-        console.info("[app]", "configuration + translation loaded");
-    }, function() {
-        console.warn("[app]", "configuration + translation failed to load");
-    }
-);
 
 // Setup views hash to hold non-routable view objects & persist them for the application lifetime.
 app.views = {

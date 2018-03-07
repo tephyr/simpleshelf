@@ -32,7 +32,7 @@ $(function() {
     // So if the hash is on an existing route (like ``#login``), nothing will appear to happen.
     // Read this before enabling pushState: http://stackoverflow.com/questions/9328513/backbone-js-and-pushstate
     let currentPath = location.pathname;
-    let historyStart = Backbone.history.start({
+    const historyStart = Backbone.history.start({
         // pushState: true,
         root: currentPath
     });
@@ -42,7 +42,5 @@ $(function() {
     );
 
     // Start app.
-    this.app.promises.initialConfiguration.then(
-        this.app.run
-    );
+    this.app.run();
 });
