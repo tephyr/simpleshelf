@@ -1,11 +1,11 @@
 const expect = require('chai').expect,
-    sinon = require('sinon'),
-    Configuration = require("../../models/Configuration.js");
+    sinon = require('sinon');
 
 import DATA_BC0 from './data/bookcollection.0.json';
 import DATA_BC1 from './data/bookcollection.1.json';
 import DATA_BC2 from './data/bookcollection.2.json';
 
+import {ConfigurationModel as Configuration} from '../../models/Configuration.js';
 import {BookCollection} from '../../models/BookCollection.js';
 
 /**

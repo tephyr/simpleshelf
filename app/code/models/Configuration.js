@@ -1,4 +1,3 @@
-"use strict";
 /**
  * Application configuration model.
  * Handles default (updateable through replication) and custom.
@@ -7,13 +6,11 @@
  * 
  * @return Singleton
  **/
-var $ = require("jquery"),
-    _ = require("underscore"),
-    Backbone = require("backbone");
+import {$, _, Backbone} from 'DefaultImports';
 
-var ConfigurationModel = Backbone.Model.extend({
+const ConfigurationModel = Backbone.Model.extend({
     _logHeader: "[ConfigurationModel]",
-    url: "_view/configuration",
+    url: "view/configuration",
     urlI18N: "data/simpleshelf-i18n-default",
     initialize: function() {
         this.lang = "en";
@@ -24,7 +21,7 @@ var ConfigurationModel = Backbone.Model.extend({
         // - Find row with .key === "default"
         // - Use that as base.
         // - Apply other config objects.
-        var result = {}, configs;
+        let result = {}, configs;
 
         if (_.has(response, "rows") && _.isArray(response.rows)) {
             if (response.rows.length > 0) {
@@ -32,10 +29,9 @@ var ConfigurationModel = Backbone.Model.extend({
                 configs = _.sortBy(response.rows, function(cfgDoc) {
                     return (cfgDoc.key === "default") ? 0 : 1;
                 });
-                configs = _.pluck(configs, "value");
-                configs = _.map(configs, this._stripConfig);
+                configs = _.map(configs, (x) => { return this._stripConfig(x.value); });
                 _.each(configs, function(cfg) {
-                    result = _.extendOwn(result, cfg);
+                    _.assignIn(result, cfg);
                 });
                 result = _.omit(result, "configurationType");
             }
@@ -67,7 +63,7 @@ var ConfigurationModel = Backbone.Model.extend({
             result = null;
 
         _.map(this.get("actions"), function(actionsByStatus) {
-            _.extendOwn(activityStuff, actionsByStatus);
+            _.assignIn(activityStuff, actionsByStatus);
         });
 
         if (_.has(activityStuff, statusValue)) {
@@ -90,6 +86,8 @@ var ConfigurationModel = Backbone.Model.extend({
                 warning: 10,
                 danger: 5
             };
+
+        if (_.isNil(this.get('messages'))) return {};
 
         // Map messages to view format.
         var msgs = _.map(this.get('messages')[viewName], function(msg) {
@@ -134,7 +132,7 @@ var ConfigurationModel = Backbone.Model.extend({
      * @return {Object}      {key: translation}
      */
     _combineTranslations: function(data) {
-        return _.extendOwn(
+        return _.assignIn(
             {},
             data.statuses[this.lang],
             data.actions[this.lang]
@@ -151,4 +149,4 @@ var ConfigurationModel = Backbone.Model.extend({
     }
 });
 
-module.exports = ConfigurationModel;
+export {ConfigurationModel};

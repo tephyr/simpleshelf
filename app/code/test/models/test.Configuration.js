@@ -1,6 +1,7 @@
 var expect = require('chai').expect,
-    sinon = require('sinon'),
-    Configuration = require("../../models/Configuration.js");
+    sinon = require('sinon');
+
+import {ConfigurationModel as Configuration} from '../../models/Configuration.js';
 
 /**
  * Test the Configuration model & validate parsing.

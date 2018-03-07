@@ -1,8 +1,8 @@
 const expect = require('chai').expect,
     sinon = require('sinon'),
-    testUtilities = require("../testUtilities.js"),
-    Configuration = require("../../models/Configuration.js");
+    testUtilities = require("../testUtilities.js");
 
+import {ConfigurationModel as Configuration} from '../../models/Configuration.js';
 import {Book} from '../../models/Book.js';
 
 describe('Book', function() {
