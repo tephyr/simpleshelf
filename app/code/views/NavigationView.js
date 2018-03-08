@@ -4,6 +4,7 @@
 import {_, Backbone, Handlebars} from 'DefaultImports';
 import {Hub} from 'Hub';
 import NavbarTemplate from './templates/navbar.html';
+import NavbarTemplateStandard from './templates/navbarstandard.html';
 
 const NavigationView = Backbone.View.extend({
     id: "navigationView",
@@ -13,11 +14,15 @@ const NavigationView = Backbone.View.extend({
 
     initialize: function() {
         this._template = Handlebars.compile(NavbarTemplate);
+        this._templateStandard = Handlebars.compile(NavbarTemplateStandard);
         this.listenTo(Hub, 'routechanged', this.onRouteChange);
+        this.listenTo(Hub, 'app:userloggedin', this.onLogIn);
+        this.listenTo(Hub, 'app:userloggedout', this.onLogOut);
     },
 
-    render: function() {
-        this.$el.html(this._template());
+    render: function(data) {
+        let template = _.get(data, 'loggedIn', false) ? this._template() : this._templateStandard();
+        this.$el.html(template);
         return this;
     },
 
@@ -38,6 +43,14 @@ const NavigationView = Backbone.View.extend({
     /** EVENTS **/
     onClickHome: function(event) {
         // TODO: here for testing; currently a noop.
+    },
+
+    onLogIn: function() {
+        this.render({loggedIn: true});
+    },
+
+    onLogOut: function() {
+        this.render({loggedIn: false});
     },
 
     onRouteChange: function(eventData={}) {
