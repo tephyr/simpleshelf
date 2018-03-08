@@ -10,7 +10,8 @@ import {Catalog} from 'Catalog';
  * - app:bookDeleted        (book deleted; TODO:REFACTOR)
  * - app:navigate           (any view signals a route change)
  * - app:requestlogin
- * * app:userloggedin       (anytime user successfully logs in)
+ * * app:userloggedin       (anytime user logs in)
+ * * app:userloggedout      (after user logs out)
  * * catalog:bookadded      (book added *after* initial fetch)
  * - catalog:bookchanged    (book edited)
  * - catalog:configfetched
@@ -27,7 +28,9 @@ class HubModule {
         this.on('app:bookDeleted', this.onBookDeleted);
         this.on('app:navigate', this.onNavigate);
         this.on('app:requestlogin', this.onRequestLogin);
+        this.on('app:requestlogout', this.onRequestLogout);
         this.on('app:userloggedin', this.onUserLoggedIn);
+        this.on('app:userloggedout', this.onUserLoggedOut);
         this.listenTo(Catalog, 'all', this.proxyEvents);
     }
 
@@ -89,6 +92,18 @@ class HubModule {
             });
     }
 
+    onRequestLogout() {
+        CouchUtils.logout()
+            .done(() => {
+                console.info(this._logHeader, 'Logged out!');
+                this.trigger('app:userloggedout');
+                this.trigger("app:navigate", {url: "login"});
+            })
+            .fail(() => {
+                console.warn(this._logHeader, "Logout failed!");
+            });
+    }
+
     onUserLoggedIn() {
         // Check if configuration loaded.
         // If not, load **first**, then proceed.
@@ -106,6 +121,10 @@ class HubModule {
             // Proceed to main page.
             this.trigger("app:navigate", {url: "main"});
         }
+    }
+
+    onUserLoggedOut() {
+        Catalog.clearLibrary();
     }
 };
 

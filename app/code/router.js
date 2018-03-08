@@ -17,6 +17,7 @@ const Router = Backbone.Router.extend({
     routes: {
         ""          : "main", // Use main as primary view.
         "login"     : "login",
+        "logout"    : "logout",
         "main"      : "main",
         "books"     : "books",
         "books/:id" : "book",
@@ -33,6 +34,7 @@ const Router = Backbone.Router.extend({
         this._constantViews = {}; // Hold view instance behind a particular route.
 
         this.listenTo(Hub, 'router:navigate', this.onNavigate);
+        this.listenTo(Hub, 'app:userloggedout', this.onLogout);
         this.on('route', (route, params) => { Hub.trigger('routechanged', {route, params}); });
     },
 
@@ -47,8 +49,7 @@ const Router = Backbone.Router.extend({
         /* jshint unused: false */
         if (!this._initialLoginHandled) {
             // On first load, always check for login state.
-            this._initialLoginHandled = true;
-            this._log("<execute>", "Handling login for first time");
+            this._log("<execute>", "Handling login for first load (or post-logout)");
 
             this._checkLoginStatus(callback, args, this);
 
@@ -66,6 +67,12 @@ const Router = Backbone.Router.extend({
     login: function() {
         this._log("/login");
         this._changeScreen(new LoginPageView());
+    },
+
+    logout: function() {
+        this._log("/logout");
+        this._initialLoginHandled = false;
+        Hub.trigger('app:requestlogout');
     },
 
     main: function() {
@@ -133,6 +140,13 @@ const Router = Backbone.Router.extend({
         this._changeScreen(editBookPageView);
     },
 
+    onLogout: function() {
+        _.forOwn(this._constantViews, (value, key) => {
+            value.remove();
+        });
+        this._constantViews = {};
+    },
+
     onNavigate: function(fragment, options) {
         this.navigate(fragment, options);
     },
@@ -175,14 +189,17 @@ const Router = Backbone.Router.extend({
      * @return {Promise}
      */
     _checkLoginStatus: function(routeCB, routeArgs, routeContext) {
+        const self = this;
         return CouchUtils.isLoggedIn()
             .done(function() {
                 console.log(routeContext._logHeader, "Proceed to requested page.");
+                self._initialLoginHandled = true;
                 routeCB.apply(routeContext, routeArgs);
             })
             .fail(function() {
                 console.warn(routeContext._logHeader, "Need to log in.");
                 routeContext.login();
+                self._initialLoginHandled = false;
             })
             .always(function() {
                 console.info(routeContext._logHeader, "Done checking login status.");

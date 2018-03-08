@@ -23,6 +23,15 @@ class CatalogModule {
         this.configuration = config;
     }
 
+    clearLibrary() {
+        this.bookCollection.reset();
+        this.tagCollection.reset();
+        this.readingStatsModel.clear({silent: true});
+        this.globalCountModel.clear({silent: true});
+        this.booksFetched = false;
+        this.metadataUpToDate = false;
+    }
+
     fetchBooks() {
         const dfrd = $.Deferred();
 

@@ -26,10 +26,8 @@ app.run = function() {
     const _logHeader = "[app.run]";
     console.info(_logHeader, "App running as of ", new Date());
 
-    app.catalog.tagCollection.fetch();
-
     // Load navbar view.
-    $("body").prepend(app.views.navigationView.render().$el);
+    $("body").prepend(app.views.navigationView.render({loggedIn: false}).$el);
     // Load global alert view.
     $("#alertContent").append(app.views.globalAlertView.render().$el);
 };
