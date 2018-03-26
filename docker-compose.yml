@@ -7,10 +7,11 @@ version: "3.1"
 services:
         
     node:
-      container_name: node-front
+      container_name: simpleshelf-node-front
+      image: ${DOCKER_ACCT}/simpleshelf-node-front
       build: 
         context: .
-        dockerfile: .docker/node-front.dockerfile
+        dockerfile: .docker/simpleshelf-node-front.${NODE_ENV}.dockerfile
       environment:
         - NODE_ENV
       ports:
