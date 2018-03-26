@@ -14,12 +14,7 @@ services:
         dockerfile: .docker/simpleshelf-node-front.${NODE_ENV}.dockerfile
       environment:
         - NODE_ENV
-      ports:
-        - "8080:8080"
       volumes:
-        - ./server:/var/www/simpleshelf
-        - ./node_modules:/var/www/simpleshelf/node_modules
-        - ./output-public:/var/www/simpleshelf/output-public
         - ./server/config:/opt/simpleshelf/config
         - ./server/log:/var/log
       working_dir: /var/www/simpleshelf
@@ -34,9 +29,6 @@ services:
       volumes:
         - ./docker-couchdb/data:/opt/couchdb/data
         - ./docker-couchdb/etc:/opt/couchdb/etc/
-      ports:
-        # Remove "5984:" to lock out external access.
-        - "5984:5984"
       networks:
         - simpleshelf-network
 

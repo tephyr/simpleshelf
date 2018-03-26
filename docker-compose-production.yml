@@ -1,0 +1,14 @@
+# production settings
+version: "3.1"
+ 
+services:
+        
+    node:
+      ports:
+        # Customize exported port.
+        - "9090:8080"
+
+    couchdb:
+      ports:
+        # Disallow external access.
+        - "5984"

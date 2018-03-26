@@ -1,0 +1,17 @@
+# development settings, automatically overrides when using the base docker-compose.yml file
+version: "3.1"
+ 
+services:
+        
+    node:
+      ports:
+        - "8080:8080"
+      volumes:
+        - ./server:/var/www/simpleshelf
+        - ./node_modules:/var/www/simpleshelf/node_modules
+        - ./output-public:/var/www/simpleshelf/output-public
+      
+    couchdb:
+      ports:
+        # Remove "5984:" to lock out external access.
+        - "5984:5984"
