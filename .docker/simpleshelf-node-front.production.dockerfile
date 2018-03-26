@@ -2,6 +2,9 @@ FROM 		node:latest
 
 LABEL author="Andrew Ittner"
 
+COPY ./server /var/www/simpleshelf
+COPY ./node_modules /var/www/simpleshelf/node_modules
+COPY ./output-public /var/www/simpleshelf/output-public
 WORKDIR /var/www/simpleshelf
 
 RUN npm install -g pm2@latest
