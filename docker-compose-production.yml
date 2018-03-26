@@ -4,6 +4,7 @@ version: "3.1"
 services:
         
     node:
+      image: ${DOCKER_ACCT}/simpleshelf-node-front:production
       ports:
         # Customize exported port.
         - "9090:8080"
