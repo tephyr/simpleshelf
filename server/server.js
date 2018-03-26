@@ -61,4 +61,7 @@ app.use('/view', proxy(Object.assign({}, baseProxy, {
     }
 })));
 
-app.listen(8080, () => console.log(`Example app listening on port ${port}!!!`));
+app.listen(port, () => {
+    console.log(`Example app listening (internally) on port ${port}`);
+    console.info(`Running node ${process.version}`);
+});
