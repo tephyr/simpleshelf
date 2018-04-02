@@ -28,7 +28,7 @@ services:
       image: apache/couchdb
       volumes:
         - ./docker-couchdb/data:/opt/couchdb/data
-        - ./docker-couchdb/etc:/opt/couchdb/etc/
+        - ./docker-couchdb/etc/local.d:/opt/couchdb/etc/local.d
       networks:
         - simpleshelf-network
 
