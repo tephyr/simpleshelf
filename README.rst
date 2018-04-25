@@ -16,6 +16,10 @@ Tools, libraries, plugins
 - CouchDB_
 - Backbone.js_
 - Docker_
+
+  - https://github.com/apache/couchdb-docker
+  - https://hub.docker.com/_/couchdb/
+
 - gulp_
 
 How to install
@@ -30,6 +34,7 @@ Development
 
      # Use your Docker Hub ID, or an empty string.
      sudo DOCKER_ACCT=X NODE_ENV=development docker-compose build
+     # Append --pull to get latest versions of images
 
 #. Run the app::
 
