@@ -7,7 +7,8 @@ services:
       ports:
         - "8080:8080"
       volumes:
-        - ./server:/var/www/simpleshelf
+        - ./server/code:/var/www/simpleshelf
+        - ./server/config:/opt/simpleshelf/config
         - ./node_modules:/var/www/simpleshelf/node_modules
         - ./output-public:/var/www/simpleshelf/output-public
       

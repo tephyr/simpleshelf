@@ -15,7 +15,7 @@ services:
       environment:
         - NODE_ENV
       volumes:
-        - ./server/config:/opt/simpleshelf/config
+        - ./server/config-host:/opt/simpleshelf/config-host
         - ./server/log:/var/log
       working_dir: /var/www/simpleshelf
       depends_on:

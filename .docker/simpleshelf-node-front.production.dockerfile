@@ -2,9 +2,12 @@ FROM    node:carbon
 
 LABEL   author="Andrew Ittner"
 
-COPY    ./server /var/www/simpleshelf
-COPY    ./node_modules /var/www/simpleshelf/node_modules
-COPY    ./output-public /var/www/simpleshelf/output-public
+COPY    ./server/code       /var/www/simpleshelf
+COPY    ./server/config     /opt/simpleshelf/config
+COPY    ./node_modules      /var/www/simpleshelf/node_modules
+COPY    ./output-public     /var/www/simpleshelf/output-public
+# TODO: copy design docs, db default config docs
+
 WORKDIR /var/www/simpleshelf
 
 RUN     npm install -g pm2@latest
