@@ -2,17 +2,30 @@ const config = require('config');
 const express = require('express');
 const app = express();
 const proxy = require('http-proxy-middleware');
+let svrConfig;
 
-console.info('NODE_ENV: ' + config.util.getEnv('NODE_ENV'));
-console.info('[couchdbServer]', config.get('couchdbServer'), '[databaseName]', config.get('databaseName'),
-    '[designDoc]', config.get('designDoc'));
+function loadSideConfig() {
+    // Load from host config; all values overwrite standard config.
+    const sideCfg = config.util.loadFileConfigs(process.env.NODE_CONFIG_DIR_HOST);
 
-const nano = require('nano')(config.get('couchdbServer')),
-    simpleshelfDB = nano.use(config.get('databaseName'));
+    // config object made immutable by first .get()
+    svrConfig = config.util.extendDeep({}, config, sideCfg);
+}
+
+loadSideConfig();
+
+console.info('NODE_ENV:', svrConfig.util.getEnv('NODE_ENV'));
+console.info('NODE_CONFIG_DIR: ' + svrConfig.util.getEnv('NODE_CONFIG_DIR'));
+console.info('NODE_CONFIG_DIR_HOST:', process.env.NODE_CONFIG_DIR_HOST);
+console.info('[couchdbServer]', svrConfig.get('couchdbServer'), '[databaseName]', svrConfig.get('databaseName'),
+    '[designDoc]', svrConfig.get('designDoc'));
+
+const nano = require('nano')(svrConfig.get('couchdbServer')),
+    simpleshelfDB = nano.use(svrConfig.get('databaseName'));
 
 const port = process.env.PORT || 8080;
 const baseProxy = {
-    target: config.get('couchdbServer'),
+    target: svrConfig.get('couchdbServer'),
     changeOrigin: true,
     logLevel: 'debug'
 };
@@ -46,7 +59,7 @@ app.use('/auth/_session', proxy(Object.assign({}, baseProxy, {
 
 // Access data from current db.
 app.use('/data', proxy(Object.assign({}, baseProxy, {
-    target: config.get('couchdbServer') + '/' + config.get('databaseName'),
+    target: svrConfig.get('couchdbServer') + '/' + svrConfig.get('databaseName'),
     pathRewrite: {
         '^/data' : ''           // remove base path
     }
@@ -55,9 +68,9 @@ app.use('/data', proxy(Object.assign({}, baseProxy, {
 // Access specific view functions from current design doc.
 // api/_design/simpleshelfmobile/_view/global
 app.use('/view', proxy(Object.assign({}, baseProxy, {
-    target: config.get('couchdbServer') + '/' + config.get('databaseName'),
+    target: svrConfig.get('couchdbServer') + '/' + svrConfig.get('databaseName'),
     pathRewrite: {
-        '^/view' : '/_design/' + config.get('designDoc') + '/_view/'
+        '^/view' : '/_design/' + svrConfig.get('designDoc') + '/_view/'
     }
 })));
 
@@ -65,3 +78,4 @@ app.listen(port, () => {
     console.log(`Example app listening (internally) on port ${port}`);
     console.info(`Running node ${process.version}`);
 });
+
