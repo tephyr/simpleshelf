@@ -2,6 +2,7 @@ const config = require('config');
 const express = require('express');
 const app = express();
 const proxy = require('http-proxy-middleware');
+const serverSetup = require('./serverSetup');
 let svrConfig;
 
 function loadSideConfig() {
@@ -17,6 +18,7 @@ loadSideConfig();
 console.info('NODE_ENV:', svrConfig.util.getEnv('NODE_ENV'));
 console.info('NODE_CONFIG_DIR: ' + svrConfig.util.getEnv('NODE_CONFIG_DIR'));
 console.info('NODE_CONFIG_DIR_HOST:', process.env.NODE_CONFIG_DIR_HOST);
+console.info(`Running node ${process.version} on ${new Date().toISOString()}`);
 console.info('[couchdbServer]', svrConfig.get('couchdbServer'), '[databaseName]', svrConfig.get('databaseName'),
     '[designDoc]', svrConfig.get('designDoc'));
 
@@ -74,8 +76,13 @@ app.use('/view', proxy(Object.assign({}, baseProxy, {
     }
 })));
 
-app.listen(port, () => {
-    console.log(`Example app listening (internally) on port ${port}`);
-    console.info(`Running node ${process.version}`);
-});
-
+// Check if server is properly setup.
+if (serverSetup.isSetupNecessary()) {
+    console.warn('Server requires setup; exiting.');
+    process.exitCode = 2;
+} else {
+    app.listen(port, () => {
+        console.log(`Example app listening (internally) on port ${port}`);
+        console.info('');
+    });
+}
