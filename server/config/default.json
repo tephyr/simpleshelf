@@ -1,5 +1,8 @@
 {
     "couchdbServer": "http://couchdb:5984",
     "databaseName": "simpleshelf",
-    "designDoc": "simpleshelfmobile"
+    "designDoc": "simpleshelfmobile",
+    "defaults": {
+        "designdoc": "/opt/simpleshelf/default/designdoc"
+    }
 }

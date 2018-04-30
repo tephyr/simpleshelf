@@ -6,7 +6,8 @@ COPY    ./server/code       /var/www/simpleshelf
 COPY    ./server/config     /opt/simpleshelf/config
 COPY    ./node_modules      /var/www/simpleshelf/node_modules
 COPY    ./output-public     /var/www/simpleshelf/output-public
-# TODO: copy design docs, db default config docs
+COPY    ./output-ddoc       /opt/simpleshelf/default/designdoc
+# TODO: copy db default config docs
 
 WORKDIR /var/www/simpleshelf
 

@@ -11,6 +11,7 @@ services:
         - ./server/config:/opt/simpleshelf/config
         - ./node_modules:/var/www/simpleshelf/node_modules
         - ./output-public:/var/www/simpleshelf/output-public
+        - ./output-ddoc:/opt/simpleshelf/default/designdoc
       
     couchdb:
       ports:
