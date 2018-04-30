@@ -8,6 +8,9 @@
     "env": {
       "NODE_CONFIG_DIR": "/opt/simpleshelf/config",
       "NODE_CONFIG_DIR_HOST": "/opt/simpleshelf/config-host"
-    }
+    },
+    "min_uptime": 3000,
+    "max_restarts": 3,
+    "autorestart": false
   }]
 }
