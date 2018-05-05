@@ -1,19 +1,10 @@
-const config = require('config');
+const serverConfiguration = require('./serverConfiguration');
 const express = require('express');
 const app = express();
 const proxy = require('http-proxy-middleware');
 const serverSetup = require('./serverSetup');
-let svrConfig;
 
-function loadSideConfig() {
-    // Load from host config; all values overwrite standard config.
-    const sideCfg = config.util.loadFileConfigs(process.env.NODE_CONFIG_DIR_HOST);
-
-    // config object made immutable by first .get()
-    svrConfig = config.util.extendDeep({}, config, sideCfg);
-}
-
-loadSideConfig();
+let svrConfig = serverConfiguration.loadSideConfig();
 
 console.info('NODE_ENV:', svrConfig.util.getEnv('NODE_ENV'));
 console.info('NODE_CONFIG_DIR: ' + svrConfig.util.getEnv('NODE_CONFIG_DIR'));
