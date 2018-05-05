@@ -14,7 +14,7 @@ module.exports = function(gulp, settings) {
     /**
      * Copy design doc files to output.
      **/
-    gulp.task('_copy_ddoc', [/*'_clean:ddoc'*/], () => {
+    gulp.task('_copy_ddoc', ['_clean:ddoc'], () => {
         return gulp.src(settings.globs.ddoc)
             .pipe(gulp.dest(settings.ddocOutput));
     });

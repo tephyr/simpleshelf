@@ -2,7 +2,7 @@
 docs/_build/
 node_modules/
 docker-couchdb/
-output-*/
+output*/
 server/config-host/
 server/log/
 config/*-personal.json

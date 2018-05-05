@@ -6,12 +6,13 @@ var gulp = require('gulp'),
 
 var settings = {
     clientSource: path.resolve(config.get('clientSource')),
+    docsOutput: config.get('outputDocs'),
     ddocSource: path.resolve(config.get('ddocSource')),
     ddocOutput: config.get('outputDDoc'),
     destination: config.get('destination'),
-    codeOutputPath: path.join(config.get('outputPublic'), 'code'),
-    staticOutputPath: config.get('outputPublic'),
-    styleOutputPath: path.join(config.get('outputPublic'), 'style'),
+    codeOutputPath: path.join(config.get('outputWebApp'), 'code'),
+    staticOutputPath: config.get('outputWebApp'),
+    styleOutputPath: path.join(config.get('outputWebApp'), 'style'),
     isDebug: config.has('debug') ? config.get('debug') : false,
     libraryModules: config.get("libraryModules"),
     extraPaths: config.get("extraPaths"),
@@ -70,6 +71,8 @@ require("./tasks/build-tests.js")(gulp, settings);
 require("./tasks/copy-test-lib.js")(gulp, settings);
 require("./tasks/browser-sync-init.js")(gulp, settings);
 require("./tasks/browser-sync-reload.js")(gulp, settings);
+require("./tasks/copy-docs.js")(gulp, settings);
+require("./tasks/build-for-docker.js")(gulp, settings);
 
 /**
  * Show settings for this task runner.
