@@ -43,6 +43,7 @@
     "browser-sync": "^2.23.6",
     "browserify": "^16.1.0",
     "chai": "^4.1.2",
+    "couchdb-compile": "^1.10.0",
     "couchdb-push": "^2.3.2",
     "del": "^3.0.0",
     "globby": "^8.0.1",
