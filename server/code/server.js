@@ -33,8 +33,8 @@ const baseProxy = {
 };
 
 /* ROUTES */
-// Main: static files from output-public/
-app.use('/', express.static('output-public'));
+// Main: static files from webapp/
+app.use('/', express.static('webapp'));
 
 // Access info about current db through nano.
 app.get('/simpleshelf', (req, res) => {
