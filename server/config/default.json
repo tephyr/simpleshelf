@@ -3,6 +3,7 @@
     "databaseName": "simpleshelf",
     "designDoc": "simpleshelfmobile",
     "defaults": {
-        "designdoc": "/opt/simpleshelf/default/designdoc"
+        "designDoc": "/opt/simpleshelf/defaults/designdoc",
+        "docs": "/opt/simpleshelf/defaults/docs"
     }
 }
