@@ -10,10 +10,11 @@ services:
         - ./server/code:/var/www/simpleshelf
         - ./server/config:/opt/simpleshelf/config
         - ./node_modules:/var/www/simpleshelf/node_modules
-        - ./output-public:/var/www/simpleshelf/output-public
-        - ./output-ddoc:/opt/simpleshelf/default/designdoc
+        - ./output/webapp:/var/www/simpleshelf/webapp
+        - ./output/designdoc:/opt/simpleshelf/defaults/designdoc
+        - ./output/docs:/opt/simpleshelf/defaults/docs
       
     couchdb:
       ports:
-        # Remove "5984:" to lock out external access.
-        - "5984:5984"
+        # Remove "8081:" to lock out external access.
+        - "8081:5984"

@@ -5,9 +5,9 @@ LABEL   author="Andrew Ittner"
 COPY    ./server/code       /var/www/simpleshelf
 COPY    ./server/config     /opt/simpleshelf/config
 COPY    ./node_modules      /var/www/simpleshelf/node_modules
-COPY    ./output-public     /var/www/simpleshelf/output-public
-COPY    ./output-ddoc       /opt/simpleshelf/default/designdoc
-# TODO: copy db default config docs
+COPY    ./output/webapp     /var/www/simpleshelf/webapp
+COPY    ./output/designdoc      /opt/simpleshelf/defaults/designdoc
+COPY    ./output/docs           /opt/simpleshelf/defaults/docs
 
 WORKDIR /var/www/simpleshelf
 
