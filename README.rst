@@ -57,13 +57,12 @@ After the ``npm install`` step...
 
      sudo DOCKER_ACCT=X NODE_ENV=production docker-compose -f docker-compose.yml -f docker-compose-production.yml up
 
-#. TODO: **ONE-TIME** To seed CouchDB's initial databases::
+#. **ONE-TIME** To seed CouchDB's initial databases::
 
    # NOTE: the containers MUST be running, and you MUST be able to access them.
-   # sudo DOCKER_ACCT=X NODE_ENV=production docker-compose -f docker-compose.yml -f docker-compose-production.yml exec couchdb sh
-   sudo DOCKER_ACCT=X NODE_ENV=production docker-compose -f docker-compose.yml -f docker-compose-production.yml -v $(pwd)/server/setup:/tmp/setup exec couchdb sh
-
-   # Type `exit` and press `ctrl-c` to exit the shell.
+   # The two "node" values are intentional (the first references the node container, the second runs the node executable).
+   # It is safe to run multiple times; a flag will be set once it successfully runs.
+   sudo DOCKER_ACCT=X NODE_ENV=production docker-compose -f docker-compose.yml -f docker-compose-production.yml exec --env CDB_USER=Y CDB_PW=Z node node runsetup.js
 
 Configuration
 -------------

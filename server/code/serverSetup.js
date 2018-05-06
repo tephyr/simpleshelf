@@ -3,7 +3,7 @@ const config = require('config'),
     fs = require('fs'),
     path = require('path'),
     util = require('util'),
-    push = require('couchdb-push'),
+    nano = require('nano'),
     serverConfiguration = require('./serverConfiguration');
 
 const SETUPSTATUSFILE = 'setup-status.json';
@@ -58,8 +58,6 @@ async function _setSetupConfiguration(cfg) {
 
 function setupAsync(cfg, auth={user:'', password:''}) {
     return new Promise((resolve, reject) => {
-        const promisePush = util.promisify(push);
-
         // Insert credentials into URL.
         const protocolEnd = cfg.get('couchdbServer').indexOf('://') + 3;
         const protocol = cfg.get('couchdbServer').substring(0, protocolEnd);
@@ -69,7 +67,16 @@ function setupAsync(cfg, auth={user:'', password:''}) {
         const dbURL = `${authURL}/${cfg.get('databaseName')}`;
         console.debug(dbURL, cfg.defaults.designDoc);
 
-        promisePush(dbURL, cfg.defaults.designDoc).then(() => {
+        const nanoDriver = nano(authURL);
+
+        const db = nanoDriver.use(cfg.get('databaseName'));
+        const bulkFn = util.promisify(db.bulk);
+        const docs = [
+            JSON.parse(fs.readFileSync(cfg.defaults.designDoc))
+        ];
+        // TODO: load from cfg.defaults.docs
+
+        bulkFn({docs}).then(() => {
             resolve('!');
         }).catch((msgData) => {
             reject(msgData);
@@ -87,7 +94,7 @@ async function run() {
         const serverCfg = serverConfiguration.loadSideConfig();
         const setupCfg = await _getSetupConfiguration();
         const result = await setupAsync(serverCfg, {user: process.env.CDB_USER, password: process.env.CDB_PW}).catch((msgData) => {
-            console.debug(msgData);
+            console.debug(_.omit(msgData, ['request']));
             throw(msgData);
         });
 
