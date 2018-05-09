@@ -38,7 +38,7 @@ Development
 
 #. Run the app::
 
-     sudo DOCKER_ACCT=X NODE_ENV=development docker-compose up
+     sudo DOCKER_ACCT=X NODE_ENV=development COMPOSE_PROJECT_NAME=dev docker-compose up
 
 Production
 ----------
@@ -51,18 +51,18 @@ After the ``npm install`` step...
 
 #. Copy ``./server/config`` to the target directory, retaining the data structure.
 #. Copy ``docker-compose*.yml`` to the target directory.
-#. **If you intend to run multiple versions**, add a ``container_name`` value to ``docker-compose-production.yml`` for each service, customizing it *for that instance*.
+#. **If you intend to run multiple versions on the same system**, add a ``COMPOSE_PROJECT_NAME`` environment variable, customizing the container names *for that instance*.
 #. In the target directory, pass the initial CouchDB admin name & password to ``couchdb_init.sh``, and run it.
 #. Run the app::
 
-     sudo DOCKER_ACCT=X NODE_ENV=production docker-compose -f docker-compose.yml -f docker-compose-production.yml up
+     sudo DOCKER_ACCT=A NODE_ENV=production COMPOSE_PROJECT_NAME=B docker-compose -f docker-compose.yml -f docker-compose-production.yml up
 
 #. **ONE-TIME** To seed CouchDB's initial databases::
 
    # NOTE: the containers MUST be running, and you MUST be able to access them.
    # The two "node" values are intentional (the first references the node container, the second runs the node executable).
    # It is safe to run multiple times; a flag will be set once it successfully runs.
-   sudo DOCKER_ACCT=X NODE_ENV=production docker-compose -f docker-compose.yml -f docker-compose-production.yml exec --env CDB_USER=Y CDB_PW=Z node node runsetup.js
+   sudo DOCKER_ACCT=A NODE_ENV=production COMPOSE_PROJECT_NAME=B docker-compose -f docker-compose.yml -f docker-compose-production.yml exec --env CDB_USER=Y --env CDB_PW=Z node node runsetup.js
 
 Configuration
 -------------

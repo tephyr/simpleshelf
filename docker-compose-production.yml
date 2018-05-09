@@ -4,8 +4,6 @@ version: "3.1"
 services:
         
     node:
-      # Change if running multiple instances on the same host.
-      # container_name: simpleshelf-node-front
       image: ${DOCKER_ACCT}/simpleshelf-node-front:production
       ports:
         # Customize exported port.
