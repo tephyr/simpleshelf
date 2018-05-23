@@ -49,7 +49,6 @@ After the ``npm install`` step...
      # Use your Docker Hub ID, or an empty string.
      sudo DOCKER_ACCT=X NODE_ENV=production docker-compose -f docker-compose.yml -f docker-compose-production.yml build
 
-#. Copy ``./server/config`` to the target directory, retaining the data structure.
 #. Copy ``docker-compose*.yml`` to the target directory.
 #. **If you intend to run multiple versions on the same system**, add a ``COMPOSE_PROJECT_NAME`` environment variable, customizing the container names *for that instance*.
 #. In the target directory, pass the initial CouchDB admin name & password to ``couchdb_init.sh``, and run it.
