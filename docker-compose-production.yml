@@ -1,17 +1,15 @@
 # production settings
 version: "3.1"
+
  
 services:
-        
     node:
       image: ${DOCKER_ACCT}/simpleshelf-node-front:production
       ports:
         # Customize exported port.
-        - "9090:8080"
+        - "${NODE_PORTS}"
 
     couchdb:
-      # Change if running multiple instances on the same host.
-      # container_name: couchdb
       ports:
-        # Disallow external access.
-        - "5984"
+        # Use a single port number to disallow external access: "5984".
+        - "${COUCHDB_PORTS}"

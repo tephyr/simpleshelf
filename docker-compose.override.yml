@@ -5,7 +5,7 @@ services:
         
     node:
       ports:
-        - "8080:8080"
+        - "${NODE_PORTS}"
       volumes:
         - ./server/code:/var/www/simpleshelf
         - ./server/config:/opt/simpleshelf/config
@@ -16,5 +16,5 @@ services:
       
     couchdb:
       ports:
-        # Remove "8081:" to lock out external access.
-        - "8081:5984"
+        # Use a single port number to disallow external access: "5984".
+        - "${COUCHDB_PORTS}"

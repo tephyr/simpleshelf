@@ -1,4 +1,6 @@
 # Cribbed from https://github.com/DanWahlin/CodeWithDanDockerServices
+#. Customize simpleshelf.*.env.
+#. Link (or copy) preferred simpleshelf.*.env to .env (dot-file) in this directory.
 #. Run docker-compose build
 #. Run docker-compose up
     

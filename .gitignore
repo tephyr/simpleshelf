@@ -9,6 +9,7 @@ config/*-personal.json
 config/*-demo.json
 config/personal-*/
 server/config/local*.json
+.env
 next.txt
 README.html
 *.pyc
