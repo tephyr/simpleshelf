@@ -28,19 +28,25 @@ const baseProxy = {
 app.use('/', express.static('webapp'));
 
 // Access info about current db through nano.
-app.get('/simpleshelf', (req, res) => {
-    nano.db.list(function(err, body) {
-        if (err) {
+app.get('/serverinfo', (req, res) => {
+    (async function foo() {
+        const couchdbInfo = await nano.request({
+            path: '/'
+        });
+        
+        const body = await nano.db.list().catch((err) => {
             console.warn(err);
             res.send('Error when retrieving current databases.');
-        } else {
-            // body is an array
-            body.forEach(function(db) {
-                console.log(db);
-            });
-            res.send('Listed current databases to console.');
-        }
-    });
+        });
+
+        console.log(couchdbInfo);
+        // body is an array
+        body.forEach(function(db) {
+            console.log(db);
+        });
+
+        res.send('Printed server info to console.');
+    }());
 });
 
 // Access session calls
