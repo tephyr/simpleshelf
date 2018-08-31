@@ -2,7 +2,7 @@
   "apps" : [{
     "name"        : "simpleshelf",
     "script"      : "./server.js",
-    "watch"       : ["./server.js", "./serverSetup.js"],
+    "watch"       : ["./server.js", "./server*.js"],
     "out_file"    : "/var/log/pm2/pm2.log",
     "error_file"  : "/var/log/pm2/pm2.log",
     "env": {
