@@ -53,6 +53,7 @@ settings.globs = {
 
 // Import external tasks, giving them the settings object.
 require("./tasks/bulk-update")(gulp, settings);
+require("./tasks/bulk-update-file")(gulp, settings);
 require("./tasks/build-docs")(gulp, settings);
 require("./tasks/clean-ui-framework")(gulp, settings);
 require("./tasks/ui-framework")(gulp, settings);

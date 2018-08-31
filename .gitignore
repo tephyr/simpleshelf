@@ -9,7 +9,8 @@ config/*-personal.json
 config/*-demo.json
 config/personal-*/
 server/config/local*.json
+*.pyc
 .env
+bulk-update-file.json
 next.txt
 README.html
-*.pyc
