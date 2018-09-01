@@ -1,8 +1,10 @@
+const _ = require('lodash');
 const serverConfiguration = require('./serverConfiguration');
 const express = require('express');
 const app = express();
 const proxy = require('http-proxy-middleware');
 const serverSetup = require('./serverSetup');
+const bodyParser = require('body-parser');
 
 let svrConfig = serverConfiguration.loadSideConfig();
 
@@ -13,6 +15,8 @@ console.info(`Running node ${process.version} on ${new Date().toISOString()}`);
 console.info('[couchdbServer]', svrConfig.get('couchdbServer'), '[databaseName]', svrConfig.get('databaseName'),
     '[designDoc]', svrConfig.get('designDoc'));
 
+app.use(bodyParser.json());
+
 const nano = require('nano')(svrConfig.get('couchdbServer')),
     simpleshelfDB = nano.use(svrConfig.get('databaseName'));
 
@@ -22,6 +26,8 @@ const baseProxy = {
     changeOrigin: true,
     logLevel: 'debug'
 };
+
+const serverDocumentIO = require('./serverDocumentIO');
 
 /* ROUTES */
 // Main: static files from webapp/
@@ -72,6 +78,42 @@ app.use('/view', proxy(Object.assign({}, baseProxy, {
         '^/view' : '/_design/' + svrConfig.get('designDoc') + '/_view/'
     }
 })));
+
+// Get the database's data in bulk-load-ready format.
+app.get('/getdocs', (req, res) => {
+    (async function bkp() {
+        // console.info(req);
+        // console.info('Has Basic Auth?', req.headers.authorization);
+        // console.info('Has Cookie?', req.headers.cookie);
+
+        const nanoDB = require('nano')({
+            url: svrConfig.get('couchdbServer'),
+            cookie: req.headers.cookie,
+            requestDefaults: { jar:true }
+        }).use(svrConfig.get('databaseName'));
+
+        let sessionInfo = await nanoDB.session();
+        console.info('sessionInfo', sessionInfo);
+
+        let documents = await serverDocumentIO.getDocuments(nanoDB);
+        console.info(`# of documents: ${documents.length}`);
+        res.send({
+            count: documents.length,
+            docs: documents
+        });
+    })();
+});
+
+// Add documents to db.
+app.post('/setdocs', (req, res) => {
+
+    (async function bulkUpdate(){
+        let updateResponse = await serverDocumentIO.setDocuments(simpleshelfDB, req.body);
+        console.info(updateResponse);
+        res.send(updateResponse);
+    }());
+
+});
 
 // Check if server is properly setup.
 if (serverSetup.isSetupNecessary()) {
