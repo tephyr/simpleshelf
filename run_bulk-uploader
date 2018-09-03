@@ -1,0 +1,7 @@
+#!/bin/bash
+USER=$1
+PW=$2
+http --session=/tmp/session-couchdb-bulk-uploader.json -f POST localhost:8080/auth/_session name=$USER password=$PW
+http --session=/tmp/session-couchdb-bulk-uploader.json localhost:8080/setdocs < bulk-update-file.json
+http --session=/tmp/session-couchdb-bulk-uploader.json DELETE localhost:8080/auth/_session
+rm /tmp/session-couchdb-bulk-uploader.json
