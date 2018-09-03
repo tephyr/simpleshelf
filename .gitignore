@@ -12,5 +12,6 @@ server/config/local*.json
 *.pyc
 .env
 bulk-update-file.json
+last-commit-hash.txt
 next.txt
 README.html
