@@ -1,0 +1,55 @@
+# This section contains your application metadata.
+version: 0.1.0
+name: simplshelfapp
+description: 
+# Namespace to use when pushing to a registry. This is typically your Hub username.
+namespace: ${DOCKER_ACCT}
+# List of application maintainers with name and email for each
+maintainers:
+  - name: Andrew Ittner
+    email: aji@rhymingpanda.com
+
+---
+version: "3.7"
+ 
+services:
+        
+    node:
+      image: ${DOCKER_ACCT}/simpleshelf-node-front:${NODE_ENV}
+      environment:
+        environment: ${NODE_ENV}
+      ports:             
+        - "${NODE_PORTS}"
+      volumes:
+        - ${WORK_DIR}/server/config-host:/opt/simpleshelf/config-host
+        - ${WORK_DIR}/server/log:/var/log
+      working_dir: /var/www/simpleshelf
+      depends_on:
+        - couchdb
+      networks:
+        - primarynet
+      
+    couchdb:
+      image: apache/couchdb
+      volumes:
+        - ${WORK_DIR}/docker-couchdb/data:/opt/couchdb/data
+        - ${WORK_DIR}/docker-couchdb/etc/local.d:/opt/couchdb/etc/local.d
+      ports:
+        # Use a single port number to disallow external access: "5984".
+        - "${COUCHDB_PORTS}"
+      networks:
+        - primarynet
+
+networks:
+    primarynet:
+      name: ${NETWORK_NAME}
+      driver: bridge
+
+---
+# This section contains the default values for your application settings.
+DOCKER_ACCT: tephyr
+NODE_ENV: production
+NODE_PORTS: 9090:8080
+COUCHDB_PORTS: 5984
+NETWORK_NAME: simpleshelf-network
+WORK_DIR: "."
