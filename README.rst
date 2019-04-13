@@ -26,7 +26,7 @@ How to install
 ++++++++++++++
 Development
 -----------
-#. Install Docker_ & docker-compose.
+#. Install Docker_ & docker-compose_.
 #. Install NodeJS_.
 #. Install gulp_ globally.
 #. Install node dependencies: ``npm install``.
@@ -60,10 +60,10 @@ After the ``npm install`` step...
 
 #. **ONE-TIME** To seed CouchDB's initial databases::
 
-   # NOTE: the containers MUST be running, and you MUST be able to access them.
-   # The two "node" values are intentional (the first references the node container, the second runs the node executable).
-   # It is safe to run multiple times; a flag will be set once it successfully runs.
-   sudo DOCKER_ACCT=A docker-compose -f docker-compose.yml -f docker-compose-production.yml exec --env CDB_USER=Y --env CDB_PW=Z node node runsetup.js
+     # NOTE: the containers MUST be running, and you MUST be able to access them.
+     # The two "node" values are intentional (the first references the node container, the second runs the node executable).
+     # It is safe to run multiple times; a flag will be set once it successfully runs.
+     sudo DOCKER_ACCT=A docker-compose -f docker-compose.yml -f docker-compose-production.yml exec --env CDB_USER=Y --env CDB_PW=Z node node runsetup.js
 
 #. Restart the server if the seed was necessary.
 
@@ -108,6 +108,7 @@ How to test
 .. _chai: http://chaijs.com/
 .. _couchdb: http://couchdb.apache.org/
 .. _docker: https://docker.com/
+.. _docker-compose: https://github.com/docker/compose
 .. _gulp: http://gulpjs.com/
 .. _jquery: http://jquery.com/
 .. _`library of congress`: http://www.loc.gov/
