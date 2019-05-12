@@ -1,10 +1,12 @@
-module.exports = function(gulp, settings) {
+/**
+ * Execute linter on given source files
+ * @return {Stream}
+ */
+function lint() {
     const lintSpecific = require('../util/gulp/lint-specific');
-    /**
-     * Execute linter on given source files
-     * @return {Stream}
-     */
-    gulp.task('lint', function () {
-        return lintSpecific(settings.globs.appCode);
-    });
+    return lintSpecific(global.settings.globs.appCode);
 };
+
+// exports.default = lint;
+export { lint };
+export default lint;

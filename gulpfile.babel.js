@@ -51,6 +51,8 @@ settings.globs = {
     'sass': path.join(settings.clientSource, '/style/*.scss')
 };
 
+global.settings = settings;
+
 // Import external tasks, giving them the settings object.
 require("./tasks/bulk-update")(gulp, settings);
 require("./tasks/bulk-update-file")(gulp, settings);
@@ -63,7 +65,9 @@ require("./tasks/build-ddoc")(gulp, settings);
 require("./tasks/push")(gulp, settings);
 require("./tasks/code")(gulp, settings);
 require("./tasks/build-app")(gulp, settings);
-require("./tasks/lint")(gulp, settings);
+import { lint } from './tasks/lint';
+
+//import lint from "./tasks/lint";
 //require("./tasks/test-headless.js")(gulp, settings); // Disabled until node LTS supports async/await AND gulp.
 require("./tasks/bundle-test-lib.js")(gulp, settings);
 require("./tasks/ui-test.js")(gulp, settings);
@@ -74,6 +78,8 @@ require("./tasks/browser-sync-reload.js")(gulp, settings);
 require("./tasks/test-in-browser.js")(gulp, settings);
 require("./tasks/copy-docs.js")(gulp, settings);
 require("./tasks/build-for-docker.js")(gulp, settings);
+
+export { lint };
 
 /**
  * Show settings for this task runner.
