@@ -9,7 +9,7 @@ module.exports = function(gulp, settings) {
         return del(settings.docsOutput);
     });
 
-    gulp.task('copy-docs', ['_clean-docs'], function() {
+    gulp.task('copy-docs', gulp.series('_clean-docs', function() {
         let docsGlobs = [];
 
         if (_.has(settings, '_docs')) {
@@ -19,5 +19,5 @@ module.exports = function(gulp, settings) {
 
         return gulp.src(docsGlobs)
             .pipe(gulp.dest(settings.docsOutput));
-    });
+    }));
 };

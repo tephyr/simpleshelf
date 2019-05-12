@@ -4,7 +4,7 @@ module.exports = function(gulp, settings) {
     /**
      * Copy 3rd-party UI framework files to _attachments.
      **/
-    gulp.task('ui-framework', ['clean:ui-framework'], function() {
+    gulp.task('ui-framework', gulp.series('clean:ui-framework', function() {
         var bootstrapCSS = gulp.src(settings.externalUICSSDev)
             .pipe(gulp.dest(settings.styleOutputPath));
 
@@ -12,5 +12,5 @@ module.exports = function(gulp, settings) {
             .pipe(gulp.dest(settings.codeOutputPath));
 
         return merge(bootstrapCSS, bootstrapJS);
-    });
+    }));
 };

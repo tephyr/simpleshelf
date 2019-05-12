@@ -4,7 +4,7 @@ module.exports = function(gulp, settings) {
     /**
      * Run all test build tasks.
      **/
-    gulp.task('build-tests', ['copy-test-lib', 'bundle-test-lib', 'ui-test'], function () {
+    gulp.task('build-tests', gulp.series('copy-test-lib', 'bundle-test-lib', 'ui-test', function () {
         // Lastly, bundle the test code (app/code/test/...).
         return appBundlerFn({
             entries: './app/code/test/testIndex.js',
@@ -14,5 +14,5 @@ module.exports = function(gulp, settings) {
             destinationName: 'test.bundle.js',
             destinationDir: settings.testOutputPath
         });
-    });
+    }));
 };

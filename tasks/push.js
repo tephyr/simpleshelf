@@ -7,7 +7,7 @@ module.exports = function(gulp, settings) {
     /**
      * Push SOURCE to DESTINATION using couchdb-push.
      **/
-    gulp.task('push', ['build-ddoc'], function(cb) {
+    gulp.task('push', gulp.series('build-ddoc', function(cb) {
         console.info("Pushing", settings.ddocOutput, "to", settings.destination);
         push(settings.destination, settings.ddocOutput, function(err, resp) {
             if (_.isObject(err)) {
@@ -21,5 +21,5 @@ module.exports = function(gulp, settings) {
                 return cb();
             }
         });
-    });
+    }));
 };

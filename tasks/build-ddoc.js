@@ -19,7 +19,7 @@ module.exports = function(gulp, settings) {
     /**
      * Copy design doc files to output.
      **/
-    gulp.task('_copy_ddoc', ['_clean:ddoc'], () => {
+    gulp.task('_copy_ddoc', () => {
         return gulp.src(settings.globs.ddoc)
             .pipe(gulp.dest(outputTemp));
     });
@@ -27,7 +27,7 @@ module.exports = function(gulp, settings) {
     /**
      * Take global modules and install them to {ddocOutput/views/lib}.
      */
-    gulp.task('_copy_ddoc_modules', ['_copy_ddoc'], () => {
+    gulp.task('_copy_ddoc_modules', () => {
         const moduleDest = path.join(outputTemp, 'views', 'lib');
         return gulp.src(settings.ddocModules)
             .pipe(gulp.dest(moduleDest));
@@ -36,7 +36,7 @@ module.exports = function(gulp, settings) {
     /**
      * Compile design doc directory to single JSON file.
      */
-    gulp.task('_compile-ddoc', ['_copy_ddoc_modules'], (cb) => {
+    gulp.task('_compile-ddoc', (cb) => {
         compile(outputTemp, (err, doc) => {
             fs.mkdirSync(settings.ddocOutput);
             fs.writeFileSync(path.join(settings.ddocOutput, 'designdoc.json'), JSON.stringify(doc));
@@ -48,5 +48,5 @@ module.exports = function(gulp, settings) {
     /**
      * Run all sub-tasks in order.
      */
-    gulp.task('build-ddoc', ['_compile-ddoc']);
+    gulp.task('build-ddoc', gulp.series('_clean:ddoc', '_copy_ddoc', '_copy_ddoc_modules', '_compile-ddoc'))
 };

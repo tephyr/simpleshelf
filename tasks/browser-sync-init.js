@@ -5,12 +5,12 @@ module.exports = function(gulp, settings) {
     /**
      * Initialize the browser sync server (static).
      */
-    gulp.task('browser-sync-init', ['build-tests'], function(cb) {
+    gulp.task('browser-sync-init', gulp.series('build-tests', function(cb) {
         settings.dynamic.browserSync.init({
             server: {
                 baseDir: settings.testOutputPath
             }
         });
         cb();
-    });
+    }));
 };

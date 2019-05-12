@@ -59,26 +59,26 @@ require("./tasks/clean-ui-framework")(gulp, settings);
 require("./tasks/ui-framework")(gulp, settings);
 require("./tasks/ui-local")(gulp, settings);
 require("./tasks/bundle-lib")(gulp, settings);
+require("./tasks/build-ddoc")(gulp, settings);
 require("./tasks/push")(gulp, settings);
 require("./tasks/code")(gulp, settings);
 require("./tasks/build-app")(gulp, settings);
-require("./tasks/build-ddoc")(gulp, settings);
 require("./tasks/lint")(gulp, settings);
-require("./tasks/test-in-browser.js")(gulp, settings);
 //require("./tasks/test-headless.js")(gulp, settings); // Disabled until node LTS supports async/await AND gulp.
 require("./tasks/bundle-test-lib.js")(gulp, settings);
 require("./tasks/ui-test.js")(gulp, settings);
-require("./tasks/build-tests.js")(gulp, settings);
 require("./tasks/copy-test-lib.js")(gulp, settings);
+require("./tasks/build-tests.js")(gulp, settings);
 require("./tasks/browser-sync-init.js")(gulp, settings);
 require("./tasks/browser-sync-reload.js")(gulp, settings);
+require("./tasks/test-in-browser.js")(gulp, settings);
 require("./tasks/copy-docs.js")(gulp, settings);
 require("./tasks/build-for-docker.js")(gulp, settings);
 
 /**
  * Show settings for this task runner.
  **/
-gulp.task('default', function() {
+gulp.task('default', function(cb) {
     // place code for your default task here
     if (_.isEmpty(process.env.NODE_ENV)) {
         // process.env.NODE_ENV = "personal";
@@ -96,6 +96,8 @@ gulp.task('default', function() {
     console.info();
     console.info("Typical dev command: `gulp app-watch ddoc-watch test-watch docs-watch`");
     console.info("  (This pushes the current code to CouchDB, builds the UI, then watches for changes.)");
+
+    cb();
 });
 
 /**
@@ -143,12 +145,14 @@ gulp.task('docs-watch', function() {
 });
 
 // Watch files, run test tasks.
-gulp.task('test-watch', ['browser-sync-init'], function() {
+gulp.task('test-watch', gulp.series('browser-sync-init', function() {
     // When any test or source code changes, combine/run browserify/run tests.
     const watcher = gulp.watch(_.flattenDeep([settings.globs.allCode, settings.globs.testCode]), {debounceDelay: 100},
         ['browser-sync-reload'/*, 'test-headless'*/]);
 
-    watcher.on('change', function(event) {
+    watcher.on('change', function(path, stats) {
+        console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
+    }).on('unlink', function(path) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
     });
-});
+}));
