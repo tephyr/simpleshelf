@@ -14,4 +14,4 @@ server/config/local*.json
 bulk-update-file.json
 last-commit-hash.txt
 next.txt
-README.html
+*.html
