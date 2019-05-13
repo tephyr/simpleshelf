@@ -143,14 +143,21 @@ gulp.task('docs-watch', function() {
 });
 
 // Watch files, run test tasks.
-//gulp.task('test-watch', gulp.series('browser-sync-init', function() {
-    // When any test or source code changes, combine/run browserify/run tests.
-  //  const watcher = gulp.watch(_.flattenDeep([settings.globs.allCode, settings.globs.testCode]), {debounceDelay: 100},
-   //     ['browser-sync-reload'/*, 'test-headless'*/]);
+export const testWatch = gulp.series(browserSyncInit, function() {
+    const _logger = function(event, targetPath) {
+        //console.log('event', event, 'targetPath', targetPath);
+        if (['add', 'change', 'unlink', 'addDir', 'unlinkDir'].includes(event)) {
+            console.log(`${path.relative(process.cwd(), targetPath)} ==> ${event}, running tests.`);
+        }
+    };
 
-    /*watcher.on('change', function(path, stats) {
-        console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
-    }).on('unlink', function(path) {
-        console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
-    });
-}));*/
+    // When any test or source code changes, combine/run browserify/run tests.
+    const watcher = gulp.watch(
+        _.flattenDeep([settings.globs.allCode, settings.globs.testCode]),
+        //{events: 'all'}, // This seems to prevent the chokidar events from firing.
+        gulp.series(browserSyncReload) /*'test-headless'*/
+    );
+
+    // Use chokidar instance to log events.
+    watcher.on('all', _logger);
+});
