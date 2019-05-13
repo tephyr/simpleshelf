@@ -109,16 +109,21 @@ gulp.task('ddoc-watch', function() {
 });
 
 // Watch files, build app (front-end only).
-gulp.task('app-watch', function() {
+export const appWatch = function() {
     settings.isDebug = true;
+
+    const _logger = function(event, targetPath) {
+        if (['add', 'change', 'unlink', 'addDir', 'unlinkDir'].includes(event)) {
+            console.log(`${path.relative(process.cwd(), targetPath)} ==> ${event}, building front-end.`);
+        }
+    };
+
     // When any app code changes, combine/run browserify.
     const watchList = _.flattenDeep(_.values(_.pick(settings.globs, ['ui', 'images', 'sass', 'appCode'])));
-    const watcher = gulp.watch(watchList, {debounceDelay: 100}, ['build-app']);
+    const watcher = gulp.watch(watchList, gulp.series(buildApp));
 
-    watcher.on('change', function(event) {
-        console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
-    });
-});
+    watcher.on('all', _logger);
+};
 
 // Watch files, run analyze tasks.
 export const analyzeWatch = function() {
