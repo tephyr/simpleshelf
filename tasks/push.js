@@ -1,25 +1,28 @@
-module.exports = function(gulp, settings) {
-    var _ = require('lodash'),
-        push = require('couchdb-push'),
-        notify = require("gulp-notify"),
-        notifier = require("node-notifier");
+const _ = require('lodash'),
+    cdbPush = require('couchdb-push'),
+    notify = require("gulp-notify"),
+    notifier = require("node-notifier");
 
-    /**
-     * Push SOURCE to DESTINATION using couchdb-push.
-     **/
-    gulp.task('push', gulp.series('build-ddoc', function(cb) {
-        console.info("Pushing", settings.ddocOutput, "to", settings.destination);
-        push(settings.destination, settings.ddocOutput, function(err, resp) {
-            if (_.isObject(err)) {
-                // Handle failure.
-                console.error(err);
-                return cb(err);
-            } else {
-                // Handle success.
-                console.log(resp);
-                notifier.notify({title: 'push', message: JSON.stringify(resp, null, ' ')});
-                return cb();
-            }
-        });
-    }));
+import {series} from 'gulp';
+import {buildDDoc} from './build-ddoc';
+
+/**
+ * Push SOURCE to DESTINATION using couchdb-push.
+ **/
+const _push = function(cb) {
+    console.info("Pushing", global.settings.ddocOutput, "to", global.settings.destination);
+    cdbPush(global.settings.destination, global.settings.ddocOutput, function(err, resp) {
+        if (_.isObject(err)) {
+            // Handle failure.
+            console.error(err);
+            return cb(err);
+        } else {
+            // Handle success.
+            console.log(resp);
+            notifier.notify({title: 'push', message: JSON.stringify(resp, null, ' ')});
+            return cb();
+        }
+    });
 };
+
+export const push = series(buildDDoc, _push);

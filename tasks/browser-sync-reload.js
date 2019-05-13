@@ -1,9 +1,13 @@
-module.exports = function(gulp, settings) {
-    /**
-     * Reload the browserSync object.
-     */
-    gulp.task('browser-sync-reload', gulp.series('build-tests', function(cb){
-        settings.dynamic.browserSync.reload();
-        cb();
-    }));
+import {series} from 'gulp';
+
+import {buildTests} from './build-tests';
+
+/**
+ * Reload the browserSync object.
+ */
+const _browserSyncReload = function(cb){
+    global.settings.dynamic.browserSync.reload();
+    cb();
 };
+
+export const browserSyncReload = series(buildTests, _browserSyncReload);

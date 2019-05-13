@@ -1,7 +1,11 @@
-module.exports = function(gulp, settings) {
+import {series} from 'gulp';
 
-    /**
-     * Build files locally.
-     **/
-    gulp.task('build-app', gulp.series('bundle-lib', 'code', 'ui-framework', 'ui-local'));
-};
+import {bundleLib} from './bundle-lib';
+import {code} from './code';
+import {uiFramework} from './ui-framework';
+import {uiLocal} from './ui-local';
+
+/**
+ * Build files locally.
+ **/
+export const buildApp = series(bundleLib, code, uiFramework, uiLocal);

@@ -1,10 +1,8 @@
-module.exports = function(gulp, settings) {
-    var libBundlerFn = require('./util-bundlers.js')(gulp, settings).libBundlerFn;
+import {libBundlerFn} from './util-bundlers';
 
-    /**
-     * Combine all app/code/lib libraries, *in order*, to testlib.bundle.js.
-     **/
-    gulp.task('bundle-test-lib', function() {
-        return libBundlerFn(settings.libraryModules, 'testlib.bundle.js', settings.testOutputPath);
-    });
+/**
+ * Combine all app/code/lib libraries, *in order*, to testlib.bundle.js.
+ **/
+export const bundleTestLib = function() {
+    return libBundlerFn(global.settings.libraryModules, 'testlib.bundle.js', global.settings.testOutputPath);
 };

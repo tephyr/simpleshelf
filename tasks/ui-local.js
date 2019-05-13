@@ -1,26 +1,26 @@
-module.exports = function(gulp, settings) {
-    var path = require('path'),
-        sass = require('gulp-sass'),
-        merge = require('merge-stream');
+const path = require('path'),
+    sass = require('gulp-sass'),
+    merge = require('merge-stream');
 
-    /**
-     * Build local SASS into CSS, copy any HTML or images.
-     **/
-    gulp.task('ui-local', function() {
-        var uiFiles = gulp.src(settings.globs.directUI)
-            .pipe(gulp.dest(path.join(settings.staticOutputPath)));
+import {src, dest} from 'gulp';
 
-        var imageFiles = gulp.src(settings.globs.images)
-            .pipe(gulp.dest(path.join(settings.staticOutputPath, 'img')));
+/**
+ * Build local SASS into CSS, copy any HTML or images.
+ **/
+export const uiLocal = function() {
+    const uiFiles = src(settings.globs.directUI)
+        .pipe(dest(path.join(settings.staticOutputPath)));
 
-        var buildSass = gulp.src(settings.globs.sass)
-            .pipe(sass({
-                includePaths: [
-                    './node_modules/bootstrap/scss'
-                ]
-            }).on('error', sass.logError))
-            .pipe(gulp.dest(settings.styleOutputPath));
+    const imageFiles = src(settings.globs.images)
+        .pipe(dest(path.join(settings.staticOutputPath, 'img')));
 
-        return merge(buildSass, uiFiles, imageFiles);
-    });
+    const buildSass = src(settings.globs.sass)
+        .pipe(sass({
+            includePaths: [
+                './node_modules/bootstrap/scss'
+            ]
+        }).on('error', sass.logError))
+        .pipe(dest(settings.styleOutputPath));
+
+    return merge(buildSass, uiFiles, imageFiles);
 };

@@ -7,6 +7,4 @@ function lint() {
     return lintSpecific(global.settings.globs.appCode);
 };
 
-// exports.default = lint;
 export { lint };
-export default lint;

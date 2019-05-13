@@ -54,32 +54,24 @@ settings.globs = {
 global.settings = settings;
 
 // Import external tasks, giving them the settings object.
-require("./tasks/bulk-update")(gulp, settings);
-require("./tasks/bulk-update-file")(gulp, settings);
-require("./tasks/build-docs")(gulp, settings);
-require("./tasks/clean-ui-framework")(gulp, settings);
-require("./tasks/ui-framework")(gulp, settings);
-require("./tasks/ui-local")(gulp, settings);
-require("./tasks/bundle-lib")(gulp, settings);
-require("./tasks/build-ddoc")(gulp, settings);
-require("./tasks/push")(gulp, settings);
-require("./tasks/code")(gulp, settings);
-require("./tasks/build-app")(gulp, settings);
+//require("./tasks/bulk-update")(gulp, settings);
+//require("./tasks/bulk-update-file")(gulp, settings);
+import {buildDocs} from "./tasks/build-docs";
+import {bundleLib} from "./tasks/bundle-lib";
+import {buildDDoc} from "./tasks/build-ddoc";
+import {push} from "./tasks/push";
+import {code} from "./tasks/code";
+import {buildApp} from "./tasks/build-app";
 import { lint } from './tasks/lint';
 
-//import lint from "./tasks/lint";
 //require("./tasks/test-headless.js")(gulp, settings); // Disabled until node LTS supports async/await AND gulp.
-require("./tasks/bundle-test-lib.js")(gulp, settings);
-require("./tasks/ui-test.js")(gulp, settings);
-require("./tasks/copy-test-lib.js")(gulp, settings);
-require("./tasks/build-tests.js")(gulp, settings);
-require("./tasks/browser-sync-init.js")(gulp, settings);
-require("./tasks/browser-sync-reload.js")(gulp, settings);
-require("./tasks/test-in-browser.js")(gulp, settings);
-require("./tasks/copy-docs.js")(gulp, settings);
-require("./tasks/build-for-docker.js")(gulp, settings);
+import {uiTest} from "./tasks/ui-test.js";
+import {browserSyncInit} from "./tasks/browser-sync-init.js";
+import {browserSyncReload} from "./tasks/browser-sync-reload.js";
+import * as testInBrowser from "./tasks/test-in-browser";
+import {buildForDocker} from "./tasks/build-for-docker.js";
 
-export { lint };
+export { buildApp, buildDDoc, buildDocs, buildForDocker, bundleLib, code, lint, push, uiTest };
 
 /**
  * Show settings for this task runner.
@@ -151,14 +143,14 @@ gulp.task('docs-watch', function() {
 });
 
 // Watch files, run test tasks.
-gulp.task('test-watch', gulp.series('browser-sync-init', function() {
+//gulp.task('test-watch', gulp.series('browser-sync-init', function() {
     // When any test or source code changes, combine/run browserify/run tests.
-    const watcher = gulp.watch(_.flattenDeep([settings.globs.allCode, settings.globs.testCode]), {debounceDelay: 100},
-        ['browser-sync-reload'/*, 'test-headless'*/]);
+  //  const watcher = gulp.watch(_.flattenDeep([settings.globs.allCode, settings.globs.testCode]), {debounceDelay: 100},
+   //     ['browser-sync-reload'/*, 'test-headless'*/]);
 
-    watcher.on('change', function(path, stats) {
+    /*watcher.on('change', function(path, stats) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
     }).on('unlink', function(path) {
         console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
     });
-}));
+}));*/

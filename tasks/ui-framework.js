@@ -1,16 +1,20 @@
-module.exports = function(gulp, settings) {
-    var merge = require('merge-stream');
+import {series, src, dest} from 'gulp';
 
-    /**
-     * Copy 3rd-party UI framework files to _attachments.
-     **/
-    gulp.task('ui-framework', gulp.series('clean:ui-framework', function() {
-        var bootstrapCSS = gulp.src(settings.externalUICSSDev)
-            .pipe(gulp.dest(settings.styleOutputPath));
+import merge from 'merge-stream';
 
-        var bootstrapJS = gulp.src(settings.externalUIJSDev)
-            .pipe(gulp.dest(settings.codeOutputPath));
+import {cleanUIFramework} from './clean-ui-framework';
 
-        return merge(bootstrapCSS, bootstrapJS);
-    }));
+/**
+ * Copy 3rd-party UI framework files to _attachments.
+ **/
+const _uiFramework = function() {
+    const bootstrapCSS = src(settings.externalUICSSDev)
+        .pipe(dest(settings.styleOutputPath));
+
+    const bootstrapJS = src(settings.externalUIJSDev)
+        .pipe(dest(settings.codeOutputPath));
+
+    return merge(bootstrapCSS, bootstrapJS);
 };
+
+export const uiFramework = series(cleanUIFramework, _uiFramework);

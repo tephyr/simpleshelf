@@ -1,17 +1,16 @@
-module.exports = function(gulp, settings) {
-    var merge = require('merge-stream'),
-        path = require('path');
+import {src, dest} from 'gulp';
+const merge = require('merge-stream'),
+    path = require('path');
 
-    /**
-     * Copy HTML & CSS files to test output.
-     **/
-    gulp.task('ui-test', function() {
-        var mochaCSS = gulp.src(settings.externalUICSSTest)
-            .pipe(gulp.dest(settings.testOutputPath));
+/**
+ * Copy HTML & CSS files to test output.
+ **/
+export const uiTest = function() {
+    const mochaCSS = src(settings.externalUICSSTest)
+        .pipe(dest(settings.testOutputPath));
 
-        var testUI = gulp.src(path.join(settings.testSource, '*.html'))
-            .pipe(gulp.dest(settings.testOutputPath));
+    const testUI = src(path.join(settings.testSource, '*.html'))
+        .pipe(dest(settings.testOutputPath));
 
-        return merge(mochaCSS, testUI);
-    });
+    return merge(mochaCSS, testUI);
 };
