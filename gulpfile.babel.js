@@ -121,26 +121,31 @@ gulp.task('app-watch', function() {
 });
 
 // Watch files, run analyze tasks.
-gulp.task('analyze-watch', function() {
-    // When any source code changes, analyze with jshint.
-    const watcher = gulp.watch([settings.globs.appCode, settings.globs.ddocCode]);
+export const analyzeWatch = function() {
+    const actionHandlerFn = (path) => {
+        lintSpecific(path);
+    };
 
-    watcher.on('change', function(event) {
-        lintSpecific(event.path);
-    });
-});
+    // When any source code changes, analyze with jshint.
+    const watcher = gulp.watch(
+        _.flattenDeep([settings.globs.appCode, settings.globs.ddocCode]),
+        {events: 'add change'}
+    );
+
+    watcher.on('add', actionHandlerFn).on('change', actionHandlerFn);
+};
 
 // Watch files, run docs tasks.
-gulp.task('docs-watch', function() {
+/*export const docsWatch = function() {
     if (_.has(settings, "_docs")) {
         // When any doc changes, push to server.
-        var watcher = gulp.watch(_.values(settings._docs), {debounceDelay: 100}, ['bulk-update']);
+        const watcher = gulp.watch(_.values(settings._docs), gulp.series(bulkUpdate));
 
         watcher.on('change', function(event) {
             console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', pushing docs.');
         });
     }
-});
+};*/
 
 // Watch files, run test tasks.
 export const testWatch = gulp.series(browserSyncInit, function() {
