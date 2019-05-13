@@ -1,10 +1,10 @@
-var gulp = require('gulp'),
+const gulp = require('gulp'),
     _ = require('lodash'),
     path = require('path'),
     lintSpecific = require('./util/gulp/lint-specific'),
     config = require('config');
 
-var settings = {
+const settings = {
     clientSource: path.resolve(config.get('clientSource')),
     docsOutput: config.get('outputDocs'),
     ddocSource: path.resolve(config.get('ddocSource')),
@@ -92,7 +92,7 @@ gulp.task('default', function(cb) {
     console.info("Build output (config.outputDDoc)", settings.ddocOutput);
     console.info("Server design doc (config.destination)", settings.destination);
     console.info();
-    console.info("Typical dev command: `gulp app-watch ddoc-watch test-watch docs-watch`");
+    console.info("Typical dev command: `gulp appWatch ddocWatch testWatch`");
     console.info("  (This pushes the current code to CouchDB, builds the UI, then watches for changes.)");
 
     cb();
@@ -101,12 +101,9 @@ gulp.task('default', function(cb) {
 /**
  * Watch for changes, trigger ``push`` task.
  **/
-gulp.task('ddoc-watch', function() {
-    gulp.watch(settings.globs.ddoc, function(event) {
-        console.log(path.relative(process.cwd(), event.path)+' ==> '+event.type+', running tasks.');
-        gulp.start('push');
-    });
-});
+export const ddocWatch = function() {
+    gulp.watch(settings.globs.ddoc, push);
+};
 
 // Watch files, build app (front-end only).
 export const appWatch = function() {
