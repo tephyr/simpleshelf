@@ -30,6 +30,13 @@ Development
 #. Install NodeJS_.
 #. Install gulp_ globally.
 #. Install node dependencies: ``npm install``.
+#. Build the web app::
+
+     # Choose the appropriate NODE_ENV - you can customize & extend the configurations.
+     NODE_ENV=dev gulp buildForDocker
+     # to continuously build after changes
+     NODE_ENV=dev gulp appWatch ddocWatch
+
 #. See the development section in `Installation <./INSTALLATION.rst>`__
 
 Production
@@ -37,6 +44,11 @@ Production
 .. note:: Presently there is no pre-built image; you will have to install as a developer.
 
 #. Follow the Development steps above, through the ``npm install`` step...
+#. Build the web app::
+
+     # Choose the appropriate NODE_ENV - you can customize & extend the configurations.
+     NODE_ENV=production gulp buildForDocker
+
 #. In the target directory, pass the initial CouchDB admin name & password to ``couchdb_init.sh``, and run it.
 #. Run the app: see the production section in `Installation <./INSTALLATION.rst>`__
 #. **ONE-TIME** To seed CouchDB's initial databases::
@@ -79,9 +91,8 @@ Available configuration values are:
 
 How to test
 -----------
-* ``gulp test-phantom``: runs the PhantomJS_ test runner, outputting to the console.
-* ``gulp test-in-browser``: runs the BrowserSync runner, launching (or updating) the test page, typically at http://localhost:3000/index.html.
-* ``gulp test-watch``: run the console *and* browser tests, reloading both when any code changes.
+* ``gulp testInBrowser``: runs the BrowserSync runner, launching (or updating) the test page, typically at http://localhost:3000/index.html.
+* ``gulp testWatch``: run the console *and* browser tests, reloading both when any code changes.
 
 .. Documentation
 .. +++++++++++++
