@@ -72,7 +72,7 @@
     "express": "^4.16.4",
     "handlebars": "^4.3.0",
     "http-proxy-middleware": "^0.19.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "lodash": "^4.17.11",
     "md5": "^2.2.1",
     "nano": "^8.1.0",
