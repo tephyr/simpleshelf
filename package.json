@@ -73,7 +73,7 @@
     "handlebars": "^4.3.0",
     "http-proxy-middleware": "^0.19.1",
     "jquery": "^3.5.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "md5": "^2.2.1",
     "nano": "^8.1.0",
     "popper.js": "^1.15.0",
