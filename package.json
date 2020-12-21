@@ -57,7 +57,7 @@
     "gulp-util": "^3.0.8",
     "merge-stream": "^1.0.1",
     "mocha": "^6.1.4",
-    "node-notifier": "^5.4.0",
+    "node-notifier": "^8.0.1",
     "sinon": "^7.3.2",
     "stringify": "^5.2.0",
     "unirest": "^0.6.0",
