@@ -5,6 +5,7 @@ x-app: &default-app
     args:
       - "NODE_ENV=${NODE_ENV:-production}"
   depends_on:
+    - "couchdb"
   env_file:
     - ".env"
   restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
@@ -14,6 +15,18 @@ x-app: &default-app
     - "${DOCKER_WEB_VOLUME:-./public:/app/public}"
 
 services:
+
+  couchdb:
+    environment:
+      - COUCHDB_USER=${COUCHDB_USER:-REQUIRED}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD:-REQUIRED}
+    image: couchdb:3.2
+    ports:
+      # Use a single port number to disallow external access: "5984".
+      - "${DOCKER_COUCHDB_PORTS:-5984}"
+    volumes:
+      - "couchdb_data:/opt/couchdb/data"
+      - "couchdb_config:/opt/couchdb/etc/local.d"
 
   web:
     <<: *default-app
@@ -33,3 +46,5 @@ services:
       - "${DOCKER_WEB_PORT_FORWARD:-127.0.0.1:8000}:8000"
 
 volumes:
+  couchdb_data: {}
+  couchdb_config: {}
