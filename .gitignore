@@ -1,4 +1,8 @@
 # ignore these files #
+.env*
+!.env.example
+docker-compose.override.yml
+
 docs/_build/
 node_modules/
 docker-couchdb/
@@ -10,7 +14,6 @@ config/*-demo.json
 config/personal-*/
 server/config/local*.json
 *.pyc
-.env
 bulk-update-file.json
 last-commit-hash.txt
 next.txt
