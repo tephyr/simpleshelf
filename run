@@ -70,11 +70,6 @@ function psql {
  _dc postgres psql -U "${POSTGRES_USER}" "${@}"
 }
 
-function redis-cli {
-  # Connect to Redis
-  _dc redis redis-cli "${@}"
-}
-
 function yarn:install {
   # Install yarn dependencies and write lock file
   _build_run_down web yarn install
