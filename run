@@ -63,13 +63,6 @@ function shell {
   cmd bash "${@}"
 }
 
-function psql {
-  # Connect to PostgreSQL
-  # shellcheck disable=SC1091
-  . .env
- _dc postgres psql -U "${POSTGRES_USER}" "${@}"
-}
-
 function yarn:install {
   # Install yarn dependencies and write lock file
   _build_run_down web yarn install
@@ -142,6 +135,7 @@ function ci:test {
 
   # shellcheck disable=SC1091
   . .env
+  # TODO: switch to couchdb
   wait-until "docker-compose exec -T \
     -e PGPASSWORD=${POSTGRES_PASSWORD} postgres \
     psql -U ${POSTGRES_USER} ${POSTGRES_USER} -c 'SELECT 1'"

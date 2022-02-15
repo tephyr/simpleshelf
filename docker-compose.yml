@@ -5,7 +5,6 @@ x-app: &default-app
     args:
       - "NODE_ENV=${NODE_ENV:-production}"
   depends_on:
-    - "postgres"
   env_file:
     - ".env"
   restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
@@ -15,19 +14,6 @@ x-app: &default-app
     - "${DOCKER_WEB_VOLUME:-./public:/app/public}"
 
 services:
-  postgres:
-    deploy:
-      resources:
-        limits:
-          cpus: "${DOCKER_POSTGRES_CPUS:-0}"
-          memory: "${DOCKER_POSTGRES_MEMORY:-0}"
-    env_file:
-      - ".env"
-    image: "postgres:14.1-bullseye"
-    restart: "${DOCKER_RESTART_POLICY:-unless-stopped}"
-    stop_grace_period: "3s"
-    volumes:
-      - "postgres:/var/lib/postgresql/data"
 
   web:
     <<: *default-app
@@ -47,4 +33,3 @@ services:
       - "${DOCKER_WEB_PORT_FORWARD:-127.0.0.1:8000}:8000"
 
 volumes:
-  postgres: {}
