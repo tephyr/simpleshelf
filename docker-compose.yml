@@ -30,7 +30,7 @@ services:
 
   web:
     <<: *default-app
-    command: "yarn watch-${NODE_ENV:-production}"
+    command: "npm run watch-${NODE_ENV:-production}"
     deploy:
       resources:
         limits:
