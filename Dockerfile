@@ -1,5 +1,5 @@
 FROM node:16.13.2-bullseye-slim AS assets
-LABEL maintainer="Nick Janetakis <nick.janetakis@gmail.com>"
+LABEL maintainer="Andrew Ittner <projects@rhymingpanda.com>"
 
 WORKDIR /app/frontend
 
@@ -11,9 +11,16 @@ RUN apt-get update \
 
 USER node
 
-COPY --chown=node:node frontend/package.json frontend/*yarn* ./
+# Enable global npm installation to user-owned directory.
+ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
+# optionally if you want to run npm global bin without specifying path
+ENV PATH=$PATH:/home/node/.npm-global/bin
 
-RUN yarn install && yarn cache clean
+COPY --chown=node:node frontend/package.json ./
+
+RUN npm install --global gulp-cli
+
+RUN npm install && npm cache clean
 
 ARG NODE_ENV="production"
 ENV NODE_ENV="${NODE_ENV}" \
@@ -23,14 +30,14 @@ ENV NODE_ENV="${NODE_ENV}" \
 COPY --chown=node:node . ..
 
 RUN if [ "${NODE_ENV}" != "development" ]; then \
-  ../run yarn:build:js && ../run yarn:build:css; else mkdir -p /app/public; fi
+  ../run gulp:build:all; else mkdir -p /app/public; fi
 
 CMD ["bash"]
 
 ###############################################################################
 
 FROM node:16.13.2-bullseye-slim AS app
-LABEL maintainer="Nick Janetakis <nick.janetakis@gmail.com>"
+LABEL maintainer="Andrew Ittner <projects@rhymingpanda.com>"
 
 WORKDIR /app/backend
 
@@ -42,9 +49,9 @@ RUN apt-get update \
 
 USER node
 
-COPY --chown=node:node backend/package.json backend/*yarn* ./
+COPY --chown=node:node backend/package.json ./
 
-RUN yarn install && yarn cache clean
+RUN npm install && npm cache clean
 
 ARG NODE_ENV="production"
 ENV NODE_ENV="${NODE_ENV}" \
@@ -59,4 +66,4 @@ ENTRYPOINT ["/app/bin/docker-entrypoint-web"]
 
 EXPOSE 8000
 
-CMD ["yarn", "watch-production"]
+CMD ["npm", "run", "watch-production"]

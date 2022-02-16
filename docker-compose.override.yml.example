@@ -15,7 +15,7 @@ x-assets: &default-assets
 services:
   js:
     <<: *default-assets
-    command: "../run yarn:build:js"
+    command: "../run gulp:build:all"
 
   css:
     <<: *default-assets

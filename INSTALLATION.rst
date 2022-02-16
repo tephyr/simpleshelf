@@ -32,6 +32,13 @@ To develop both the client-side code (single page application) and the server-si
 
 Not enabling the override file will *not cause any issues* when developing the *server* code.
 
+Overall steps
+-------------
+#. Copy ``.env.example`` to ``.env``.
+#. Update variables in ``.env``.
+#. Copy ``docker-compose.override.yml.example`` to ``docker-compose.override.yml`` (**optional**).
+#. Build & run system: ``docker compose up --build``.
+
 Production
 ++++++++++
 
