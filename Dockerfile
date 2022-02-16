@@ -20,7 +20,7 @@ COPY --chown=node:node frontend/package.json ./
 
 RUN npm install --global gulp-cli
 
-RUN npm install && npm cache clean
+RUN npm install && npm cache verify
 
 ARG NODE_ENV="production"
 ENV NODE_ENV="${NODE_ENV}" \
@@ -51,7 +51,7 @@ USER node
 
 COPY --chown=node:node backend/package.json ./
 
-RUN npm install && npm cache clean
+RUN npm install && npm cache verify
 
 ARG NODE_ENV="production"
 ENV NODE_ENV="${NODE_ENV}" \
