@@ -16,13 +16,13 @@ fi
 # -----------------------------------------------------------------------------
 
 function _dc {
-  docker-compose "${DC}" ${TTY} "${@}"
+  docker compose "${DC}" ${TTY} "${@}"
 }
 
 function _build_run_down {
-  docker-compose build
-  docker-compose run ${TTY} "${@}"
-  docker-compose down
+  docker compose build
+  docker compose run ${TTY} "${@}"
+  docker compose down
 }
 
 # -----------------------------------------------------------------------------
@@ -135,13 +135,13 @@ function ci:test {
   cp --no-clobber .env.example .env
   cp --no-clobber docker-compose.override.yml.example docker-compose.override.yml
 
-  docker-compose build
-  docker-compose up -d
+  docker compose build
+  docker compose up -d
 
   # shellcheck disable=SC1091
   . .env
   # TODO: switch to couchdb
-  wait-until "docker-compose exec -T \
+  wait-until "docker compose exec -T \
     -e PGPASSWORD=${POSTGRES_PASSWORD} postgres \
     psql -U ${POSTGRES_USER} ${POSTGRES_USER} -c 'SELECT 1'"
 
