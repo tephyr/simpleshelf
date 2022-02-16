@@ -1,5 +1,5 @@
 const path = require('path'),
-    sass = require('gulp-sass'),
+    sass = require('gulp-sass')(require('sass')),
     merge = require('merge-stream');
 
 import {src, dest} from 'gulp';
