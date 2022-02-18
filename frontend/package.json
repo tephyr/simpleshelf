@@ -2,6 +2,7 @@
   "name": "simpleshelf",
   "description": "A personal library manager, backed by CouchDB.",
   "main": "index.js",
+  "private": true,
   "directories": {
     "doc": "docs"
   },

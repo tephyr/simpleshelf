@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 const nano = require('nano')(svrConfig.get('couchdbServer')),
     simpleshelfDB = nano.use(svrConfig.get('databaseName'));
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8090;
 const baseProxy = {
     target: svrConfig.get('couchdbServer'),
     changeOrigin: true,
@@ -136,15 +136,13 @@ async function getDBConn(req) {
     );
     console.log('CouchDB prep: FINISH; result==', results.result);
     console.log(results);
-})();
 
-// Check if server is properly setup.
-if (serverSetup.isSetupNecessary()) {
-    console.warn('Server requires setup; exiting.');
-    // process.exitCode = 2;
-} else {
+    // Check if server is properly setup.
+    await serverSetup.run();
+
+    // Launch app server.
     app.listen(port, () => {
         console.log(`Example app listening (internally) on port ${port}`);
         console.info('');
     });
-}
+})();

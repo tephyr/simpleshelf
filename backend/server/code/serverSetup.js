@@ -92,9 +92,8 @@ async function addDatabase(cfg, authURL) {
  * Helper fn: write setup configuration to disk.
  * @param {Object} cfg
  */
-async function _setSetupConfiguration(cfg) {
-    const writeFile = util.promisify(fs.writeFile);
-    await writeFile(SETUPSTATUSPATH, JSON.stringify(cfg));
+function _setSetupConfiguration(cfg) {
+    fs.writeFileSync(SETUPSTATUSPATH, JSON.stringify(cfg));
 }
 
 /**
@@ -143,19 +142,20 @@ async function setupAsync(cfg, auth={user:'', password:''}) {
  */
 async function run() {
     if (isSetupNecessary()) {
-        console.info(`Setup IS necessary; using ${process.env.CDB_USER} for login`);
+        console.info(`Setup IS necessary; using ${process.env.COUCHDB_USER} for login`);
         const serverCfg = serverConfiguration.loadSideConfig();
         const setupCfg = await _getSetupConfiguration();
-        const result = await setupAsync(serverCfg, {user: process.env.CDB_USER, password: process.env.CDB_PW}).catch((msgData) => {
+        const result = await setupAsync(serverCfg, {user: process.env.COUCHDB_USER, password: process.env.COUCHDB_PASSWORD}).catch((msgData) => {
             console.debug(_.omit(msgData, ['request']));
             throw(msgData);
         });
 
         // Update setup config.
         setupCfg.setupComplete = true;
-        await _setSetupConfiguration(setupCfg);
+        console.info(`Writing ${SETUPSTATUSFILE}.`);
+        _setSetupConfiguration(setupCfg);
 
-        console.info('setup result:', result);
+        console.info('Setup result:', result);
     } else {
         console.info('Setup is NOT necessary.');
     }

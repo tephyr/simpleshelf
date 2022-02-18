@@ -4,6 +4,6 @@ import {copyDocs} from './copy-docs';
 import {buildDDoc} from './build-ddoc';
 
 /**
- * build-for-docker: prep everything in ./output
+ * build-for-docker: prep everything in ./output related to the node server.
  */
 export const buildForDocker = series(buildApp, copyDocs, buildDDoc);

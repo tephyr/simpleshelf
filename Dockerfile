@@ -29,8 +29,12 @@ ENV NODE_ENV="${NODE_ENV}" \
 
 COPY --chown=node:node . ..
 
+# Always build server-only support files.
+RUN ../run gulp:build:server
+
+# If in development environment, docker-compose.override.yml will call gulp:build:app.
 RUN if [ "${NODE_ENV}" != "development" ]; then \
-  ../run gulp:build:all; else mkdir -p /app/public; fi
+  ../run gulp:build:app; else mkdir -p /app/public; fi
 
 CMD ["bash"]
 
@@ -52,10 +56,10 @@ RUN chown -R node:node /var/log/pm2
 
 USER node
 
-COPY --chown=node:node backend/package.json ./
-
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 ENV PATH=$PATH:/home/node/.npm-global/bin
+
+COPY --chown=node:node backend/package.json ./
 
 RUN npm install --global pm2@latest
 
@@ -70,8 +74,11 @@ COPY --chown=node:node --from=assets /app/public /public
 COPY --chown=node:node backend/ ./
 COPY --chown=node:node bin/ /app/bin
 
+# Directory to hold temporary server configuration (initial status check).
+RUN mkdir -p ./server/config-host
+
 ENTRYPOINT ["/app/bin/docker-entrypoint-web"]
 
-EXPOSE 8000
+EXPOSE 8090
 
 CMD ["pm2", "start", "/app/backend/server/config/server-process-config.json", "--no-daemon"]

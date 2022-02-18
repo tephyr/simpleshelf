@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on `Keep a Changelog <https://keepachangelog.com/en/1.0.0/>`__.
 
+[2.0.2] - 2022-??-??
+++++++++++++++++++++
+Changed
+-------
+- Properly launch the node server after preparing CouchDB.
+- Used gulp tasks in server Dockerfile setup (``app`` label).
+- Change default exposed port to 8090.
+
 [2.0.1] - 2022-02-18
 ++++++++++++++++++++
 Added
