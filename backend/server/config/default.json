@@ -1,5 +1,7 @@
 {
     "couchdbServer": "http://couchdb:5984",
+    "couchdbServerName": "couchdb",
+    "couchdbServerPort": 5984,
     "databaseName": "simpleshelf",
     "designDoc": "simpleshelfmobile",
     "defaults": {

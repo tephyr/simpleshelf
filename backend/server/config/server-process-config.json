@@ -1,13 +1,13 @@
 {
   "apps" : [{
     "name"        : "simpleshelf",
-    "script"      : "./server.js",
-    "watch"       : ["./server.js", "./server*.js"],
+    "script"      : "./server/code/server.js",
+    "watch"       : ["./server/code/server.js", "./server/code/server*.js"],
     "out_file"    : "/var/log/pm2/pm2.log",
     "error_file"  : "/var/log/pm2/pm2.log",
     "env": {
-      "NODE_CONFIG_DIR": "/opt/simpleshelf/config",
-      "NODE_CONFIG_DIR_HOST": "/opt/simpleshelf/config-host"
+      "NODE_CONFIG_DIR": "/app/backend/server/config",
+      "NODE_CONFIG_DIR_HOST": "/app/backend/server/config-host"
     },
     "min_uptime": 3000,
     "max_restarts": 3,
