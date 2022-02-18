@@ -5,7 +5,7 @@
     "databaseName": "simpleshelf",
     "designDoc": "simpleshelfmobile",
     "defaults": {
-        "designDoc": "/opt/simpleshelf/defaults/designdoc/designdoc.json",
-        "docs": "/opt/simpleshelf/defaults/docs"
+        "designDoc": "/app/frontend/output/designdoc/designdoc.json",
+        "docs": "/app/frontend/output/docs"
     }
 }

@@ -83,9 +83,19 @@ function yarn:outdated:frontend {
   _dc js yarn outdated
 }
 
-function gulp:build:all {
+function gulp:build:app {
   # Build JS assets, this is meant to be run from within the assets container
   gulp buildApp
+}
+
+function gulp:build:server {
+  # Build server-only assets, this is meant to be run from within the assets container
+  gulp buildForServer
+}
+
+function gulp:build:all {
+  # Build all assets, this is meant to be run from within the assets container
+  gulp buildForDocker
 }
 
 function yarn:build:js {
