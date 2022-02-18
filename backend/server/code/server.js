@@ -5,6 +5,10 @@ const app = express();
 const proxy = require('http-proxy-middleware');
 const serverSetup = require('./serverSetup');
 const bodyParser = require('body-parser');
+const prepCouchDB = require('./prepCouchDB');
+
+console.log('server.js: START');
+console.log('process.cwd', process.cwd());
 
 let svrConfig = serverConfiguration.loadSideConfig();
 
@@ -12,6 +16,7 @@ console.info('NODE_ENV:', svrConfig.util.getEnv('NODE_ENV'));
 console.info('NODE_CONFIG_DIR: ' + svrConfig.util.getEnv('NODE_CONFIG_DIR'));
 console.info('NODE_CONFIG_DIR_HOST:', process.env.NODE_CONFIG_DIR_HOST);
 console.info(`Running node ${process.version} on ${new Date().toISOString()}`);
+console.info(`ENV variable(s): COUCHDB_USER: ${process.env.COUCHDB_USER}`);
 console.info('[couchdbServer]', svrConfig.get('couchdbServer'), '[databaseName]', svrConfig.get('databaseName'),
     '[designDoc]', svrConfig.get('designDoc'));
 
@@ -118,10 +123,25 @@ async function getDBConn(req) {
     return nanoDB;
 }
 
+// Initialize CouchDB.
+(async () => {
+    console.log('CouchDB prep: START');
+    const requiredDBs = ['_global_changes', '_replicator', '_users'];
+    const results = await prepCouchDB.run(
+        svrConfig.get('couchdbServerName'),
+        svrConfig.get('couchdbServerPort'),
+        process.env.COUCHDB_USER,
+        process.env.COUCHDB_PASSWORD,
+        requiredDBs
+    );
+    console.log('CouchDB prep: FINISH; result==', results.result);
+    console.log(results);
+})();
+
 // Check if server is properly setup.
 if (serverSetup.isSetupNecessary()) {
     console.warn('Server requires setup; exiting.');
-    process.exitCode = 2;
+    // process.exitCode = 2;
 } else {
     app.listen(port, () => {
         console.log(`Example app listening (internally) on port ${port}`);

@@ -47,9 +47,17 @@ RUN apt-get update \
   && apt-get clean \
   && mkdir -p /node_modules && chown node:node -R /node_modules /app
 
+RUN mkdir -p /var/log/pm2
+RUN chown -R node:node /var/log/pm2
+
 USER node
 
 COPY --chown=node:node backend/package.json ./
+
+ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
+ENV PATH=$PATH:/home/node/.npm-global/bin
+
+RUN npm install --global pm2@latest
 
 RUN npm install && npm cache verify
 
@@ -66,4 +74,4 @@ ENTRYPOINT ["/app/bin/docker-entrypoint-web"]
 
 EXPOSE 8000
 
-CMD ["npm", "run", "watch-production"]
+CMD ["pm2", "start", "/app/backend/server/config/server-process-config.json", "--no-daemon"]
