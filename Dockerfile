@@ -83,4 +83,4 @@ ENTRYPOINT ["/app/bin/docker-entrypoint-web"]
 
 EXPOSE 8090
 
-CMD ["pm2", "start", "/app/backend/server/config/server-process-config.json", "--no-daemon"]
+CMD ["npm", "run", "watch-production"]

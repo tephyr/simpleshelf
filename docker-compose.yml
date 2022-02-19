@@ -30,7 +30,7 @@ services:
 
   web:
     <<: *default-app
-    command: "pm2 start /app/backend/server/config/server-process-config.json --no-daemon"
+    command: "npm run watch-${NODE_ENV:-production}"
     deploy:
       resources:
         limits:
