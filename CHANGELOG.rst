@@ -5,13 +5,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on `Keep a Changelog <https://keepachangelog.com/en/1.0.0/>`__.
 
-[2.0.2] - 2022-??-??
+[2.0.2] - 2022-02-19
 ++++++++++++++++++++
 Changed
 -------
 - Properly launch the node server after preparing CouchDB.
-- Used gulp tasks in server Dockerfile setup (``app`` label).
+- Used gulp tasks in server Dockerfile setup (see Dockerfile's ``app`` label).
 - Change default exposed port to 8090.
+- Copy frontend build output to server-accessible location, update server static file path.
+- Use `pm2 <https://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/>`__'s Docker container binaries to start server. 
 
 [2.0.1] - 2022-02-18
 ++++++++++++++++++++
