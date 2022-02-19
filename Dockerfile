@@ -36,6 +36,8 @@ RUN ../run gulp:build:server
 RUN if [ "${NODE_ENV}" != "development" ]; then \
   ../run gulp:build:app; else mkdir -p /app/public; fi
 
+COPY --chown=node:node frontend/output/webapp /app/public/
+
 CMD ["bash"]
 
 ###############################################################################

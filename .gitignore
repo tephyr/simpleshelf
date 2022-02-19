@@ -1,4 +1,10 @@
 # ignore these files #
+
+### App #######################################################################
+
+public/*
+!public/.keep
+
 .env*
 !.env.example
 docker-compose.override.yml

@@ -36,7 +36,8 @@ const serverDocumentIO = require('./serverDocumentIO');
 
 /* ROUTES */
 // Main: static files from webapp/
-app.use('/', express.static('webapp'));
+// TODO: normalize to use /app/public in Docker, and relative path on host.
+app.use('/', express.static('../../../../public/'));
 
 // Access info about current db through nano.
 app.get('/serverinfo', (req, res) => {
