@@ -49,6 +49,8 @@ Production
 
 .. note:: The following is deprecated.
 
+.. ====================================================================
+
 Using Docker Compose
 ++++++++++++++++++++
 If you run multiple instances of SimpleShelf on a machine, rename *both* the **network** (``NETWORK_NAME``) *and* the **project name** (``--project-name``) to keep it isolated from other instances.

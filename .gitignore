@@ -13,7 +13,7 @@ docs/_build/
 node_modules/
 docker-couchdb/
 output*/
-server/config-host/
+backend/server/config-host/
 server/log/
 config/*-personal.json
 config/*-demo.json
