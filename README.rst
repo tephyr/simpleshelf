@@ -24,43 +24,17 @@ Tools, libraries, plugins
 
 How to install
 ++++++++++++++
+.. caution:: Build instructions are currently a work-in-progress.
+
 Development
 -----------
-#. Install Docker_, docker-compose_, and `Docker App`_.
-#. Install NodeJS_.
-#. Install gulp_ globally.
-#. Install node dependencies: ``npm install``.
-#. Build the web app::
-
-     # Choose the appropriate NODE_ENV - you can customize & extend the configurations.
-     NODE_ENV=dev gulp buildForDocker
-     # to continuously build after changes
-     NODE_ENV=dev gulp appWatch ddocWatch
-
-#. See the development section in `Installation <./INSTALLATION.rst>`__
+#. Install Docker_ and its plugin, docker-compose_
+#. Build the web app: see the development section in `Installation <./INSTALLATION.rst>`__
 
 Production
 ----------
-.. note:: Presently there is no pre-built image; you will have to install as a developer.
-
-#. Follow the Development steps above, through the ``npm install`` step...
-#. Build the web app::
-
-     # Choose the appropriate NODE_ENV - you can customize & extend the configurations.
-     NODE_ENV=production gulp buildForDocker
-
-#. In the target directory, pass the initial CouchDB admin name & password to ``couchdb_init.sh``, and run it.
-#. Run the app: see the production section in `Installation <./INSTALLATION.rst>`__
-#. **ONE-TIME** To seed CouchDB's initial databases::
-
-     # NOTE: the containers MUST be running, and you MUST be able to access them.
-     # CDB_USER, CDB_PW: user and password for the standard user in this database; it is acceptable to use the admin user's credentials.
-     # The two "node" values are intentional (the first references the node container, the second runs the node executable).
-     # It is safe to run multiple times; a flag will be set once it successfully runs.
-     sudo DOCKER_ACCT=A docker-compose -f docker-compose.yml -f docker-compose-production.yml exec \
-       --env CDB_USER=Y --env CDB_PW=Z node node runsetup.js
-
-#. Restart the server if the seed was necessary.
+#. Install Docker_ and its plugin, docker-compose_
+#. Build the web app: see the production section in `Installation <./INSTALLATION.rst>`__
 
 Configuration
 -------------
@@ -68,26 +42,6 @@ Available configuration values are:
 
 - Port to expose
 - Volumes to customize
-
-.. **Development version**: assumes the CouchDB instance is at http://127.0.0.1:5984/simpleshelf.
-
-.. 1. Install CouchDB_ v1.6.1 or greater.
-.. #. Install node_ (LTS series).
-.. #. Install gulp_ globally.
-.. #. *Optional*: To test, install PhantomJS_ for your system (or it will be installed by npm in the next step).
-.. #. Install node dependencies: ``npm install``.
-.. #. Create a database named ``simpleshelf`` in the local CouchDB instance.
-.. #. Push current code to your couchdb server: ``gulp bulk-update push``
-
-..    This pushes both the code and the default documents to the local installation; see ``config/default.json``.
-
-.. Done!  simpleshelf is now available for use; load the UI at http://127.0.0.1:5984/simpleshelf/_design/simpleshelfmobile/_rewrite/index.
-
-.. **Ongoing development**:
-
-.. #. Set gulp to watch for changes (``gulp app-watch ddoc-watch docs-watch test-watch``).
-.. #. Modify code or documents.
-.. #. Reload the design doc.
 
 How to test
 -----------
@@ -102,7 +56,6 @@ How to test
 .. _chai: http://chaijs.com/
 .. _couchdb: http://couchdb.apache.org/
 .. _docker: https://docker.com/
-.. _`docker app`: https://github.com/docker/app
 .. _docker-compose: https://github.com/docker/compose
 .. _gulp: http://gulpjs.com/
 .. _jquery: http://jquery.com/
