@@ -85,7 +85,12 @@ function yarn:outdated:frontend {
 
 function gulp:build:app {
   # Build JS assets, this is meant to be run from within the assets container
-  gulp buildApp
+  echo "gulp:build:app running in ${NODE_ENV}"
+  if [ "${NODE_ENV}" == "production" ]; then
+    gulp buildApp
+  else
+    gulp buildApp appWatch
+  fi
 }
 
 function gulp:build:server {
