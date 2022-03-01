@@ -1,3 +1,4 @@
+const path = require('path');
 const _ = require('lodash');
 const serverConfiguration = require('./serverConfiguration');
 const express = require('express');
@@ -36,8 +37,8 @@ const serverDocumentIO = require('./serverDocumentIO');
 
 /* ROUTES */
 // Main: static files from webapp/
-// TODO: normalize to use /app/public in Docker, and relative path on host.
-app.use('/', express.static('../../../../public/'));
+// console.info('EXPRESS', `Attempting to serve static files from ${path.join(__dirname, '../../public')}`);
+app.use('/', express.static(path.join(__dirname, '../../public')));
 
 // Access info about current db through nano.
 app.get('/serverinfo', (req, res) => {

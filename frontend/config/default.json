@@ -33,7 +33,7 @@
     "destination": "http://127.0.0.1:5984/simpleshelf",
     "outputDocs": "./output/docs",
     "outputDDoc": "./output/designdoc",
-    "outputWebApp": "./output/webapp",
+    "outputWebApp": "../public",
     "outputTest": "./output/test",
     "_docs": {
         "configurationDefault": "./config/default-docs/simpleshelf-configuration-default.json",
