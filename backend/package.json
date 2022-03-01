@@ -13,8 +13,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch-development": "pm2-dev start ./server/config/server-process-config.json",
-    "watch-production": "pm2-runtime start ./server/config/server-process-config.json"
+    "watch-development": "pm2-dev start ./config/server-process-config.json",
+    "watch-production": "pm2-runtime start ./config/server-process-config.json"
   },
   "devDependencies": {
   },

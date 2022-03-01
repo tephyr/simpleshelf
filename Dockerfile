@@ -77,7 +77,7 @@ COPY --chown=node:node backend/ ./
 COPY --chown=node:node bin/ /app/bin
 
 # Directory to hold temporary server configuration (initial status check).
-RUN mkdir -p ./server/config-host
+RUN mkdir -p ./config-host
 
 ENTRYPOINT ["/app/bin/docker-entrypoint-web"]
 

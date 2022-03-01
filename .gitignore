@@ -13,12 +13,12 @@ docs/_build/
 node_modules/
 docker-couchdb/
 output*/
-backend/server/config-host/
+backend/config-host/
 server/log/
 config/*-personal.json
 config/*-demo.json
 config/personal-*/
-server/config/local*.json
+backend/config/local*.json
 *.pyc
 bulk-update-file.json
 last-commit-hash.txt
