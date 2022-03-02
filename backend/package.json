@@ -22,6 +22,6 @@
     "express": "^4.17.3",
     "http-proxy-middleware": "^2.0.3",
     "lodash": "^4.17.21",
-    "nano": "^8.1.0"
+    "nano": "^9.0.5"
   }
 }
