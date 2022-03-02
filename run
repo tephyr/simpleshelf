@@ -89,7 +89,7 @@ function gulp:build:app {
   if [ "${NODE_ENV}" == "production" ]; then
     gulp buildApp
   else
-    gulp buildApp appWatch
+    gulp buildApp appWatch testWatch
   fi
 }
 

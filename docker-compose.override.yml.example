@@ -16,6 +16,9 @@ services:
   js:
     <<: *default-assets
     command: "../run gulp:build:app"
+    ports:
+      - "3000:3000"
+      - "3001:3001"
 
   # css:
   #   <<: *default-assets
