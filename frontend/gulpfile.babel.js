@@ -21,6 +21,7 @@ const settings = {
     externalUICSSTest: config.get("externalUICSSTest"),
     testSource: path.resolve(config.get('testSource')),
     testOutputPath: config.get("outputTest"),
+    browserSyncProxy: config.get("browserSyncProxy"),
     dynamic: {} // To contain any cross-task variables.
 };
 

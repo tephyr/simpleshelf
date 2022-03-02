@@ -35,6 +35,7 @@
     "outputDDoc": "./output/designdoc",
     "outputWebApp": "../public",
     "outputTest": "./output/test",
+    "browserSyncProxy": "web:8090",
     "_docs": {
         "configurationDefault": "./config/default-docs/simpleshelf-configuration-default.json",
         "i18nDefault": "./config/default-docs/simpleshelf-i18n-default.json"
