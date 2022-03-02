@@ -53,34 +53,34 @@ function test {
   cmd jest --rootDir test/ --forceExit "${@}"
 }
 
-function knex {
-  # Run any knex command
-  cmd knex "${@}"
-}
-
 function shell {
   # Start a shell session in the web container
   cmd bash "${@}"
 }
 
-function yarn:install {
-  # Install yarn dependencies and write lock file
-  _build_run_down web yarn install
+function shell:frontend {
+  # Start a shell session in the js (development-only) container
+  _dc js bash "${@}"
 }
 
-function yarn:outdated {
+function npm:install {
+  # Install back-end dependencies and write lock file
+  _build_run_down web npm install
+}
+
+function npm:outdated:backend {
   # List any installed packages that are outdated
-  cmd yarn outdated
+  cmd npm outdated
 }
 
-function yarn:install:frontend {
-  # Install front-end yarn dependencies and write lock file
-  _build_run_down js yarn install
+function npm:install:frontend {
+  # Install front-end dependencies and write lock file
+  _build_run_down js npm install
 }
 
-function yarn:outdated:frontend {
+function npm:outdated:frontend {
   # List any installed front-end packages that are outdated
-  _dc js yarn outdated
+  _dc js npm outdated
 }
 
 function gulp:build:app {
@@ -97,32 +97,6 @@ function gulp:build:server {
   # Build server-only assets, this is meant to be run from within the assets container
   gulp buildForServer
 }
-
-function gulp:build:all {
-  # Build all assets, this is meant to be run from within the assets container
-  gulp buildForDocker
-}
-
-function yarn:build:js {
-  # Build JS assets, this is meant to be run from within the assets container
-  mkdir -p ../public/js
-  node esbuild.config.js
-}
-
-function yarn:build:css {
-  # Build CSS assets, this is meant to be run from within the assets container
-  local args=()
-
-  if [ "${NODE_ENV}" == "production" ]; then
-    args=(--minify)
-  else
-    args=(--watch)
-  fi
-
-  mkdir -p ../public/css
-  tailwindcss --postcss -i css/app.css -o ../public/css/app.css "${args[@]}"
-}
-
 
 function clean {
   # Remove cache and other machine generates files
