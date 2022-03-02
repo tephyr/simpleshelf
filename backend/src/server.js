@@ -3,7 +3,7 @@ const _ = require('lodash');
 const serverConfiguration = require('./serverConfiguration');
 const express = require('express');
 const app = express();
-const proxy = require('http-proxy-middleware');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const serverSetup = require('./serverSetup');
 const bodyParser = require('body-parser');
 const prepCouchDB = require('./prepCouchDB');
@@ -63,14 +63,14 @@ app.get('/serverinfo', (req, res) => {
 });
 
 // Access session calls
-app.use('/auth/_session', proxy(Object.assign({}, baseProxy, {
+app.use('/auth/_session', createProxyMiddleware(Object.assign({}, baseProxy, {
     pathRewrite: {
         '^/auth' : ''           // remove base path
     }
 })));
 
 // Access data from current db.
-app.use('/data', proxy(Object.assign({}, baseProxy, {
+app.use('/data', createProxyMiddleware(Object.assign({}, baseProxy, {
     target: svrConfig.get('couchdbServer') + '/' + svrConfig.get('databaseName'),
     pathRewrite: {
         '^/data' : ''           // remove base path
@@ -79,7 +79,7 @@ app.use('/data', proxy(Object.assign({}, baseProxy, {
 
 // Access specific view functions from current design doc.
 // api/_design/simpleshelfmobile/_view/global
-app.use('/view', proxy(Object.assign({}, baseProxy, {
+app.use('/view', createProxyMiddleware(Object.assign({}, baseProxy, {
     target: svrConfig.get('couchdbServer') + '/' + svrConfig.get('databaseName'),
     pathRewrite: {
         '^/view' : '/_design/' + svrConfig.get('designDoc') + '/_view/'
