@@ -70,10 +70,9 @@ import {uiTest} from "./tasks/ui-test.js";
 import {browserSyncInit} from "./tasks/browser-sync-init.js";
 import {browserSyncReload} from "./tasks/browser-sync-reload.js";
 import {testInBrowser} from "./tasks/test-in-browser";
-import {buildForDocker} from "./tasks/build-for-docker.js";
 import {buildForServer} from "./tasks/build-for-server.js";
 
-export { buildApp, buildDDoc, buildDocs, buildForDocker, buildForServer, bundleLib, code, lint, push, testInBrowser };
+export { buildApp, buildDDoc, buildDocs, buildForServer, bundleLib, code, lint, push, testInBrowser };
 
 /**
  * Show settings for this task runner.
