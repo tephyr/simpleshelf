@@ -7,6 +7,9 @@ The format is based on `Keep a Changelog <https://keepachangelog.com/en/1.0.0/>`
 
 [Unreleased]
 ++++++++++++
+
+[2.0.4] - 2022-03-03
+++++++++++++++++++++
 Changed
 -------
 - Update server dependencies, handle breaking changes.
