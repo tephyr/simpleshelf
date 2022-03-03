@@ -57,7 +57,6 @@ global.settings = settings;
 // Import external tasks, giving them the settings object.
 //require("./tasks/bulk-update")(gulp, settings);
 //require("./tasks/bulk-update-file")(gulp, settings);
-import {buildDocs} from "./tasks/build-docs";
 import {bundleLib} from "./tasks/bundle-lib";
 import {buildDDoc} from "./tasks/build-ddoc";
 import {push} from "./tasks/push";
@@ -72,7 +71,7 @@ import {browserSyncReload} from "./tasks/browser-sync-reload.js";
 import {testInBrowser} from "./tasks/test-in-browser";
 import {buildForServer} from "./tasks/build-for-server.js";
 
-export { buildApp, buildDDoc, buildDocs, buildForServer, bundleLib, code, lint, push, testInBrowser };
+export { buildApp, buildDDoc, buildForServer, bundleLib, code, lint, push, testInBrowser };
 
 /**
  * Show settings for this task runner.
