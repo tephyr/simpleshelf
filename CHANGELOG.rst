@@ -7,6 +7,11 @@ The format is based on `Keep a Changelog <https://keepachangelog.com/en/1.0.0/>`
 
 [Unreleased]
 ++++++++++++
+Changed
+-------
+- Update server dependencies, handle breaking changes.
+- Update ``run`` script (switch out yarn for npm, add frontend commands).
+- Remove gulp Docker task (no longer needed).
 
 [2.0.3] - 2022-03-02
 ++++++++++++++++++++
