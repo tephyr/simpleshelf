@@ -9,7 +9,7 @@ public/*
 !.env.example
 docker-compose.override.yml
 
-docs/_build/
+docs/build/
 node_modules/
 docker-couchdb/
 output*/
