@@ -4,8 +4,8 @@
 simpleshelf's documentation
 ===========================
 
-Contents:
-
+Contents
+++++++++
 .. toctree::
    :maxdepth: 2
    :glob:
@@ -16,8 +16,15 @@ Contents:
    lists
    security
    
-UI:
+API
++++
+.. toctree::
+   :maxdepth: 2
 
+   api/index
+
+UI
++++
 .. toctree::
    :maxdepth: 3
 
