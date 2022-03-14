@@ -114,6 +114,11 @@ app.post('/setdocs', (req, res) => {
 
 });
 
+/**
+ * Get a connection to CouchDB.
+ * @param  {Object} req 
+ * @return {Object}     nano database object (https://github.com/apache/couchdb-nano#nanousename)
+ */
 async function getDBConn(req) {
     const nanoDB = require('nano')({
         url: svrConfig.get('couchdbServer'),
