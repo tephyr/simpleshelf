@@ -14,6 +14,10 @@ help:
 
 .PHONY: help Makefile
 
+browser-sync:
+	# This requires browser-sync to be installed globally, typically via node.js/npm.
+	browser-sync $(BUILDDIR)/html  -w $(SOURCEDIR) --reload-debounce --reload-delay 1500 --no-open --no-ui --port 3010
+
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
