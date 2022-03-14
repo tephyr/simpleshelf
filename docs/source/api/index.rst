@@ -27,4 +27,4 @@ Get the database's data in bulk-load-ready format.
 
 ``/setdocs``
 ++++++++++++
-Add documents to db.
+Add documents to db using the `bulk docs API <https://docs.couchdb.org/en/stable/api/database/bulk-api.html#db-bulk-docs>`__.

@@ -26,6 +26,8 @@ async function getDocuments(db) {
                     result = fullDoc.doc;
                 }
                 break;
+
+            // Drop i18n type by not inserting into filteredDocs.
         }
 
         return result;
@@ -37,12 +39,12 @@ async function getDocuments(db) {
 };
 
 /**
- * Add documents to db
- * @param {Object} db
+ * Add documents to db in bulk.
+ * @param {Object} nano db object
  * @param {Object} payload {docs: Array}
  */
 async function setDocuments(db, payload) {
-    // TODO: remove _rev?
+    // Documents must have the _rev property if they are *updates* or *deletions*.
     const results = await db.bulk(payload);
     return results; 
 };
