@@ -28,13 +28,13 @@ How to install
 
 Development
 -----------
-#. Install Docker_ and its plugin, docker-compose_
-#. Build the web app: see the development section in `Installation <./INSTALLATION.rst>`__
+#. Install Docker_ and its plugin, docker-compose_.
+#. Build the web app: see the **Development** section in `Installation <./INSTALLATION.rst>`__.
 
 Production
 ----------
-#. Install Docker_ and its plugin, docker-compose_
-#. Build the web app: see the production section in `Installation <./INSTALLATION.rst>`__
+#. Install Docker_ and its plugin, docker-compose_.
+#. Build the web app: see the **Production** section in `Installation <./INSTALLATION.rst>`__.
 
 Configuration
 -------------

@@ -22,7 +22,7 @@ Summary
   * Live updates to the front-end?  Enable the override.
   * Update the ``.env``.
 
-.. note:: This section's ideas, and the Docker/Docker Compose layout/``run`` script, are courtesy of `Nick Janetakis <https://nickjanetakis.com>`__, and cribbed from with his gracious permission and my many thanks.  His example app is here__.
+.. note:: This section's ideas, and the Docker/Docker Compose layout/``run`` script, are courtesy of `Nick Janetakis <https://nickjanetakis.com>`__, and cribbed from `An example Node + Docker app`__ with his gracious permission and my many thanks.
 
 __ docker-node-example_
 
