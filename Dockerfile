@@ -1,4 +1,4 @@
-FROM node:16.14.0-bullseye-slim AS assets
+FROM node:16.14.0-bullseye AS assets
 LABEL maintainer="Andrew Ittner <projects@rhymingpanda.com>"
 
 WORKDIR /app/frontend
@@ -40,7 +40,7 @@ CMD ["bash"]
 
 ###############################################################################
 
-FROM node:16.14.0-bullseye-slim AS app
+FROM node:16.14.0-bullseye AS app
 LABEL maintainer="Andrew Ittner <projects@rhymingpanda.com>"
 
 WORKDIR /app/backend
