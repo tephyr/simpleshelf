@@ -64,8 +64,8 @@ How to test
 .. _nodejs: https://nodejs.org/
 .. _openlibrary: http://openlibrary.org/
 .. _phantomjs: http://phantomjs.org/
-.. _python: http://python.org/
-.. _sphinx: http://sphinx.pocoo.org/
+.. _python: https://python.org/
+.. _sphinx: https://www.sphinx-doc.org/
 
 License
 +++++++
