@@ -1,7 +1,7 @@
 import {dest} from 'gulp';
 const _ = require('lodash'),
     browserify = require('browserify'),
-    gutil = require('gulp-util'),
+    log = require('fancy-log'),
     source = require('vinyl-source-stream'),
     stringify = require('stringify'),
     babelify = require('babelify');
@@ -38,7 +38,7 @@ export const appBundlerFn = function(options) {
     return b.bundle()
         .on('error', function(err) {
             // print the error
-            gutil.log(gutil.colors.bgRed(err.message));
+            log.error(err.message);
             // end this stream (to prevent browserify from hanging the stream)
             this.emit('end');
         }) // Set error handler
@@ -64,5 +64,5 @@ export const libBundlerFn = function(vendorLibraries, destinationName, destinati
     return vendor.bundle()
         .pipe(source(destinationName))   // give destination filename
         .pipe(dest(destinationDir)) // give destination directory
-        .on('error', gutil.log);
+        .on('error', log.error);
 };

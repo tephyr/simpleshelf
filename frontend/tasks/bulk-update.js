@@ -3,7 +3,6 @@ module.exports = function(gulp, settings) {
         fs = require('fs'),
         globby = require('globby'),
         path = require('path'),
-        Promise = require('bluebird'),
         unirest = require('unirest');
 
     // Combine all documents into single array, under {"docs": []}.

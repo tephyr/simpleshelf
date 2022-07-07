@@ -1,6 +1,5 @@
 const _ = require('lodash'),
     cdbPush = require('couchdb-push'),
-    notify = require("gulp-notify"),
     notifier = require("node-notifier");
 
 import {series} from 'gulp';
