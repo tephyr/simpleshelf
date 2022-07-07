@@ -36,6 +36,11 @@ Overall steps
 -------------
 #. Copy ``.env.example`` to ``.env``.
 #. Update variables in ``.env``.
+
+   Specific variables to update: ``COUCHDB_USER`` and ``COUCHDB_PASSWORD``, to login as the primary user (and CouchDB admin).
+
+   Also search for ``REQUIRED`` - any value with this string should be changed.
+
 #. Copy ``docker-compose.override.yml.example`` to ``docker-compose.override.yml`` (**optional**).
 #. Build & run system: ``docker compose up --build``.
 
