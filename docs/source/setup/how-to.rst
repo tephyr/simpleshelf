@@ -23,5 +23,14 @@ Alternate method, accessing the container directly::
 
     # Run all npm commands directly.  Current working directory is the frontend root.
 
+Enable source maps for browser code
++++++++++++++++++++++++++++++++++++
+Either add a ``"debug": true`` to ``frontend/config/default.json``, or run the ``appWatch`` gulp task::
+
+    ./run shell:fe
+
+    npx gulp appWatch
+
+
 .. _python: https://python.org/
 .. _sphinx: https://www.sphinx-doc.org/
