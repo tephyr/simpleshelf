@@ -1,13 +1,14 @@
-module.exports = function(gulp, settings) {
-    var path = require('path'),
-        mochaHeadless = require('gulp-mocha-chrome');
-     
-    /**
-     * Run tests in console using a headless browser.
-     */
-    gulp.task('test-headless', ['build-tests'], function () {
-        return gulp
-            .src(path.join(settings.testOutputPath, 'index.html'))
-            .pipe(mochaHeadless({reporter: 'dot'}));
-    });
-};
+const { series, src, pipe } = require('gulp');
+const path = require('path');
+import mochaHeadless from 'gulp-mocha-chrome';
+import { buildTests } from './build-tests.js';
+
+/**
+ * Run tests in console using a headless browser.
+ */
+const _testHeadless = function() {
+    return src(path.join(global.settings.testOutputPath, 'index.html'))
+        .pipe(mochaHeadless({reporter: 'dot'}));
+}
+
+export const testHeadless = series(buildTests, _testHeadless);
