@@ -53,32 +53,32 @@ function test {
   cmd jest --rootDir test/ --forceExit "${@}"
 }
 
-function shell {
+function shell:be {
   # Start a shell session in the web container
   cmd bash "${@}"
 }
 
-function shell:frontend {
+function shell:fe {
   # Start a shell session in the js (development-only) container
   _dc js bash "${@}"
 }
 
-function npm:install {
+function npm:install:be {
   # Install back-end dependencies and write lock file
   _build_run_down web npm install
 }
 
-function npm:outdated:backend {
+function npm:outdated:be {
   # List any installed packages that are outdated
   cmd npm outdated
 }
 
-function npm:install:frontend {
+function npm:install:fe {
   # Install front-end dependencies and write lock file
   _build_run_down js npm install
 }
 
-function npm:outdated:frontend {
+function npm:outdated:fe {
   # List any installed front-end packages that are outdated
   _dc js npm outdated
 }

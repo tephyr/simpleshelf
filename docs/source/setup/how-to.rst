@@ -12,14 +12,14 @@ Update front-end libraries
 From source root::
 
     # Show outdated dependencies
-    ./run npm:outdated:frontend
+    ./run npm:outdated:fe
 
     # Add/update dependencies
-    ./run npm:install:frontend PACKAGENAME@">=semver" --save # or --save-dev
+    ./run npm:install:fe PACKAGENAME@">=semver" --save # or --save-dev
 
 Alternate method, accessing the container directly::
 
-    ./run shell:frontend
+    ./run shell:fe
 
     # Run all npm commands directly.  Current working directory is the frontend root.
 
