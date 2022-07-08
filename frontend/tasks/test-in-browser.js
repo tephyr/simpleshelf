@@ -6,7 +6,6 @@ import {browserSyncInit} from './browser-sync-init';
  * Test in browser, via BrowserSync.
  */
 function _testInBrowser(cb) {
-    // gulp.series('build-tests', 'browser-sync-init', function(cb){
     global.settings.dynamic.browserSync.reload();
     cb();
 };

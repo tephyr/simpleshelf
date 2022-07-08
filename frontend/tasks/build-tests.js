@@ -7,7 +7,7 @@ import {uiTest} from './ui-test';
 /**
  * Run all test build tasks.
  **/
-export const _buildTests = function() {
+const _buildTests = function() {
     // Lastly, bundle the test code (app/code/test/...).
     return appBundlerFn({
         entries: './app/code/test/testIndex.js',
